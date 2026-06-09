@@ -1,12 +1,12 @@
 ---
 name: ae49-guidelines
-description: Behavioral guidelines for code work in the AE49 PyRevit extension — classify question vs command, reach >=95% understanding, surface suggestions before coding, check lib/shared code first, keep changes simple and surgical, define verifiable success criteria, commit per logical change. Use when starting any non-trivial coding task (writing, editing, fixing, or refactoring) in the AE49 extension, or when the user invokes /ae49-guidelines.
+description: Behavioral guidelines for code work — classify question vs command, reach >=95% understanding, surface suggestions before coding, check shared/lib code first, keep changes simple and surgical, define verifiable success criteria, commit per logical change. Use when starting any non-trivial coding task (writing, editing, fixing, or refactoring), or when the user invokes /ae49-guidelines.
 license: MIT
 ---
 
 # AE49 Guidelines
 
-Behavioral guidelines to reduce common LLM coding mistakes — partially adapted from [Andrej Karpathy](https://github.com/karpathy)'s [observations on LLM coding pitfalls](https://x.com/karpathy/status/2015883857489522876), extended with AE49 team coding-workflow rules.
+Behavioral guidelines to reduce common LLM coding mistakes — partially adapted from [Andrej Karpathy](https://github.com/karpathy)'s [observations on LLM coding pitfalls](https://x.com/karpathy/status/2015883857489522876), extended with general coding-workflow rules.
 
 **Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
@@ -36,9 +36,8 @@ Before implementing:
 
 **Check existing code first. DRY is real.**
 
-- Search the lib/shared code for an existing helper, component, or utility that already does the job. Reuse it.
-- For the AE49 extension, that means `AE49.extension/lib/AE49lib/`.
-- If the task involves logic likely to be reused in the future, propose extracting it into lib code BEFORE implementing it inline. Wait for the decision before creating it.
+- Search the project's shared/lib code for an existing helper, component, or utility that already does the job. Reuse it.
+- If the task involves logic likely to be reused in the future, propose extracting it into shared code BEFORE implementing it inline. Wait for the decision before creating it.
 
 ## 4. Simplicity First
 
@@ -93,6 +92,6 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 After a logical code change (feature/fix/edit) is complete and (where applicable) verified:
 - Stage ONLY the relevant files — never `git add -A`.
 - Commit with a concise message focused on the "why".
-- Push to `origin main` using the `GH_TOKEN`-prefixed command in `CLAUDE.local.md` (standing pre-authorization for this repo).
+- Do NOT push unless the user asks — pushing is the user's call, not a default.
 
 Granularity: ONE commit per completed change. NOT after every single file edit. NOT batched across unrelated changes. Still pause before destructive git ops (force-push, `reset --hard`, etc.).

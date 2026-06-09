@@ -26,6 +26,12 @@ cp -r AE49_ClaudeSkills/skills/* ~/.claude/skills/
 
 For a single project instead of globally, copy into `<your-repo>/.claude/skills/` instead. Then invoke any skill by name, e.g. `/ae49-grill`.
 
+## What ships
+
+Everything under `skills/` is environment-neutral and safe to distribute — the Quickstart above copies only that folder.
+
+The repo also keeps an `internal/` folder for **AE49-team-only** skills (repo-specific paths, a standing push authorization) that must **not** be handed to other users. It's deliberately excluded from the Quickstart copy — see [`internal/README.md`](./internal/README.md).
+
 ## Why These Skills Exist
 
 Each skill targets a common failure mode of coding agents.
@@ -49,7 +55,7 @@ When the agent flies blind without feedback, it produces crap. The fix is a tigh
 Agents accelerate coding — and software entropy with it. The fix is to care about design every day, and to periodically rescue a codebase before it ossifies.
 
 - [`/ae49-improve-codebase-architecture`](./skills/ae49-improve-codebase-architecture/SKILL.md) — find deepening opportunities, consolidate tightly-coupled modules, and make a codebase more testable and AI-navigable, informed by the domain language in `CONTEXT.md` and the decisions in `docs/adr/`.
-- [`/ae49-guidelines`](./skills/ae49-guidelines/SKILL.md) — the standing rules for code work in the AE49 PyRevit extension: keep changes simple and surgical, check shared code first, define verifiable success criteria.
+- [`/ae49-guidelines`](./skills/ae49-guidelines/SKILL.md) — the standing rules for code work: keep changes simple and surgical, check shared code first, define verifiable success criteria, commit per logical change.
 
 ### #4: The agent is way too verbose
 
@@ -71,7 +77,7 @@ Skills for code work.
 | **[ae49-debug-soft](./skills/ae49-debug-soft/SKILL.md)** | The everyday four-mantra debugging discipline: reproduce, trace the fail path, falsify the hypothesis, cross-reference every breadcrumb — before proposing any fix. |
 | **[ae49-debug-hard](./skills/ae49-debug-hard/SKILL.md)** | Disciplined diagnosis loop for hard/intermittent bugs and performance regressions: reproduce → minimise → hypothesise → instrument → fix → regression-test, with a repro harness and post-mortem. |
 | **[ae49-improve-codebase-architecture](./skills/ae49-improve-codebase-architecture/SKILL.md)** | Find deepening opportunities in a codebase, consolidate tight coupling, and make it more testable and AI-navigable, informed by the domain language and ADRs. |
-| **[ae49-guidelines](./skills/ae49-guidelines/SKILL.md)** | Behavioral guidelines for code work in the AE49 PyRevit extension: question vs. command, ≥95% understanding before coding, surgical changes, verifiable success criteria, commit per logical change. |
+| **[ae49-guidelines](./skills/ae49-guidelines/SKILL.md)** | Behavioral guidelines for code work: question vs. command, ≥95% understanding before coding, reuse-first, surgical changes, verifiable success criteria, commit per logical change. |
 | **[ae49-audit-lib](./skills/ae49-audit-lib/SKILL.md)** | Non-destructive reuse audit of the codebase: finds inline logic that's duplicated or reusable enough to belong in shared code (a helper, module, or component), reports a prioritized list with `file:line` and a proposed home, and changes nothing until you approve. |
 
 ### Productivity

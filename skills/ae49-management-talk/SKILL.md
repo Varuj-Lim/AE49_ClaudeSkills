@@ -140,6 +140,6 @@ See [EXAMPLES.md](EXAMPLES.md) for the same bug rewritten across channels (JIRA 
 - **Never invent facts** to make the rewrite cleaner. If the engineering source says "root cause unknown," the rewrite says "root cause unknown" — do not promote a speculation to a finding for narrative tidiness.
 - **Never strip a JIRA key, PR number, or customer/workload name** during de-jargoning. They're the cross-reference bridge — losing them breaks tracking.
 - **Never invent owners.** If the source doesn't name one, ask the user — don't guess from `git blame` or recent commits.
-- **Get sign-off before posting to JIRA.** Reuse the jira-check approval flow. Print-only output needs no approval.
+- **Get sign-off before posting to JIRA.** Show the exact payload and wait for an explicit *"post it"* / *"go ahead"* before you `POST`; print-only output needs no approval.
 - **Never post to Slack, email, or any non-JIRA channel from this skill.** Hand the draft to the user; they post it.
 - **Stay out of advocacy.** This skill produces a status update, not a recommendation. If the user wants a recommendation memo, confirm before reframing.
