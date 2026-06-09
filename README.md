@@ -26,12 +26,6 @@ cp -r AE49_ClaudeSkills/skills/* ~/.claude/skills/
 
 For a single project instead of globally, copy into `<your-repo>/.claude/skills/` instead. Then invoke any skill by name, e.g. `/ae49-grill`.
 
-## What ships
-
-Everything under `skills/` is environment-neutral and safe to distribute — the Quickstart above copies only that folder.
-
-The repo also keeps an `internal/` folder for **AE49-team-only** skills (repo-specific paths, a standing push authorization) that must **not** be handed to other users. It's deliberately excluded from the Quickstart copy — see [`internal/README.md`](./internal/README.md).
-
 ## Why These Skills Exist
 
 Each skill targets a common failure mode of coding agents.
