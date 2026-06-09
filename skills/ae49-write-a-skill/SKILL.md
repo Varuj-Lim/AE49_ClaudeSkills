@@ -29,7 +29,7 @@ description: Create new agent skills with proper structure, progressive disclosu
 
 Skill name is kebab-case.
 
-- **Project-level skill** (lives in the project's `.claude/skills/`) — prefix the name with `projectName-`, the project's short name. Example: in `AE49_Hub`, a leave-report skill is named `ae49-leave-report`, not `leave-report`. This namespaces project skills and keeps them distinct from user-level ones.
+- **Project-level skill** (lives in the project's `.claude/skills/`) — prefix the name with `projectName-`, the project's short name. Example: in `AE49_Hub`, a leave-report skill is named `ae49Hub-leave-report`, not `leave-report`. This namespaces project skills and keeps them distinct from user-level ones.
 - **User-level skill** (lives in `~/.claude/skills/`) — no project prefix required.
 
 ## Skill Structure
