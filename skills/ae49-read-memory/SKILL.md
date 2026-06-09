@@ -11,8 +11,8 @@ Re-reads ALL of this project's auto-memory from disk so the current session refl
 ```
 <home>/.claude/projects/<flattened-project-path>/memory/
 ```
-`<flattened-project-path>` = the absolute project path with the drive colon removed and every `\` or `/` replaced by `-`
-(e.g. `C:\Users\varuj.l\Documents\AE49_Hub` → `C--Users-varuj-l-Documents-AE49-Hub`).
+`<flattened-project-path>` = the absolute project path with every character that isn't a letter or digit — the drive colon, `\`, `/`, `.`, `_` — replaced by `-`
+(e.g. `C:\Users\alex\Documents\my_app` → `C--Users-alex-Documents-my-app`).
 
 ## Steps
 1. **Read fresh from disk.** Read `MEMORY.md` (the index) first, then read **every** other `.md` file in that folder. Do a real re-read — do NOT rely on what's already in context (the whole point is that another session may have changed it).

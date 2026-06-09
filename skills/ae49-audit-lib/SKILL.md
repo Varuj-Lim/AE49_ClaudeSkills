@@ -1,60 +1,68 @@
 ---
 name: ae49-audit-lib
-description: Audit the AE49_Hub codebase for logic written inline inside pages/components that is duplicated or reusable enough to belong in shared lib code (a helper, a hook, or a shared component). Re-scans the current code each run and reports a prioritized list with file locations and a proposed shared home, changing NOTHING until the user approves. Use when the user wants to find duplicate / copy-pasted code, DRY up the app, check for reuse opportunities, or asks "what could move into lib".
+description: Audit the codebase for logic written inline that is duplicated across files or reusable enough to belong in shared code (a helper, a module, or a shared component). Re-scans the current code each run and reports a prioritized list with file locations and a proposed shared home, changing NOTHING until the user approves. Use when the user wants to find duplicate / copy-pasted code, DRY up the codebase, check for reuse opportunities, or asks "what could move into the shared layer".
 ---
 
 # Audit Lib (shared-code / reuse audit)
 
-Perform a **non-destructive review** of the AE49_Hub source and report logic that is
-currently written inline inside pages/components but is **duplicated** or **reusable**
-enough to belong in the shared layer — a `lib` helper, a hook, or a shared component.
+Perform a **non-destructive review** of the codebase and report logic that is currently
+written inline but is **duplicated** or **reusable** enough to belong in the shared
+layer — a shared helper/module, or (in a UI project) a shared component.
 
 **Hard rule: make NO code changes until the user explicitly approves a specific
 suggestion.** This skill reads and recommends only. Producing the list is the job;
 extracting the code is a separate, approved step the user comes back for.
 
 **Re-scan every run.** Always read the current code fresh — do NOT rely on a saved
-list or on memory. Other Claude sessions edit this same folder in parallel, so the
+list or on memory. Other Claude sessions edit this same code in parallel, so the
 findings must reflect the code as it is right now.
 
 ## Step 1 — Map the source
 
-Glob `**/*.{ts,tsx}` under these folders and **read the whole files** (this is a
-cross-file duplication check — reading only excerpts will miss matches):
+First identify the project's language(s) and layout — don't assume a stack. Check the
+manifest / build file (e.g. `package.json`, `pyproject.toml`, `go.mod`, `Cargo.toml`,
+`pom.xml`) and the directory tree to learn the file extensions and where code lives.
 
-- `app/**` — pages, layouts, API routes
-- `components/**`
-- `context/**`, `hooks/**`
-- `lib/**`, `types/**` — needed to know what is ALREADY shared
+Then read the source files — **read whole files**, not excerpts: this is a cross-file
+duplication check, and excerpts will miss matches. Cover both:
+
+- the **application / feature code** — where inline logic accumulates, and
+- the **existing shared layer** — whatever this project calls it (`lib/`, `src/shared/`,
+  `common/`, `utils/`, `helpers/`, `packages/`, internal modules) — so you know what is
+  ALREADY shared.
 
 ## Step 2 — Inventory what's already shared (reuse first)
 
-Before flagging anything, list what already exists in `lib/`, `components/ui/`,
-`context/`, `hooks/`, and `types/`. The audit has two goals: (a) find inline code
-that should JOIN this shared layer, and (b) catch places that re-implement something
-that already lives here. Never propose a helper/component that already exists — point
-to the existing one instead.
+Before flagging anything, list what already exists in the shared layer. The audit has
+two goals: (a) find inline code that should JOIN the shared layer, and (b) catch places
+that re-implement something that already lives there. Never propose a helper / module /
+component that already exists — point to the existing one instead.
 
 ## Step 3 — Scan for candidates
 
 Look for these patterns (examples to guide the search, not an exhaustive list):
 
-- **Duplicated state + UI** — the same `useState` + handler + JSX copied in 2+ files
-  (e.g. a toast/notification, a modal). → a hook + a shared component.
-- **Logic worth a hook** — the same stateful logic repeated (e.g. sort field/direction
-  + comparator, search/filter, pagination). → `lib/hooks/useX.ts`.
-- **Repeated style constants** — identical long Tailwind class strings redeclared per
-  file (e.g. `inputClass`, `labelClass`). → `lib/constants/…` or a shared field component.
-- **Repeated input handling** — the same sanitise/validate/format code (e.g. a phone
-  digit-strip + "N digits left" hint). → a shared input component + a `lib` helper.
-- **Repeated object construction** — the same object literal assembled many times
-  (e.g. an audit-log `performedBy` / actor). → a `lib` helper.
-- **Repeated network calls** — the same `fetch` + auth-header + error-check block.
-  → a `lib/services` function.
-- **Magic values** — the same meaningful literal duplicated (e.g. a min-password length
-  used in both the client and an API route). → a shared constant.
-- **Reuse gaps** — markup/logic re-typed inline when a shared component/helper ALREADY
-  exists (e.g. inlining a spinner when `LoadingSpinner` exists). → import the existing one.
+- **Duplicated logic block** — the same computation or transformation copied in 2+
+  files. → a shared function/module.
+- **Repeated stateful behavior** — the same logic repeated across call sites (sort +
+  comparator, search/filter, pagination, retry/backoff). → a shared module (or a hook,
+  in a UI framework that has them).
+- **Repeated UI + state** (UI projects) — the same widget + state + handler copied in
+  2+ places (a toast, a modal, a form field). → a shared component (+ a hook if the
+  framework supports it).
+- **Repeated input handling** — the same validate / sanitise / format code (e.g. a
+  phone digit-strip + "N digits left" hint). → a shared helper (+ a shared input
+  component in a UI project).
+- **Repeated object construction** — the same object/record assembled many times
+  (e.g. an audit-log actor / `performedBy`). → a shared factory/helper.
+- **Repeated I/O** — the same network call, DB query, or file-access block (auth header
+  + error check, the same query shape). → a shared service/repository function.
+- **Repeated constants / formats** — identical long style strings, format strings, or
+  config literals redeclared per file. → a shared constant.
+- **Magic values** — the same meaningful literal duplicated in 2+ places (e.g. a min
+  password length used on both client and server). → a shared constant.
+- **Reuse gaps** — logic re-typed inline when a shared helper/component ALREADY exists.
+  → import the existing one.
 
 **Threshold (avoid over-engineering):** flag something only when it is genuinely
 duplicated (appears in **2+ places**) OR is clearly reusable business logic. A few
@@ -67,7 +75,7 @@ Produce a short, scannable, **prioritized** list. For each finding give:
 
 - **What** it is — one plain-language line,
 - **Where** — a `file:line` reference for each occurrence,
-- **Proposed home** — the `lib/` path, hook, or component it should become.
+- **Proposed home** — the shared module / function / component it should become.
 
 Group by priority:
 
@@ -76,8 +84,8 @@ Group by priority:
 - **Tier 3 — optional / low value.**
 
 Then **ask which to extract.** Apply changes only after explicit approval, **one
-approved item at a time**, reusing existing shared code where possible. Per the project
-workflow, commit + push each completed extraction.
+approved item at a time**, reusing existing shared code where possible. Commit each
+completed extraction as its own logical change.
 
 ## Guiding principles
 

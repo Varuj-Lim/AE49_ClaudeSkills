@@ -72,7 +72,7 @@ Skills for code work.
 | **[ae49-debug-hard](./skills/ae49-debug-hard/SKILL.md)** | Disciplined diagnosis loop for hard/intermittent bugs and performance regressions: reproduce → minimise → hypothesise → instrument → fix → regression-test, with a repro harness and post-mortem. |
 | **[ae49-improve-codebase-architecture](./skills/ae49-improve-codebase-architecture/SKILL.md)** | Find deepening opportunities in a codebase, consolidate tight coupling, and make it more testable and AI-navigable, informed by the domain language and ADRs. |
 | **[ae49-guidelines](./skills/ae49-guidelines/SKILL.md)** | Behavioral guidelines for code work in the AE49 PyRevit extension: question vs. command, ≥95% understanding before coding, surgical changes, verifiable success criteria, commit per logical change. |
-| **[ae49-audit-lib](./skills/ae49-audit-lib/SKILL.md)** | Non-destructive reuse audit of the AE49_Hub source: finds inline logic that's duplicated or reusable enough to belong in shared `lib` code (helper, hook, or component), reports a prioritized list with `file:line` and a proposed home, and changes nothing until you approve. |
+| **[ae49-audit-lib](./skills/ae49-audit-lib/SKILL.md)** | Non-destructive reuse audit of the codebase: finds inline logic that's duplicated or reusable enough to belong in shared code (a helper, module, or component), reports a prioritized list with `file:line` and a proposed home, and changes nothing until you approve. |
 
 ### Productivity
 

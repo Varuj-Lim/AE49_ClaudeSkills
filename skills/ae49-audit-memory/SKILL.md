@@ -17,8 +17,8 @@ The memory lives at:
 <home>/.claude/projects/<flattened-project-path>/memory/
 ```
 
-`<flattened-project-path>` is the absolute project path with the drive colon removed and every `\` or `/` replaced by `-`.
-Example: `C:\Users\varuj.l\Documents\AE49_Hub` → `C--Users-varuj-l-Documents-AE49-Hub`.
+`<flattened-project-path>` is the absolute project path with every character that isn't a letter or digit — the drive colon, `\`, `/`, `.`, `_` — replaced by `-`.
+Example: `C:\Users\alex\Documents\my_app` → `C--Users-alex-Documents-my-app`.
 
 Read `MEMORY.md` (the always-loaded index) first, then read **every** other `.md` file in that folder.
 
