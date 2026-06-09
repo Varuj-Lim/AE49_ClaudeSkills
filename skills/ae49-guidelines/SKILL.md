@@ -1,6 +1,6 @@
 ---
 name: ae49-guidelines
-description: Behavioral guidelines for code work in the AE49 PyRevit extension — classify question vs command, reach >=95% understanding, surface suggestions before coding, check lib/shared code first, keep changes simple and surgical, define verifiable success criteria, commit per logical change.
+description: Behavioral guidelines for code work in the AE49 PyRevit extension — classify question vs command, reach >=95% understanding, surface suggestions before coding, check lib/shared code first, keep changes simple and surgical, define verifiable success criteria, commit per logical change. Use when starting any non-trivial coding task (writing, editing, fixing, or refactoring) in the AE49 extension, or when the user invokes /ae49-guidelines.
 license: MIT
 ---
 

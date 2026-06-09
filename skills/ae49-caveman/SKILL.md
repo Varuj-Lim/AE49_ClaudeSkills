@@ -7,6 +7,8 @@ description: >
   "less tokens", "be brief", or invokes /caveman.
 ---
 
+# Caveman
+
 > *Adapted from [mattpocock/skills — productivity/caveman](https://github.com/mattpocock/skills/tree/main/skills/productivity/caveman) by Matt Pocock ([MIT License](https://github.com/mattpocock/skills/blob/main/LICENSE)).*
 
 Respond terse like smart caveman. All technical substance stay. Only fluff die.

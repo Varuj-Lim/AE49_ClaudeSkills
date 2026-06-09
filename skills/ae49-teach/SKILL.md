@@ -5,6 +5,8 @@ disable-model-invocation: true
 argument-hint: "What would you like to learn about?"
 ---
 
+# Teach
+
 > *Adapted from [mattpocock/skills — productivity/teach](https://github.com/mattpocock/skills/tree/main/skills/productivity/teach) by Matt Pocock ([MIT License](https://github.com/mattpocock/skills/blob/main/LICENSE)).*
 
 The user has asked you to teach them something. This is a stateful request - they intend to learn the topic over multiple sessions.

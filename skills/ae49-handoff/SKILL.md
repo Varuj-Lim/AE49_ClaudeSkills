@@ -1,8 +1,10 @@
 ---
 name: ae49-handoff
-description: Compact the current conversation into a handoff document for another agent to pick up.
+description: Compact the current conversation into a handoff document for another agent to pick up. Use when the user wants to hand work off to a fresh session, says "handoff", "hand this off", or "write a handoff", or wants the current session summarized so another agent can continue the work.
 argument-hint: "What will the next session be used for?"
 ---
+
+# Handoff
 
 > *Adapted from [mattpocock/skills — productivity/handoff](https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff) by Matt Pocock ([MIT License](https://github.com/mattpocock/skills/blob/main/LICENSE)).*
 
