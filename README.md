@@ -26,6 +26,8 @@ cp -r AE49_ClaudeSkills/skills/* ~/.claude/skills/
 
 For a single project instead of globally, copy into `<your-repo>/.claude/skills/` instead. Then invoke any skill by name, e.g. `/ae49-grill`.
 
+To auto-load skills every session, drop an [`examples/CLAUDE.md`](./examples/CLAUDE.md) into your `~/.claude/CLAUDE.md` (or a repo root) — it invokes `ae49-caveman` and `ae49-guidelines` on session start. Adapt or omit as you like.
+
 ## Why These Skills Exist
 
 Each skill targets a common failure mode of coding agents.
@@ -92,4 +94,4 @@ General workflow tools, not code-specific.
 
 ## Credits
 
-These skills are adapted from Matt Pocock's [Skills For Real Engineers](https://github.com/mattpocock/skills) (`caveman`, `grill`, `improve-codebase-architecture`, `handoff`, `teach`, `write-a-skill`, and the `diagnose` debugging loop), retuned for AE49 and extended with `ae49-scrutinize`, `ae49-management-talk`, `ae49-guidelines`, and `ae49-debug-soft`. Huge thanks to Matt for the original work.
+These skills are adapted from Matt Pocock's [Skills For Real Engineers](https://github.com/mattpocock/skills) (`caveman`, `grill`, `improve-codebase-architecture`, `handoff`, `teach`, `write-a-skill`, and the `diagnose` debugging loop), retuned for AE49 and extended with AE49 originals: `ae49-scrutinize`, `ae49-management-talk`, `ae49-guidelines`, `ae49-debug-soft`, `ae49-plan-feature`, and `ae49-implement-feature`. Huge thanks to Matt for the original work.

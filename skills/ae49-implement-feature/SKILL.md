@@ -54,8 +54,8 @@ Pick a pending plan from `docs/plans/` and build it. Meant to run in an
    in `done/` are excluded by step 1's non-recursive `docs/plans/*.md` glob, so they
    never reappear in the list — no `-DONE` suffix needed.)
 
-9. **Commit + push.** Stage ONLY the files this build touched, plus the renamed
-   `<feature>-DONE.md` plan file — never `git add -A`. One commit, message focused on
+9. **Commit + push.** Stage ONLY the files this build touched, plus the moved
+   `docs/plans/done/<feature>.md` plan file — never `git add -A`. One commit, message focused on
    the feature ("why"), per the repo's commit convention. Then, if a remote is
    configured, `git pull --rebase` and push — so the built code and the `Done` status
    reach the remote and stay in sync with the pushed plan. If no remote, commit only.
