@@ -73,6 +73,8 @@ Skills for code work.
 | **[ae49-improve-codebase-architecture](./skills/ae49-improve-codebase-architecture/SKILL.md)** | Find deepening opportunities in a codebase, consolidate tight coupling, and make it more testable and AI-navigable, informed by the domain language and ADRs. |
 | **[ae49-guidelines](./skills/ae49-guidelines/SKILL.md)** | Behavioral guidelines for code work: question vs. command, ≥95% understanding before coding, reuse-first, surgical changes, verifiable success criteria, commit per logical change. |
 | **[ae49-audit-lib](./skills/ae49-audit-lib/SKILL.md)** | Non-destructive reuse audit of the codebase: finds inline logic that's duplicated or reusable enough to belong in shared code (a helper, module, or component), reports a prioritized list with `file:line` and a proposed home, and changes nothing until you approve. |
+| **[ae49-plan-feature](./skills/ae49-plan-feature/SKILL.md)** | Plan a new feature for the current repo by stress-testing the design with a grilling interview, then saving the result as `docs/plans/<feature>.md` from a bundled plan template. |
+| **[ae49-implement-feature](./skills/ae49-implement-feature/SKILL.md)** | Implement a previously planned feature: reads the plans in `docs/plans/`, lists the ones not yet Done, lets you pick which to build, executes its steps end-to-end, then commits and pushes. |
 
 ### Productivity
 
