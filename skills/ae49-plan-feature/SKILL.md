@@ -44,7 +44,9 @@ implement session can later execute. Meant to run in a **plan-mode** session
    Once approved (or if you were never in plan mode), save `docs/plans/<slug>.md`,
    where `<slug>` is the feature name in kebab-case (e.g. "Leave page" →
    `leave-page.md`). Fill every section of the template from the grilled design, set
-   **Status** to `Ready`, and stamp **Created** with today's date.
+   **Status** to `Ready`, and stamp **Created** with today's date. Fill `Files to
+   touch` completely — implement-feature reads it to detect two sessions colliding on
+   the same file, so list every file you create or modify.
 
 7. **Commit + push the plan.** Stage ONLY `docs/plans/<slug>.md` — never
    `git add -A` (`git add <file>` creates the folder for you). Commit with a message
@@ -52,11 +54,21 @@ implement session can later execute. Meant to run in a **plan-mode** session
    configured, `git pull --rebase` first (so the push isn't rejected non-fast-forward)
    and push. If no remote, commit only and tell the user push was skipped.
 
-8. **Return to plan mode.** Call **EnterPlanMode** to switch back into plan mode,
-   ready for the next plan. (If EnterPlanMode isn't available, ask the user to
-   Shift+Tab back to plan mode.) Then report: the saved plan path, that it was
-   committed and pushed, and that the build happens later via `/ae49-implement-feature`
-   in an implement session. Do NOT implement here.
+8. **Mark complete.** Mark this planning run complete in the session task list:
+   call **TaskUpdate** to set the plan-feature task's status to `completed`. If you
+   never registered a task for this run, create one now with **TaskCreate** and
+   immediately mark it `completed`, so the task list clearly shows the skill
+   finished.
+
+9. **Return to plan mode + hand off.** Call **EnterPlanMode** to switch back into
+   plan mode, ready for the next plan. (If EnterPlanMode isn't available, ask the
+   user to Shift+Tab back to plan mode.) Then report the saved plan path and the
+   commit/push status. Do NOT implement here. ALWAYS close the turn with this exact
+   standard hand-off line (adjust only the push wording if push was skipped/blocked),
+   so the user knows the plan is finished and you're ready for the next one:
+
+   > ✅ Planning done — plan saved & pushed. Build it anytime with
+   > `/ae49-implement-feature`. Ready for your next `/ae49-plan-feature`.
 
 ## Output
 

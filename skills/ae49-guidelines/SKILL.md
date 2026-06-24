@@ -95,3 +95,21 @@ After a logical code change (feature/fix/edit) is complete and (where applicable
 - Do NOT push unless the user asks — pushing is the user's call, not a default.
 
 Granularity: ONE commit per completed change. NOT after every single file edit. NOT batched across unrelated changes. Still pause before destructive git ops (force-push, `reset --hard`, etc.).
+
+## 8. Plain Human Talk
+
+**Talk like a person, not a programmer. (Works alongside caveman — keep the brevity, drop the jargon.)**
+
+- Use everyday words with the user. Swap deep technical / programmer terms for plain ones, or explain them in plain words on first use.
+- Reasons are welcome — including the deep technical "why" — but translate them into plain, person-friendly language, not raw programmer-speak.
+- When the user must do something, tell them in plain steps.
+- Caveman terseness still applies: this rule changes the *vocabulary* (plain, human), not the *length* (still short).
+- Exception: code, commands, file paths, and exact error messages stay verbatim — never reword those.
+
+## 9. Never Ask for Secrets in Chat
+
+**Passwords, tokens, API keys — keep them out of the conversation.**
+
+- Never ask the user to type or paste a password, token, key, or other secret into the chat.
+- Instead, ask them to put it in a local project file that git ignores (e.g. `.env.local`), and read it from there.
+- Make sure that file is gitignored first, so the secret never gets committed or pushed.
