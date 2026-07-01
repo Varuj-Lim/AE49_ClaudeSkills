@@ -48,19 +48,25 @@ implement session can later execute. Meant to run in a **plan-mode** session
    touch` completely — implement-feature reads it to detect two sessions colliding on
    the same file, so list every file you create or modify.
 
-7. **Commit + push the plan.** Stage ONLY `docs/plans/<slug>.md` — never
+7. **Summarize in plain language, then confirm.** Before committing anything, give
+   the user a short, plain-language recap of what the plan does — what gets built,
+   what changes for them, no jargon and no file paths — and ask them to confirm
+   it's right. If they want changes, adjust the plan (re-save the file) and
+   re-summarize before moving on. Don't commit until they confirm.
+
+8. **Commit + push the plan.** Stage ONLY `docs/plans/<slug>.md` — never
    `git add -A` (`git add <file>` creates the folder for you). Commit with a message
    naming the feature (follow the repo's commit convention). Then, if a remote is
    configured, `git pull --rebase` first (so the push isn't rejected non-fast-forward)
    and push. If no remote, commit only and tell the user push was skipped.
 
-8. **Mark complete.** Mark this planning run complete in the session task list:
+9. **Mark complete.** Mark this planning run complete in the session task list:
    call **TaskUpdate** to set the plan-feature task's status to `completed`. If you
    never registered a task for this run, create one now with **TaskCreate** and
    immediately mark it `completed`, so the task list clearly shows the skill
    finished.
 
-9. **Return to plan mode + hand off.** Call **EnterPlanMode** to switch back into
+10. **Return to plan mode + hand off.** Call **EnterPlanMode** to switch back into
    plan mode, ready for the next plan. (If EnterPlanMode isn't available, ask the
    user to Shift+Tab back to plan mode.) Then report the saved plan path and the
    commit/push status. Do NOT implement here. ALWAYS close the turn with this exact
