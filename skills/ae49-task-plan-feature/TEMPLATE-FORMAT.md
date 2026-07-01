@@ -3,6 +3,14 @@
 **Status:** Ready <!-- Ready | In progress | On hold | Done -->
 **Created:** <YYYY-MM-DD>
 
+## Plain-language summary
+<!-- No jargon, no file paths — written for the user, not a developer. This is
+     shown back to the user twice: once here to confirm before the plan is
+     committed, and again by implement-feature right after they pick this plan
+     to build. Keep it accurate if the plan changes later. -->
+**What changes:** <1-2 plain-English sentences on what gets built/changed>
+**After this is done:** <1-2 plain-English sentences on what's different for the user>
+
 ## Context
 Why this change — the problem or need, what prompted it, the intended outcome.
 

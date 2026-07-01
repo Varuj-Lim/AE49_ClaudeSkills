@@ -92,13 +92,23 @@ Pick a pending plan from `docs/plans/` and build it. Meant to run in an
    the step-1 `git pull --rebase` snapshot, so a plan another session marks In progress a
    moment later may be missed.
 
-5. **Load.** Read the selected plan fully. Set its **Status** to `In progress`. If
-   you are resuming an `On hold` plan, the manual action is assumed finished — delete
-   its `## On hold` section and resume from the first unticked Step.
+5. **Load, explain, confirm.** Read the selected plan fully.
 
-   **Announce the pick in plain text before building** — one clear line so the user
-   can always see which plan is running, e.g. `🔨 Building: **unified-leave-table-format**
-   (was Ready)`. Restate it the same way if you resume after a pause.
+   **Announce the pick in plain text** — one clear line so the user can always see
+   which plan is running, e.g. `🔨 Building: **unified-leave-table-format** (was
+   Ready)`. Restate it the same way if you resume after a pause.
+
+   Then show the plan's `## Plain-language summary` section back to the user —
+   what will change and what's different once it's built — and ask them to confirm
+   before you start building. This is the same summary they already approved during
+   planning; you're re-surfacing it, not re-deriving it. (If an older plan has no
+   `## Plain-language summary` section, write one now from the plan's Context/Steps
+   and confirm it fresh before continuing.) If they want changes, stop and let them
+   redirect — don't start building on a plan they haven't reconfirmed.
+
+   Once confirmed, set the plan's **Status** to `In progress`. If you are resuming
+   an `On hold` plan, the manual action is assumed finished — delete its `## On hold`
+   section and resume from the first unticked Step.
 
 6. **Build.** Execute the plan's **Steps** in order. After each step's verify
    passes, tick its box (`[ ]` → `[x]`). Reuse the helpers named in the plan's

@@ -46,13 +46,16 @@ implement session can later execute. Meant to run in a **plan-mode** session
    `leave-page.md`). Fill every section of the template from the grilled design, set
    **Status** to `Ready`, and stamp **Created** with today's date. Fill `Files to
    touch` completely — implement-feature reads it to detect two sessions colliding on
-   the same file, so list every file you create or modify.
+   the same file, so list every file you create or modify. Write the
+   `## Plain-language summary` section in plain English — no jargon, no file paths,
+   just what gets built and what's different for the user once it's done —
+   implement-feature reads this same section back to the user later, so get it
+   right here.
 
-7. **Summarize in plain language, then confirm.** Before committing anything, give
-   the user a short, plain-language recap of what the plan does — what gets built,
-   what changes for them, no jargon and no file paths — and ask them to confirm
-   it's right. If they want changes, adjust the plan (re-save the file) and
-   re-summarize before moving on. Don't commit until they confirm.
+7. **Confirm the plain-language summary.** Read the `## Plain-language summary`
+   section you just wrote (step 6) back to the user and ask them to confirm it's
+   right. If they want changes, adjust the plan — and that summary section — then
+   re-confirm before moving on. Don't commit until they confirm.
 
 8. **Commit + push the plan.** Stage ONLY `docs/plans/<slug>.md` — never
    `git add -A` (`git add <file>` creates the folder for you). Commit with a message
