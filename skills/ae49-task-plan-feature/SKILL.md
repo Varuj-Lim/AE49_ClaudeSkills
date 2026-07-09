@@ -50,26 +50,26 @@ implement session can later execute. Meant to run in a **plan-mode** session
    `## Plain-language summary` section in plain English — no jargon, no file paths,
    just what gets built and what's different for the user once it's done —
    implement-feature reads this same section back to the user later, so get it
-   right here.
+   right here. Also write the `## Testing checklist` section: plain, numbered
+   steps the user can click through in the app after the feature is built, to
+   confirm it actually works — implement-feature reads this back to the user as
+   its final report once the build is done.
 
-7. **Confirm the plain-language summary.** Read the `## Plain-language summary`
-   section you just wrote (step 6) back to the user and ask them to confirm it's
-   right. If they want changes, adjust the plan — and that summary section — then
-   re-confirm before moving on. Don't commit until they confirm.
-
-8. **Commit + push the plan.** Stage ONLY `docs/plans/<slug>.md` — never
+7. **Commit + push the plan.** The ExitPlanMode approval in step 6 already served
+   as the user's review of the plain-language summary and testing checklist — do
+   not ask them to confirm again. Stage ONLY `docs/plans/<slug>.md` — never
    `git add -A` (`git add <file>` creates the folder for you). Commit with a message
    naming the feature (follow the repo's commit convention). Then, if a remote is
    configured, `git pull --rebase` first (so the push isn't rejected non-fast-forward)
    and push. If no remote, commit only and tell the user push was skipped.
 
-9. **Mark complete.** Mark this planning run complete in the session task list:
+8. **Mark complete.** Mark this planning run complete in the session task list:
    call **TaskUpdate** to set the plan-feature task's status to `completed`. If you
    never registered a task for this run, create one now with **TaskCreate** and
    immediately mark it `completed`, so the task list clearly shows the skill
    finished.
 
-10. **Return to plan mode + hand off.** Call **EnterPlanMode** to switch back into
+9. **Return to plan mode + hand off.** Call **EnterPlanMode** to switch back into
    plan mode, ready for the next plan. (If EnterPlanMode isn't available, ask the
    user to Shift+Tab back to plan mode.) Then report the saved plan path and the
    commit/push status. Do NOT implement here. ALWAYS close the turn with this exact

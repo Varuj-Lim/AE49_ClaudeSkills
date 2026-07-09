@@ -41,3 +41,11 @@ Existing helpers / components / patterns to reuse (with paths) instead of writin
 ## Verification
 How to test end-to-end — run the app, exercise the flow, run typecheck
 (`npx tsc --noEmit`), and check the changed routes.
+
+## Testing checklist
+<!-- Plain, numbered click-through steps for the USER (not the build session) to
+     follow after the feature is built, to confirm it works. No jargon, no file
+     paths — same audience as the Plain-language summary. implement-feature reads
+     this back to the user as part of its final report. -->
+1. [ ] <do this in the app> → you should see <this>
+2. [ ] <do this in the app> → you should see <this>
