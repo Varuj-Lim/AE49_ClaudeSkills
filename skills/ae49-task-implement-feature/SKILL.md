@@ -62,6 +62,11 @@ Pick a pending plan from `docs/plans/` and build it. Meant to run in an
      crashed/stale build. Pick one only to resume after a crash; if another session
      is live, the shared worktree means edits can clobber." The user MAY force-pick
      one of these to resume.
+   **Order the buildable list smallest plan first (small → big).** Size = number of
+   paths in that plan's `## Files to touch` (already collected in step 3a), tie-broken
+   by the count of `## Steps` checkboxes. Fewest files first; equal files → fewer Steps
+   first. Number the list in that order so the quickest builds sit at the top.
+
    **ALWAYS print the buildable plans as a plain-text numbered list first** — even
    when you then use AskUserQuestion — so the choices stay visible in the transcript
    (the picker widget alone hides them, and the user has said they often can't see
