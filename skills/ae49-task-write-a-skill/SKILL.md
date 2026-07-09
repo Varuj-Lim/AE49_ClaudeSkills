@@ -15,12 +15,22 @@ description: Create new agent skills with proper structure, progressive disclosu
    - Does it need executable scripts or just instructions?
    - Any reference materials to include?
 
-2. **Draft the skill** - create:
+2. **Check for existing skills** - before drafting, search BOTH skill homes for overlap:
+   - Project: `<project>/.claude/skills/*/SKILL.md`
+   - User: `~/.claude/skills/*/SKILL.md`
+
+   Compare the requested domain/triggers against each skill's `name` + `description`
+   frontmatter (plus the session's available-skills list). If an existing skill already
+   covers — or partly covers — the request: STOP. Show the user that skill's name and
+   description, and ask whether to update/extend it instead, and what to change.
+   Create a new skill only after the user confirms nothing existing fits.
+
+3. **Draft the skill** - create:
    - SKILL.md with concise instructions
    - Additional reference files if content exceeds 500 lines
    - Utility scripts if deterministic operations needed
 
-3. **Review with user** - present draft and ask:
+4. **Review with user** - present draft and ask:
    - Does this cover your use cases?
    - Anything missing or unclear?
    - Should any section be more/less detailed?
