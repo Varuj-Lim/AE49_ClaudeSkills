@@ -202,10 +202,22 @@ Pick a pending plan from `docs/plans/` and build it. Meant to run in an
     👤 Tested by you: <✅ confirmed working — quote or summarize their confirmation>
     📝 Commit: <short message>
     🚀 Push: <✅ pushed / ⏭️ skipped — reason>
-    ⚠️ Watch out: <anything the user should manually check — omit the line if none>
+    ⚠️ Watch out: <anything the user must manually do or check — written in PLAIN, everyday language; omit the line if none>
     ```
     One clause per line, no prose. Reuse the same field emoji every run
     (✅/🔨/🧪/👤/📝/🚀/⚠️) so reports scan the same way build to build.
+
+    **Watch out must be jargon-free (per `ae49-ref-guidelines` rule 8).** This line is
+    written for the user, who may not be technical — translate every item into plain
+    words: say what they need to do and why it matters in real terms, never lead with
+    raw config keys, cloud role names, API/method names, or internal mechanics. Put the
+    plain meaning first; if a specific setting or name is genuinely needed to act on it,
+    add it in parentheses *after* the plain explanation. Example —
+    - ❌ jargon: "`createCustomToken` 500s in prod without the Service Account Token
+      Creator role on the App Hosting service account."
+    - ✅ plain: "On the live website (not your computer), Google login won't work until
+      one Google Cloud permission is turned on — it tests fine locally. Ask whoever
+      manages the server to enable it (the *Service Account Token Creator* role)."
 
 ## Notes
 
