@@ -19,12 +19,23 @@ description: >-
 
 ## Why this exists
 
-The support-ticket page is the same page in every app: file a bug or suggestion,
-list them, mark them resolved. Two real apps (**AE49_Hub**, **NuriHub**) forked it
-from one origin and still share the layout, colors, and interaction. Copy this
-canon into a new project instead of reinventing it. The two apps are the worked
-examples — see [REFERENCE.md](REFERENCE.md) for a paste-ready skeleton + how each
-one did it.
+The support-ticket page is the same page in every app: file a bug or suggestion, list
+them, mark them resolved. Two real apps (**AE49_Hub**, **NuriHub**) forked it from one
+origin. Copy this canon instead of reinventing it; [REFERENCE.md](REFERENCE.md) has a
+paste-ready skeleton + how each app did it.
+
+## Canonical choices (this reference)
+
+This skill describes ONE recommended ticket page — the best of both apps:
+
+- **Default view:** Open **+** In Progress (Resolved hidden). *(from NuriHub)*
+- **Status filter:** a **multi-select checkbox menu** (tick any mix). **Type filter:** a single dropdown. *(from NuriHub)*
+- **"Clear" resets to the default view**, not to "show all". *(from NuriHub)*
+- **Reply:** the privileged Detail form has an **optional Response** field; once written it shows read-only to the submitter. *(from AE49_Hub)*
+- **Status labels:** "Open / In Progress / Resolved" (capital **P**).
+- **Toolbar count:** show "{shown} of {total} tickets".
+- **Privilege gate stays generic** — a department check *or* a role check; the skill doesn't pick one.
+- **No notifications** are part of this pattern (out of scope).
 
 ## Anatomy
 
@@ -33,7 +44,7 @@ one did it.
 │ Tickets                                    [ + New ticket ] │  header: title + subtitle + primary pill
 │ Report a bug or suggest an improvement                      │
 ├────────────────────────────────────────────────────────────┤
-│ [🔍 Search…]   [Status ▾]   [Type ▾]   Clear(2)   12 of 40  │  toolbar: search · filters · clear · count
+│ [🔍 Search…]  [Status(2)▾]  [Type ▾]  Clear   12 of 40    │  status = checkboxes · type = dropdown · live count
 ├────────────────────────────────────────────────────────────┤
 │ ▸ 3 selected      [ Delete selected ]      Clear            │  bulk bar — privileged, only when rows picked
 ├────────────────────────────────────────────────────────────┤
@@ -62,7 +73,7 @@ interface Ticket {
   updatedAt: string;             // ISO
   resolvedAt?: string;           // set when status → resolved
   attachmentUrl?: string;        // optional screenshot (cloud-storage URL)
-  // AE49_Hub-only reply feature (leave out if you don't need it):
+  // Reply feature — the privileged Response back to the submitter:
   response?: string; respondedBy?: string; respondedByName?: string; respondedAt?: string;
 }
 ```
@@ -92,7 +103,7 @@ Labels: **Open · In Progress · Resolved** and **Bug · Suggestion**.
 ## Table columns
 
 1. **Checkbox** — *privileged only*; header has select-all (indeterminate when partial).
-2. **Title** — bold; an unread red-dot (AE49) or a paperclip when attached (Nuri).
+2. **Title** — bold; optionally a small marker (an attachment paperclip, or an unread dot).
 3. **Type** — `TYPE_TONE` pill.
 4. **Submitter** — nickname if set, else full name.
 5. **Status** — `STATUS_TONE` pill.
@@ -104,7 +115,12 @@ Labels: **Open · In Progress · Resolved** and **Bug · Suggestion**.
 - **Whole row is the click target** → opens the Detail modal. NOT a name-link to a `/view` route.
 - **All CRUD lives in modals on one page** — no `/new`, `/[id]`, or `/edit` routes.
 - **No column sorting** — order is fixed newest-first from the query; you filter, not sort.
-- **Status filter defaults to open** (AE49 `open`; Nuri `open` + `in_progress`), never "all".
+- **Status filter** = a **multi-select checkbox menu**, defaulting to **Open + In Progress**
+  (Resolved hidden); tick any mix. **Type filter** = a single dropdown. **"Clear" resets to
+  that default view**, not to "show all".
+- **Toolbar shows a live count** — "{shown} of {total} tickets".
+- **Reply loop** — the *editable* (privileged) Detail form has an **optional Response** field;
+  once written it shows read-only to the submitter (needs the `response*` fields on the model).
 - **Create modal** = type + title + description + optional screenshot, and supports
   **Ctrl+V paste-to-attach** with a preview + remove.
 - **A privilege gate** controls the checkbox column, the per-row trash, the *editable* Detail
@@ -113,15 +129,9 @@ Labels: **Open · In Progress · Resolved** and **Bug · Suggestion**.
 
 ## Porting to a new project
 
-**Keep as-is (app-agnostic):** the anatomy, the two badge maps, the modal-CRUD-on-one-page
-shape, the `Ticket` data model, the whole-row-click.
-
-**Swap per project:**
-- **Brand primary** → the "New ticket" pill background + the input focus ring
-  (`ae49-slate` / `nuri-terra` / your token).
-- **Privilege predicate** → who may edit/delete (a department check vs a role check).
-- **Compose vs inline** → lean on a shared UI kit if the project has one (AE49), or hand-roll
-  the header/search/filter/table if it doesn't (Nuri).
+**Keep:** the anatomy, badge maps, modal-CRUD-on-one-page, the `Ticket` model, whole-row-click.
+**Swap per project:** brand primary (New-ticket pill + focus ring), the privilege predicate
+(department vs role check), and compose-vs-inline (shared UI kit vs hand-rolled).
 
 ## Don't
 
@@ -129,6 +139,7 @@ shape, the `Ticket` data model, the whole-row-click.
 - **No `/view` or `/edit` routes** — use modals.
 - **Don't scatter the badge colors** — keep `STATUS_TONE` + `TYPE_TONE` together atop the page.
 - **Don't make the Title a link** — the row is the click target.
+- **Don't wire notifications into this pattern** — out of scope for the reference.
 
 ## Reference
 

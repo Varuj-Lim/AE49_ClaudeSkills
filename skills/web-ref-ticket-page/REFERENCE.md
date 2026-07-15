@@ -26,12 +26,14 @@ const TYPE_TONE = {
 const STATUS_LABEL = { open: "Open", in_progress: "In Progress", resolved: "Resolved" } as const;
 const TYPE_LABEL = { bug: "Bug", suggestion: "Suggestion" } as const;
 const PILL = "inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium";
+const DEFAULT_STATUS: TicketStatus[] = ["open", "in_progress"]; // shown on load; Resolved hidden
 
 export default function TicketsPage() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [filterStatus, setFilterStatus] = useState<TicketStatus | "">("open"); // NOT "all"
+  const [statusFilter, setStatusFilter] = useState<Set<TicketStatus>>(() => new Set(DEFAULT_STATUS));
+  const [statusMenuOpen, setStatusMenuOpen] = useState(false);
   const [filterType, setFilterType] = useState<TicketType | "">("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [creating, setCreating] = useState(false);
@@ -42,14 +44,22 @@ export default function TicketsPage() {
 
   useEffect(() => { getTickets().then(setTickets).finally(() => setLoading(false)); }, []);
 
+  const toggleStatus = (s: TicketStatus) => setStatusFilter((prev) => {
+    const next = new Set(prev); next.has(s) ? next.delete(s) : next.add(s); return next;
+  });
+  const statusIsDefault =
+    statusFilter.size === DEFAULT_STATUS.length && DEFAULT_STATUS.every((s) => statusFilter.has(s));
+  const clearFilters = () => { setStatusFilter(new Set(DEFAULT_STATUS)); setFilterType(""); };
+
   const filtered = tickets.filter((t) => {
     const q = search.toLowerCase();
     const hitsSearch = !q || [t.title, t.description, t.submittedByName]
       .some((f) => f?.toLowerCase().includes(q));
-    return hitsSearch && (!filterStatus || t.status === filterStatus)
-                      && (!filterType || t.type === filterType);
+    const hitsStatus = statusFilter.size === 0 || statusFilter.has(t.status);
+    return hitsSearch && hitsStatus && (!filterType || t.type === filterType);
   });
-  const activeFilters = [filterStatus, filterType].filter(Boolean).length;
+  // "Clear" is offered only when the status set differs from the default (or a type is picked).
+  const activeFilters = (statusIsDefault ? 0 : 1) + (filterType ? 1 : 0);
 
   return (
     <div className="flex flex-col h-full min-h-0 space-y-6">
@@ -70,14 +80,37 @@ export default function TicketsPage() {
       <div className="flex flex-wrap items-center gap-3">
         <SearchInput value={search} onChange={setSearch}
           placeholder="Search by title, description, submitter…" />
-        <FilterSelect value={filterStatus} onChange={setFilterStatus}
-          placeholder="All Statuses" options={["open", "in_progress", "resolved"]} />
-        <FilterSelect value={filterType} onChange={setFilterType}
-          placeholder="All Types" options={["bug", "suggestion"]} />
+
+        {/* Status = multi-select checkbox menu (add an outside-click listener to close it) */}
+        <div className="relative">
+          <button type="button" onClick={() => setStatusMenuOpen((o) => !o)}
+            className="rounded-lg border px-3 py-2 text-sm">
+            {statusFilter.size === 0 ? "Status: All" : `Status (${statusFilter.size})`} ▾
+          </button>
+          {statusMenuOpen && (
+            <div className="absolute z-20 mt-1 w-48 rounded-lg border bg-white py-1 shadow-lg">
+              {(["open", "in_progress", "resolved"] as TicketStatus[]).map((s) => (
+                <label key={s} className="flex items-center gap-2.5 px-3 py-2 text-sm hover:bg-gray-50">
+                  <input type="checkbox" checked={statusFilter.has(s)} onChange={() => toggleStatus(s)} />
+                  {STATUS_LABEL[s]}
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Type = single dropdown */}
+        <select value={filterType} onChange={(e) => setFilterType(e.target.value as TicketType | "")}
+          className="rounded-lg border px-3 py-2 text-sm">
+          <option value="">All types</option>
+          <option value="bug">Bug</option>
+          <option value="suggestion">Suggestion</option>
+        </select>
+
         {activeFilters > 0 && (
-          <button onClick={() => { setFilterStatus(""); setFilterType(""); }}>Clear ({activeFilters})</button>
+          <button onClick={clearFilters}>Clear ({activeFilters})</button>
         )}
-        <span className="ml-auto text-sm text-gray-500">{filtered.length} of {tickets.length}</span>
+        <span className="ml-auto text-sm text-gray-500">{filtered.length} of {tickets.length} tickets</span>
       </div>
 
       {/* BULK BAR — privileged, only when rows selected */}
@@ -155,38 +188,44 @@ Fields: **Type** select (Bug / Suggestion) · **Title** (required) · **Descript
 - **Paste-to-attach**: a `document` paste listener while the modal is open grabs an image
   from the clipboard (Ctrl+V), shows an object-URL preview + a Remove button.
 - On submit: upload the attachment (if any) → create with `status: "open"` → write an
-  activity log → notify the people who handle tickets → toast + close.
+  activity log → toast + close.
 
 ## 3. Detail / edit modal
 
 - **Read-only (non-privileged):** title, Type + Status pills, "Filed by … · date", the
   description (`whitespace-pre-wrap`), the attachment image, and the reply block if present.
 - **Editable (privileged):** Title + Description inputs, then a Type select, a Status select,
-  and (AE49) a Response textarea; plus Delete + Save. Save diffs each field, stamps
-  `resolvedAt` when status → resolved, stamps the reply fields when a response is written,
-  logs the changes, toasts, closes.
+  and an **optional Response** textarea (the reply back to the submitter); plus Delete + Save.
+  Save diffs each field, stamps `resolvedAt` when status → resolved, stamps the reply fields
+  (`respondedBy`/`respondedByName`/`respondedAt`) when a response is written, logs the changes,
+  toasts, closes.
 
 ## 4. AE49_Hub vs NuriHub
 
 Same origin, since diverged. Same badge colors, same modal shells, same paste-to-attach,
-same bulk-delete loop. Where they differ:
+same bulk-delete loop. The skill's canonical page (SKILL.md → *Canonical choices*) blends
+both — NuriHub's filters + count, AE49_Hub's Response reply. This table is the full
+divergence, for reference:
 
 | Aspect | AE49_Hub | NuriHub |
 |---|---|---|
 | Shared UI | composes `PageHeader` / `SearchInput` / `FilterSelect` / `ClearFiltersButton` / `TableCard` + `tableStyles` / `formStyles` | all inline; shares only `LoadingSpinner` / `ConfirmModal` / `ProgressBar` |
 | Modals | inlined in `page.tsx` | extracted to `components/support/TicketModal.tsx` + `TicketDetailModal.tsx` |
 | Privilege gate | `isRdDepartment(userProfile?.department)` | `userProfile?.role === "developer"` |
-| Status filter | single-value `FilterSelect`, default `open` | custom multi-select checkbox dropdown, default `open` + `in_progress` |
+| Status filter | single-value `FilterSelect`, default `open` | ★ multi-select checkbox dropdown, default `open` + `in_progress` |
+| Toolbar count | none | ★ "{shown} of {total} tickets" |
+| Reply | ★ `response*` fields + optional Response textarea | no reply |
+| Row marker | unread red-dot (`useUnreadTargets`) + `markRead` on open | paperclip on rows with an attachment |
 | Brand primary | `ae49-slate` (`#526D82`) | `nuri-terra` (`#CF5E40`) |
-| Extra features | `response*` reply fields + unread red-dot (`useUnreadTargets`) + `markRead` on open | paperclip icon on rows with an attachment; no reply |
 | Bulk-select | shared `useMultiSelect` hook | local `useState<Set<string>>` |
-| Notify on create | targeted `createNotificationsForMany` to the RD uids | broadcast `sendNotification` |
-| Log module | `"tickets"` | `"support"` |
-| Label casing | "In Progress" | "In progress" |
+| Label casing | ★ "In Progress" | "In progress" |
 | Table layout | `<TableCard fill>` full-height, sticky header, internal scroll | `bg-white rounded-xl border` card, horizontal scroll |
 
-Pick the AE49 side when the project already has a shared component kit and wants the reply +
-unread features; pick the Nuri side for a lighter, self-contained page.
+★ = the side this skill adopts as canonical (SKILL.md → *Canonical choices*).
+
+Two choices the skill leaves open — decide per project: **compose vs inline** (lean on a
+shared UI kit if the project has one, else hand-roll the header/search/filter/table), and
+the **row marker** (unread dot, attachment paperclip, or neither).
 
 ## 5. File index
 
