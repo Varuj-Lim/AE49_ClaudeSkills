@@ -95,8 +95,15 @@ Running a single control room? Ignore this — one window does everything, one o
   `pull --ff-only` would fail AFTER the deploy already happened. Push or remove it first.
 - **Folder-claimable (setup):** a `<buildN>` is claimable only if ALL of:
   1. its working tree is clean (`git -C "<buildN>" status --porcelain` empty), **and**
-  2. it's on `main`, **or** its branch's PR is **merged/closed** (`gh pr list --repo
-     <owner>/<repo> --head "<prefix>/<slug>" --state open` returns nothing), **and**
+  2. it's on `main` (never held a branch), **or** a **merged/closed PR actually exists** for
+     its branch — `gh pr list --repo <owner>/<repo> --head "<prefix>/<slug>" --state all
+     --json number,state` must return **≥1 PR with none `OPEN`**. **A branch with NO PR in any
+     state is NOT claimable** — that's a build that was just set up and hasn't opened its PR
+     yet (the board shows it "Building — PR not yet opened"); recycling it would reset the
+     folder and wipe a live build. (Testing only that `--state open` is empty is WRONG — an
+     about-to-start build also has no open PR, so "no open PR" ≠ "the work landed". A crashed
+     no-PR build is freed with `abandon`, which returns the folder to `main` → then the
+     on-`main` branch of this rule makes it claimable.) **and**
   3. nothing unpushed: if the branch still has an upstream, `git -C "<buildN>" log
      "@{u}..HEAD" --oneline` must be empty. **If `@{u}` no longer resolves, that is NOT a
      failure** — it's the normal recycled state (after a squash-merge GitHub auto-deletes
