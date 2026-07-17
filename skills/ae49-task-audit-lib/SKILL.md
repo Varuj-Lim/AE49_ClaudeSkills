@@ -93,9 +93,10 @@ findings must reflect the code as it is right now.
 6. **Ensure the folder.** Check for `docs/plans/` at the repo root. If it does not
    exist, create it.
 
-7. **Read the template.** Read [TEMPLATE-FORMAT.md](TEMPLATE-FORMAT.md) from THIS
-   skill's directory — that is the canonical plan format (do not depend on a
-   project-level template).
+7. **Read the template.** Read the shared canonical plan format:
+   [`../ae49-task-plan-feature/TEMPLATE-FORMAT.md`](../ae49-task-plan-feature/TEMPLATE-FORMAT.md).
+   It's the **one** plan template, shared with plan-feature so the two can't drift — audit-lib
+   keeps no copy of its own. (Do not depend on a project-level template.)
 
 8. **Exit plan mode, then write the plan.** In plan mode you cannot create the file yet,
    and you cannot silently switch modes yourself. Put the full plan in the plan-mode plan
@@ -112,14 +113,32 @@ findings must reflect the code as it is right now.
      rewired to import it, so implement-feature can detect two sessions colliding on the
      same file.
    - **Reuse** — point at any existing shared code the new extraction should build on.
+   - **Branch** — set `**Branch:**` per the template's guidance (`refactor/<slug>` fits most
+     extractions; a bare `—` only for a tiny direct-on-main tidy-up).
+   - **Plain-language summary** — 1–2 jargon-free lines on what changes and what's different
+     afterwards (implement-feature reads this back to the user).
+   - **Testing checklist** — plain click-through steps to confirm the affected screens/flows
+     still work after the extraction.
+
+   Then **wire overlaps into the build chain exactly as `ae49-task-plan-feature` step 7.** An
+   extraction rewires many call sites, so it is the *most* collision-prone plan type: find every
+   other undone plan it shares a file with and set `**After:**` accordingly (leave `—` only if it
+   overlaps nothing). Without this, `/ae49-task-integrate` treats the plan as a dependency-free
+   root and may build it in parallel with a plan that edits the same files.
 
    Set **Status** to `Ready` and stamp **Created** with today's date.
 
-9. **Commit + push the plan.** Stage ONLY `docs/plans/<slug>.md` — never `git add -A`
-   (`git add <file>` creates the folder for you). Commit with a message naming the
-   extraction (follow the repo's commit convention). Then, if a remote is configured,
-   `git pull --rebase` first (so the push isn't rejected non-fast-forward) and push. If
-   no remote, commit only and tell the user push was skipped.
+9. **Commit + push the plan.** **First, the merge-in-flight check (multi-session repos with a
+   build-folder pool), exactly as `ae49-task-plan-feature` step 8:** before staging, confirm the
+   hub is on the default branch — `git rev-parse --abbrev-ref HEAD`. If it reads `_merge_preview`
+   (or any non-default branch), a merge is mid-flight — do NOT commit; tell the user the plan is
+   written and held, and wait until the hub is back on the default branch. Never `git checkout`
+   the hub yourself. Then stage ONLY `docs/plans/<slug>.md` plus any existing plan whose
+   `**After:**` you edited in step 8's wiring — never `git add -A` (`git add <file>` creates the
+   folder for you). Commit with a message naming the extraction (follow the repo's commit
+   convention). Then, if a remote is configured, `git pull --rebase` first (so the push isn't
+   rejected non-fast-forward) and push. If no remote, commit only and tell the user push was
+   skipped.
 
 10. **Mark complete.** Mark this audit run complete in the session task list: call
     **TaskUpdate** to set the audit task's status to `completed`. If you never registered

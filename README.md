@@ -76,7 +76,9 @@ Skills for code work.
 | **[ae49-ref-guidelines](./skills/ae49-ref-guidelines/SKILL.md)** | Behavioral guidelines for code work: question vs. command, ≥95% understanding before coding, reuse-first, surgical changes, verifiable success criteria, commit per logical change. |
 | **[ae49-task-audit-lib](./skills/ae49-task-audit-lib/SKILL.md)** | Non-destructive reuse audit of the codebase: finds inline logic that's duplicated or reusable enough to belong in shared code (a helper, module, or component), reports a prioritized list with `file:line` and a proposed home, and changes nothing until you approve. |
 | **[ae49-task-plan-feature](./skills/ae49-task-plan-feature/SKILL.md)** | Plan a new feature for the current repo by stress-testing the design with a grilling interview, then saving the result as `docs/plans/<feature>.md` from a bundled plan template. |
-| **[ae49-task-implement-feature](./skills/ae49-task-implement-feature/SKILL.md)** | Implement a previously planned feature: reads the plans in `docs/plans/`, lists the ones not yet Done, lets you pick which to build, executes its steps end-to-end, then commits and pushes. |
+| **[ae49-task-implement-feature](./skills/ae49-task-implement-feature/SKILL.md)** | Implement a previously planned feature: reads the plans in `docs/plans/`, lists the ones ready to build, executes its steps end-to-end, runs the automated checks, then waits for you to test before committing and pushing. |
+| **[ae49-task-integrate](./skills/ae49-task-integrate/SKILL.md)** | The Main Session control room for the parallel multi-session workflow: a standing pool of reusable build-folder clones, plus one command with five operations (board / init / setup / merge / abandon) that claims folders, branches plans, and lands PRs through a gated local preview before anything deploys. |
+| **[ae49-task-setup-team-workflow](./skills/ae49-task-setup-team-workflow/SKILL.md)** | The map + setup guide for that workflow — five coordinated session types (Refine Prompt, Plan, Main Setup, Build, Main Merge), how they hand off, and a per-session verification checklist. Project-agnostic. |
 
 ### Productivity
 
@@ -92,6 +94,18 @@ General workflow tools, not code-specific.
 | **[ae49-task-audit-memory](./skills/ae49-task-audit-memory/SKILL.md)** | Non-destructive review of the project's auto-memory files: flags stale, duplicate, or misfiled entries plus gaps, and reports keep / update / delete / create suggestions without changing anything until you approve. |
 | **[ae49-task-read-memory](./skills/ae49-task-read-memory/SKILL.md)** | Re-read the project's auto-memory from disk to pick up edits made by other Claude sessions running in parallel, then recap the current state grouped by type. Read-only — never edits. |
 | **[ae49-ref-report-format](./skills/ae49-ref-report-format/SKILL.md)** | The one shared format for any findings / review / audit / status report: plain-English lines, emoji-tagged severity tiers, a per-finding ID you can reference back, and an emoji verdict. Used by the review and audit skills so they don't each reinvent a layout. |
+| **[ae49-ref-prompt-refine](./skills/ae49-ref-prompt-refine/SKILL.md)** | On/off mode that turns the agent into a prompt rewriter: it stops answering and instead rewrites whatever you type into one clearer English prompt to copy and send. Runs on the smallest model. |
+
+### Web patterns
+
+Reusable UI/app patterns distilled from real production apps — portable references for building, reviewing, or porting common web features. Not process skills; drop them into any project. Examples are from Next.js + Tailwind + Firebase apps; swap the brand/framework specifics when porting.
+
+| Skill | What it does |
+|-------|--------------|
+| **[web-ref-ticket-page](./skills/web-ref-ticket-page/SKILL.md)** | Canonical support-ticket / bug-report page: header + search/filter toolbar + a record table with every create/view/edit/delete in modals on one page, shared status/type badge colors, whole-row-click, and a privileged bulk-delete. |
+| **[web-ref-page-routes](./skills/web-ref-page-routes/SKILL.md)** | Canonical record navigation for a CRUD entity: the list / view / edit / add route shape, breadcrumbs that replace the lone back arrow, and list filters/sort/search kept in the URL so a filtered list survives view → edit → save. |
+| **[web-ref-filter-dropdown](./skills/web-ref-filter-dropdown/SKILL.md)** | Checkbox multi-select filter dropdown for a list page: a `FilterMultiSelect` button with an "All" master box (indeterminate on a partial pick), driven by a `useMultiSelectFilter` hook that owns the selected set, row predicate, and reset. |
+| **[web-ref-device-auth](./skills/web-ref-device-auth/SKILL.md)** | Trusted-device sign-in: an "Add this device" checkbox that registers a remembered, remotely-revocable device kept alive by a heartbeat, paired with a membership-gated Google sign-in that never auto-creates accounts. |
 
 ## Credits
 

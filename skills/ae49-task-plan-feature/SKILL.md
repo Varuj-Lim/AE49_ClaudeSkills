@@ -55,21 +55,59 @@ implement session can later execute. Meant to run in a **plan-mode** session
    confirm it actually works — implement-feature reads this back to the user as
    its final report once the build is done.
 
-7. **Commit + push the plan.** The ExitPlanMode approval in step 6 already served
+7. **Wire overlaps into the build chain.** Before committing, connect this plan to any
+   undone plan it shares a file with, so `/ae49-task-integrate` knows what can build in
+   parallel vs. what must wait. **Skip this whole step when this plan's `**Branch:**` is the
+   bare `—`** (direct-on-main plans don't use build folders) — leave `**After:**` as `—`.
+   - **Find overlaps.** Collect this plan's `## Files to touch` paths (ignore any
+     `NO changes:` bullet). Read every OTHER **undone** plan in `docs/plans/*.md` (Status
+     Ready / In progress / On hold — skip the `done/` subfolder and other `Branch: —` plans)
+     and collect theirs the same way. An overlap = they share ≥1 path (same collision logic
+     implement-feature uses).
+   - **No overlaps →** leave `**After:**` as `—` and continue.
+   - **Overlaps →** show them all at once (each plan's name + the shared file) and ask ONE
+     question — build this **after all of them** (default, one keypress) or mark it
+     **urgent**?
+     - **After all (default):** set this plan's `**After:** <slugA>, <slugB>, …` to every
+       overlapped plan. If the overlaps span more than one existing chain, this correctly
+       merges those chains into one.
+     - **Urgent:** the user picks which overlapped plan(s) should instead wait for THIS
+       plan; for each, add `<this-slug>` to THAT plan's own `**After:**` field (edit the
+       existing plan file — allowed, plan docs live on `main`) and drop it from this plan's
+       `After`. Only offer flipping a plan that is **not yet building** (no branch/PR).
+       **Refuse a flip that would create a cycle** (the target already sits behind this plan
+       through some path) and explain.
+   - Store only these `**After:**` edges — never letters/levels/`.N`; `/ae49-task-integrate`
+     derives the chain display (A1 → A2 → A3.1/A3.2) live from them.
+
+8. **Commit + push the plan.** The ExitPlanMode approval in step 6 already served
    as the user's review of the plain-language summary and testing checklist — do
-   not ask them to confirm again. Stage ONLY `docs/plans/<slug>.md` — never
-   `git add -A` (`git add <file>` creates the folder for you). Commit with a message
-   naming the feature (follow the repo's commit convention). Then, if a remote is
-   configured, `git pull --rebase` first (so the push isn't rejected non-fast-forward)
+   not ask them to confirm again.
+
+   **First, the merge-in-flight check (multi-session repos with a build-folder pool).** A
+   plan session shares the hub folder with the one Main Session, and the merge gate briefly
+   parks the hub on a `_merge_preview` branch. **Before staging, confirm the hub is on the
+   default branch** — `git rev-parse --abbrev-ref HEAD`. If it reads `_merge_preview` (or any
+   non-default branch), a merge is mid-flight: **do NOT commit** — the commit would land on
+   the preview branch and error. Tell the user the plan is written and waiting, and hold the
+   commit until the hub is back on `main` (re-check, then commit). Never `git checkout` the
+   hub yourself. (On a solo repo with no such pool, HEAD is always the default branch — this
+   check just passes.)
+
+   Then: stage ONLY the plan file(s) this run wrote or changed —
+   `docs/plans/<slug>.md` plus any existing plan whose `**After:**` you edited in step 7's
+   urgent path — never `git add -A` (`git add <file>` creates the folder for you). Commit
+   with a message naming the feature (follow the repo's commit convention). Then, if a remote
+   is configured, `git pull --rebase` first (so the push isn't rejected non-fast-forward)
    and push. If no remote, commit only and tell the user push was skipped.
 
-8. **Mark complete.** Mark this planning run complete in the session task list:
+9. **Mark complete.** Mark this planning run complete in the session task list:
    call **TaskUpdate** to set the plan-feature task's status to `completed`. If you
    never registered a task for this run, create one now with **TaskCreate** and
    immediately mark it `completed`, so the task list clearly shows the skill
    finished.
 
-9. **Return to plan mode + hand off.** Call **EnterPlanMode** to switch back into
+10. **Return to plan mode + hand off.** Call **EnterPlanMode** to switch back into
    plan mode, ready for the next plan. (If EnterPlanMode isn't available, ask the
    user to Shift+Tab back to plan mode.) Then report the saved plan path and the
    commit/push status. Do NOT implement here. ALWAYS close the turn with this exact
@@ -81,7 +119,8 @@ implement session can later execute. Meant to run in a **plan-mode** session
 
 ## Output
 
-- One file: `docs/plans/<slug>.md`, Status `Ready`, committed and pushed.
+- `docs/plans/<slug>.md`, Status `Ready`, `**After:**` wired, committed and pushed
+  (plus, only in step 7's urgent path, an edited `**After:**` line in one existing plan).
 - Session left back in plan mode, ready for the next `/ae49-task-plan-feature`.
 
 ## Notes

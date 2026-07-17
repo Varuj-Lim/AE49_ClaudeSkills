@@ -200,14 +200,14 @@ Fields: **Type** select (Bug / Suggestion) · **Title** (required) · **Descript
   (`respondedBy`/`respondedByName`/`respondedAt`) when a response is written, logs the changes,
   toasts, closes.
 
-## 4. AE49_Hub vs NuriHub
+## 4. <hubname> vs <hubname2>
 
 Same origin, since diverged. Same badge colors, same modal shells, same paste-to-attach,
 same bulk-delete loop. The skill's canonical page (SKILL.md → *Canonical choices*) blends
-both — NuriHub's filters + count, AE49_Hub's Response reply. This table is the full
+both — <hubname2>'s filters + count, <hubname>'s Response reply. This table is the full
 divergence, for reference:
 
-| Aspect | AE49_Hub | NuriHub |
+| Aspect | <hubname> | <hubname2> |
 |---|---|---|
 | Shared UI | composes `PageHeader` / `SearchInput` / `FilterSelect` / `ClearFiltersButton` / `TableCard` + `tableStyles` / `formStyles` | all inline; shares only `LoadingSpinner` / `ConfirmModal` / `ProgressBar` |
 | Modals | inlined in `page.tsx` | extracted to `components/support/TicketModal.tsx` + `TicketDetailModal.tsx` |
@@ -229,7 +229,7 @@ the **row marker** (unread dot, attachment paperclip, or neither).
 
 ## 5. File index
 
-**AE49_Hub** (`C:\Users\varuj.l\Documents\AE49_Hub`)
+**<hubname>** (`C:\Users\<you>\Documents\<hubname>`)
 - `app/(app)/support/tickets/page.tsx` — list + create/detail/delete modals (all inline)
 - `types/ticket.ts` — `Ticket`, `TicketType`, `TicketStatus`
 - `lib/services/ticketService.ts` — Firestore/Storage CRUD (`tickets` collection)
@@ -237,7 +237,7 @@ the **row marker** (unread dot, attachment paperclip, or neither).
 - constants: `lib/constants/{tableStyles,formStyles,textStyles}.ts`; brand tokens in `app/globals.css` `@theme`
 - hooks: `lib/hooks/{useMultiSelect,useUnreadTargets}.ts`
 
-**NuriHub** (`Varuj-Lim/NURI_Hub`, private — read via `gh`)
+**<hubname2>** (`<owner>/<repo2>`, private — read via `gh`)
 - `app/(app)/support/tickets/page.tsx` — list page
 - `components/support/TicketModal.tsx` — create · `components/support/TicketDetailModal.tsx` — view/edit
 - `types/ticket.ts` · `lib/services/ticketService.ts`

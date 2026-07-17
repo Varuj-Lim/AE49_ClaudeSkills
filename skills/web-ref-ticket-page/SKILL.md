@@ -5,7 +5,7 @@ description: >-
   with a "New ticket" button, a search + status/type filter toolbar, a record
   table (Title · Type · Submitter · Status · Created · Actions), and every
   create/view/edit/delete handled in modals on one page. Distilled from two real
-  Next.js + Tailwind + Firebase apps (AE49_Hub, NuriHub) that share it. Use
+  Next.js + Tailwind + Firebase apps that share it. Use
   whenever building, reviewing, or porting a ticket / support / bug-report /
   feedback / issue / request page in any project — the layout, the status/type
   badge colors (open gray / in_progress amber / resolved emerald; bug rose /
@@ -20,7 +20,7 @@ description: >-
 ## Why this exists
 
 The support-ticket page is the same page in every app: file a bug or suggestion, list
-them, mark them resolved. Two real apps (**AE49_Hub**, **NuriHub**) forked it from one
+them, mark them resolved. Two real apps (**<hubname>**, **<hubname2>**) forked it from one
 origin. Copy this canon instead of reinventing it; [REFERENCE.md](REFERENCE.md) has a
 paste-ready skeleton + how each app did it.
 
@@ -28,10 +28,10 @@ paste-ready skeleton + how each app did it.
 
 This skill describes ONE recommended ticket page — the best of both apps:
 
-- **Default view:** Open **+** In Progress (Resolved hidden). *(from NuriHub)*
-- **Status filter:** a **multi-select checkbox menu** (tick any mix). **Type filter:** a single dropdown. *(from NuriHub)*
-- **"Clear" resets to the default view**, not to "show all". *(from NuriHub)*
-- **Reply:** the privileged Detail form has an **optional Response** field; once written it shows read-only to the submitter. *(from AE49_Hub)*
+- **Default view:** Open **+** In Progress (Resolved hidden). *(from <hubname2>)*
+- **Status filter:** a **multi-select checkbox menu** (tick any mix). **Type filter:** a single dropdown. *(from <hubname2>)*
+- **"Clear" resets to the default view**, not to "show all". *(from <hubname2>)*
+- **Reply:** the privileged Detail form has an **optional Response** field; once written it shows read-only to the submitter. *(from <hubname>)*
 - **Status labels:** "Open / In Progress / Resolved" (capital **P**).
 - **Toolbar count:** show "{shown} of {total} tickets".
 - **Privilege gate stays generic** — a department check *or* a role check; the skill doesn't pick one.
@@ -115,9 +115,14 @@ Labels: **Open · In Progress · Resolved** and **Bug · Suggestion**.
 - **Whole row is the click target** → opens the Detail modal. NOT a name-link to a `/view` route.
 - **All CRUD lives in modals on one page** — no `/new`, `/[id]`, or `/edit` routes.
 - **No column sorting** — order is fixed newest-first from the query; you filter, not sort.
-- **Status filter** = a **multi-select checkbox menu**, defaulting to **Open + In Progress**
-  (Resolved hidden); tick any mix. **Type filter** = a single dropdown. **"Clear" resets to
-  that default view**, not to "show all".
+- **Status filter** = the shared **`FilterMultiSelect`** checkbox multi-select. Its mechanics —
+  the "All" master checkbox, indeterminate-on-partial, empty-set-matches-nothing, outside-click
+  close, and the `useMultiSelectFilter` hook — are specified once in
+  **[`web-ref-filter-dropdown`](../web-ref-filter-dropdown/SKILL.md)**; don't re-derive them here.
+  Ticket-specific choices on top: it **defaults to Open + In Progress** (Resolved hidden) via the
+  hook's `defaultValues`, and needs **`z-40`** so the panel clears the table's sticky header
+  (`z-20`) yet still sits below modals/toasts (`z-50`). **Type filter** = a single dropdown.
+  **"Clear" resets to that default view**, not to "show all".
 - **Toolbar shows a live count** — "{shown} of {total} tickets".
 - **Reply loop** — the *editable* (privileged) Detail form has an **optional Response** field;
   once written it shows read-only to the submitter (needs the `response*` fields on the model).
@@ -144,5 +149,5 @@ Labels: **Open · In Progress · Resolved** and **Bug · Suggestion**.
 ## Reference
 
 - Paste-ready skeleton, per-modal shapes, full app comparison, file index → [REFERENCE.md](REFERENCE.md).
-- **AE49_Hub** — `app/(app)/support/tickets/page.tsx` (list + all modals inline), `types/ticket.ts`, `lib/services/ticketService.ts`.
-- **NuriHub** — `app/(app)/support/tickets/page.tsx`, `components/support/TicketModal.tsx` + `TicketDetailModal.tsx`, `types/ticket.ts`, `lib/services/ticketService.ts`.
+- **<hubname>** — `app/(app)/support/tickets/page.tsx` (list + all modals inline), `types/ticket.ts`, `lib/services/ticketService.ts`.
+- **<hubname2>** — `app/(app)/support/tickets/page.tsx`, `components/support/TicketModal.tsx` + `TicketDetailModal.tsx`, `types/ticket.ts`, `lib/services/ticketService.ts`.

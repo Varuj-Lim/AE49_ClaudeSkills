@@ -3,8 +3,9 @@ name: ae49-task-implement-feature
 description: >
   Implement a previously planned feature. Reads every plan in docs/plans/, lists
   the ones ready to build (Status Ready or On hold), lets the user pick which to
-  build, executes its steps end-to-end, waits for the user to manually test and
-  confirm it works before marking it Done, then commits and pushes. Use when the
+  build, executes its steps end-to-end, runs the automated checks, then STOPS with
+  every change uncommitted for the user to manually test — committing and pushing
+  only after the user confirms testing passed and asks to commit. Use when the
   user wants to implement
   or build a planned feature, invokes /ae49-task-implement-feature, or is in an implement
   session ready to execute a docs/plans/ plan file.
@@ -15,14 +16,62 @@ description: >
 Pick a pending plan from `docs/plans/` and build it. Meant to run in an
 **implement** session (`claude --permission-mode acceptEdits` or default).
 
+## Commit gate (the core rule — read first)
+
+**Manual testing by the user is the final gate before ANY commit or push.** Build the
+plan and run every automated check (typecheck, build, lint, tests/CI), then **STOP with
+all changes sitting uncommitted in the working tree** and wait. Do **not** create a
+commit or push anything — not a checkpoint, not the plan-status bookkeeping, nothing —
+until the user has run the testing checklist, explicitly confirms it passed, and asks
+you to commit. Only then do steps 10–11 (archive + the single commit + push). This holds
+everywhere, including the mid-build manual-action pause (step 6): that stays uncommitted
+too. In a normal run there is exactly ONE commit, and it happens after the user's
+approval.
+
+**PR_FLOW exception:** on a feature branch (see `## PR_FLOW — branch sessions`) the user's
+manual test moves to the Main Session's merge gate, so branch commits and the PR happen
+WITHOUT a prior user test. This gate binds DIRECT_TO_MAIN only — the two never apply at
+the same time.
+
 ## Workflow
 
-1. **Find plans.** If a remote is configured, `git pull --rebase` first so the list
-   reflects plans pushed from a plan session. List `docs/plans/*.md` — every file
+1. **Find plans.** If a remote is configured **and the working tree is clean**,
+   `git pull --rebase` first so the list reflects plans pushed from a plan session.
+   **Skip the pull when the tree is dirty** — a build paused at step 8 leaves its work
+   uncommitted, and `git pull --rebase` aborts on a dirty tree ("cannot pull with
+   rebase: you have unstaged changes"); in that case you're resuming that paused build,
+   so proceed without pulling. List `docs/plans/*.md` — every file
    there is a `<feature>.md` plan. (Completed plans live in the `docs/plans/done/`
    subfolder; the non-recursive `*.md` glob skips them, so they never appear in the
    list.) If `docs/plans/` is missing or empty, tell the user there's nothing to
    implement (plan one with `/ae49-task-plan-feature`) and stop.
+
+   **Then detect the flow (branch vs. main).** Right after finding plans, decide whether
+   this session commits straight to the default branch (today's behavior) or is a feature
+   branch that ends in a PR:
+   ```bash
+   cur=$(git rev-parse --abbrev-ref HEAD)
+   def=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null); def=${def#origin/}
+   [ -z "$def" ] && def=main
+   # cur == def  → DIRECT_TO_MAIN (today's behavior, verbatim)
+   # cur != def  → PR_FLOW
+   ```
+   Use `symbolic-ref`, **not** `git rev-parse --abbrev-ref origin/HEAD` — the latter
+   echoes its argument when the ref is missing, so a remote-less repo on `main` would
+   mis-detect PR_FLOW. `symbolic-ref` prints nothing on failure, so the `def=main`
+   fallback kicks in. Then:
+   - **`cur == def` → DIRECT_TO_MAIN:** the flow is **unchanged — all existing steps below
+     (2–12) apply verbatim.** This is today's behavior for this and every other repo,
+     including repos with no `origin/HEAD` set. Ignore the PR_FLOW section entirely.
+     **Pool-folder guard:** but if the folder's basename matches the build-pool pattern
+     (`*-build<N>`, e.g. `<hubname>-build2`), **STOP** — an idle build folder sits on `main`,
+     and building here would commit and deploy straight to production from a pool folder.
+     Tell the user: run `/ae49-task-integrate setup <plan>` in the Main Session first (it
+     puts this folder on a feature branch), then re-run this skill here.
+   - **`cur != def` → PR_FLOW:** this is a branch session in a build folder (one of the
+     pooled clones). Build per steps 2–12 **but apply the deltas in the
+     `## PR_FLOW — branch sessions` section** (after the Workflow) — they override the steps
+     they name; everything else still applies.
 
 2. **Filter.** Read each file's **Status** (the first word of the Status line) and
    sort plans into three buckets:
@@ -32,6 +81,12 @@ Pick a pending plan from `docs/plans/` and build it. Meant to run in an
      in the normal list; hold them aside as the *stuck?* set (a live concurrent
      session, OR a crashed/abandoned build).
    - **Done** — ignore.
+
+   **Branch-build override (repos with a build-folder pool):** branch sessions never write
+   Status, so a plan being built in a build folder still reads `Ready`. After the step-1
+   sync, also check the remote branches: a plan whose slug matches a remote
+   `(feature|bugfix|refactor)/<slug>` branch is being built right now — put it in the
+   **In progress** bucket regardless of its Status line.
 
    If there are no Buildable plans **and** no In-progress plans, tell the user
    there's nothing to implement (plan one with `/ae49-task-plan-feature`) and stop.
@@ -111,7 +166,9 @@ Pick a pending plan from `docs/plans/` and build it. Meant to run in an
    has no `## Plain-language summary` section, write one now from the plan's
    Context/Steps and show it — still no confirmation wait.)
 
-   Set the plan's **Status** to `In progress`. If you are resuming
+   Set the plan's **Status** to `In progress` (in the working tree only — per the
+   Commit gate, this and every later change stays uncommitted until the user approves
+   testing). If you are resuming
    an `On hold` plan, read its `## On hold` note to tell which pause it was: (a) a
    manual action was needed before the build could continue — assume it's done,
    delete the note, and resume from the first unticked Step; (b) awaiting your test
@@ -130,11 +187,15 @@ Pick a pending plan from `docs/plans/` and build it. Meant to run in an
      (a) set **Status** to `On hold`;
      (b) add a `## On hold — waiting on you` section naming the exact manual action
      **and** the Step number to resume from;
-     (c) **checkpoint-commit** — stage only the files touched so far **plus** the plan
-     file (never `git add -A`), commit with a message noting it's paused on a manual
-     step, and if a remote is configured `git pull --rebase` then push — so the paused
-     state and partial work are durable and any session can resume cleanly;
-     (d) tell the user the manual action, then **stop**.
+     (c) **do NOT commit or push** — the build isn't finished and hasn't been tested, so
+     the partial work stays uncommitted in the working tree (per the Commit gate);
+     (d) tell the user the exact manual action AND the Step number to resume from, note
+     that the work is sitting uncommitted, then **stop**.
+     **Durability caveat:** nothing is committed, and this repo's concurrent sessions can
+     strip unstaged edits — so it's safest to do the manual action and resume in the SAME
+     session. If the pause must span sessions, you MAY offer a clearly-labeled *untested
+     WIP* checkpoint commit, but make it ONLY with the user's explicit OK (and the final
+     commit in step 11 still supersedes it once testing passes).
      `On hold` is filtered IN, so once they finish the manual step they re-run
      `/ae49-task-implement-feature`, pick the plan, and step 5 flips it back to
      `In progress` and resumes from the noted step.
@@ -142,9 +203,10 @@ Pick a pending plan from `docs/plans/` and build it. Meant to run in an
 7. **Verify.** Run the plan's **Verification** section end-to-end (run the app,
    typecheck, exercise the flow). Fix and re-verify until it passes.
 
-8. **Show the testing checklist — then wait.** Automated Verify (step 7) is not the
-   finish line. **Never set Status to `Done` on your own say-so** — that only
-   happens once the user has personally tried the feature and told you it works.
+8. **Show the testing checklist — then STOP, uncommitted.** Automated Verify (step 7)
+   is not the finish line, and it is NOT a licence to commit. **Never commit or push,
+   and never set Status to `Done`, on your own say-so** — both wait until the user has
+   personally tried the feature and told you it works (per the Commit gate).
 
    - Print the plan's `## Testing checklist` section back to the user verbatim —
      plain, numbered, click-through steps. (If an older plan has no such section,
@@ -152,28 +214,33 @@ Pick a pending plan from `docs/plans/` and build it. Meant to run in an
      This is a lightweight, per-feature list only — separate from the full
      `/ae49Hub-task-uat-docs` role-based checklist pipeline, which this step does
      not touch or update.
-   - Tell the user plainly: the build and your own checks passed, but you're
-     holding off on marking it Done until they've run through the checklist and
-     told you it works.
-   - **Checkpoint before waiting**, the same way as a manual-action pause, since
-     this wait can outlast the conversation: set **Status** to `On hold`, add a
-     `## On hold — awaiting your test confirmation` section noting that all Steps
-     and automated Verify are already done and only the user's confirmation is
-     pending, then **checkpoint-commit** (stage the files touched so far plus the
-     plan file — never `git add -A` — commit with a message noting it's paused on
-     test confirmation, `git pull --rebase` then push if a remote is configured).
-   - Then **stop** and wait for the user's reply. Do not touch Success-criteria
-     boxes or Status again until step 9 resolves them.
+   - Tell the user plainly: the build and your automated checks passed, **all changes
+     are sitting uncommitted in the working tree**, and you're holding off on BOTH the
+     commit and marking it Done until they've run the checklist and told you it works.
+   - Set the plan's **Status** to `On hold` and add a `## On hold — awaiting your test
+     confirmation` section (all Steps + automated Verify done, only the user's
+     confirmation pending) — but **leave it uncommitted**, in the working tree, with
+     everything else. **Do NOT commit or push here.**
+   - **Durability caveat:** the work now lives only in the working tree, and this
+     repo's concurrent sessions can strip unstaged edits — so it's safest to test in
+     this same session. If the wait must span sessions, you MAY offer a clearly-labeled
+     *untested WIP* checkpoint commit, but only with the user's explicit OK.
+   - Then **stop** and wait for the user's reply. Do not commit, and do not touch
+     Success-criteria boxes or Status again, until step 9 resolves them.
 
 9. **Act on the user's answer.**
-   - **It works.** Delete the `## On hold` section, tick every Success-criteria box
-     that now holds, and set **Status** to `Done`. Continue to step 10.
-   - **It doesn't work / something's off.** Fix it, re-run **Verify** (step 7), then
-     repeat step 8 (fresh checklist, fresh checkpoint) and wait again. Loop until
-     confirmed — never mark `Done` on an unconfirmed build.
+   - **It works / they ask you to commit.** NOW — and only now — is committing
+     unlocked. Delete the `## On hold` section, tick every Success-criteria box that
+     now holds, set **Status** to `Done`, and continue to step 10 (archive) + step 11
+     (the single commit + push — the FIRST commit of this build).
+   - **It doesn't work / something's off.** Fix it — changes stay uncommitted — re-run
+     **Verify** (step 7), then repeat step 8 (fresh checklist) and wait again. Still
+     **do not commit**. Loop until confirmed — never commit or mark `Done` on an
+     unconfirmed build.
    - If confirmation arrives in a **later run** of this skill (the user picked this
-     same `On hold` plan back up), step 5 already routes you straight here instead
-     of rebuilding.
+     same `On hold` plan back up), step 5 routes you straight here — provided the
+     uncommitted work is still in the working tree (or a labeled WIP checkpoint was
+     made); either way step 11 produces the clean final commit.
 
 10. **Move the plan file into `done/`.** Once the plan is confirmed working and marked
    `Done`, move it into the `docs/plans/done/` subfolder so completed plans are separated
@@ -185,11 +252,15 @@ Pick a pending plan from `docs/plans/` and build it. Meant to run in an
    in `done/` are excluded by step 1's non-recursive `docs/plans/*.md` glob, so they
    never reappear in the list — no `-DONE` suffix needed.)
 
-11. **Commit + push (final).** Stage ONLY the files this build touched, plus the moved
-   `docs/plans/done/<feature>.md` plan file — never `git add -A`. One commit, message focused on
-   the feature ("why"), per the repo's commit convention. Then, if a remote is
-   configured, `git pull --rebase` and push — so the built code and the `Done` status
-   reach the remote and stay in sync with the pushed plan. If no remote, commit only.
+11. **Commit + push (final).** This runs ONLY after the user's step-9 approval — it is
+   normally the FIRST and only commit of the build (nothing was committed earlier). Stage
+   ONLY the files this build touched, plus the moved `docs/plans/done/<feature>.md` plan
+   file — never `git add -A`. One commit, message focused on the feature ("why"), per the
+   repo's commit convention. (If a labeled *untested WIP* checkpoint was made during a
+   cross-session pause, fold it into one clean feature commit — `git commit --amend` or a
+   soft reset — never leave the WIP as the final record.) Then, if a remote is configured,
+   `git pull --rebase` and push — so the built code and the `Done` status reach the remote
+   and stay in sync with the pushed plan. If no remote, commit only.
 
 12. **Report.** Close out per [ae49-ref-report-format](../ae49-ref-report-format/SKILL.md)'s
     shared principles — plain English, one consistent emoji per field, one-line close —
@@ -218,6 +289,14 @@ Pick a pending plan from `docs/plans/` and build it. Meant to run in an
     - ✅ plain: "On the live website (not your computer), Google login won't work until
       one Google Cloud permission is turned on — it tests fine locally. Ask whoever
       manages the server to enable it (the *Service Account Token Creator* role)."
+
+## PR_FLOW — branch sessions
+
+When step 1's flow detection finds `cur != def`, this is a **branch session** in a build
+folder: build the plan per steps 2–12 but apply the branch-session deltas in
+**[PR-FLOW.md](PR-FLOW.md)** — the plan is pre-bound + read-only, steps 8–10 are skipped, and
+the run ends in a PR instead of a user-tested commit. Loaded only on that path, so a normal
+DIRECT_TO_MAIN build never pays for it. (On DIRECT_TO_MAIN, ignore this section entirely.)
 
 ## Notes
 
