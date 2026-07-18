@@ -233,6 +233,16 @@ folder: build the plan per steps 2–12 but apply the branch-session deltas in
 the run ends in a PR instead of a user-tested commit. Loaded only on that path, so a normal
 DIRECT_TO_MAIN build never pays for it. (On DIRECT_TO_MAIN, ignore this section entirely.)
 
+## FROM-REVIEW — implementing merge-gate fixes
+
+When this skill is invoked with **`--from-review`** (or a `.review/pr-<PR#>.json` artifact
+exists in the current build folder for its branch), it does NOT pick a plan — it implements the
+code-review findings the Main Session's merge gate dispatched, then pushes so the merge gate can
+re-enter at its preview. This is a PR_FLOW variant (branch session, plan file read-only). Full
+steps → **[FROM-REVIEW.md](FROM-REVIEW.md)**. The dispatch that produces the artifact lives in
+`ae49-task-integrate`'s AUTOFIX.md; only `auto`-class findings are ever implemented here —
+`decision` findings stay with the user.
+
 ## Notes
 
 - One plan per run. To build another, run the skill again.

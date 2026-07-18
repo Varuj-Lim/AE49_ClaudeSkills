@@ -124,7 +124,9 @@ you run one. Quick map (argument selects the operation, default `board`):
 - **`board`** — live status board of pool + plans + PRs + doctor pass.
 - **`setup [<slug>]`** — claim a free folder, sync it to `origin/main`, branch + publish it.
 - **`merge <PR#>`** — gated land: CI + review → preview the squash on `:3000` → deploy only on
-  your OK → archive the plan.
+  your OK → archive the plan. After review it can **optionally auto-fix** — dispatch the
+  mechanical findings to the branch's build folder for a `--from-review` build session, then
+  re-enter at the preview (opt-in, never skips a gate) → **[AUTOFIX.md](AUTOFIX.md)**.
 - **`abandon <slug>`** — close the PR, free the folder, delete the branch, leave or archive the plan.
 
 The argument table and Preflights above bind every operation; OPERATIONS.md has the exact commands.

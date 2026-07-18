@@ -164,13 +164,16 @@ Land one feature, testing the **squashed result on the hub's `:3000` before anyt
 1. **Preflight** (Hub-clean, incl. the no-unpushed-main check). `git -C "<hub>" fetch origin
    --prune`. Identify the PR + its head branch `<prefix>/<slug>`. **Re-entrancy:** if the PR
    is ALREADY merged (a previous run crashed mid-tail), skip a–g and resume from h → i — each
-   tail step is safely re-runnable.
+   tail step is safely re-runnable. **Auto-fix re-entry:** if a dispatch is in flight —
+   `<buildN>/.review/pr-<PR#>.results.json` exists — handle it per **[AUTOFIX.md](AUTOFIX.md)**
+   step c-4 (read the outcomes, STOP on any `needs-human`, else re-review the fix diff) before
+   Phase 1.
 - **a. Clear a stale `blocked` label.** If the PR carries `blocked` from an earlier halt and
   the cause is fixed, remove it now:
   `gh pr edit <PR#> --repo <owner>/<repo> --remove-label blocked`.
   (Steps below only ADD the label — this is the one place it comes off.)
 - **b. CI green.** `gh pr checks <PR#> --repo <owner>/<repo>` must pass. Red → fix or add `blocked` label, STOP.
-- **c. Review.** Run `/code-review` on the PR (findings as PR comments). Blockers → `gh pr edit <PR#> --repo <owner>/<repo> --add-label blocked`, STOP.
+- **c. Review.** Run `/code-review` on the PR (findings as PR comments). Blockers → `gh pr edit <PR#> --repo <owner>/<repo> --add-label blocked`. Then, when fixable findings remain, **optionally run the auto-fix loop → [AUTOFIX.md](AUTOFIX.md)**: emit a structured `findings.json`, classify each finding `auto | decision | wontfix`, and offer (opt-in — **never default**) to dispatch the `auto` fixes to the branch's build folder, where a `/ae49-task-implement-feature --from-review` session implements + pushes them. `decision` findings always stay with the user and keep the PR blocked. If the user declines dispatch, STOP for manual fix-forward as today. The loop re-enters at step f — it **never skips the preview or your confirmation**.
 - **d. Unexpected files.** `gh pr diff <PR#> --repo <owner>/<repo> --name-only` vs the plan's `## Files to touch` — surface extras.
 - **e. Conflict / duplication.** Files overlap another open PR → explain, list options, user decides order; skim other PRs for same-functionality duplication.
 - **f. Phase 1 — preview the squashed result on `:3000` (NO deploy):**
