@@ -35,6 +35,12 @@ the same time.
 
 ## Workflow
 
+**0. Review-handoff auto-detect (before anything else).** If a `.review/pr-<PR#>.json` file
+exists in this folder — the merge gate's auto-fix dispatch dropped it — this run implements
+those code-review fixes, **not** a plan: skip the plan pick entirely and follow
+**[FROM-REVIEW.md](FROM-REVIEW.md)**. (Invoking with `--from-review` forces this path too.)
+Otherwise continue with step 1.
+
 1. **Find plans.** If a remote is configured **and the working tree is clean**,
    `git pull --rebase` first so the list reflects plans pushed from a plan session.
    **Skip the pull when the tree is dirty** — a build paused at step 8 leaves its work
