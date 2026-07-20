@@ -67,17 +67,19 @@ Existing helpers / components / patterns to reuse (with paths) instead of writin
 - <unresolved question for the user>
 
 ## Rollback strategy
-<!-- How to undo this if it breaks production after merge. Standard = revert the merge
-     commit on main (`git revert <sha>` + push, which App Hosting redeploys); never
-     reset --hard or force-push main. `Standard` is a complete, valid answer. Write prose
-     ONLY for deviations — Firestore schema change, storage/firestore rules change (those
-     need a separate `npx firebase-tools deploy --only firestore:rules`), or a new secret
-     needing manual reversal. -->
+<!-- How to undo this if it breaks after release. Standard = revert the merge commit on
+     the default branch (`git revert <sha>` + push, plus whatever redeploy that triggers
+     in THIS project); never reset --hard or force-push the default branch. `Standard` is
+     a complete, valid answer. Write prose ONLY for deviations — anything git revert alone
+     does NOT undo: a schema/data migration, a change that ships outside the git push
+     (security rules, infra config, a separate deploy target), or a new secret needing
+     manual reversal. Take the project's actual deploy mechanics from its own CLAUDE.md /
+     AGENTS.md rather than assuming a stack. -->
 Standard
 
 ## Verification
-How to test end-to-end — run the app, exercise the flow, run typecheck
-(`npx tsc --noEmit`), and check the changed routes.
+How to test end-to-end — run the app, exercise the flow, and run whatever checks this
+project defines (typecheck / build / lint — see its CLAUDE.md), then check what changed.
 
 ## Testing checklist
 <!-- MANDATORY — never empty, never "none". There is no docs/TESTING.md any more; this

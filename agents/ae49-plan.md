@@ -32,9 +32,10 @@ rules from any other project:
    - **No overlap** → leave it a **new independent chain** (no `After:` edge).
    This mirrors the overlap model in `ae49-task-plan-feature` step 7. Main reads these
    edges into a DAG to decide which implementers can run in parallel worktrees.
-4. **Write the plan** to `docs/plans/<slug>.md` following the bundled template at
-   `~/.claude/skills/ae49-task-plan-feature/TEMPLATE-FORMAT.md` (read it first and match its
-   structure, Status field, and `After:` convention exactly).
+4. **Write the plan** to `docs/plans/<slug>.md` following the bundled `TEMPLATE-FORMAT.md`
+   from the `ae49-task-plan-feature` skill — normally `~/.claude/skills/ae49-task-plan-feature/`,
+   or `<repo>/.claude/skills/ae49-task-plan-feature/` when the skills are installed per-project.
+   Read it first and match its structure, Status field, and `After:` convention exactly.
 
 ## Hard limits — you are headless
 

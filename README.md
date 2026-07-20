@@ -38,7 +38,12 @@ For a single project instead of globally, copy into `<your-repo>/.claude/skills/
 
 `/ae49-task-update-skills` syncs all three, one-way, GitHub → local.
 
-To auto-load skills every session, drop an [`examples/CLAUDE.md`](./examples/CLAUDE.md) into your `~/.claude/CLAUDE.md` (or a repo root) — it invokes `ae49-ref-caveman` and `ae49-ref-guidelines` on session start. Adapt or omit as you like.
+To auto-load skills every session, put a `CLAUDE.md` at `~/.claude/CLAUDE.md` (or a repo root). Two are provided:
+
+- [`dotclaude/CLAUDE.md`](./dotclaude/CLAUDE.md) — **the full setup, and the one `/ae49-task-update-skills` syncs.** Loads four skills: `ae49-task-grill`, `ae49-ref-guidelines`, `ae49-ref-caveman`, and `ae49-router`. Use this if you want the router workflow (Main delegates to the `ae49-plan` / `ae49-implement` agents).
+- [`examples/CLAUDE.md`](./examples/CLAUDE.md) — a **minimal** starting point: just `ae49-ref-caveman` and `ae49-ref-guidelines`, no router, no agents. Use this if you'd rather drive everything yourself.
+
+Adapt or omit as you like — but note the sync overwrites `~/.claude/CLAUDE.md` from `dotclaude/`, so put local edits there if you want them to survive.
 
 ## Why These Skills Exist
 
@@ -87,10 +92,9 @@ Skills for code work.
 | **[ae49-task-improve-codebase-architecture](./skills/ae49-task-improve-codebase-architecture/SKILL.md)** | Find deepening opportunities in a codebase, consolidate tight coupling, and make it more testable and AI-navigable, informed by the domain language and ADRs. |
 | **[ae49-ref-guidelines](./skills/ae49-ref-guidelines/SKILL.md)** | Behavioral guidelines for code work: question vs. command, ≥95% understanding before coding, reuse-first, surgical changes, verifiable success criteria, commit per logical change. |
 | **[ae49-task-audit-lib](./skills/ae49-task-audit-lib/SKILL.md)** | Non-destructive reuse audit of the codebase: finds inline logic that's duplicated or reusable enough to belong in shared code (a helper, module, or component), reports a prioritized list with `file:line` and a proposed home, and changes nothing until you approve. |
+| **[ae49-router](./skills/ae49-router/SKILL.md)** | Makes the Main session a thin router: it grills you, then delegates planning to the `ae49-plan` agent and building to `ae49-implement` (each in its own git worktree, so independent work runs in parallel), while every human gate — design approval, manual test, and anything that touches git — stays with you. Requires the `agents/` folder. |
 | **[ae49-task-plan-feature](./skills/ae49-task-plan-feature/SKILL.md)** | Plan a new feature for the current repo by stress-testing the design with a grilling interview, then saving the result as `docs/plans/<feature>.md` from a bundled plan template. |
 | **[ae49-task-implement-feature](./skills/ae49-task-implement-feature/SKILL.md)** | Implement a previously planned feature: reads the plans in `docs/plans/`, lists the ones ready to build, executes its steps end-to-end, runs the automated checks, then waits for you to test before committing and pushing. |
-| **[ae49-task-integrate](./skills/ae49-task-integrate/SKILL.md)** | The Main Session control room for the parallel multi-session workflow: a standing pool of reusable build-folder clones, plus one command with five operations (board / init / setup / merge / abandon) that claims folders, branches plans, and lands PRs through a gated local preview before anything deploys. |
-| **[ae49-task-setup-team-workflow](./skills/ae49-task-setup-team-workflow/SKILL.md)** | The map + setup guide for that workflow — five coordinated session types (Refine Prompt, Plan, Main Setup, Build, Main Merge), how they hand off, and a per-session verification checklist. Project-agnostic. |
 
 ### Productivity
 
@@ -114,8 +118,6 @@ Reusable UI/app patterns distilled from real production apps — portable refere
 
 | Skill | What it does |
 |-------|--------------|
-| **[web-ref-ticket-page](./skills/web-ref-ticket-page/SKILL.md)** | Canonical support-ticket / bug-report page: header + search/filter toolbar + a record table with every create/view/edit/delete in modals on one page, shared status/type badge colors, whole-row-click, and a privileged bulk-delete. |
-| **[web-ref-page-routes](./skills/web-ref-page-routes/SKILL.md)** | Canonical record navigation for a CRUD entity: the list / view / edit / add route shape, breadcrumbs that replace the lone back arrow, and list filters/sort/search kept in the URL so a filtered list survives view → edit → save. |
 | **[web-ref-filter-dropdown](./skills/web-ref-filter-dropdown/SKILL.md)** | Checkbox multi-select filter dropdown for a list page: a `FilterMultiSelect` button with an "All" master box (indeterminate on a partial pick), driven by a `useMultiSelectFilter` hook that owns the selected set, row predicate, and reset. |
 | **[web-ref-device-auth](./skills/web-ref-device-auth/SKILL.md)** | Trusted-device sign-in: an "Add this device" checkbox that registers a remembered, remotely-revocable device kept alive by a heartbeat, paired with a membership-gated Google sign-in that never auto-creates accounts. |
 
