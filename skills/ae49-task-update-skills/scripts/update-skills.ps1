@@ -68,6 +68,23 @@ try {
   $repoNames = $repoSkills | ForEach-Object { $_.Name }
   $localOnly = @(Get-ChildItem $SkillsDir -Directory | Where-Object { $repoNames -notcontains $_.Name -and $_.Name -ne $SelfSkill } | ForEach-Object { $_.Name })
 
+  # Mirror the subagent definitions: repo agents/*.md -> ~/.claude/agents/*.md.
+  # These are the headless workers Main spawns (ae49-plan / ae49-implement); without this
+  # they live only on one machine and a sync silently leaves them stale. Skipped if the
+  # repo has no agents/ folder. Repo wins on apply, same rule as skills.
+  $repoAgentsRoot  = Join-Path $TmpDir "agents"
+  $localAgentsRoot = Join-Path $env:USERPROFILE ".claude\agents"
+  $agentsAdded = @(); $agentsUpdated = @(); $agentsUnchanged = 0
+  if (Test-Path $repoAgentsRoot) {
+    foreach ($agent in @(Get-ChildItem $repoAgentsRoot -File -Filter *.md)) {
+      $target = Join-Path $localAgentsRoot $agent.Name
+      if (-not (Test-Path $target)) { $agentsAdded += $agent.Name }
+      elseif ((Get-ContentKey $agent.FullName) -ne (Get-ContentKey $target)) { $agentsUpdated += $agent.Name }
+      else { $agentsUnchanged++ }
+    }
+  }
+  $agentsChanged = ($agentsAdded.Count + $agentsUpdated.Count) -gt 0
+
   # Also mirror the user-level CLAUDE.md: repo dotclaude/CLAUDE.md -> ~/.claude/CLAUDE.md.
   # Skipped silently if the repo has no dotclaude/CLAUDE.md. Repo wins on apply, same as skills
   # — so a local hand-edit to ~/.claude/CLAUDE.md that isn't pushed to the repo is overwritten.
@@ -89,6 +106,12 @@ try {
       robocopy $src $dst /MIR /NJH /NJS /NDL /NFL /NP | Out-Null
       if ($LASTEXITCODE -ge 8) { throw "robocopy failed for $name (exit $LASTEXITCODE)" }
     }
+    if ($agentsChanged) {
+      if (-not (Test-Path $localAgentsRoot)) { New-Item -ItemType Directory -Path $localAgentsRoot | Out-Null }
+      foreach ($name in ($agentsAdded + $agentsUpdated)) {
+        Copy-Item (Join-Path $repoAgentsRoot $name) (Join-Path $localAgentsRoot $name) -Force
+      }
+    }
     if ($claudeChanged) { Copy-Item $repoClaude $localClaude -Force }
   }
 
@@ -101,13 +124,16 @@ try {
   Write-Output "unchanged: $unchangedCount"
   if ($localOnly.Count -gt 0) { Write-Output "local-only, never touched: $($localOnly -join ', ')" }
   Write-Output "self (bootstrapper, never synced): $SelfSkill"
+  foreach ($name in $agentsAdded)   { Write-Output "ADD      agents/$name  (in repo, not on this machine)" }
+  foreach ($name in $agentsUpdated) { Write-Output "UPDATE   agents/$name  (local differs from repo; repo version wins on apply)" }
+  if ($agentsUnchanged -gt 0) { Write-Output "agents unchanged: $agentsUnchanged" }
   switch ($claudeState) {
     "add"    { Write-Output "ADD      CLAUDE.md  (user-level; in repo, not on this machine)" }
     "update" { Write-Output "UPDATE   CLAUDE.md  (user-level; local differs from repo; repo version wins on apply)" }
   }
 
   if (-not $Apply) {
-    if (($added.Count + $updated.Count) -eq 0 -and -not $claudeChanged) {
+    if (($added.Count + $updated.Count) -eq 0 -and -not $claudeChanged -and -not $agentsChanged) {
       Write-Output ""
       Write-Output "Everything already matches the repo. Nothing to do."
     } else {
@@ -117,8 +143,10 @@ try {
   } else {
     $claudeNote = ""
     if ($claudeChanged) { $claudeNote = " + CLAUDE.md" }
+    $agentNote = ""
+    if ($agentsChanged) { $agentNote = " + $($agentsAdded.Count + $agentsUpdated.Count) agent(s)" }
     Write-Output ""
-    Write-Output "Done: $($added.Count) added, $($updated.Count) updated$claudeNote."
+    Write-Output "Done: $($added.Count) added, $($updated.Count) updated$agentNote$claudeNote."
   }
 } finally {
   Remove-Item -Recurse -Force $TmpDir -ErrorAction SilentlyContinue

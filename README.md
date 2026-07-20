@@ -14,7 +14,8 @@ Clone the repo and copy the skills into your Claude Code skills directory.
 
 ```powershell
 git clone https://github.com/Varuj-Lim/AE49_ClaudeSkills.git
-Copy-Item -Path .\AE49_ClaudeSkills\skills\* -Destination "$env:USERPROFILE\.claude\skills\" -Recurse -Force
+Copy-Item -Path .\AE49_ClaudeSkills\skills\*  -Destination "$env:USERPROFILE\.claude\skills\"  -Recurse -Force
+Copy-Item -Path .\AE49_ClaudeSkills\agents\*  -Destination "$env:USERPROFILE\.claude\agents\"  -Force
 ```
 
 **macOS / Linux:**
@@ -22,9 +23,20 @@ Copy-Item -Path .\AE49_ClaudeSkills\skills\* -Destination "$env:USERPROFILE\.cla
 ```bash
 git clone https://github.com/Varuj-Lim/AE49_ClaudeSkills.git
 cp -r AE49_ClaudeSkills/skills/* ~/.claude/skills/
+mkdir -p ~/.claude/agents && cp AE49_ClaudeSkills/agents/*.md ~/.claude/agents/
 ```
 
 For a single project instead of globally, copy into `<your-repo>/.claude/skills/` instead. Then invoke any skill by name, e.g. `/ae49-task-grill`.
+
+## Layout
+
+| Folder | Goes to | What it is |
+|---|---|---|
+| `skills/` | `~/.claude/skills/` | The skills themselves — invoke by name, e.g. `/ae49-task-grill`. |
+| `agents/` | `~/.claude/agents/` | Subagent definitions. `ae49-plan` and `ae49-implement` are the headless workers a Main session spawns to write plans and build them in isolated worktrees. Skills alone are not enough — without these, `ae49-router` has nothing to delegate to. |
+| `dotclaude/CLAUDE.md` | `~/.claude/CLAUDE.md` | Session-init: the skills loaded on every session's first response. |
+
+`/ae49-task-update-skills` syncs all three, one-way, GitHub → local.
 
 To auto-load skills every session, drop an [`examples/CLAUDE.md`](./examples/CLAUDE.md) into your `~/.claude/CLAUDE.md` (or a repo root) — it invokes `ae49-ref-caveman` and `ae49-ref-guidelines` on session start. Adapt or omit as you like.
 

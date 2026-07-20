@@ -5,10 +5,21 @@ description: Sync the user-level skills in ~/.claude/skills from the AE49_Claude
 
 # Update user skills from GitHub
 
-Pulls the latest skill folders from `https://github.com/Varuj-Lim/AE49_ClaudeSkills`
-(`skills/` directory) into `~/.claude/skills`, **and** the user-level CLAUDE.md
-(repo `dotclaude/CLAUDE.md` → `~/.claude/CLAUDE.md`). One-way: **GitHub → local**. The
-repo is the source of truth — on apply, the repo version overwrites the local one.
+Pulls three things from `https://github.com/Varuj-Lim/AE49_ClaudeSkills`:
+
+| Repo | → Local |
+|---|---|
+| `skills/` | `~/.claude/skills` |
+| `agents/*.md` | `~/.claude/agents` |
+| `dotclaude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
+
+One-way: **GitHub → local**. The repo is the source of truth — on apply, the repo
+version overwrites the local one.
+
+The `agents/` sync matters as much as the skills: `ae49-plan` and `ae49-implement` are
+the headless workers Main spawns to do the actual planning and building. Before they were
+tracked they existed on exactly one machine, and a sync would refresh every skill while
+silently leaving the agents stale.
 
 ## Quick start
 
@@ -26,6 +37,7 @@ repo is the source of truth — on apply, the repo version overwrites the local 
    - `ADD` — skill exists in the repo but not on this machine
    - `UPDATE` — local copy differs from the repo (direction unknown — see warning)
    - `local-only` — exists only on this machine; **never touched or deleted**
+   - `ADD/UPDATE agents/<name>.md` — same rules, for the subagent definitions
 2. **Warning gate:** an `UPDATE` only says the two copies *differ*. If the user
    edited a skill locally and never pushed it, applying will overwrite that
    edit. When an UPDATE appears, remind the user of this before applying; if
