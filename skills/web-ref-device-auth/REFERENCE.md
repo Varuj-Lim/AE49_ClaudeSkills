@@ -394,8 +394,8 @@ valid trusted sessions. In <hubname> it runs at 04:00 local via a scheduled func
 
 ## <hubname> source file index (provenance)
 
-Single-app origin — this skill is distilled from a single real app only (unlike the two-app
-`web-ref-page-routes` / `web-ref-ticket-page`). Re-sync against these paths if it drifts:
+Single-app origin — this skill is distilled from a single real app only, so treat these
+paths as the one source of truth and re-sync against them if it drifts:
 
 | Piece | Path |
 |---|---|
