@@ -4,11 +4,11 @@ description: >
   Implement a previously planned feature. Reads every plan in docs/plans/, lists
   the ones ready to build (Status Ready or On hold), lets the user pick which to
   build, executes its steps end-to-end, runs the automated checks, then STOPS with
-  every change uncommitted for the user to manually test — committing and pushing
-  only after the user confirms testing passed and asks to commit. Use when the
-  user wants to implement
+  every change uncommitted for the user to manually test — committing only after the
+  user confirms testing passed and asks to commit. Use when the user wants to implement
   or build a planned feature, invokes /ae49-task-implement-feature, or is in an implement
-  session ready to execute a docs/plans/ plan file.
+  session ready to execute a docs/plans/ plan file. Solo single-session path — when Main
+  is routing via the ae49-implement agent, this skill is not used.
 ---
 
 # Implement a feature
@@ -16,30 +16,37 @@ description: >
 Pick a pending plan from `docs/plans/` and build it. Meant to run in an
 **implement** session (`claude --permission-mode acceptEdits` or default).
 
+## When to use this — and when NOT to
+
+This is the **solo, hands-on build path**: ONE human session, in the repo folder,
+that picks a plan, builds it, and holds it for your manual test. Use it for small
+plans where spawning an agent + worktree is more ceremony than the change, for
+resuming an `On hold` plan that needed a manual action only you can do, or whenever
+the router/worktree harness isn't in play.
+
+**Do NOT run this inside an `ae49-implement` agent** — that agent is headless, has
+no user to test with, and is told not to run this skill. If Main is routing (`impl:`),
+Main spawns `ae49-implement` in a throwaway worktree and owns the manual-test gate and
+the git landing itself; this skill is not part of that path. The agent is the default;
+this skill is the deliberate exception.
+
 ## Commit gate (the core rule — read first)
 
-**Manual testing by the user is the final gate before ANY commit or push.** Build the
+**Manual testing by the user is the final gate before ANY commit.** Build the
 plan and run every automated check (typecheck, build, lint, tests/CI), then **STOP with
 all changes sitting uncommitted in the working tree** and wait. Do **not** create a
 commit or push anything — not a checkpoint, not the plan-status bookkeeping, nothing —
 until the user has run the testing checklist, explicitly confirms it passed, and asks
-you to commit. Only then do steps 10–11 (archive + the single commit + push). This holds
+you to commit. Only then do steps 10–11 (archive + the single commit). This holds
 everywhere, including the mid-build manual-action pause (step 6): that stays uncommitted
 too. In a normal run there is exactly ONE commit, and it happens after the user's
 approval.
 
-**PR_FLOW exception:** on a feature branch (see `## PR_FLOW — branch sessions`) the user's
-manual test moves to the Main Session's merge gate, so branch commits and the PR happen
-WITHOUT a prior user test. This gate binds DIRECT_TO_MAIN only — the two never apply at
-the same time.
+**This gate has no exception.** On a feature branch the commit is cheaper (a branch commit
+is not a deploy), but the user still tests BEFORE the merge — and the merge is the deploy.
+Never merge a PR the user has not personally tested and explicitly told you to merge.
 
 ## Workflow
-
-**0. Review-handoff auto-detect (before anything else).** If a `.review/pr-<PR#>.json` file
-exists in this folder — the merge gate's auto-fix dispatch dropped it — this run implements
-those code-review fixes, **not** a plan: skip the plan pick entirely and follow
-**[FROM-REVIEW.md](FROM-REVIEW.md)**. (Invoking with `--from-review` forces this path too.)
-Otherwise continue with step 1.
 
 1. **Find plans.** If a remote is configured **and the working tree is clean**,
    `git pull --rebase` first so the list reflects plans pushed from a plan session.
@@ -52,47 +59,35 @@ Otherwise continue with step 1.
    list.) If `docs/plans/` is missing or empty, tell the user there's nothing to
    implement (plan one with `/ae49-task-plan-feature`) and stop.
 
-   **Then detect the flow (branch vs. main).** Right after finding plans, decide whether
-   this session commits straight to the default branch (today's behavior) or is a feature
-   branch that ends in a PR:
-   ```bash
-   cur=$(git rev-parse --abbrev-ref HEAD)
-   def=$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null); def=${def#origin/}
-   [ -z "$def" ] && def=main
-   # cur == def  → DIRECT_TO_MAIN (today's behavior, verbatim)
-   # cur != def  → PR_FLOW
-   ```
-   Use `symbolic-ref`, **not** `git rev-parse --abbrev-ref origin/HEAD` — the latter
-   echoes its argument when the ref is missing, so a remote-less repo on `main` would
-   mis-detect PR_FLOW. `symbolic-ref` prints nothing on failure, so the `def=main`
-   fallback kicks in. Then:
-   - **`cur == def` → DIRECT_TO_MAIN:** the flow is **unchanged — all existing steps below
-     (2–12) apply verbatim.** This is today's behavior for this and every other repo,
-     including repos with no `origin/HEAD` set. Ignore the PR_FLOW section entirely.
-     **Pool-folder guard:** but if the folder's basename matches the build-pool pattern
-     (`*-build<N>`, e.g. `<hubname>-build2`), **STOP** — an idle build folder sits on `main`,
-     and building here would commit and deploy straight to production from a pool folder.
-     Tell the user: run `/ae49-task-integrate setup <plan>` in the Main Session first (it
-     puts this folder on a feature branch), then re-run this skill here.
-   - **`cur != def` → PR_FLOW:** this is a branch session in a build folder (one of the
-     pooled clones). Build per steps 2–12 **but apply the deltas in the
-     `## PR_FLOW — branch sessions` section** (after the Workflow) — they override the steps
-     they name; everything else still applies.
+   **Agent-worktree guard:** if this folder's path contains `.claude/worktrees/agent-`,
+   **STOP** — you are inside an `ae49-implement` agent's throwaway worktree, which never
+   commits and is deleted after landing. Report back to Main instead of building here.
+
+   **Note the current branch** (`git rev-parse --abbrev-ref HEAD`) and the default branch
+   (`git symbolic-ref --short refs/remotes/origin/HEAD`, stripped of `origin/`, falling
+   back to `main` when it prints nothing). Step 11 needs it: you never commit on the
+   default branch. Use `symbolic-ref`, **not** `git rev-parse --abbrev-ref origin/HEAD` —
+   the latter echoes its argument when the ref is missing.
 
 2. **Filter.** Read each file's **Status** (the first word of the Status line) and
    sort plans into three buckets:
    - **Buildable** — Status `Ready` (fresh) or `On hold` (paused, waiting on the
      user). These go in the pick list.
+
+     **Chain check:** a plan carries `After: <slug>[, <slug>]` edges written by
+     `ae49-plan`. A plan is only Buildable if every plan it lists in `After:` is already
+     `Done` (in `docs/plans/done/`). Otherwise hold it aside as **Blocked** — list it
+     separately, naming what it waits on, and don't offer it as a pick.
    - **In progress** — a session is (or was) actively building it. Do NOT put these
      in the normal list; hold them aside as the *stuck?* set (a live concurrent
      session, OR a crashed/abandoned build).
    - **Done** — ignore.
 
-   **Branch-build override (repos with a build-folder pool):** branch sessions never write
-   Status, so a plan being built in a build folder still reads `Ready`. After the step-1
-   sync, also check the remote branches: a plan whose slug matches a remote
-   `(feature|bugfix|refactor)/<slug>` branch is being built right now — put it in the
-   **In progress** bucket regardless of its Status line.
+   **Concurrent-agent override:** an `ae49-implement` agent building in its own worktree
+   never writes Status, so its plan still reads `Ready`. After the step-1 sync, run
+   `git worktree list`: if a worktree under `.claude/worktrees/agent-*` exists, treat any
+   plan it may be building as **In progress** (ask the user which, if it isn't obvious) —
+   its work is uncommitted and invisible to `git log`.
 
    If there are no Buildable plans **and** no In-progress plans, tell the user
    there's nothing to implement (plan one with `/ae49-task-plan-feature`) and stop.
@@ -163,8 +158,9 @@ Otherwise continue with step 1.
      `/ae49-task-implement-feature`, pick the plan, and step 5 flips it back to
      `In progress` and resumes from the noted step.
 
-7. **Verify.** Run the plan's **Verification** section end-to-end (run the app,
-   typecheck, exercise the flow). Fix and re-verify until it passes.
+7. **Verify.** Run the plan's **Verification** section end-to-end. If it is missing or
+   thin, fall back to the project's own commands from its `CLAUDE.md` — at minimum
+   typecheck, build and lint. Fix and re-verify until it passes.
 
 8. **Show the testing checklist — then STOP, uncommitted.** Automated Verify (step 7)
    is not the finish line, and it is NOT a licence to commit. **Never commit or push,
@@ -174,9 +170,10 @@ Otherwise continue with step 1.
    - Print the plan's `## Testing checklist` section back to the user verbatim —
      plain, numbered, click-through steps. (If an older plan has no such section,
      write one now from its Success criteria and Steps, then show that instead.)
-     This is a lightweight, per-feature list only — separate from the full
-     `/ae49Hub-task-uat-docs` role-based checklist pipeline, which this step does
-     not touch or update.
+     The plan's own `## Testing checklist` is the ONLY testing model — there is no
+     project testing doc to keep in sync. If the built code diverged from the checklist,
+     quote it verbatim anyway and add a short "Checklist drift" note listing the
+     corrected or missing steps.
    - Tell the user plainly: the build and your automated checks passed, **all changes
      are sitting uncommitted in the working tree**, and you're holding off on BOTH the
      commit and marking it Done until they've run the checklist and told you it works.
@@ -195,7 +192,7 @@ Otherwise continue with step 1.
    - **It works / they ask you to commit.** NOW — and only now — is committing
      unlocked. Delete the `## On hold` section, tick every Success-criteria box that
      now holds, set **Status** to `Done`, and continue to step 10 (archive) + step 11
-     (the single commit + push — the FIRST commit of this build).
+     (the single commit — the FIRST commit of this build).
    - **It doesn't work / something's off.** Fix it — changes stay uncommitted — re-run
      **Verify** (step 7), then repeat step 8 (fresh checklist) and wait again. Still
      **do not commit**. Loop until confirmed — never commit or mark `Done` on an
@@ -215,15 +212,24 @@ Otherwise continue with step 1.
    in `done/` are excluded by step 1's non-recursive `docs/plans/*.md` glob, so they
    never reappear in the list — no `-DONE` suffix needed.)
 
-11. **Commit + push (final).** This runs ONLY after the user's step-9 approval — it is
-   normally the FIRST and only commit of the build (nothing was committed earlier). Stage
-   ONLY the files this build touched, plus the moved `docs/plans/done/<feature>.md` plan
-   file — never `git add -A`. One commit, message focused on the feature ("why"), per the
-   repo's commit convention. (If a labeled *untested WIP* checkpoint was made during a
+11. **Commit (final) — and stop there.** This runs ONLY after the user's step-9 approval —
+   it is normally the FIRST and only commit of the build (nothing was committed earlier).
+   Stage ONLY the files this build touched, plus the moved `docs/plans/done/<feature>.md`
+   plan file — never `git add -A`. One commit, message focused on the feature ("why"), per
+   the repo's commit convention. (If a labeled *untested WIP* checkpoint was made during a
    cross-session pause, fold it into one clean feature commit — `git commit --amend` or a
-   soft reset — never leave the WIP as the final record.) Then, if a remote is configured,
-   `git pull --rebase` and push — so the built code and the `Done` status reach the remote
-   and stay in sync with the pushed plan. If no remote, commit only.
+   soft reset — never leave the WIP as the final record.)
+
+   **Never commit or push on the default branch.** If you are on it, create the feature
+   branch FIRST (`git switch -c <prefix>/<slug>`, prefix per the plan's `**Branch:**`
+   field), and commit there. Then **stop and report** — the commit is the end of this
+   skill's authority.
+
+   Anything that reaches the default branch needs the user's **explicit go-ahead, asked
+   for and answered each time**: pushing the branch, opening the PR (`gh pr create --base
+   <def>`), and — separately — the squash-merge. **Merging is deploying.** Never push the
+   default branch, never merge a PR, and never treat "commit it" as permission to do
+   either. If the repo has no remote, commit on the branch and stop.
 
 12. **Report.** Close out per [ae49-ref-report-format](../ae49-ref-report-format/SKILL.md)'s
     shared principles — plain English, one consistent emoji per field, one-line close — but
@@ -231,28 +237,12 @@ Otherwise continue with step 1.
     Use the build-specific field set (✅ Done · 🔨 Built · 🧪 Verify · 👤 Tested by you ·
     📝 Commit · 🚀 Push · ⚠️ Watch out) + the jargon-free "Watch out" rule → **[REPORT.md](REPORT.md)**.
 
-## PR_FLOW — branch sessions
-
-When step 1's flow detection finds `cur != def`, this is a **branch session** in a build
-folder: build the plan per steps 2–12 but apply the branch-session deltas in
-**[PR-FLOW.md](PR-FLOW.md)** — the plan is pre-bound + read-only, steps 8–10 are skipped, and
-the run ends in a PR instead of a user-tested commit. Loaded only on that path, so a normal
-DIRECT_TO_MAIN build never pays for it. (On DIRECT_TO_MAIN, ignore this section entirely.)
-
-## FROM-REVIEW — implementing merge-gate fixes
-
-When this skill is invoked with **`--from-review`** (or a `.review/pr-<PR#>.json` artifact
-exists in the current build folder for its branch), it does NOT pick a plan — it implements the
-code-review findings the Main Session's merge gate dispatched, then pushes so the merge gate can
-re-enter at its preview. This is a PR_FLOW variant (branch session, plan file read-only). Full
-steps → **[FROM-REVIEW.md](FROM-REVIEW.md)**. The dispatch that produces the artifact lives in
-`ae49-task-integrate`'s AUTOFIX.md; only `auto`-class findings are ever implemented here —
-`decision` findings stay with the user.
-
 ## Notes
 
 - One plan per run. To build another, run the skill again.
 - If a step is ambiguous or the plan contradicts the code, stop and ask — don't guess.
+- To implement PR review findings, the user pastes them in and you fix them on the PR
+  branch — there is no `.review/` artifact and no auto-fix dispatch.
 - **Don't show the preview to the user — they'll see it themselves.** Verify your own
   way (typecheck, route checks, etc.), but never open, screenshot, or share the browser
   preview with the user.

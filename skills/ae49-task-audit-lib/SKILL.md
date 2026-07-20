@@ -123,17 +123,14 @@ findings must reflect the code as it is right now.
    Then **wire overlaps into the build chain exactly as `ae49-task-plan-feature` step 7.** An
    extraction rewires many call sites, so it is the *most* collision-prone plan type: find every
    other undone plan it shares a file with and set `**After:**` accordingly (leave `—` only if it
-   overlaps nothing). Without this, `/ae49-task-integrate` treats the plan as a dependency-free
-   root and may build it in parallel with a plan that edits the same files.
+   overlaps nothing). Without this, Main treats the plan as a dependency-free root and may
+   dispatch it to a worktree in parallel with a plan that edits the same files.
 
    Set **Status** to `Ready` and stamp **Created** with today's date.
 
-9. **Commit + push the plan.** **First, the merge-in-flight check (multi-session repos with a
-   build-folder pool), exactly as `ae49-task-plan-feature` step 8:** before staging, confirm the
-   hub is on the default branch — `git rev-parse --abbrev-ref HEAD`. If it reads `_merge_preview`
-   (or any non-default branch), a merge is mid-flight — do NOT commit; tell the user the plan is
-   written and held, and wait until the hub is back on the default branch. Never `git checkout`
-   the hub yourself. Then stage ONLY `docs/plans/<slug>.md` plus any existing plan whose
+9. **Commit + push the plan**, exactly as `ae49-task-plan-feature` step 8. Confirm you are on
+   the default branch first (`git rev-parse --abbrev-ref HEAD`); if not, do NOT commit — tell
+   the user the plan is written and held. Then stage ONLY `docs/plans/<slug>.md` plus any existing plan whose
    `**After:**` you edited in step 8's wiring — never `git add -A` (`git add <file>` creates the
    folder for you). Commit with a message naming the extraction (follow the repo's commit
    convention). Then, if a remote is configured, `git pull --rebase` first (so the push isn't

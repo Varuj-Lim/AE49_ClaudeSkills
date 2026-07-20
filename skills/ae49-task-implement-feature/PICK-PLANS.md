@@ -11,8 +11,9 @@ path on a bullet marked "NO changes" (those are explicitly untouched). That yiel
 path-set per plan. Compute every pairwise intersection: a plan *collides* with another
 when their path-sets share ≥1 file. Record, per plan, which other plans it collides
 with and on which files. A collision with an **In-progress** plan is the serious one
-(a live concurrent session shares the worktree → edits can clobber); a collision
-between two **Buildable** plans only bites if both get built at once.
+(a concurrent implementer builds the same files in its own worktree → the two diffs
+conflict when they land); a collision between two **Buildable** plans only bites if
+both get built at once.
 
 **(b) List + select.** Present the **Buildable** plans for the user to pick one. For
 each option show the feature name **plus its status**, so an `On hold` resume is
@@ -23,10 +24,10 @@ colliding plan(s), their status, and the shared file(s), e.g. "⚠️ collides w
 *absent-policy* (In progress) on `functions/src/index.ts`, `types/notification.ts`".
 Mark options with no overlap as clean.
 - If the *stuck?* set (In-progress plans) is non-empty, also list those under a
-  clear **warning**: "In progress — may be a live session building it now, or a
-  crashed/stale build. Pick one only to resume after a crash; if another session
-  is live, the shared worktree means edits can clobber." The user MAY force-pick
-  one of these to resume.
+  clear **warning**: "In progress — may be a live session or agent building it now, or a
+  crashed/stale build. Pick one only to resume after a crash; if another build is live,
+  its uncommitted work in a separate worktree will conflict with yours at landing."
+  The user MAY force-pick one of these to resume.
 **Order the buildable list smallest plan first (small → big).** Size = number of
 paths in that plan's `## Files to touch` (already collected in step 3a), tie-broken
 by the count of `## Steps` checkboxes. Fewest files first; equal files → fewer Steps

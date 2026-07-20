@@ -10,7 +10,7 @@
 🧪 Verify: <✅/❌ per check, e.g. "✅ tsc clean" · "👀 preview not checked (reason)">
 👤 Tested by you: <✅ confirmed working — quote or summarize their confirmation>
 📝 Commit: <short message>
-🚀 Push: <✅ pushed / ⏭️ skipped — reason>
+🚀 Push: <⏸️ not pushed — awaiting your go-ahead (the default) / ✅ pushed <branch> after your go-ahead / ⏭️ skipped — reason>
 ⚠️ Watch out: <anything the user must manually do or check — written in PLAIN, everyday language; omit the line if none>
 ```
 One clause per line, no prose. Reuse the same field emoji every run
