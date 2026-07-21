@@ -97,7 +97,10 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
 
 - The **design interview / approval** (grill + plan approval) before drafting or building.
 - The **manual-test gate** — after `ae49-implement` returns, show the user the change and
-  **stop for their manual test** before any commit.
+  **stop for their manual test** before any commit. If the checklist needs data that doesn't
+  exist and the project has a test-data skill (e.g. `<project>-task-test-data`), offer to
+  seed **tagged disposable test data** per that skill, and after the user passes the test
+  sweep it (verify zero remain) **before** landing.
 - **Git landing.** No sub-agent commits, pushes, or touches the default branch. You
   commit/push only after the user confirms, and follow **this project's own deploy rules**
   in its `CLAUDE.md` (e.g. if merge == deploy, that merge needs the user's explicit
