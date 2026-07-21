@@ -43,7 +43,7 @@ Skill name is kebab-case: `<scope>-<type>-<name>`.
 
 - **Project-level skill** (lives in the project's `.claude/skills/`) — prefix with the project's short name, e.g. `ae49Hub-`. This namespaces project skills and keeps them distinct from user-level ones.
 - **User-level skill** (lives in `~/.claude/skills/`) — use your personal namespace, e.g. `ae49-`.
-- **Cross-project pattern skill** (a reusable UI/app pattern distilled from real apps, kept in `~/.claude/skills/` but meant to port to any project) — use a domain scope that names the pattern family, e.g. `web-` (`web-ref-filter-dropdown`, `web-ref-device-auth`). Distinct from `ae49-` because it's not about *your* setup — it's a portable pattern anyone could reuse.
+- **Cross-project pattern skill** (a reusable UI/app pattern kept in `~/.claude/skills/` but meant to port to any project) — use a domain scope that names the pattern family, e.g. `web-` (`web-ref-<pattern>`). Distinct from `ae49-` because it's not about *your* setup — it's a portable pattern anyone could reuse. Prefer this only for patterns that must travel without their source repo; when the source project is at hand, referencing its real code beats a distilled copy that can drift.
 
 **Type segment** — what kind (required, immediately after the scope):
 
