@@ -111,15 +111,6 @@ General workflow tools, not code-specific.
 | **[ae49-ref-report-format](./skills/ae49-ref-report-format/SKILL.md)** | The one shared format for any findings / review / audit / status report: plain-English lines, emoji-tagged severity tiers, a per-finding ID you can reference back, and an emoji verdict. Used by the review and audit skills so they don't each reinvent a layout. |
 | **[ae49-ref-prompt-refine](./skills/ae49-ref-prompt-refine/SKILL.md)** | On/off mode that turns the agent into a prompt rewriter: it stops answering and instead rewrites whatever you type into one clearer English prompt to copy and send. Runs on the smallest model. |
 
-### Web patterns
-
-Reusable UI/app patterns distilled from real production apps — portable references for building, reviewing, or porting common web features. Not process skills; drop them into any project. Examples are from Next.js + Tailwind + Firebase apps; swap the brand/framework specifics when porting.
-
-| Skill | What it does |
-|-------|--------------|
-| **[web-ref-filter-dropdown](./skills/web-ref-filter-dropdown/SKILL.md)** | Checkbox multi-select filter dropdown for a list page: a `FilterMultiSelect` button with an "All" master box (indeterminate on a partial pick), driven by a `useMultiSelectFilter` hook that owns the selected set, row predicate, and reset. |
-| **[web-ref-device-auth](./skills/web-ref-device-auth/SKILL.md)** | Trusted-device sign-in: an "Add this device" checkbox that registers a remembered, remotely-revocable device kept alive by a heartbeat, paired with a membership-gated Google sign-in that never auto-creates accounts. |
-
 ## Credits
 
 These skills are adapted from Matt Pocock's [Skills For Real Engineers](https://github.com/mattpocock/skills) (`caveman`, `grill`, `improve-codebase-architecture`, `handoff`, `teach`, `write-a-skill`, and the `diagnose` debugging loop), retuned for AE49 and extended with AE49 originals: `ae49-task-scrutinize`, `ae49-task-management-talk`, `ae49-ref-guidelines`, `ae49-ref-debug-soft`, `ae49-ref-report-format`, `ae49-task-plan-feature`, and `ae49-task-implement-feature`. Huge thanks to Matt for the original work.
