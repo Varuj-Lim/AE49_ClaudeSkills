@@ -1,6 +1,6 @@
 ---
 name: ae49-router
-description: Makes the Main session act as a thin router and refiner for ae49-workflow projects — it classifies each request, refines rough prompts on demand, delegates heavy plan and implement work to the ae49-plan and ae49-implement sub-agents (parallel across chains, sequential within a chain), and keeps every human gate in Main. Loaded at session start via ~/.claude/CLAUDE.md. Recognises the refine, plan, impl, and self routing prefixes and requests like who should do this.
+description: Makes the Main session act as a thin router and refiner for ae49-workflow projects — it classifies each request, refines rough prompts on demand, delegates heavy plan and implement work to the ae49-plan and ae49-implement sub-agents (parallel across chains, sequential within a chain), and keeps every human gate in Main. Loaded at session start via ~/.claude/CLAUDE.md. Recognises the refine, plan, impl, status, and self routing prefixes and requests like who should do this or show the plan board.
 ---
 
 # ae49-router — Main as thin orchestrator
@@ -31,6 +31,7 @@ Read the start of each user message for an explicit lane:
 | `refine:` | Refine the user's text (see below), show the draft, wait for confirm, then route it. |
 | `plan:` | Run the design interview **with the user in Main** (grill), then spawn `ae49-plan` to draft the plan(s). |
 | `impl:` | Against an **approved** plan, spawn `ae49-implement` per the chain graph. |
+| `status:` | Report the plan board — every plan's state as one emoji table (see below). No delegation. |
 | `self:` | Handle it yourself inline, no delegation. |
 | *(none)* | Propose a route. If it's genuinely ambiguous, ask the user with `AskUserQuestion` who should take it. |
 
@@ -53,6 +54,30 @@ Apply that skill's rewrite discipline directly:
 4. Only after their OK, route the confirmed prompt to the right lane.
 
 Never auto-run a refined prompt before the user confirms it.
+
+## The `status:` lane — the plan board
+
+When the user sends `status:` (or asks for plan status), render the board inline. Always
+re-read from disk — never report from memory:
+
+1. Read every `docs/plans/*.md` → its `Status:` field + `After:` edges; list
+   `docs/plans/done/` newest-first for recent landings.
+2. Detect live builds: implementers you spawned this session, plus `git worktree list`
+   (a lingering feature-branch worktree from another session = build in progress or
+   awaiting integration — say which you can't tell, don't guess).
+3. Output ONE table, one row per plan, most-active first, emoji column first:
+
+| Emoji | Meaning |
+|---|---|
+| 🔨 | building right now (implementer running) |
+| 🧪 | built — waiting for the user's manual test / landing |
+| ✅ | ready — approved, unblocked, can dispatch on `impl:` |
+| ⏳ | waiting — blocked; name the unlanded plans from its `After:` chain in the last column |
+| ⛔ | on hold (`Status: On hold`) |
+| 🗄️ | recently landed (show the newest 2–3 from `done/`) |
+
+Table columns: emoji · plan name · waiting on (blockers by name, or "—"). After the table,
+one short line per 🔨/🧪 row saying what happens next at its gate.
 
 ## Chain graph — dispatching implementers safely
 
