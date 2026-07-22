@@ -111,7 +111,10 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   `docs/gate-checklist.html` reading a sibling `gate-checklist.js` items file), also
   overwrite the items file for this gate (`## <section>` strings become headers) and tell
   the user to open the page — ticks persist in their browser. The items file is
-  gitignored per-gate scratch: never commit it, delete it at landing.
+  gitignored per-gate scratch: never commit it, delete it at landing. A project that
+  doesn't yet carry the template can adopt it by copying this skill's bundled
+  `resources/gate-checklist.html` into its docs/ (commit it once + gitignore the sibling
+  `gate-checklist.js`).
   If the checklist needs data that doesn't
   exist and the project has a test-data skill (e.g. `<project>-task-test-data`), offer to
   seed **tagged disposable test data** per that skill, and after the user passes the test
