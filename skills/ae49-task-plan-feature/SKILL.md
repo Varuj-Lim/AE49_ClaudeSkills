@@ -52,7 +52,10 @@ applies if Main writes it inline.
    the user once it's done — the ae49-implement agent reads this same section back to
    the user later, so get it right here. Also write the `## Testing checklist`
    section: plain, numbered steps the user can click through in the app after the
-   feature is built. This is now the project's ONLY testing artefact (there is no
+   feature is built. **Caveman mode is OFF inside a Testing checklist** — every item
+   is a full, self-explanatory sentence naming where to click, what to do, and what
+   the user should see ("Open X → do Y → you should see Z"); never compressed
+   fragments. This is now the project's ONLY testing artefact (there is no
    docs/TESTING.md), and ae49-implement quotes it **verbatim** in its final report —
    so it must be present, non-empty, and accurate. Never write "none".
 

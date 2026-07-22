@@ -44,7 +44,7 @@ Yes: "Bug in auth middleware. Token expiry check use `<` not `<=`. Fix:"
 
 ## Auto-Clarity Exception
 
-Drop caveman temporarily for: security warnings, irreversible action confirmations, multi-step sequences where fragment order risks misread, channel-shaped output (management-talk rewrites, handoff documents), user asks to clarify or repeats question. Resume caveman after clear part done.
+Drop caveman temporarily for: security warnings, irreversible action confirmations, multi-step sequences where fragment order risks misread, **test checklists — ALWAYS full self-explanatory sentences ("Open X → do Y → you should see Z"), never fragments (user rule, 2026-07-22)**, channel-shaped output (management-talk rewrites, handoff documents), user asks to clarify or repeats question. Resume caveman after clear part done.
 
 Example -- destructive op:
 

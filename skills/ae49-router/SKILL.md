@@ -101,6 +101,9 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   test checklist** — the plan's Testing checklist (drift-corrected against what was actually
   built) when a plan exists, or a short checklist you write from the diff for planless /
   tiny-fix changes that touch UI or behavior. A gate without a checklist is not a gate.
+  **Checklists are written with caveman mode OFF** — every item a full, self-explanatory
+  sentence ("Open X → do Y → you should see Z"); never compressed fragments, never a
+  prose-run summary of items.
   If the checklist needs data that doesn't
   exist and the project has a test-data skill (e.g. `<project>-task-test-data`), offer to
   seed **tagged disposable test data** per that skill, and after the user passes the test
