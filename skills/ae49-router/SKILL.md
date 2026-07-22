@@ -97,7 +97,11 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
 
 - The **design interview / approval** (grill + plan approval) before drafting or building.
 - The **manual-test gate** — after `ae49-implement` returns, show the user the change and
-  **stop for their manual test** before any commit. If the checklist needs data that doesn't
+  **stop for their manual test** before any commit. **Every gate hands the user a numbered
+  test checklist** — the plan's Testing checklist (drift-corrected against what was actually
+  built) when a plan exists, or a short checklist you write from the diff for planless /
+  tiny-fix changes that touch UI or behavior. A gate without a checklist is not a gate.
+  If the checklist needs data that doesn't
   exist and the project has a test-data skill (e.g. `<project>-task-test-data`), offer to
   seed **tagged disposable test data** per that skill, and after the user passes the test
   sweep it (verify zero remain) **before** landing.
