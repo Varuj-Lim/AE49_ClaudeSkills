@@ -108,9 +108,14 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   whole list (numbering continues across section groups, so "item 13" is unambiguous);
   lists longer than ~8 items group under short bold section headers.
   **Clickable checklist page:** if the project carries a gate-checklist template (e.g.
-  `docs/gate-checklist.html` reading a sibling `gate-checklist.js` items file), also
-  overwrite the items file for this gate (`## <section>` strings become headers) and tell
-  the user to open the page — ticks persist in their browser. The items file is
+  `docs/gate-checklist.html` reading a sibling `gate-checklist.js` items file), overwrite
+  the items file for this gate (`## <section>` strings become headers) and hand the user a
+  clickable FULL file URL to the page (e.g.
+  `file:///C:/…/<project>/docs/gate-checklist.html`, as a markdown link) — ticks persist
+  in their browser. **When the page exists, do NOT print the checklist items in chat**
+  (user rule, 2026-07-23): the chat message carries only the link, the item count, and
+  any gate-specific notes (seeded values, cautions, "Reset ticks" when numbering shifted).
+  Print items in chat only when the project has no checklist page. The items file is
   gitignored per-gate scratch: never commit it, delete it at landing. A project that
   doesn't yet carry the template can adopt it by copying this skill's bundled
   `resources/gate-checklist.html` into its docs/ (commit it once + gitignore the sibling

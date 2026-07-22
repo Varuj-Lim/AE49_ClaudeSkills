@@ -174,9 +174,12 @@ Never merge a PR the user has not personally tested and explicitly told you to m
      one check per item, numbered sequentially 1..N through the whole list (numbers
      continue across section groups); bold section headers when longer than ~8 items.
      If the project carries a gate-checklist template (e.g. `docs/gate-checklist.html`
-     + sibling `gate-checklist.js` items file), also overwrite the items file for this
-     gate and tell the user to open the page (clickable ticks, browser-persisted);
-     the items file is gitignored scratch — never commit, delete at landing.
+     + sibling `gate-checklist.js` items file), overwrite the items file for this gate
+     and hand the user a clickable FULL file URL to the page (markdown link to
+     `file:///…/docs/gate-checklist.html`); in that case do NOT print the items in chat
+     (user rule, 2026-07-23) — link + item count + gate notes only. Print items in chat
+     only when no checklist page exists. The items file is gitignored scratch — never
+     commit, delete at landing.
      (If an older plan has no such section, write one now from its Success criteria
      and Steps, then show that instead.)
      The plan's own `## Testing checklist` is the ONLY testing model — there is no
