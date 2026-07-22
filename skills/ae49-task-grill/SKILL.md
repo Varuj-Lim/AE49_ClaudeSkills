@@ -15,6 +15,16 @@ Ask the questions one at a time, waiting for feedback on each question before co
 
 If a question can be answered by exploring the codebase, explore the codebase instead.
 
+**Risk-tiered question depth (user rule, 2026-07-22):** scale how much you probe the USER
+(vs. settle by exploration) to the feature's risk tier.
+- **Dial UP — always scenario-probe the user** when the feature touches money, permission /
+  visibility boundaries (who can see or edit what), deleting or migrating real data, or
+  external state (security rules, deploys, third-party messaging/email). Code cannot answer
+  *intent* there, and a wrong assumption causes real harm.
+- **Stay lean** for clones of an existing in-repo pattern ("same as X"), UI shape, and
+  cosmetic work — explore the precedent, decide, and let the manual-test gate verify.
+  Zero questions is a valid grill result when code answers every branch.
+
 </what-to-do>
 
 ## Adapt to the repo
