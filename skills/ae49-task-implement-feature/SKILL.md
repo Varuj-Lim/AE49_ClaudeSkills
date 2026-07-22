@@ -173,6 +173,10 @@ Never merge a PR the user has not personally tested and explicitly told you to m
      compressed fragments or prose-run summaries. **Format:** `N. [ ] <sentence>`,
      one check per item, numbered sequentially 1..N through the whole list (numbers
      continue across section groups); bold section headers when longer than ~8 items.
+     If the project carries a gate-checklist template (e.g. `docs/gate-checklist.html`
+     + sibling `gate-checklist.js` items file), also overwrite the items file for this
+     gate and tell the user to open the page (clickable ticks, browser-persisted);
+     the items file is gitignored scratch — never commit, delete at landing.
      (If an older plan has no such section, write one now from its Success criteria
      and Steps, then show that instead.)
      The plan's own `## Testing checklist` is the ONLY testing model — there is no

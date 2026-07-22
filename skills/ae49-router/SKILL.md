@@ -107,6 +107,11 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   `N. [ ] <sentence>` with ONE check per item, numbered sequentially 1..N through the
   whole list (numbering continues across section groups, so "item 13" is unambiguous);
   lists longer than ~8 items group under short bold section headers.
+  **Clickable checklist page:** if the project carries a gate-checklist template (e.g.
+  `docs/gate-checklist.html` reading a sibling `gate-checklist.js` items file), also
+  overwrite the items file for this gate (`## <section>` strings become headers) and tell
+  the user to open the page — ticks persist in their browser. The items file is
+  gitignored per-gate scratch: never commit it, delete it at landing.
   If the checklist needs data that doesn't
   exist and the project has a test-data skill (e.g. `<project>-task-test-data`), offer to
   seed **tagged disposable test data** per that skill, and after the user passes the test
