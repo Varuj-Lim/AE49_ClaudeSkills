@@ -103,7 +103,10 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   tiny-fix changes that touch UI or behavior. A gate without a checklist is not a gate.
   **Checklists are written with caveman mode OFF** — every item a full, self-explanatory
   sentence ("Open X → do Y → you should see Z"); never compressed fragments, never a
-  prose-run summary of items.
+  prose-run summary of items. **Checklist format:** each item on its own line as
+  `N. [ ] <sentence>` with ONE check per item, numbered sequentially 1..N through the
+  whole list (numbering continues across section groups, so "item 13" is unambiguous);
+  lists longer than ~8 items group under short bold section headers.
   If the checklist needs data that doesn't
   exist and the project has a test-data skill (e.g. `<project>-task-test-data`), offer to
   seed **tagged disposable test data** per that skill, and after the user passes the test

@@ -55,7 +55,10 @@ applies if Main writes it inline.
    feature is built. **Caveman mode is OFF inside a Testing checklist** — every item
    is a full, self-explanatory sentence naming where to click, what to do, and what
    the user should see ("Open X → do Y → you should see Z"); never compressed
-   fragments. This is now the project's ONLY testing artefact (there is no
+   fragments. **Format:** one item per line as `N. [ ] <sentence>`, ONE check per
+   item, numbered sequentially 1..N through the whole list (numbering continues
+   across section groups); group under short bold section headers when the list
+   exceeds ~8 items. This is now the project's ONLY testing artefact (there is no
    docs/TESTING.md), and ae49-implement quotes it **verbatim** in its final report —
    so it must be present, non-empty, and accurate. Never write "none".
 

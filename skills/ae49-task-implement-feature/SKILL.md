@@ -170,9 +170,11 @@ Never merge a PR the user has not personally tested and explicitly told you to m
    - Print the plan's `## Testing checklist` section back to the user verbatim —
      plain, numbered, click-through steps, **with caveman mode OFF**: every item a
      full, self-explanatory sentence ("Open X → do Y → you should see Z"), never
-     compressed fragments or prose-run summaries. (If an older plan has no such
-     section, write one now from its Success criteria and Steps, then show that
-     instead.)
+     compressed fragments or prose-run summaries. **Format:** `N. [ ] <sentence>`,
+     one check per item, numbered sequentially 1..N through the whole list (numbers
+     continue across section groups); bold section headers when longer than ~8 items.
+     (If an older plan has no such section, write one now from its Success criteria
+     and Steps, then show that instead.)
      The plan's own `## Testing checklist` is the ONLY testing model — there is no
      project testing doc to keep in sync. If the built code diverged from the checklist,
      quote it verbatim anyway and add a short "Checklist drift" note listing the
