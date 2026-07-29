@@ -116,10 +116,18 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   (user rule, 2026-07-23): the chat message carries only the link, the item count, and
   any gate-specific notes (seeded values, cautions, "Reset ticks" when numbering shifted).
   Print items in chat only when the project has no checklist page. The items file is
-  gitignored per-gate scratch: never commit it, delete it at landing. A project that
-  doesn't yet carry the template can adopt it by copying this skill's bundled
-  `resources/gate-checklist.html` into its docs/ (commit it once + gitignore the sibling
-  `gate-checklist.js`).
+  gitignored per-gate scratch: never commit it, delete it at landing.
+  **Template adoption** — a project that doesn't yet carry the template adopts it in
+  ONE docs commit (no manual-test gate needed for a docs-only adoption):
+  1. Copy this skill's bundled `resources/gate-checklist.html` →
+     `<project>/docs/gate-checklist.html`, unchanged (the page is project-agnostic; an
+     identical copy in a sibling project works as the source too).
+  2. Add `docs/gate-checklist.js` to the project's `.gitignore` with a short comment
+     (per-gate scratch, never committed).
+  3. Commit the template + `.gitignore` edit together as one docs commit on the default
+     branch, explicit pathspec (e.g. `docs: adopt clickable gate-checklist page`).
+  4. If the project defines a no-deploy backup push (e.g. `git push origin main:backup`),
+     run it; a deploying push still needs the user's explicit go-ahead.
   If the checklist needs data that doesn't
   exist and the project has a test-data skill (e.g. `<project>-task-test-data`), offer to
   seed **tagged disposable test data** per that skill, and after the user passes the test
