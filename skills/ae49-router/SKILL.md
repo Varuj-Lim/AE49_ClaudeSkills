@@ -96,7 +96,14 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
 ## Gates you (Main) always own — never delegate these
 
 - The **design interview / approval** (grill + plan approval) before drafting or building.
-- The **manual-test gate** — after `ae49-implement` returns, show the user the change and
+- The **audit gate** (adopted 2026-08-01, owner mandate — EVERY build): after
+  `ae49-implement` returns and BEFORE the user sees anything, spawn the headless
+  **`ae49-audit`** agent with the plan path + the build worktree/diff. It adversarially
+  reviews the code (plan conformance, logic, edge cases, data safety, blast radius) and
+  returns findings or PASS. Main fixes or re-dispatches BLOCKER/MAJOR findings before
+  opening the user gate; MINOR findings are reported at the gate. Only after the audit
+  passes does the manual-test gate open.
+- The **manual-test gate** — after `ae49-implement` returns **and `ae49-audit` passes**, show the user the change and
   **stop for their manual test** before any commit. **Every gate hands the user a numbered
   test checklist** — the plan's Testing checklist (drift-corrected against what was actually
   built) when a plan exists, or a short checklist you write from the diff for planless /
