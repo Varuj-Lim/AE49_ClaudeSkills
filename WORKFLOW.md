@@ -61,7 +61,7 @@ only see committed state). Say `impl:` when you want the build.
 
 | You say | What Claude does |
 |---|---|
-| `all pass, commit it` | ONE commit per feature on main → plan flipped Done + archived to `docs/plans/done/` → worktree removed safely → `backup` branch pushed (off-machine safety; NEVER deploys). |
+| `all pass, commit it` | ONE commit per feature on main → plan flipped Done + archived to `docs/plans/done/` → worktree removed safely → **gate checklist reset to its closed state** (the page reads "No open gate") → `backup` branch pushed (off-machine safety; NEVER deploys). |
 | `push` | `git push origin main` → **auto-deploys to production**. Only ever say it when you mean production. |
 | *(you say nothing)* | Commits queue locally; `backup` still protects them. |
 

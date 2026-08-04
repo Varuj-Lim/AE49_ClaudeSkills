@@ -50,7 +50,18 @@
 <script>
 (function () {
   var data = window.GATE_CHECKLIST;
-  if (!data || !data.items || !data.items.length) return;
+  if (!data) return; // file missing/blocked — keep the troubleshooting text
+  // CLOSED state: Main resets gate-checklist.js at every landing ("all pass,
+  // commit it"), so the page never shows a stale, already-landed gate.
+  if (data.closed || !data.items || !data.items.length) {
+    document.getElementById("title").textContent = "✅ No open gate";
+    document.getElementById("slug").textContent = data.closed ? "Last gate: " + data.closed : "";
+    document.getElementById("list").innerHTML =
+      '<p class="empty">Nothing to test right now — Main writes a fresh checklist here when the next gate opens.</p>';
+    document.querySelector(".progress-wrap").style.display = "none";
+    document.getElementById("reset").style.display = "none";
+    return;
+  }
   var key = "ae49-gate-" + (data.feature || "unnamed");
   document.getElementById("title").textContent = data.title || "Gate checklist";
   document.getElementById("slug").textContent = data.feature || "";
