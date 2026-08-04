@@ -2,6 +2,8 @@
 
 Agent skills for real engineering work in the AE49 stack — not vibe coding.
 
+**New here? Read [WORKFLOW.md](WORKFLOW.md)** — the owner's handbook: every prefix, phrase, and gate in the human-Claude working loop.
+
 Building real software is hard. Frameworks that try to own the whole process tend to take away your control and make failures hard to debug. These skills take the opposite stance: they're **small, easy to adapt, and composable**. They work with any model, slot into any repo, and are based on engineering fundamentals rather than a rigid pipeline. Hack on them, make them your own.
 
 They began as an adaptation of Matt Pocock's [Skills For Real Engineers](https://github.com/mattpocock/skills) (see [Credits](#credits)), tuned for AE49 — including the PyRevit extension — and extended with a few skills of our own.
