@@ -15,6 +15,12 @@ Write so a non-programmer can follow it — explain the *why* and the consequenc
 words; swap programmer terms for plain ones (or explain them on first use). **Exception:** file
 paths, `file:line` citations, code snippets, and exact error text stay verbatim — never reword.
 
+**Caveman mode NEVER applies to a report (user rule, 2026-08-04).** Even when the session runs
+in caveman/compressed mode, every report to the user — audits, reviews, findings, status —
+is written in full, complete sentences: each finding says what the thing is, why it is safe or
+unsafe, and what happens if it is removed/fixed versus left alone. Comprehension beats token
+savings in reports; the user must never have to guess what a compressed fragment meant.
+
 ## 2. Emoji-tag every section
 
 Tag each section / severity / field with a small, consistent emoji so the eye can jump to it —
