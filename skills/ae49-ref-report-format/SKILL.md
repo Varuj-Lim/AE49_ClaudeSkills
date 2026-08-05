@@ -21,6 +21,16 @@ is written in full, complete sentences: each finding says what the thing is, why
 unsafe, and what happens if it is removed/fixed versus left alone. Comprehension beats token
 savings in reports; the user must never have to guess what a compressed fragment meant.
 
+## 1b. Multi-track status boards are TABLES (user rule, 2026-08-05)
+
+Whenever a report covers the state of **multiple parallel items** — in-flight builds, plans,
+agents, features, gates, tickets — render them as a **markdown table**, one row per item,
+never a bullet/numbered list. Standard columns (adapt names to fit): **Item · Stage ·
+Waiting on · Next**. A short status emoji may lead the Stage cell (🔨 building · 🔍 audit ·
+🧾 gate open · 📝 planning · ✅ landed · 📦 staged). Prose stays for the surrounding
+explanation; the board itself is the table. One or two items may stay inline in a sentence —
+three or more always get the table.
+
 ## 2. Emoji-tag every section
 
 Tag each section / severity / field with a small, consistent emoji so the eye can jump to it —
