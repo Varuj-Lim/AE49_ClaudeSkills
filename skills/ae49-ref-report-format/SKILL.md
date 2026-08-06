@@ -25,11 +25,54 @@ savings in reports; the user must never have to guess what a compressed fragment
 
 Whenever a report covers the state of **multiple parallel items** — in-flight builds, plans,
 agents, features, gates, tickets — render them as a **markdown table**, one row per item,
-never a bullet/numbered list. Standard columns (adapt names to fit): **Item · Stage ·
-Waiting on · Next**. A short status emoji may lead the Stage cell (🔨 building · 🔍 audit ·
-🧾 gate open · 📝 planning · ✅ landed · 📦 staged). Prose stays for the surrounding
-explanation; the board itself is the table. One or two items may stay inline in a sentence —
-three or more always get the table.
+never a bullet/numbered list. Prose stays for the surrounding explanation; the board itself is
+the table. One or two items may stay inline in a sentence — three or more always get the table.
+
+### The template (user-confirmed 2026-08-06 — copy this shape)
+
+```markdown
+| Item | Stage | Waiting on | Next |
+|---|---|---|---|
+| overtime-exact-minutes | 🔍 Audit running | Auditors | Fixes → stage → gate |
+| attendance-import-review-screen | 🔍 Audit running | Auditor | Fixes → stage → gate |
+| profile-attendance-report | 📋 Ready | Exact-minutes landing | Build (chain tail) |
+| Unpushed on `main` | 📦 17 items | Your "push" | One push deploys all |
+```
+
+Which renders as:
+
+| Item | Stage | Waiting on | Next |
+|---|---|---|---|
+| overtime-exact-minutes | 🔍 Audit running | Auditors | Fixes → stage → gate |
+| attendance-import-review-screen | 🔍 Audit running | Auditor | Fixes → stage → gate |
+| profile-attendance-report | 📋 Ready | Exact-minutes landing | Build (chain tail) |
+| Unpushed on `main` | 📦 17 items | Your "push" | One push deploys all |
+
+### What each column is for
+
+| Column | Holds | Rule |
+|---|---|---|
+| **Item** | The plan slug, feature or standing concern — the name the user already uses for it | Never a sentence. Standing concerns (unpushed commits, a pending deploy) get a row too. |
+| **Stage** | Emoji + two or three words | One emoji, from the legend below. Not a percentage, not a guess at time remaining. |
+| **Waiting on** | **WHO or WHAT unblocks it** | The most important column — it tells the user whether the ball is theirs. Say "Your gate" / "Your push" plainly when it is. |
+| **Next** | The single next action once unblocked | An arrow chain (`Fixes → stage → gate`) is fine. Not a list of everything left. |
+
+### Stage emoji legend — same emoji, same meaning, every run
+
+📝 planning · 📋 plan ready · 🔨 building · 🔍 audit running · 🔧 fixing findings ·
+📦 staged / pending · 🧪 the user's manual gate · ✅ landed · 🚀 deployed · ⏸️ blocked
+
+### Rules that keep the board honest
+
+- **One row per item, always the same columns.** Adapt column *names* only if the domain
+  genuinely differs (tickets, deploys); never drop "Waiting on".
+- **Never invent progress.** A background agent's result is unknown until its notification
+  arrives — write "🔍 Audit running", never a predicted verdict or a percentage.
+- **The user's own rows go last** (their gate, their push) so the ask is the final thing read.
+- **Put the table at the END of the message**, after the prose that explains it. The reader
+  wants the reasoning first and the board as the summary they scroll back to.
+- A one-line takeaway may follow the table when something needs emphasis (e.g. what a push
+  would deploy) — but the table is never *replaced* by that line.
 
 ## 2. Emoji-tag every section
 
