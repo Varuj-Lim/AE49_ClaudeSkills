@@ -13,8 +13,8 @@ later execute. Meant to run in a **plan-mode** session (`claude --permission-mod
 but works in any session.
 
 **Hard rule: make NO app-code changes in this skill.** The only file this skill writes
-is the plan in `docs/plans/`. Extracting the code is a separate step the user runs later
-with `/ae49-task-implement-feature`.
+is the plan in `docs/plans/`. Extracting the code is a separate build step — under the
+router workflow Main dispatches the plan to an `ae49-implement` agent (`impl:` lane).
 
 **Re-scan every run.** Always read the current code fresh — do NOT rely on a saved
 list or on memory. Other Claude sessions edit this same code in parallel, so the
@@ -110,13 +110,13 @@ findings must reflect the code as it is right now.
      site to import it; `→ verify:` a real check (e.g. `npx tsc --noEmit`, the route
      still renders).
    - **Files to touch** — list the new/edited shared file AND every call site that gets
-     rewired to import it, so implement-feature can detect two sessions colliding on the
+     rewired to import it, so Main's overlap check can detect two builds colliding on the
      same file.
    - **Reuse** — point at any existing shared code the new extraction should build on.
    - **Branch** — set `**Branch:**` per the template's guidance (`refactor/<slug>` fits most
      extractions; a bare `—` only for a tiny direct-on-main tidy-up).
    - **Plain-language summary** — 1–2 jargon-free lines on what changes and what's different
-     afterwards (implement-feature reads this back to the user).
+     afterwards (Main reads this back to the user at the gate).
    - **Testing checklist** — plain click-through steps to confirm the affected screens/flows
      still work after the extraction.
 
@@ -148,8 +148,8 @@ findings must reflect the code as it is right now.
     code here. ALWAYS close the turn with this exact standard hand-off line (adjust only
     the push wording if push was skipped/blocked):
 
-    > ✅ Audit done — extraction plan saved & pushed. Build it anytime with
-    > `/ae49-task-implement-feature`. Ready for your next `/ae49-task-audit-lib`.
+    > ✅ Audit done — extraction plan saved & pushed. Build it anytime with the
+    > router's `impl:` lane. Ready for your next `/ae49-task-audit-lib`.
 
 ## Output
 

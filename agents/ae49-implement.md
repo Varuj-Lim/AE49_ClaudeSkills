@@ -42,9 +42,8 @@ from any hardcoded list. Before and while implementing:
 - **You cannot ask the user anything** (`AskUserQuestion`/`ExitPlanMode` unavailable). If the
   plan is ambiguous or you hit a real design fork, **stop and return the question to Main** —
   do not guess your way past a decision.
-- **Do NOT run the interactive `ae49-task-implement-feature` skill** — its manual-test STOP
-  gate and pool-folder guard assume a human session. You do the mechanical build only; the
-  manual-test gate lives with Main + the user.
+- **No interactive gates here** — manual-test STOP gates assume a human session. You do
+  the mechanical build only; the manual-test gate lives with Main + the user.
 - **NEVER commit, push, or touch the `main`/default branch.** Leave every change uncommitted
   in your worktree. Main + the user own all git landing, per the project's own deploy rules.
 

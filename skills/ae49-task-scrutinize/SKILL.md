@@ -63,10 +63,10 @@ After the report, ask the user **which finding(s) they want to fix** (they refer
 **A. Project / app code → never edit it here; plan it.** Another session may be mid-implement on the shared app worktree, and a direct edit can clash. Fully follow the **`ae49-task-plan-feature`** procedure — invoke that skill (via the Skill tool), or replicate its steps:
 
 - Write the fix as `docs/plans/<slug>.md` from that skill's `TEMPLATE-FORMAT.md` (its canonical template).
-- Set **Status** `Ready`, stamp **Created** with today's date, and fill **Files to touch** completely (implement-feature reads it to detect two sessions colliding on the same file).
+- Set **Status** `Ready`, stamp **Created** with today's date, and fill **Files to touch** completely (Main's overlap check reads it to detect two builds colliding on the same file).
 - Commit & push ONLY that plan file (never `git add -A`).
 
-The scrutiny already did the design work, so reuse the findings / evidence / fixes as the plan content and skip the grilling step unless a fix decision is still open. Hand off — the user builds it later with `/ae49-task-implement-feature`. Never run the app-code fix inline.
+The scrutiny already did the design work, so reuse the findings / evidence / fixes as the plan content and skip the grilling step unless a fix decision is still open. Hand off — Main builds it later via the `impl:` lane (an `ae49-implement` agent). Never run the app-code fix inline.
 
 **B. User-level files → fix them directly, no plan.** Skills under `~/.claude/skills/`, personal config, and docs are NOT app code, aren't in the app build, and can't collide with an app implement session. So skip the plan ceremony: report, ask which findings to fix, and **edit those files directly** — committing per change where they live under version control.
 
