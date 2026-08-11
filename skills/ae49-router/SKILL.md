@@ -44,9 +44,8 @@ calls in one message).
 
 ## Inline refine (the `refine:` lane)
 
-You (Main, on Opus) do the refine yourself — do **not** spawn a sub-agent for it, and do
-**not** run the `ae49-ref-prompt-refine` skill (its Haiku-mode STOP gate would block you).
-Apply that skill's rewrite discipline directly:
+You (Main) do the refine yourself — do **not** spawn a sub-agent for it. The rewrite
+discipline, applied directly:
 
 1. Take the user's rough text (translate Thai → English if needed).
 2. Produce **ONE** clear, improved English prompt.
