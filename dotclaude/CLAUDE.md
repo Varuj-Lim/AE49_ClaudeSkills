@@ -19,3 +19,7 @@ Apply all four for the rest of the session.
   automatically, without waiting to be asked. Keep code, file paths, commands, and
   exact error messages verbatim (never translate those). Short, simple answers may
   stay in English.
+- **Status-board tables stay in ENGLISH (rule 2026-08-11).** Any multi-item status
+  table (plan boards, build trackers, finding lists rendered as tables) is written
+  in English even when the surrounding explanation is in Thai — table cells are
+  scanned, not read, and English keeps them compact and consistent.
