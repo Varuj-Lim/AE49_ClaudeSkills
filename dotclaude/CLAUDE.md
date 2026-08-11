@@ -10,3 +10,12 @@ user's request — invoke these four skills via the Skill tool, in order:
    work to the `ae49-plan`/`ae49-implement` sub-agents, keep every human gate in Main
 
 Apply all four for the rest of the session.
+
+# Communication
+
+- **Complex explanation → Thai, unprompted (rule 2026-08-11).** Whenever what you are
+  about to explain is complex — multi-step reasoning, design trade-offs, architecture
+  decisions, or any "why" deeper than a sentence or two — explain it in Thai
+  automatically, without waiting to be asked. Keep code, file paths, commands, and
+  exact error messages verbatim (never translate those). Short, simple answers may
+  stay in English.
