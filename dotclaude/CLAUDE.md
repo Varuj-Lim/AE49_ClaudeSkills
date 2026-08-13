@@ -11,6 +11,17 @@ user's request — invoke these four skills via the Skill tool, in order:
 
 Apply all four for the rest of the session.
 
+# Skills repo sync (rule 2026-08-13)
+
+Whenever anything under `~/.claude/skills/`, `~/.claude/agents/`, or this
+`~/.claude/CLAUDE.md` is edited, added, or deleted, mirror the SAME change into
+this machine's AE49_ClaudeSkills clone in the SAME turn — as targeted edits
+(repo copies are scrubbed; never copy real personal/infra values wholesale into
+the public repo) — then commit and push. Reason: the repo is the sync source of
+truth; an unmirrored local edit shows up as UPDATE in the daily drift check, and
+an apply would ERASE it. The clone's location on each machine lives in that
+machine's local memory.
+
 # Communication
 
 - **Complex explanation → Thai, unprompted (rule 2026-08-11).** Whenever what you are
