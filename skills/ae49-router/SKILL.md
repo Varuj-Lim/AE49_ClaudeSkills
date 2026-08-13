@@ -112,7 +112,16 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   prose-run summary of items. **Checklist format:** each item on its own line as
   `N. [ ] <sentence>` with ONE check per item, numbered sequentially 1..N through the
   whole list (numbering continues across section groups, so "item 13" is unambiguous);
-  lists longer than ~8 items group under short bold section headers.
+  when a list must exceed ~8 items it groups under short bold section headers.
+  **Checklist budget (user rule 2026-08-13): aim for 5–7 items; only a genuinely
+  complex gate may exceed that, and it should never reach 10.** Condense by merging
+  related checks into one item and covering only the core flow plus the risky edges —
+  the audit already verified the rest; a gate checklist is the user's smoke test, not a
+  re-audit. When a plan's Testing checklist is longer, Main condenses it at the gate.
+  **Checklist language (user rule 2026-08-13): items are written in THAI**, keeping
+  technical terms, UI labels, button names, codes and file paths in English (e.g.
+  "เปิดแท็บ Approvals แล้วกด Approve ใบ OT9901 → ตัวเลขต้องอ่าน 5h 30m") — full,
+  self-explanatory sentences still apply.
   **Clickable checklist page:** if the project carries a gate-checklist template (e.g.
   `docs/gate-checklist.html` reading a sibling `gate-checklist.js` items file), overwrite
   the items file for this gate (`## <section>` strings become headers) and hand the user a
