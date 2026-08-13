@@ -64,19 +64,27 @@ re-read from disk — never report from memory:
 2. Detect live builds: implementers you spawned this session, plus `git worktree list`
    (a lingering feature-branch worktree from another session = build in progress or
    awaiting integration — say which you can't tell, don't guess).
-3. Output ONE table, one row per plan, most-active first, emoji column first:
+3. Output ONE table, one row per item, most-active first, FOUR columns (user format
+   ruling 2026-08-13): **Item | Stage | Waiting on | Next**.
 
-| Emoji | Meaning |
+   - **Item** — the plan slug, or a short name for planless work worth a row
+     (e.g. "Unpushed on main", a paused audit, tickets awaiting clarify).
+   - **Stage** — ONE emoji from the set below + a 2–4 word label
+     (e.g. "🧪 Your gate (8 items)", "🔨 Building", "🔍 In audit").
+   - **Waiting on** — whose move unblocks it: blocking plan names from the `After:`
+     chain, "your test", "your push", an audit verdict, or "—".
+   - **Next** — one short phrase: what happens right after the wait clears
+     (e.g. "pass → sweep → commit"). This column replaces the old after-table prose.
+
+| Emoji | Stage |
 |---|---|
 | 🔨 | building right now (implementer running) |
-| 🧪 | built — waiting for the user's manual test / landing |
+| 🔍 | in audit, or fixing audit findings (audit-gate mandate — before the user gate) |
+| 🧪 | your gate — built + audited, waiting for the user's manual test (say the checklist item count) |
 | ✅ | ready — approved, unblocked, can dispatch on `impl:` |
-| ⏳ | waiting — blocked; name the unlanded plans from its `After:` chain in the last column |
+| ⏳ | waiting — blocked; name the unlanded plans in Waiting on |
 | ⛔ | on hold (`Status: On hold`) |
 | 🗄️ | recently landed (show the newest 2–3 from `done/`) |
-
-Table columns: emoji · plan name · waiting on (blockers by name, or "—"). After the table,
-one short line per 🔨/🧪 row saying what happens next at its gate.
 
 ## Chain graph — dispatching implementers safely
 
