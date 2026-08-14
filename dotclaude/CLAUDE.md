@@ -1,15 +1,24 @@
 # Session initialization
 
 At the very start of every session — on your first response, before addressing the
-user's request — invoke these four skills via the Skill tool, in order:
+user's request — invoke these five skills via the Skill tool, in order:
 
 1. `ae49-task-grill` — interview me to reach shared understanding before any work
 2. `ae49-ref-guidelines` — load the coding-workflow guidelines
 3. `ae49-ref-caveman` — ultra-compressed communication mode
-4. `ae49-router` — act as thin Main: refine on request, delegate heavy plan/implement
+4. `ae49-ref-report-format` — the ONE format for every report back to me: findings,
+   reviews, audits, status boards. Added 2026-08-14 because it was not in this list,
+   so a whole session of audit relays and status tables was improvised instead —
+   findings with no IDs to refer back to, and ad-hoc columns instead of the board.
+5. `ae49-router` — act as thin Main: refine on request, delegate heavy plan/implement
    work to the `ae49-plan`/`ae49-implement` sub-agents, keep every human gate in Main
 
-Apply all four for the rest of the session.
+Apply all five for the rest of the session.
+
+**Emoji legend precedence (rule 2026-08-14):** `ae49-router` and `ae49-ref-report-format`
+both describe the four-column board and their column names agree, but their stage
+emoji sets differ. `ae49-ref-report-format` wins — it is the declared single source
+for report format.
 
 # Skills repo sync (rule 2026-08-13)
 

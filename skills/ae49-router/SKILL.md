@@ -79,15 +79,18 @@ re-read from disk — never report from memory:
    - **Next** — one short phrase: what happens right after the wait clears
      (e.g. "pass → sweep → commit"). This column replaces the old after-table prose.
 
-| Emoji | Stage |
-|---|---|
-| 🔨 | building right now (implementer running) |
-| 🔍 | in audit, or fixing audit findings (audit-gate mandate — before the user gate) |
-| 🧪 | your gate — built + audited, waiting for the user's manual test (say the checklist item count) |
-| ✅ | ready — approved, unblocked, can dispatch on `impl:` |
-| ⏳ | waiting — blocked; name the unlanded plans in Waiting on |
-| ⛔ | on hold (`Status: On hold`) |
-| 🗄️ | recently landed (show the newest 2–3 from `done/`) |
+**The stage emoji legend lives in `ae49-ref-report-format`, not here** (precedence rule
+2026-08-14): 📝 planning · 📋 plan ready · 🔨 building · 🔍 audit running · 🔧 fixing
+findings · 📦 staged / pending · 🧪 the user's manual gate · ✅ landed · 🚀 deployed ·
+⏸️ blocked. This skill previously carried a second, slightly different set (⏳ waiting,
+⛔ on hold, 🗄️ recently landed), which meant two skills defined the same board two ways.
+Read the legend from that skill so every report in every project uses one set.
+
+Board rows this lane adds on top of the shared legend:
+
+- **`⏸️ Blocked`** — name the unlanded plans from its `After:` chain in *Waiting on*.
+- **`⏸️ On hold`** — a plan whose file says `Status: On hold`; say "on hold" in *Next*.
+- **`✅ Landed`** — show the newest 2–3 from `done/` so recent work stays visible.
 
 ## Chain graph — dispatching implementers safely
 
