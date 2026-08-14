@@ -66,6 +66,9 @@ re-read from disk — never report from memory:
    awaiting integration — say which you can't tell, don't guess).
 3. Output ONE table, one row per item, most-active first, FOUR columns (user format
    ruling 2026-08-13): **Item | Stage | Waiting on | Next**.
+   **NEVER collapse items into one row** (user ruling 2026-08-14): no "Ready ×6", no
+   "plan A + plan B" merged rows — every plan and tracked item gets its OWN row even
+   when many share a state or share one gate.
 
    - **Item** — the plan slug, or a short name for planless work worth a row
      (e.g. "Unpushed on main", a paused audit, tickets awaiting clarify).
