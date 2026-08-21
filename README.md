@@ -4,6 +4,8 @@ Agent skills for real engineering work in the AE49 stack — not vibe coding.
 
 **New here? Read [WORKFLOW.md](WORKFLOW.md)** — the owner's handbook: every prefix, phrase, and gate in the human-Claude working loop.
 
+**Setting up a new machine — or unsure what state an old one is in? Read [BOOTSTRAP.md](BOOTSTRAP.md)** — every step pairs a ✅ Verify with its 🔧 Fix, so a half-set-up machine can be audited top to bottom.
+
 Building real software is hard. Frameworks that try to own the whole process tend to take away your control and make failures hard to debug. These skills take the opposite stance: they're **small, easy to adapt, and composable**. They work with any model, slot into any repo, and are based on engineering fundamentals rather than a rigid pipeline. Hack on them, make them your own.
 
 They began as an adaptation of Matt Pocock's [Skills For Real Engineers](https://github.com/mattpocock/skills) (see [Credits](#credits)), tuned for AE49 — including the PyRevit extension — and extended with a few skills of our own.
@@ -37,6 +39,7 @@ For a single project instead of globally, copy into `<your-repo>/.claude/skills/
 | `skills/` | `~/.claude/skills/` | The skills themselves — invoke by name, e.g. `/ae49-task-grill`. |
 | `agents/` | `~/.claude/agents/` | Subagent definitions. `ae49-plan` and `ae49-implement` are the headless workers a Main session spawns to write plans and build them in isolated worktrees. Skills alone are not enough — without these, `ae49-router` has nothing to delegate to. |
 | `dotclaude/CLAUDE.md` | `~/.claude/CLAUDE.md` | Session-init: the skills loaded on every session's first response. |
+| `hooks/` | `~/.claude/hooks/` | Machine-local hooks — copied by hand once and registered in `~/.claude/settings.json` (the sync script does not install these). See [BOOTSTRAP.md](BOOTSTRAP.md) step 4. |
 
 `/ae49-task-update-skills` syncs all three, one-way, GitHub → local.
 
