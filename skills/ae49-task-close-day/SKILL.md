@@ -1,6 +1,6 @@
 ---
 name: ae49-task-close-day
-description: End-of-day parking ceremony so every piece of in-flight work travels via git and a session on ANY machine can resume exactly here — parks uncommitted feature trees and queued worktree builds onto transport branches, runs the project's no-deploy backup push, and rewrites the in-flight memory to point at branches instead of machine paths. Use when the user says "ปิดวัน", "ย้ายเครื่อง", "เอางานกลับบ้าน", "park my work", "close the day", is about to switch machines (office ↔ home), or invokes /ae49-task-close-day. Pairs with ae49-task-open-day on the other side.
+description: End-of-day parking ceremony so every piece of in-flight work travels via git and a session on ANY machine can resume exactly here — parks uncommitted feature trees and queued worktree builds onto transport branches, runs the project's no-deploy backup push, rewrites the in-flight memory to point at branches instead of machine paths, and builds the 🎒 hand-carry list of gitignored machine-local files (e.g. an .env.local whose keys changed) that must travel outside git. Use when the user says "ปิดวัน", "ย้ายเครื่อง", "เอางานกลับบ้าน", "park my work", "close the day", is about to switch machines (office ↔ home), or invokes /ae49-task-close-day. Pairs with ae49-task-open-day on the other side.
 ---
 
 # Close day — park everything so work travels
@@ -51,24 +51,38 @@ or a Temp folder.
    `git add -A` + commit + push on its own agent branch. Skip a worktree whose
    tree is clean and whose branch is already on origin.
 
-5. **Update the in-flight memory.** Rewrite the driver's inflight file so every
-   queue item points at a BRANCH (never a machine path or Temp patch file), and
-   record: parked-by machine name, date, gate state, and what open-day should
-   restore first. Commit it: `docs(memory): close-day park <date>`.
+5. **Off-git cargo check (🎒 hand-carry list).** Git cannot carry ignored
+   machine-local files, so list what must travel by hand. Check `.env.local`
+   (and any other `.env*` the project uses): if its modified time is newer than
+   the previous close-day — or the user says keys were added/rotated — flag it
+   CARRY, naming WHICH key changed (key NAME only, NEVER the value). Same for
+   any other gitignored file the user wants identical on the other side
+   (emulator snapshots are normally rebuilt per machine, not carried). Unsure
+   whether something changed? Ask the user. Nothing to carry → record that
+   explicitly.
 
-6. **Backup push.** Run the project's no-deploy backup push, e.g.
+6. **Update the in-flight memory.** Rewrite the driver's inflight file so every
+   queue item points at a BRANCH (never a machine path or Temp patch file), and
+   record: parked-by machine name, date, gate state, the step-5 🎒 carry list
+   with each item's reason, and what open-day should restore first. Commit it:
+   `docs(memory): close-day park <date>`.
+
+7. **Backup push.** Run the project's no-deploy backup push, e.g.
    `git push origin main:backup`. This carries the memory commit plus every
    unpushed main commit off-machine. (Park branches were pushed in 3–4.)
 
-7. **Skills repo check.** The skills sync clone must be clean and pushed
+8. **Skills repo check.** The skills sync clone must be clean and pushed
    (`git -C <clone> status -sb`) per the same-turn mirror rule. Drift found:
    mirror + push it now, so the other machine's drift check pulls it tomorrow.
 
-8. **Report** per `ae49-ref-report-format`: a table of item → where it now lives
-   (branch) → what open-day will do with it. If a gate was open, warn that
-   emulator/seeded test data is machine-local and must be re-seeded on the other
-   side. End with: Main can be closed and the machine shut down (close a running
-   emulator with Ctrl+C, never the window X).
+9. **Report** per `ae49-ref-report-format`: a table of item → where it now lives
+   (branch) → what open-day will do with it, plus a **🎒 carry with you**
+   section listing every step-5 item with its reason and how to move it (USB
+   drive or password manager — never chat, never git). Say "nothing to carry"
+   out loud when the list is empty, so the user never has to guess. If a gate
+   was open, warn that emulator/seeded test data is machine-local and must be
+   re-seeded on the other side. End with: Main can be closed and the machine
+   shut down (close a running emulator with Ctrl+C, never the window X).
 
 ## Notes
 

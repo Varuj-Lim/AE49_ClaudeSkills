@@ -1,6 +1,6 @@
 ---
 name: ae49-task-open-day
-description: Morning resume ceremony on any machine after ae49-task-close-day parked work on another — fast-forwards main from the project's backup branch, syncs skills, restores the parked feature tree (uncommitted) from its park/ transport branch, re-opens the manual-test gate, and reports the board. Use when the user says "เปิดวัน", "มาทำต่อ", "ทำต่อจากที่ทำงาน", "ทำต่อจากที่บ้าน", "resume where I left off", "open the day", starts a session right after switching machines, or invokes /ae49-task-open-day.
+description: Morning resume ceremony on any machine after ae49-task-close-day parked work on another — fast-forwards main from the project's backup branch, syncs skills, verifies the 🎒 hand-carry list arrived (e.g. an updated .env.local), restores the parked feature tree (uncommitted) from its park/ transport branch, re-opens the manual-test gate, and reports the board. Use when the user says "เปิดวัน", "มาทำต่อ", "ทำต่อจากที่ทำงาน", "ทำต่อจากที่บ้าน", "resume where I left off", "open the day", starts a session right after switching machines, or invokes /ae49-task-open-day.
 ---
 
 # Open day — resume parked work on this machine
@@ -40,7 +40,14 @@ Mirror of `ae49-task-close-day`. Everything arrives through git.
    hub tree, which agent branches hold queued builds, the gate state, and the
    first action.
 
-4. **Restore the hub tree** (when the manifest lists a park branch):
+4. **Verify the 🎒 cargo arrived.** For each item in the manifest's carry list
+   (e.g. ".env.local — key X added"): confirm it is on THIS machine — the named
+   key exists in this machine's `.env.local` (check the key NAME with a grep,
+   never print values), or the file's modified time is fresh. Anything missing:
+   STOP and tell the user exactly what to bring before continuing — a stale
+   `.env.local` fails much later with a confusing auth error, so catch it here.
+
+5. **Restore the hub tree** (when the manifest lists a park branch):
 
    ```
    git cherry-pick -n origin/park/<name>
@@ -51,17 +58,17 @@ Mirror of `ae49-task-close-day`. Everything arrives through git.
    A conflict means main moved underneath the park (something landed after the
    park was cut) — stop and resolve with the user.
 
-5. **Queued builds** need nothing yet. When a queue item's turn comes, stage it
+6. **Queued builds** need nothing yet. When a queue item's turn comes, stage it
    with `git cherry-pick -n origin/<its-agent-branch>` + `git restore --staged .`
    — this replaces any older Temp-patch instructions still written in the memory.
 
-6. **Re-open the gate** if one was open at close: rewrite the project's
+7. **Re-open the gate** if one was open at close: rewrite the project's
    gate-checklist items file from the plan + memory and hand over the file://
    link per the gate rules. Emulator and seeded test data are machine-local — if
    the gate needs seeded data, re-seed on THIS machine (the project's test-data
    skill), and launch the dev/emulator with this machine's launcher.
 
-7. **Update memory + report.** Note "resumed on <machine> <date>" in the
+8. **Update memory + report.** Note "resumed on <machine> <date>" in the
    in-flight file (the commit can ride the next landing). Report the board per
    `ae49-ref-report-format` and name the single next action.
 
