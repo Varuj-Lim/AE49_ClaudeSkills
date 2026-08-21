@@ -42,8 +42,11 @@ says "ปิด session", "close this session", or hands off with no machine swi
    the memory format can't hold** (a long investigation, design reasoning).
    Link it from the in-flight file so the next session actually finds it.
 4. Commit per the rules above (memory commits: `docs(memory): …`; the branch
-   guard still applies). Then tell the user: close away — the next session
-   picks this up by itself.
+   guard still applies). Durability push: in a project where a default-branch
+   push DEPLOYS, never push main here — use the project's no-deploy backup push
+   (e.g. `git push origin main:backup`) instead; plain push only where pushing
+   is inert. Then tell the user: close away — the next session picks this up by
+   itself.
 
 For switching MACHINES, use `ae49-task-close-day` instead (work must travel via
 git, with a 🎒 hand-carry list); this mode covers only a same-machine swap.
