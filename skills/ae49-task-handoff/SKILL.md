@@ -1,6 +1,6 @@
 ---
 name: ae49-task-handoff
-description: Compact the current conversation into a handoff document for another agent to pick up. Use when the user wants to hand work off to a fresh session, says "handoff", "hand this off", or "write a handoff", or wants the current session summarized so another agent can continue the work.
+description: Compact the current conversation into a handoff document for another agent to pick up. Use when the user wants to hand work off to a fresh session, says "handoff", "hand this off", or "write a handoff", or wants the current session summarized so another agent can continue the work — including closing a session in place ("ปิด session", "close this session and open a new one"), where in projects with git-synced per-person memory the driver's in-flight memory file (auto-read at next session start) is the primary artifact and the doc is written only for deep context.
 argument-hint: "What will the next session be used for?"
 ---
 
@@ -24,3 +24,26 @@ Do not duplicate content already captured in other artifacts (PRDs, plans, ADRs,
 Redact any sensitive information, such as API keys, passwords, or personally identifiable information.
 
 If the user passed arguments, treat them as a description of what the next session will focus on and tailor the doc accordingly.
+
+## Session-close mode (same machine, new session)
+
+When the intent is "close this session and continue in a fresh one" (the user
+says "ปิด session", "close this session", or hands off with no machine switch):
+
+1. **Check for git-synced per-person memory** — a repo `.claude/memory/MEMORY.md`
+   with a driver mapping. Without it, write the handoff doc as above and tell
+   the user to point the new session at the file (nothing loads it by itself).
+2. **With it, the driver's in-flight memory file is the PRIMARY artifact** — the
+   next session auto-reads it at start, while a `docs/handoffs/` doc alone sits
+   unread. Update (or create) the driver's `inflight-<date>.md`: current state,
+   queue, decisions made this session, the single next action. Keep the
+   person's MEMORY.md index line current.
+3. **Write the full handoff doc ONLY when the conversation carries deep context
+   the memory format can't hold** (a long investigation, design reasoning).
+   Link it from the in-flight file so the next session actually finds it.
+4. Commit per the rules above (memory commits: `docs(memory): …`; the branch
+   guard still applies). Then tell the user: close away — the next session
+   picks this up by itself.
+
+For switching MACHINES, use `ae49-task-close-day` instead (work must travel via
+git, with a 🎒 hand-carry list); this mode covers only a same-machine swap.
