@@ -9,8 +9,8 @@ Staff file bugs and suggestions at each hub's Support → Tickets. This skill is
 the ONE process for turning them into `docs/plans/` work: **read and clarify,
 then hand off** — the plan itself is produced by the normal `plan:` lane. Each
 project's ticket skill (`ae49Hub-task-ticket-to-plan`,
-`nurihub-task-ticket-to-plan`) declares its facts and its write-back rules;
-this file never carries a path, uid, collection name, or response template.
+`nurihub-task-ticket-to-plan`) declares its facts;
+this file never carries a path, uid, or collection name — the process and the response templates live here.
 
 ## Shared hard rules
 
@@ -97,5 +97,5 @@ clarifying questions follow `ae49-task-grill`.
 
 Script paths and invocations · collection name and doc shape · status
 vocabulary · priority tiers (the `web-ref-ticket-queue` facts) · attachment
-markers and image-field semantics · write-back rules, actor identity, and
-response language/templates · any project-only statuses or fields.
+markers and image-field semantics · write-back FACTS (script, actor identity,
+notification behavior) · any project-only statuses or fields.
