@@ -1,6 +1,6 @@
 ---
 name: web-task-ticket-to-plan
-description: The shared ticket-to-plan doorway workflow for every hub project (AE49_Hub, Nuri_Hub, and future siblings) — read the support tickets, let the owner pick, clarify until the intent is settled, then hand off into the project's NORMAL plan flow. Use when the user wants to work from tickets in ANY hub project — "ticket to plan", "read the tickets", "ดู ticket", "what did staff request/report" — alongside that project's own ticket skill, which supplies the facts: script paths, collection/status vocabulary, priority tiers, attachment markers, and its OWN write-back rules. The process changes HERE once; project skills never restate it.
+description: The shared ticket-to-plan doorway workflow for every hub project (AE49_Hub, Nuri_Hub, and future siblings) — read the support tickets, let the owner pick, clarify until the intent is settled, then hand off into the project's NORMAL plan flow. Use when the user wants to work from tickets in ANY hub project — "ticket to plan", "read the tickets", "ดู ticket", "what did staff request/report" — alongside that project's own ticket skill, which supplies the facts: script paths, collection/status vocabulary, priority tiers, attachment markers, actor identity, and notification behavior — the two-step write-back itself (gate PASS → in_progress + Thai reply; PUSH → resolved + Thai reply, owner ruling 2026-08-26) lives HERE and is identical in every hub. The process changes HERE once; project skills never restate it.
 ---
 
 # Ticket → Plan — shared doorway workflow
@@ -19,14 +19,24 @@ this file never carries a path, uid, collection name, or response template.
   per settled spec; a ticket may also turn out to be a tiny fix (router's
   tiny-fix fast path) or a duplicate of an existing plan — say so instead of
   forcing a plan.
-- **Ticket writes happen ONLY at moments the owner owns — never on Main's
-  initiative, and never before the work is on PRODUCTION.** A landed-but-
-  unpushed feature is invisible to the requester; closing their ticket then
-  sends them looking for something that is not there (it happened, 2026-08-17).
-  WHAT gets written differs per project and lives in the project skill (AE49:
-  two-step Thai responses at gate-pass and push; Nuri: status-only resolve
-  after push, replies are the owner's to write in the app). Follow the project
-  skill exactly; when in doubt, read it before touching a ticket.
+- **Ticket writes happen at exactly TWO moments, both owned by the owner —
+  never on Main's initiative (owner ruling 2026-08-26, unified across the
+  hubs; supersedes NuriHub's 2026-08-17 status-only rule):**
+  1. **At the owner's gate PASS** for the feature that answers the ticket →
+     `status: in_progress` + a Thai response saying it is done and waiting
+     for the next deploy.
+  2. **At the owner's PUSH** (production deploy) → `status: resolved` + a
+     Thai response saying it is live now.
+  Templates (plain Thai, keep the app's English labels; one or two
+  sentences, say WHAT changed for the requester, never the internals):
+  - **PASS:** `ทำเสร็จแล้วครับ — <สิ่งที่เปลี่ยนสำหรับผู้ยื่น 1 ประโยค> รอขึ้นระบบจริงในรอบ deploy ถัดไป จะแจ้งอีกครั้งเมื่อใช้ได้`
+  - **PUSH:** `ขึ้นระบบแล้วครับ — <สิ่งที่เปลี่ยน 1 ประโยค> ลองใช้ได้เลย ถ้าไม่ตรงที่ต้องการแจ้งกลับได้ที่ ticket นี้`
+  Always dry-run first and show the owner; `--apply` only after it reads
+  right; one ticket per call; only for a ticket the plan cites; never
+  `rejected` unless the owner says so; and **never before the work is on
+  PRODUCTION** — a landed-but-unpushed feature is invisible to the requester
+  (it happened, 2026-08-17). Script paths, actor identity, and notification
+  behavior are the project skill's facts.
 
 ## The flow
 
@@ -74,9 +84,9 @@ this file never carries a path, uid, collection name, or response template.
    plan whose Context does not name its source ticket cannot be closed
    cleanly later.
 
-6. **Close — per the project's write-back rules, at the owner's own words**
-   (see the shared hard rule above). Dry-run first, show the owner what will
-   change, `--apply` only after it reads right.
+6. **Write back — the two-step rule above, at the owner's own words.** The
+   project skill names the script, the actor identity, and whether a bell
+   notification accompanies the write.
 
 ## Output notes
 
