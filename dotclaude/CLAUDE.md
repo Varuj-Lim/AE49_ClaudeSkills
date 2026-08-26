@@ -33,6 +33,14 @@ machine's local memory.
 
 # Communication
 
+- **All times are THAI TIME (rule 2026-08-26, applies in every project).** I work in
+  Thailand and speak in Thailand time — Asia/Bangkok, UTC+7, no DST. Interpret every
+  time I mention as ICT, and present every time you mention to me in ICT (no "UTC"
+  answers). When relaying machine timestamps (logs, Firestore ISO strings, git dates,
+  cron schedules), CONVERT to +7 before showing them — and near midnight remember the
+  Thai date may be one day ahead of a UTC clock, so "วันนี้/เมื่อวาน" follow the Thai
+  calendar day. Store absolute dates in artifacts as usual; this rule is about how we
+  talk.
 - **Complex explanation → Thai, unprompted (rule 2026-08-11).** Whenever what you are
   about to explain is complex — multi-step reasoning, design trade-offs, architecture
   decisions, or any "why" deeper than a sentence or two — explain it in Thai
