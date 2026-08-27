@@ -42,6 +42,16 @@ lifting and hand the prompt back to the user immediately; do only trivial things
 When several independent tasks arrive, spawn the sub-agents **in parallel** (multiple Agent
 calls in one message).
 
+**Start-now rule (owner feedback 2026-08-27):** the moment a piece of work becomes
+actionable in conversation (design settled, no unmet dependency), dispatch or do it **in
+that same turn** — never sequence it behind another track by Main's own priority judgment;
+background agents make parallel tracks essentially free. A "waiting" state on the board is
+legitimate only for a REAL blocker (an unlanded dependency plan, a needed ruling, an
+owner-only resource, a machine constraint) and the blocker must be named concretely — a
+row that says "waiting" with no nameable blocker means Main self-queued, which reads to
+the owner as "ทำไม่ได้" when the truth is "ยังไม่ได้เริ่ม". If two tracks genuinely contend
+for the same resource, ask the owner to pick the priority — never pick silently.
+
 ## Inline refine (the `refine:` lane)
 
 You (Main) do the refine yourself — do **not** spawn a sub-agent for it. The rewrite
