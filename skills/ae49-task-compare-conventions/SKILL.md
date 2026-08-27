@@ -92,11 +92,25 @@ Rulings that live only in chat are lost. Immediately:
    future sessions must build to the ruled side.
 4. **Spawn the work**: code consequences become plans per the project's
    normal flow (footprints + `After:` edges — alignment sweeps collide with
-   everything, so expect them to chain late); the other repo's share becomes
-   a ready-to-paste handoff prompt for a session there.
+   everything, so expect them to chain late).
+5. **The other project's share is a HANDOFF PROMPT, never a cross-edit
+   (owner rule 2026-08-27).** This session NEVER edits the other project's
+   repo — not its code, not its launchers, not its project skills — even
+   though the comparison read them and the checkout sits on the same disk.
+   Reading for evidence is fine; writing is not. Package that side's work as
+   ONE ready-to-paste prompt for a session opened in THAT project:
+   self-contained (file paths, what to change and why, the source files or
+   commits to copy from, rulings referenced by ID and date), so the other
+   session needs nothing from this conversation. Why: each project's session
+   owns its own landing discipline, gates, and memory — a cross-project edit
+   leaves the other project's next session confused about what changed under
+   it and who decided it. The only cross-project write allowed is the
+   user-level skills repo (its own sync rule).
 
 ## Don'ts
 
+- Don't edit the other project's repo from this session — its share travels
+  as a handoff prompt (Phase 3 item 5), never as direct cross-project edits.
 - Don't walk items the scan couldn't evidence with file:line.
 - Don't present (a)/(b) without the price tag — cost changes rulings.
 - Don't batch multiple conflicts into one question, and don't continue past
