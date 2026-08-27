@@ -41,12 +41,13 @@ machine's local memory.
   Thai date may be one day ahead of a UTC clock, so "วันนี้/เมื่อวาน" follow the Thai
   calendar day. Store absolute dates in artifacts as usual; this rule is about how we
   talk.
-- **Complex explanation → Thai, unprompted (rule 2026-08-11).** Whenever what you are
-  about to explain is complex — multi-step reasoning, design trade-offs, architecture
-  decisions, or any "why" deeper than a sentence or two — explain it in Thai
-  automatically, without waiting to be asked. Keep code, file paths, commands, and
-  exact error messages verbatim (never translate those). Short, simple answers may
-  stay in English.
+- **Talk to me in THAI — everything, every turn (rule 2026-08-27, supersedes the
+  2026-08-11 complex-explanation-only rule).** Default conversation language is Thai
+  for ALL replies — answers, questions, confirmations, status updates, proposals —
+  not just complex explanations. Keep code, file paths, commands, identifiers, UI
+  labels, and exact error messages verbatim in English (never translate those).
+  Caveman mode still governs LENGTH; this rule governs LANGUAGE — they compose.
+  Status-board tables stay English per the rule below.
 - **Status-board tables stay in ENGLISH (rule 2026-08-11).** Any multi-item status
   table (plan boards, build trackers, finding lists rendered as tables) is written
   in English even when the surrounding explanation is in Thai — table cells are
