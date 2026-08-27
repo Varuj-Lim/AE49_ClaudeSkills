@@ -145,7 +145,7 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   (user rule, 2026-07-23): the chat message carries only the link, the item count, and
   any gate-specific notes (seeded values, cautions, "Reset ticks" when numbering shifted).
   Print items in chat only when the project has no checklist page. The items file is
-  gitignored per-gate scratch: never commit it. **At landing ("all pass, commit it") RESET it to the CLOSED payload** — `{ feature, title, closed: "<slug> landed <date> (commit <sha>, N/N)", items: [] }` — so the page reads "No open gate" instead of showing an already-landed gate (user rule 2026-08-04); the shell renders that state. Write a fresh item list only when the NEXT gate opens.
+  gitignored per-gate scratch: never commit it. **At landing ("all pass, commit it") RESET it to the CLOSED payload** — shape and closed-line grammar live in the shared canon **`web-ref-gate-closed-format`** (single source, rule 2026-08-27; e.g. `<slug> landed <date> (gate N/N; commit <sha>)`) — so the page reads "No open gate" instead of showing an already-landed gate (user rule 2026-08-04); the shell renders that state. Write a fresh item list only when the NEXT gate opens.
   **Template adoption** — a project that doesn't yet carry the template adopts it in
   ONE docs commit (no manual-test gate needed for a docs-only adoption):
   1. Copy this skill's bundled `resources/gate-checklist.html` →
