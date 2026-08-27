@@ -171,6 +171,18 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   exist and the project has a test-data skill (e.g. `<project>-task-test-data`), offer to
   seed **tagged disposable test data** per that skill, and after the user passes the test
   sweep it (verify zero remain) **before** landing.
+  **Choose the gate's ENVIRONMENT deliberately, and say why** (rule 2026-08-27). When a
+  project offers both a production-backed and an emulator/sandbox-backed dev environment,
+  never let the gate default to whichever one a script or an old checklist happens to point
+  at — pick per gate:
+  - **Emulator/sandbox** when the checklist has the user CREATE, EDIT or DELETE records as
+    part of testing, or when the feature needs no real data (every input typed by hand).
+    Those clicks otherwise leave junk in production, which someone has to sweep later.
+  - **Production** when the gate's expected values were DERIVED from production — e.g. a
+    checklist asserting real people, real totals or real names. A snapshot would show
+    different numbers and the user would report a mismatch that is not a defect.
+  State the chosen environment in the checklist title so the tester cannot land on the
+  wrong port, and record the reason where the feature's notes live.
 - **Git landing.** No sub-agent commits, pushes, or touches the default branch. You
   commit/push only after the user confirms, and follow **this project's own deploy rules**
   in its `CLAUDE.md` (e.g. if merge == deploy, that merge needs the user's explicit
