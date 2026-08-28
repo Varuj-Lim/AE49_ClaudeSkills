@@ -96,6 +96,11 @@ findings · 📦 staged / pending · 🧪 the user's manual gate · ✅ landed �
 ⛔ on hold, 🗄️ recently landed), which meant two skills defined the same board two ways.
 Read the legend from that skill so every report in every project uses one set.
 
+**Every board ends with the 👤 "your move" line** — the required closing line defined in
+`ae49-ref-report-format` ("Rules that keep the board honest"). The `status:` lane never ends
+on the table itself: name what the user has to do, or say plainly that nothing is waiting on
+them and what is being waited on instead. The format lives THERE, not here.
+
 Board rows this lane adds on top of the shared legend:
 
 - **`⏸️ Blocked`** — name the unlanded plans from its `After:` chain in *Waiting on*.

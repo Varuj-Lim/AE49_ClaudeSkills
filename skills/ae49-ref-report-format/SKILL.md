@@ -73,6 +73,25 @@ Which renders as:
   wants the reasoning first and the board as the summary they scroll back to.
 - A one-line takeaway may follow the table when something needs emphasis (e.g. what a push
   would deploy) — but the table is never *replaced* by that line.
+- **Close with the 👤 "your move" line — REQUIRED, never omitted (user rule, 2026-08-28).**
+  The very last line of the message answers the question the reader actually has: *is anything
+  waiting on me?* It restates, as concrete actions, every row whose *Waiting on* points at the
+  user — and when no row does, it says that outright and names what is being waited on instead,
+  so silence is never mistaken for "nothing to do". Rules:
+  - One or two lines, in the conversation's language (the table itself stays English).
+  - Concrete verbs the user can act on ("test the 7 gate items, then say ผ่านหมด"), never a
+    restatement of a Stage ("gate is open").
+  - It comes AFTER the table and after any takeaway line — nothing follows it.
+  - Never dropped on the grounds that the *Waiting on* column already says it: a reader
+    scanning a ten-row board must not have to re-read a column to learn the ball is theirs.
+
+  ```markdown
+  👤 **รอคุณ:** เทส gate 7 ข้อบนหน้า checklist แล้วบอก "ผ่านหมด" · สั่ง "push" เมื่อพร้อม deploy
+  ```
+
+  ```markdown
+  👤 **ไม่มีอะไรรอคุณตอนนี้** — รอ builder เสร็จ แล้วผมจะรายงานพร้อม gate ต่อไป
+  ```
 
 ## 2. Emoji-tag every section
 
