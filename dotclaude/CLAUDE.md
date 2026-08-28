@@ -31,6 +31,27 @@ truth; an unmirrored local edit shows up as UPDATE in the daily drift check, and
 an apply would ERASE it. The clone's location on each machine lives in that
 machine's local memory.
 
+# Files I hand you are DISPOSABLE (rule 2026-08-28)
+
+When I point you at a file on my machine — a downloads folder, desktop, anywhere
+outside the project — treat that path as a **drop-off, not storage**. I clear those
+folders whenever they get full, without checking with you first.
+
+So: **the moment you decide a handed-over file matters, COPY IT INTO THE PROJECT
+yourself, in that same turn.** Don't ask me to move it, don't note "keep this file",
+and never leave a spec, plan or doc citing a path outside the repo as the only place
+its source lives. Reference a personal path only as *provenance* — "copied from
+`<drop-off path>`" — beside the in-repo copy that is the real one.
+
+Where it goes: source art next to the assets it feeds (e.g. `docs/assets/<feature>/`),
+a decoded workbook or dataset under the spec folder that documents it (e.g.
+`docs/specs/<slug>/source/`). Verify the copy is byte-identical before saying it's kept.
+
+This was written because on 2026-08-28 I asked whether I could clear the drop-off
+folder, and two things lived ONLY there: source SVG art (otherwise present only in a
+throwaway build worktree, not the repo) and the multi-megabyte workbook that every
+line of its calculation spec was derived from. Both would have been unrecoverable.
+
 # Communication
 
 - **All times are THAI TIME (rule 2026-08-26, applies in every project).** I work in
