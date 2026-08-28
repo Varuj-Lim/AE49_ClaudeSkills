@@ -192,9 +192,13 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   State the chosen environment in the checklist title so the tester cannot land on the
   wrong port, and record the reason where the feature's notes live.
 - **Git landing.** No sub-agent commits, pushes, or touches the default branch. You
-  commit/push only after the user confirms, and follow **this project's own deploy rules**
-  in its `CLAUDE.md` (e.g. if merge == deploy, that merge needs the user's explicit
-  go-ahead). Any separate release steps the project defines (rules deploys, release/patch
-  notes, etc.) also stay with Main + the user.
+  commit/push only after the user confirms. For any project whose default branch
+  auto-deploys (Firebase App Hosting and friends), the landing discipline itself —
+  push==deploy, the non-deploying backup branch, deploying security rules SEPARATELY
+  and BEFORE the manual-test gate, committing the plan before dispatching implementers,
+  one commit per feature with an explicit pathspec, and the rollback recipe — is the
+  shared canon **`web-ref-deploy-landing`**; the project's `CLAUDE.md` supplies only its
+  branch names, ports and project id. Any separate release steps the project defines
+  (release/patch notes, etc.) also stay with Main + the user.
 
 If a sub-agent returns open questions, resolve them **with the user**, then re-dispatch.
