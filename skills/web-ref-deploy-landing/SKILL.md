@@ -51,18 +51,25 @@ are NOT deployed by App Hosting. They go out through their own command:
 npx firebase-tools deploy --only firestore:rules --project <project-id>
 ```
 
-**When a feature changes rules, deploy them BEFORE opening the manual-test
-gate**, not at landing. Two reasons, and the second is the dangerous one:
+**When the gate runs against PRODUCTION, deploy the rules before opening it** —
+otherwise the tester hits `permission-denied` on a feature whose code is
+perfectly correct.
 
-- The gate cannot pass otherwise — the tester hits `permission-denied` on a
-  feature whose code is correct.
-- If rules are forgotten entirely, the push deploys the app against the OLD
-  rules and the feature goes live **denying itself**. The symptom is a
-  permission error that reads exactly like an application bug, so the hunt
-  starts in the wrong place.
+**When the gate runs on the EMULATOR (the default — see `ae49-router`), it needs
+no deploy at all.** `firebase.json` points the emulator at the very same
+`firestore.rules` file in the working tree, so the local suite is already
+running the new rules the moment they are saved. Deploying "for the gate" in
+that case changes production for no testing benefit. Check `firebase.json`
+rather than assuming.
 
-Treat "does this feature touch rules or functions?" as part of preparing every
-gate, not as a landing afterthought.
+Either way, **the rules must go out before the feature does**. If they are
+forgotten, the push deploys the app against the OLD rules and the feature goes
+live **denying itself** — and the symptom is a permission error that reads
+exactly like an application bug, so the hunt starts in the wrong place. So treat
+"does this feature touch rules or functions?" as a question with a deadline of
+the deploy, asked while preparing the gate; deploying at that moment is fine and
+de-risks landing day, but say plainly that it is a landing step, not a gate
+prerequisite, whenever the gate is on the emulator.
 
 ## 4. Commit the plan BEFORE dispatching implementers
 
