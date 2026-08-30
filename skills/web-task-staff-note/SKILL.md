@@ -61,7 +61,7 @@ skipped — never "clarified" by Claude inventing the team's answer.
 | Fact | Example (NuriHub) |
 |---|---|
 | Filing script | `scripts/staff-note-ticket.cjs` (dry-run default, `--apply` writes) |
-| Marking | dedicated types `ask` / `inform` (title-prefix `[ถามทีม]`/`[แจ้งทีม]` until the type feature lands) |
+| Marking | dedicated ticket types `ask` / `inform` — labels Ask / Inform (landed 2026-08-30; a developer may also file them from the in-app create form) |
 | Owner identity | the fixed owner email the script resolves live |
 | Status vocabulary | the project's ticket statuses |
 
