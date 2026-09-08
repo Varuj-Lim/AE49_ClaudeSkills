@@ -143,7 +143,11 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   whole list (numbering continues across section groups, so "item 13" is unambiguous);
   when a list must exceed ~8 items it groups under short bold section headers.
   **Checklist budget (user rule 2026-08-13): aim for 5–7 items; only a genuinely
-  complex gate may exceed that, and it should never reach 10.** Condense by merging
+  complex gate may exceed that, and it should never reach 10. The budget is PER
+  FEATURE — a combined gate of several features is one section per feature, each
+  section inside the budget (owner reminder 2026-09-08, after Main opened a 44-item
+  combined list by pasting every plan checklist plus every audit drift line; the
+  drift lines are merged INTO the 7, never appended).** Condense by merging
   related checks into one item and covering only the core flow plus the risky edges —
   the audit already verified the rest; a gate checklist is the user's smoke test, not a
   re-audit. When a plan's Testing checklist is longer, Main condenses it at the gate.

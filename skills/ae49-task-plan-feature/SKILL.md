@@ -52,7 +52,11 @@ applies if Main writes it inline.
    the user once it's done — the ae49-implement agent reads this same section back to
    the user later, so get it right here. Also write the `## Testing checklist`
    section: plain, numbered steps the user can click through in the app after the
-   feature is built. **Caveman mode is OFF inside a Testing checklist** — every item
+   feature is built. **Budget: 5–7 items, never 10** (the router's checklist budget,
+   owner rule 2026-08-13, reaffirmed 2026-09-08 after two plans shipped 15-item
+   lists that Main then pasted into a 44-item gate) — merge related checks into one
+   item and cover only the core flow plus the risky edges; the audit re-verifies the
+   rest, the gate is the owner's smoke test. **Caveman mode is OFF inside a Testing checklist** — every item
    is a full, self-explanatory sentence naming where to click, what to do, and what
    the user should see ("Open X → do Y → you should see Z"); never compressed
    fragments. **Format:** one item per line as `N. [ ] <sentence>`, ONE check per
