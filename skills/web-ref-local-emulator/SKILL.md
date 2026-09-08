@@ -53,6 +53,28 @@ through the owner's clicks per rule 1: owner presses safe-close (it exports
 data first; the X button loses it) → Claude deletes the emulator build
 cache → owner presses start.
 
+**Signature to confirm it (2026-09-08):** the SAME URL answers 200 on the
+production-data dev server and 404 on the emulator one, and every DYNAMIC
+route (`/…/[id]/view`) 404s while list pages still render — check with
+`curl -o /dev/null -w "%{http_code}"` against both app ports before naming
+a button.
+
+**Prevention — ruled 2026-09-08 after the cache had grown to 21 GB / 39 GB
+(emulator / production dev servers of one hub):**
+1. The dev cache must not persist on disk. Next 16 keeps Turbopack's dev
+   cache under `<distDir>/dev` by default and never prunes it; each project
+   turns that off in its Next config (`experimental.
+   turbopackFileSystemCacheForDev: false`) so the cache lives in memory,
+   nothing grows, and a restart starts clean. Production builds are untouched.
+2. **Main tells the owner to restart BEFORE the gate** whenever it has staged
+   a LARGE build (roughly 10+ files copied into the hub tree at once) while
+   the emulator dev server is up — that HMR burst is exactly what corrupts
+   the route table. Say it in the gate hand-over, never assume the running
+   server absorbed the change.
+3. Between the owner's clicks, Claude deletes a bloated dist dir (the
+   emulator's when the suite is safe-closed; the production dev server's
+   only while that launcher is closed) — deleting is fine, starting is not.
+
 ## 6. Killing look-alike processes safely (ruling 2026-08-26)
 
 Two hubs' suites are IDENTICAL in a process listing — the same
