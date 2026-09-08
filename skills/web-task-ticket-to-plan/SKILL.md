@@ -41,12 +41,19 @@ this file never carries a path, uid, or collection name — the process and the 
   sentences, say WHAT changed for the requester, never the internals):
   - **PASS:** `ทำเสร็จแล้วครับ — <สิ่งที่เปลี่ยนสำหรับผู้ยื่น 1 ประโยค> รอขึ้นระบบจริงในรอบ deploy ถัดไป จะแจ้งอีกครั้งเมื่อใช้ได้`
   - **PUSH:** `ขึ้นระบบแล้วครับ — <สิ่งที่เปลี่ยน 1 ประโยค> ลองใช้ได้เลย ถ้าไม่ตรงที่ต้องการแจ้งกลับได้ที่ ticket นี้`
-  Always dry-run first and show the owner; `--apply` only after it reads
-  right; one ticket per call; only for a ticket the plan cites; never
-  `rejected` unless the owner says so; and **never before the work is on
-  PRODUCTION** — a landed-but-unpushed feature is invisible to the requester
-  (it happened, 2026-08-17). Script paths, actor identity, and notification
-  behavior are the project skill's facts.
+  **Write directly — no approval round trip (owner ruling 2026-09-08 evening:
+  "เขียนไปได้เลย แค่บอกผมว่าเขียนว่าอะไร ไม่ต้องขออนุญาต").** The owner's PASS /
+  PUSH / approve word IS the authorization: compose the reply from the
+  template, `--apply` it, and REPORT the exact text written (the owner checks
+  it in the app when it goes out). The script's dry-run stays Main's own
+  sanity check (ticket found, status transition right, bell decision as
+  expected), not a gate the owner has to read; it replaced an
+  "always show first" rule that cost a round trip per ticket. One ticket per
+  call; only for a ticket the plan cites; never `rejected` unless the owner
+  says so; and **never before the work is on PRODUCTION** — a
+  landed-but-unpushed feature is invisible to the requester (it happened,
+  2026-08-17). Script paths, actor identity, and notification behavior are
+  the project skill's facts.
 
 ## The flow
 
@@ -117,9 +124,10 @@ this file never carries a path, uid, or collection name — the process and the 
 
 6. **Write back — the three-step rule above, at the owner's own words.** The
    approval step fires the moment the owner approves a plan whose Context
-   cites the ticket (dry-run first, show it, apply); the project skill names
-   the script, the actor identity, and whether a bell notification
-   accompanies the write.
+   cites the ticket; every step writes directly and reports the text
+   afterwards (no "show first" round trip); the project skill names the
+   script, the actor identity, and whether a bell notification accompanies
+   the write.
 
 ## Output notes
 
