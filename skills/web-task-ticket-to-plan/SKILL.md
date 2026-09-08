@@ -19,16 +19,24 @@ this file never carries a path, uid, or collection name — the process and the 
   per settled spec; a ticket may also turn out to be a tiny fix (router's
   tiny-fix fast path) or a duplicate of an existing plan — say so instead of
   forcing a plan.
-- **Ticket writes happen at exactly TWO moments, both owned by the owner —
+- **Ticket writes happen at exactly THREE moments, all owned by the owner —
   never on Main's initiative (owner ruling 2026-08-26, unified across the
-  hubs; supersedes NuriHub's 2026-08-17 status-only rule):**
+  hubs, supersedes NuriHub's 2026-08-17 status-only rule; the APPROVAL step
+  was added by owner ruling 2026-09-08 so staff can see a ticket is being
+  worked on — picking a ticket up for reading/clarifying still writes
+  nothing, because a picked ticket may turn out to be a duplicate or a
+  no-plan):**
+  0. **At the owner's APPROVAL of the plan that cites the ticket** →
+     `status: in_progress` + a short Thai response saying it has been taken
+     up and is being built. Silent (no bell) — the answer bell comes later.
   1. **At the owner's gate PASS** for the feature that answers the ticket →
-     `status: in_progress` + a Thai response saying it is done and waiting
-     for the next deploy.
+     keep `in_progress`, REPLACE the response with one saying it is done and
+     waiting for the next deploy.
   2. **At the owner's PUSH** (production deploy) → `status: resolved` + a
      Thai response saying it is live now.
   Templates (plain Thai, keep the app's English labels; one or two
   sentences, say WHAT changed for the requester, never the internals):
+  - **APPROVAL:** `รับเรื่องแล้วครับ — <สิ่งที่จะทำให้ 1 ประโยค> อยู่ระหว่างจัดทำ จะแจ้งอีกครั้งเมื่อทำเสร็จ`
   - **PASS:** `ทำเสร็จแล้วครับ — <สิ่งที่เปลี่ยนสำหรับผู้ยื่น 1 ประโยค> รอขึ้นระบบจริงในรอบ deploy ถัดไป จะแจ้งอีกครั้งเมื่อใช้ได้`
   - **PUSH:** `ขึ้นระบบแล้วครับ — <สิ่งที่เปลี่ยน 1 ประโยค> ลองใช้ได้เลย ถ้าไม่ตรงที่ต้องการแจ้งกลับได้ที่ ticket นี้`
   Always dry-run first and show the owner; `--apply` only after it reads
@@ -97,9 +105,11 @@ this file never carries a path, uid, or collection name — the process and the 
    plan whose Context does not name its source ticket cannot be closed
    cleanly later.
 
-6. **Write back — the two-step rule above, at the owner's own words.** The
-   project skill names the script, the actor identity, and whether a bell
-   notification accompanies the write.
+6. **Write back — the three-step rule above, at the owner's own words.** The
+   approval step fires the moment the owner approves a plan whose Context
+   cites the ticket (dry-run first, show it, apply); the project skill names
+   the script, the actor identity, and whether a bell notification
+   accompanies the write.
 
 ## Output notes
 
