@@ -96,3 +96,26 @@ headless suite (`firebase emulators:exec`) imports the fresh production
 snapshot, saves it into `.dev-emulator-data`, and exits — the next
 `dev-emu.cmd` start boots straight into that snapshot. Rule 1 is
 unchanged either way: the OWNER presses the button.
+
+## 8. Launcher parity across hubs (owner ruling 2026-09-08)
+
+Every hub carries the SAME five launcher files in `.claude/` — `dev.cmd`
+(production dev), `dev-utc.cmd` (production dev with `TZ=UTC`, mimics App
+Hosting for server-clock gates), `dev-emu.cmd`, `stop-emu.cmd`,
+`refresh-emu-data.cmd` — plus the matching three `launch.json` entries
+(`<hub>`, `<hub>-utc`, `<hub>-emu`, each with `autoPort: true`). The files
+are byte-identical across hubs EXCEPT the project tokens: the app ports, the
+emulator port block, the Firebase project id and the hub's display name.
+Batch files stay pure ASCII (no em-dashes — cmd.exe reads them as ANSI).
+
+- A launcher improvement made in one hub is ported to every sibling hub the
+  SAME DAY, by that hub's own session — never by cross-editing another hub's
+  repo. Main lists the exact hunks in a handoff for the sibling session.
+- Each hub keeps ONE facts skill named `<hub>-ref-emulator` (ports, launcher
+  names, sign-in, which gate runs where, script retargeting, known fixes)
+  that mirrors its siblings section-for-section; this canon holds only the
+  discipline.
+- Verify parity with a normalised diff: substitute the sibling's ports /
+  project id / name into its copy, `diff` it against this hub's file — zero
+  non-comment differences is the pass condition (Main ran exactly this on
+  2026-09-08: `dev.cmd` identical, the other three differed in comments only).
