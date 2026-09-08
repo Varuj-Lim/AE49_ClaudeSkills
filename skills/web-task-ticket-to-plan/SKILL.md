@@ -53,9 +53,22 @@ this file never carries a path, uid, or collection name — the process and the 
    auto-pick, don't rank by your own judgment unless asked.
 
 3. **Read in full** — `--id <docId>` for the full description and any existing
-   response. If there is an attachment, say a screenshot exists and ask the
-   owner to open it in the app if its content matters (the scripts cannot view
-   Storage images).
+   response. **Attachments: fetch and LOOK at them yourself — never ask the
+   owner to open the app (owner ruling 2026-09-08, standing authorization in
+   every hub; asking each time was the complaint).** Each image field on the
+   doc is a plain download URL (Firebase Storage `?alt=media&token=…`, no
+   auth needed); pull every attachment into the session scratchpad and view it
+   with the image-capable Read tool BEFORE asking any question the picture
+   might already answer:
+
+   ```
+   curl -sSL --max-time 60 -o "<scratchpad>/ticket-<id6>-<n>.png" "<attachmentUrl>"
+   ```
+
+   Then say in the card, in one line, what the screenshot shows. The list
+   scripts stay text-only on purpose — the fetch is a shell step, not a script
+   feature. If a fetch fails (expired token, deleted file), say so and only then
+   ask the owner to open it in the app.
 
    **Always show the owner the ticket card FIRST (owner rule 2026-08-25,
    shared).** The moment a ticket is picked up — and again whenever work on it
