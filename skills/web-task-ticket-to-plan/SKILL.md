@@ -59,6 +59,14 @@ this file never carries a path, uid, or collection name — the process and the 
    tier). Tier vocabulary and attachment/answered markers are the project
    skill's facts.
 
+   **`in_progress` tickets are NOT rows (owner rule 2026-09-08).** A ticket
+   that is `in_progress` AND cited by an open plan (grep its id in
+   `docs/plans/*.md`) is work already moving — nothing blocks it, so it only
+   pads the table. Leave it out and say it in ONE line under the table:
+   `N in_progress — carried by <plan slugs>`. Show an `in_progress` ticket as
+   a row ONLY when no plan carries it, flagged ⚠️ — that is a ticket someone
+   flipped and then forgot, and it needs a pick like any open one.
+
 2. **Pick** — ask the owner which ticket(s) to take up (by ID or title). Don't
    auto-pick, don't rank by your own judgment unless asked.
 
