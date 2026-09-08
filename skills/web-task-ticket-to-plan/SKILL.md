@@ -1,6 +1,6 @@
 ---
 name: web-task-ticket-to-plan
-description: The shared ticket-to-plan doorway workflow for every hub project (AE49_Hub, Nuri_Hub, and future siblings) — read the support tickets, let the owner pick, clarify until the intent is settled, then hand off into the project's NORMAL plan flow. Use when the user wants to work from tickets in ANY hub project — "ticket to plan", "read the tickets", "ดู ticket", "what did staff request/report" — alongside that project's own ticket skill, which supplies the facts: script paths, collection/status vocabulary, priority tiers, attachment markers, actor identity, and notification behavior — the two-step write-back itself (gate PASS → in_progress + Thai reply; PUSH → resolved + Thai reply, owner ruling 2026-08-26) lives HERE and is identical in every hub. The process changes HERE once; project skills never restate it.
+description: The shared ticket-to-plan doorway workflow for every hub project (AE49_Hub, Nuri_Hub, and future siblings) — read the support tickets, let the owner pick, clarify until the intent is settled, then hand off into the project's NORMAL plan flow. Use when the user wants to work from tickets in ANY hub project — "ticket to plan", "read the tickets", "ดู ticket", "what did staff request/report" — alongside that project's own ticket skill, which supplies the facts: script paths, collection/status vocabulary, priority tiers, attachment markers, actor identity, and notification behavior — the three-step write-back itself (plan APPROVAL → in_progress only, no reply, owner ruling 2026-09-08; gate PASS → in_progress + Thai reply; PUSH → resolved + Thai reply, owner ruling 2026-08-26) lives HERE and is identical in every hub. The process changes HERE once; project skills never restate it.
 ---
 
 # Ticket → Plan — shared doorway workflow
@@ -27,16 +27,18 @@ this file never carries a path, uid, or collection name — the process and the 
   nothing, because a picked ticket may turn out to be a duplicate or a
   no-plan):**
   0. **At the owner's APPROVAL of the plan that cites the ticket** →
-     `status: in_progress` + a short Thai response saying it has been taken
-     up and is being built. Silent (no bell) — the answer bell comes later.
+     `status: in_progress` and NOTHING else — no response text (owner ruling
+     2026-09-08: "แค่เปลี่ยน Status พอ ไม่ต้องอธิบาย" — the explanation is
+     written only when the work is done, at the two moments below). Silent
+     (no bell). Run the project's update script with `--status in_progress`
+     and no response argument.
   1. **At the owner's gate PASS** for the feature that answers the ticket →
-     keep `in_progress`, REPLACE the response with one saying it is done and
-     waiting for the next deploy.
+     keep `in_progress`, add the Thai response saying it is done and waiting
+     for the next deploy.
   2. **At the owner's PUSH** (production deploy) → `status: resolved` + a
      Thai response saying it is live now.
   Templates (plain Thai, keep the app's English labels; one or two
   sentences, say WHAT changed for the requester, never the internals):
-  - **APPROVAL:** `รับเรื่องแล้วครับ — <สิ่งที่จะทำให้ 1 ประโยค> อยู่ระหว่างจัดทำ จะแจ้งอีกครั้งเมื่อทำเสร็จ`
   - **PASS:** `ทำเสร็จแล้วครับ — <สิ่งที่เปลี่ยนสำหรับผู้ยื่น 1 ประโยค> รอขึ้นระบบจริงในรอบ deploy ถัดไป จะแจ้งอีกครั้งเมื่อใช้ได้`
   - **PUSH:** `ขึ้นระบบแล้วครับ — <สิ่งที่เปลี่ยน 1 ประโยค> ลองใช้ได้เลย ถ้าไม่ตรงที่ต้องการแจ้งกลับได้ที่ ticket นี้`
   Always dry-run first and show the owner; `--apply` only after it reads
