@@ -73,3 +73,21 @@ line of its calculation spec was derived from. Both would have been unrecoverabl
   table (plan boards, build trackers, finding lists rendered as tables) is written
   in English even when the surrounding explanation is in Thai — table cells are
   scanned, not read, and English keeps them compact and consistent.
+
+# One session, one project folder (rule 2026-09-09)
+
+A session WRITES only inside the project it was opened in — the working
+directory's repo, plus this machine's own `~/.claude` user files. READING any
+other repo on the machine is fine (compare, diff, copy a reference); writing
+there is not — no file edits, no `git` commands, no scripts run against it, not
+even a one-line port "while I am here". Two sessions writing one checkout is how,
+on 2026-09-08, a sibling session's commit swept another session's staged files
+along and a launcher was rewritten underneath a batch that was still running.
+
+When the OTHER project needs the change, the deliverable is a **handoff
+prompt**: a paste-ready block I hand to that project's own session — what to
+change, the exact source it may read (file path + commit in THIS repo), the
+token map (ports / project id / names), and how to verify. Short enough to
+paste; the sibling session does the edit, the build, the gate and the commit.
+`ae49-task-compare-conventions` (Phase 3, item 5) and `web-ref-local-emulator`
+§8 already work this way — this section makes it the general rule.
