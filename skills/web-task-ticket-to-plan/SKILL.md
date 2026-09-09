@@ -16,13 +16,13 @@ this file never carries a path, uid, or collection name — the process and the 
 
 - **Cite tickets by their HUMAN CODE, never by the doc id (owner ruling
   2026-09-09: "ตอนคุณบอกระบุมาเป็น ID ที่มองไม่ได้ง่ายๆ ใน web").** A Firestore doc
-  id is invisible on the web; the code (AE49: `TK0007`, first column of
+  id is invisible on the web; the code (AE49 and NuriHub: `TK0007`, first column of
   Support → Tickets, in the modal title, the bells and the search box) is what
   the owner can find. So chat cards, listing tables, plan `Context` lines,
   commit messages and patch notes name the CODE + title. The doc id is only
   ever a script argument, and the project scripts accept the code there too.
-  A project that has no code yet (NuriHub until it adds one) cites the doc id
-  and says so in its project skill.
+  A project that has no code yet cites the doc id and says so in its project
+  skill — none today: AE49_Hub and NuriHub both mint `TK` codes (2026-09-09).
 - **No plan writing here.** After clarification, hand off to the normal flow —
   short grill in Main, then dispatch `ae49-plan` per the router skill. One plan
   per settled spec; a ticket may also turn out to be a tiny fix (router's
