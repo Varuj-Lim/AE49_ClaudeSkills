@@ -94,6 +94,17 @@ sweeps all of it into one unreviewable commit.
 
 Nothing is committed before the user's manual test passes.
 
+**Trap (2026-09-08): `git apply --3way` implies `--index`.** Staging a
+worktree's diff into the hub with `git apply --3way <patch>` leaves every
+applied file STAGED, and the next `git commit` — even one preceded by
+`git add <one unrelated file>` — sweeps all of them into that commit before
+the gate has run (231 files went into a two-file "chore(tickets)" commit that
+way). After any `git apply`, run `git reset -q` so the staged work drops back
+to the working tree, and pass the pathspec to `git commit` itself
+(`git commit -m … -- <paths>`), never rely on what `git add` happened to
+stage. A new file the patch created is untracked after the reset — `git add`
+it explicitly at landing.
+
 ## 6. Tiny-fix fast path
 
 A tiny **cosmetic** change — one or two files, no new behaviour, no plan file —
