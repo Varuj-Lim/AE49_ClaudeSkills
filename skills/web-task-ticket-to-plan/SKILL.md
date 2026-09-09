@@ -1,6 +1,6 @@
 ---
 name: web-task-ticket-to-plan
-description: The shared ticket-to-plan doorway workflow for every hub project (AE49_Hub, Nuri_Hub, and future siblings) — read the support tickets, let the owner pick, clarify until the intent is settled, then hand off into the project's NORMAL plan flow. Use when the user wants to work from tickets in ANY hub project — "ticket to plan", "read the tickets", "ดู ticket", "what did staff request/report" — alongside that project's own ticket skill, which supplies the facts: script paths, collection/status vocabulary, priority tiers, attachment markers, actor identity, and notification behavior — the three-step write-back itself (plan APPROVAL → in_progress only, no reply, owner ruling 2026-09-08; gate PASS → in_progress + Thai reply; PUSH → resolved + Thai reply, owner ruling 2026-08-26) lives HERE and is identical in every hub. The process changes HERE once; project skills never restate it.
+description: The shared ticket-to-plan doorway workflow for every hub project (AE49_Hub, Nuri_Hub, and future siblings) — read the support tickets, let the owner pick, clarify until the intent is settled, then hand off into the project's NORMAL plan flow. Use when the user wants to work from tickets in ANY hub project — "ticket to plan", "read the tickets", "ดู ticket", "what did staff request/report" — alongside that project's own ticket skill, which supplies the facts: script paths, collection/status vocabulary, priority tiers, attachment markers, actor identity, and notification behavior — the three-step write-back itself (plan APPROVAL → in_progress only, no reply, owner ruling 2026-09-08; gate PASS → in_progress + Thai reply; PUSH → resolved + Thai reply, owner ruling 2026-08-26) lives HERE and is identical in every hub. The process changes HERE once; project skills never restate it. Tickets are cited by their HUMAN CODE (AE49 `TK0007`) wherever the owner reads, never by the raw doc id (owner ruling 2026-09-09).
 ---
 
 # Ticket → Plan — shared doorway workflow
@@ -14,6 +14,15 @@ this file never carries a path, uid, or collection name — the process and the 
 
 ## Shared hard rules
 
+- **Cite tickets by their HUMAN CODE, never by the doc id (owner ruling
+  2026-09-09: "ตอนคุณบอกระบุมาเป็น ID ที่มองไม่ได้ง่ายๆ ใน web").** A Firestore doc
+  id is invisible on the web; the code (AE49: `TK0007`, first column of
+  Support → Tickets, in the modal title, the bells and the search box) is what
+  the owner can find. So chat cards, listing tables, plan `Context` lines,
+  commit messages and patch notes name the CODE + title. The doc id is only
+  ever a script argument, and the project scripts accept the code there too.
+  A project that has no code yet (NuriHub until it adds one) cites the doc id
+  and says so in its project skill.
 - **No plan writing here.** After clarification, hand off to the normal flow —
   short grill in Main, then dispatch `ae49-plan` per the router skill. One plan
   per settled spec; a ticket may also turn out to be a tiny fix (router's
@@ -60,25 +69,27 @@ this file never carries a path, uid, or collection name — the process and the 
 1. **List** — run the project's read-only list script (path in the project
    skill). Default scope = **open + in_progress + on_hold** (owner ruling
    2026-08-13); `--status all` / `--status <one>` widens on request. Render as
-   a table (English, per `ae49-ref-report-format`): ID · Status · Priority ·
-   Type · Date · Requester · Title, one row per ticket, **ordered per
+   a table (English, per `ae49-ref-report-format`): Code · Status · Priority ·
+   Type · Date · Requester · Title (Code = the human code; the doc id only
+   where the project has no code yet), one row per ticket, **ordered per
    `web-ref-ticket-queue`** (priority tier first, oldest first within each
    tier). Tier vocabulary and attachment/answered markers are the project
    skill's facts.
 
    **`in_progress` tickets are NOT rows (owner rule 2026-09-08).** A ticket
-   that is `in_progress` AND cited by an open plan (grep its id in
-   `docs/plans/*.md`) is work already moving — nothing blocks it, so it only
+   that is `in_progress` AND cited by an open plan (grep its code — or its
+   doc id where no code exists — in `docs/plans/*.md`) is work already moving — nothing blocks it, so it only
    pads the table. Leave it out and say it in ONE line under the table:
    `N in_progress — carried by <plan slugs>`. Show an `in_progress` ticket as
    a row ONLY when no plan carries it, flagged ⚠️ — that is a ticket someone
    flipped and then forgot, and it needs a pick like any open one.
 
-2. **Pick** — ask the owner which ticket(s) to take up (by ID or title). Don't
+2. **Pick** — ask the owner which ticket(s) to take up (by code or title). Don't
    auto-pick, don't rank by your own judgment unless asked.
 
-3. **Read in full** — `--id <docId>` for the full description and any existing
-   response. **Attachments: fetch and LOOK at them yourself — never ask the
+3. **Read in full** — `--id <code|docId>` (the project script resolves the
+   human code; the doc id still works) for the full description and any
+   existing response. **Attachments: fetch and LOOK at them yourself — never ask the
    owner to open the app (owner ruling 2026-09-08, standing authorization in
    every hub; asking each time was the complaint).** Each image field on the
    doc is a plain download URL (Firebase Storage `?alt=media&token=…`, no
@@ -100,7 +111,7 @@ this file never carries a path, uid, or collection name — the process and the 
    resumes in a later message — render its full card in chat BEFORE any
    analysis, question, or action: **Title · Description (verbatim, in full) ·
    Type · Priority · Status · Date · Requester** (+ attachment markers and the
-   ID). Never discuss a ticket by row number or bare ID alone: the owner must
+   CODE). Never discuss a ticket by row number or bare doc id alone: the owner must
    never have to scroll back or open the app to know which ticket is on the
    table. **Every batch of clarifying questions opens by restating which
    ticket it is about** (title + requester at minimum, the full card if
@@ -116,11 +127,11 @@ this file never carries a path, uid, or collection name — the process and the 
    Stop when Main could defend the spec to the `ae49-plan` agent.
 
 5. **Hand off** — summarise the settled spec in 2–3 sentences, name the source
-   ticket (ID + title) so the plan's Context section can cite it, and continue
+   ticket (code + title) so the plan's Context section can cite it, and continue
    exactly as a `plan:` request: remaining grill → dispatch `ae49-plan` →
-   approve → `impl:` → audit → gate chain. **Carry the ticket id forward** — a
-   plan whose Context does not name its source ticket cannot be closed
-   cleanly later.
+   approve → `impl:` → audit → gate chain. **Carry the ticket CODE forward** (the
+   doc id beside it is optional) — a plan whose Context does not name its source
+   ticket cannot be closed cleanly later.
 
 6. **Write back — the three-step rule above, at the owner's own words.** The
    approval step fires the moment the owner approves a plan whose Context
