@@ -36,7 +36,15 @@ draftsman charts) — that is a chart rule, not a table one.
 
 ## 3. Prose vs cells
 
-- A **table cell, print cell, chip or tile** uses the compact form: `1h 4m`.
+- A **table cell, print cell, chip or tile** uses the compact form: `1h 4m`,
+  and **it never wraps** (owner ruling 2026-09-10). `1h 4m` is ONE figure, not two
+  words: broken across two lines it reads as two numbers stacked in a column of
+  numbers, and on a printed sheet the reader cannot tell a wrapped figure from a
+  second row. So the cell that holds a duration carries `whitespace-nowrap`, and
+  a column that holds durations is given enough width for its widest figure
+  rather than being allowed to wrap — if something has to give, take the width
+  from a text column (a name, a description), never from a duration column.
+  This applies on screen and on paper, to a total row as much as to a data row.
 - A **Thai explainer sentence** (Policy column, tooltip, caption, toast, log
   line meant for staff) spells the unit out in Thai, minutes only when the figure
   is minutes: `สาย 64 นาที — เส้นแบ่งเวลาเข้าวันนั้นคือ 13:00`, `รวม 3.5 ชั่วโมง`.
