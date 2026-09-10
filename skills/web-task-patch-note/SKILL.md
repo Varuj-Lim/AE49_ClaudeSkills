@@ -88,7 +88,7 @@ Firebase service-account key from `.env.local` — it must exist.
      the app, for the team. NOT raw commit subjects, NOT jargon (no file
      names, no "refactor"). Group related commits into one bullet; drop
      purely-internal commits with no user-visible effect. **Format per
-     [body-format.md](body-format.md)** — section headings by app area
+     [body-format.md](body-format.md), INCLUDING its Bullet style section (≤ ~25 Thai words, verb first, no rationale)** — section headings by app area
      (names per the project skill), `- ` bullets under each, headline feature
      first. A plain line with no `- ` renders as a bold heading.
    - **Title** — a short headline for the release.

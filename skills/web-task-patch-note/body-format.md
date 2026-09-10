@@ -71,3 +71,31 @@ Settings (RD only)
 - [ ] One blank line (`\n\n`) between sections.
 - [ ] Sections are the app's nav areas, headline feature first — never one
       undifferentiated list.
+
+## Bullet style (owner ruling 2026-09-10 — "อ่าน Patch Note แล้ว Format เละ")
+
+The grammar above fixes the SHAPE; this fixes the WRITING. It exists because
+AE49's living handout had grown to 162 bullets, 92 of them over 500 characters
+(the longest ~2,000): landings kept APPENDING a changelog sentence with its
+design rationale instead of revising the area's description.
+
+- **One bullet = ONE thing the user can see or do** — a change in a version
+  note, a capability in the living handout. **≤ ~25 Thai words (~150
+  characters).** If it needs more, it is two bullets, or a sub-heading
+  (indented 4 spaces) with 2–3 short bullets under it.
+- **Verb first, effect second:** เพิ่ม… / เปลี่ยน… / แก้… / ลบ… / ย้าย… then what
+  the user gets, in the user's words. No design rationale ("เพราะ…"), no
+  history ("เดิม… ตอนนี้…"), no programmer terms (component, state, hook,
+  collection, commit, merge). Keep the app's English tab/button/field names
+  verbatim so what staff read matches what they click.
+- **Bug fixes** go under a `    แก้ไข` sub-heading inside the area's section
+  (indented 4 spaces, bullets indented 8), one bullet each, and only when a
+  user could have noticed the bug.
+- **Per area per note: ≤ ~6 bullets**, headline area first (already the rule).
+- **The living handout is REVISED, never appended.** Each project names its
+  handout file (AE49: `docs/launch-patch-note.md`); it describes what the app
+  DOES today in 3–6 bullets per area. A landing rewrites or merges that area's
+  bullets in place. The version note's changelog is built from `git log` at
+  publish time (Flow), not read off the handout.
+- **Before publishing, audit the body against these rules:** any bullet over
+  ~150 characters, any "เดิม…", any programmer term is a finding to fix first.
