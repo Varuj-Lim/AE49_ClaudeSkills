@@ -45,8 +45,17 @@ matching icon. A funnel on a button labelled `Date range` is a lie.
 
 ## R2 · `Clear` and "inactive"
 
-- `Clear (N)` counts **filters only, never the search box**, and resets **filters
-  only**. The search box has the browser's own ×.
+- **`Clear` may exclude the search box ONLY IF the search box has its own clear
+  affordance** — `type="search"`, which paints a native ×, or an explicit × button.
+  Where it does, `Clear (N)` counts filters only and resets filters only, so the two
+  affordances stay independent. **Where the search box is a plain `type="text"` with no
+  ×, `Clear` MUST reset and count it too** — otherwise there is no way to clear a search
+  at all except selecting the text and deleting it.
+  **Check the input; do not assume.** This clause was first written the AE49 way,
+  filters-only with the native × as its justification, and that was simply wrong for
+  NuriHub: `type="search"` appears nowhere in that codebase, so every list page whose
+  `Clear` also resets the search box is RIGHT, not deviant (verified 2026-09-10, the day
+  this file was written).
 - The button **self-hides** at `count === 0`. Never render it disabled.
 - **Multi-value group: ALL TICKED = inactive. An empty set shows nothing.** This
   is deliberately the opposite of the intuition that "unticking everything
