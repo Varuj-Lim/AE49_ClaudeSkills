@@ -105,7 +105,8 @@ Rulings that live only in chat are lost. Immediately:
    owns its own landing discipline, gates, and memory — a cross-project edit
    leaves the other project's next session confused about what changed under
    it and who decided it. The only cross-project write allowed is the
-   user-level skills repo (its own sync rule).
+   user-level skills repo (its own sync rule). The shape and required parts
+   of that prompt are the shared skill `web-task-handoff-prompt`.
 
 ## Don'ts
 

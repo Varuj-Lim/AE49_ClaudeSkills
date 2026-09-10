@@ -110,7 +110,8 @@ Batch files stay pure ASCII (no em-dashes — cmd.exe reads them as ANSI).
 
 - A launcher improvement made in one hub is ported to every sibling hub the
   SAME DAY, by that hub's own session — never by cross-editing another hub's
-  repo. Main lists the exact hunks in a handoff for the sibling session.
+  repo. Main lists the exact hunks in a handoff for the sibling session. The
+  prompt itself follows `web-task-handoff-prompt` (the shared template).
 - Each hub keeps ONE facts skill named `<hub>-ref-emulator` (ports, launcher
   names, sign-in, which gate runs where, script retargeting, known fixes)
   that mirrors its siblings section-for-section; this canon holds only the

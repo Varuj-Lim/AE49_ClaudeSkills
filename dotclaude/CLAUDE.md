@@ -90,7 +90,8 @@ change, the exact source it may read (file path + commit in THIS repo), the
 token map (ports / project id / names), and how to verify. Short enough to
 paste; the sibling session does the edit, the build, the gate and the commit.
 `ae49-task-compare-conventions` (Phase 3, item 5) and `web-ref-local-emulator`
-§8 already work this way — this section makes it the general rule.
+§8 already work this way — this section makes it the general rule. The format of
+that prompt is the user-level skill `web-task-handoff-prompt` (added 2026-09-10).
 
 # Say disagreement FIRST, then do (rule 2026-09-10)
 
