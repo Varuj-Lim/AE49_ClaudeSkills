@@ -1,6 +1,6 @@
 ---
 name: web-task-ticket-to-plan
-description: The shared ticket-to-plan doorway workflow for every hub project (AE49_Hub, Nuri_Hub, and future siblings) — read the support tickets, let the owner pick, clarify until the intent is settled, then hand off into the project's NORMAL plan flow. Use when the user wants to work from tickets in ANY hub project — "ticket to plan", "read the tickets", "ดู ticket", "what did staff request/report" — alongside that project's own ticket skill, which supplies the facts: script paths, collection/status vocabulary, priority tiers, attachment markers, actor identity, and notification behavior — the three-step write-back itself (plan APPROVAL → in_progress only, no reply, owner ruling 2026-09-08; gate PASS → in_progress + Thai reply; PUSH → resolved + Thai reply, owner ruling 2026-08-26) lives HERE and is identical in every hub. The process changes HERE once; project skills never restate it. Tickets are cited by their HUMAN CODE (AE49 `TK0007`) wherever the owner reads, never by the raw doc id (owner ruling 2026-09-09).
+description: The shared ticket-to-plan doorway workflow for every hub project (AE49_Hub, Nuri_Hub, and future siblings) — read the support tickets, let the owner pick, clarify until the intent is settled, then hand off into the project's NORMAL plan flow. Use when the user wants to work from tickets in ANY hub project — "ticket to plan", "read the tickets", "ดู ticket", "what did staff request/report" — alongside that project's own ticket skill, which supplies the facts: script paths, collection/status vocabulary, priority tiers, attachment markers, actor identity, and notification behavior — the two-step write-back itself (plan APPROVAL → in_progress only, no reply, owner ruling 2026-09-08; PUSH → resolved + the ONE Thai reply — deliberately NO reply at the gate PASS, owner ruling 2026-09-10 collapsing the former three-step rule) lives HERE and is identical in every hub. The process changes HERE once; project skills never restate it. Tickets are cited by their HUMAN CODE (AE49 `TK0007`) wherever the owner reads, never by the raw doc id (owner ruling 2026-09-09).
 ---
 
 # Ticket → Plan — shared doorway workflow
@@ -28,42 +28,49 @@ this file never carries a path, uid, or collection name — the process and the 
   per settled spec; a ticket may also turn out to be a tiny fix (router's
   tiny-fix fast path) or a duplicate of an existing plan — say so instead of
   forcing a plan.
-- **Ticket writes happen at exactly THREE moments, all owned by the owner —
-  never on Main's initiative (owner ruling 2026-08-26, unified across the
-  hubs, supersedes NuriHub's 2026-08-17 status-only rule; the APPROVAL step
-  was added by owner ruling 2026-09-08 so staff can see a ticket is being
-  worked on — picking a ticket up for reading/clarifying still writes
-  nothing, because a picked ticket may turn out to be a duplicate or a
-  no-plan):**
-  0. **At the owner's APPROVAL of the plan that cites the ticket** →
+- **Ticket writes happen at exactly TWO moments, both owned by the owner —
+  never on Main's initiative (owner ruling 2026-09-10, which COLLAPSED the
+  former three-step rule; it supersedes the 2026-08-26 unification and
+  NuriHub's older 2026-08-17 status-only rule. Picking a ticket up for
+  reading/clarifying still writes nothing, because a picked ticket may turn
+  out to be a duplicate or a no-plan):**
+  1. **At the owner's APPROVAL of the plan that cites the ticket** →
      `status: in_progress` and NOTHING else — no response text (owner ruling
-     2026-09-08: "แค่เปลี่ยน Status พอ ไม่ต้องอธิบาย" — the explanation is
-     written only when the work is done, at the two moments below). Silent
-     (no bell). Run the project's update script with `--status in_progress`
-     and no response argument.
-  1. **At the owner's gate PASS** for the feature that answers the ticket →
-     keep `in_progress`, add the Thai response saying it is done and waiting
-     for the next deploy.
+     2026-09-08: "แค่เปลี่ยน Status พอ ไม่ต้องอธิบาย"). Silent (no bell). Run the
+     project's update script with `--status in_progress` and no response
+     argument.
   2. **At the owner's PUSH** (production deploy) → `status: resolved` + a
-     Thai response saying it is live now.
-  Templates (plain Thai, keep the app's English labels; one or two
-  sentences, say WHAT changed for the requester, never the internals):
-  - **PASS:** `ทำเสร็จแล้วครับ — <สิ่งที่เปลี่ยนสำหรับผู้ยื่น 1 ประโยค> รอขึ้นระบบจริงในรอบ deploy ถัดไป จะแจ้งอีกครั้งเมื่อใช้ได้`
-  - **PUSH:** `ขึ้นระบบแล้วครับ — <สิ่งที่เปลี่ยน 1 ประโยค> ลองใช้ได้เลย ถ้าไม่ตรงที่ต้องการแจ้งกลับได้ที่ ticket นี้`
-  **Write directly — no approval round trip (owner ruling 2026-09-08 evening:
-  "เขียนไปได้เลย แค่บอกผมว่าเขียนว่าอะไร ไม่ต้องขออนุญาต").** The owner's PASS /
-  PUSH / approve word IS the authorization: compose the reply from the
-  template, `--apply` it, and REPORT the exact text written (the owner checks
-  it in the app when it goes out). The script's dry-run stays Main's own
-  sanity check (ticket found, status transition right, bell decision as
-  expected), not a gate the owner has to read; it replaced an
-  "always show first" rule that cost a round trip per ticket. One ticket per
-  call; only for a ticket the plan cites; never `rejected` unless the owner
-  says so; and **never before the work is on PRODUCTION** — a
-  landed-but-unpushed feature is invisible to the requester (it happened,
-  2026-08-17). Script paths, actor identity, and notification behavior are
-  the project skill's facts.
+     Thai response saying it is live now. **This is the ONLY moment a reply is
+     ever written.**
 
+  **There is deliberately NO reply at the gate PASS (owner ruling 2026-09-10,
+  "ยุบเหลือตอบตอน push").** A "done, waiting for the next deploy" reply used to go
+  out at the gate; it is removed because the gap between a PASS and a push is
+  not reliably short — NuriHub was sitting on 23 unpushed commits the day this
+  was ruled. A reply saying เสร็จแล้ว while the feature is not on production
+  sends the requester looking for something that is not there, which is exactly
+  the 2026-08-17 burn: **a landed-but-unpushed feature is invisible to the
+  requester.** Silence until the push is the honest state, and `in_progress`
+  already tells staff the ticket is being worked on. That clause — **never
+  write a reply before the work is on PRODUCTION** — now governs every write
+  with nothing contradicting it; under the old three-step rule it sat in direct
+  tension with the gate-PASS step, which is how the rule came to be
+  re-examined.
+
+  Template (plain Thai, keep the app's English labels; one or two sentences,
+  say WHAT changed for the requester, never the internals):
+  - **PUSH:** `ขึ้นระบบแล้วครับ — <สิ่งที่เปลี่ยน 1 ประโยค> ลองใช้ได้เลย ถ้าไม่ตรงที่ต้องการแจ้งกลับได้ที่ ticket นี้`
+
+  **Write directly — no approval round trip (owner ruling 2026-09-08 evening:
+  "เขียนไปได้เลย แค่บอกผมว่าเขียนว่าอะไร ไม่ต้องขออนุญาต").** The owner's PUSH /
+  approve word IS the authorization: compose the reply from the template,
+  `--apply` it, and REPORT the exact text written (the owner checks it in the
+  app when it goes out). The script's dry-run stays Main's own sanity check
+  (ticket found, status transition right, bell decision as expected), not a
+  gate the owner has to read; it replaced an "always show first" rule that cost
+  a round trip per ticket. One ticket per call; only for a ticket the plan
+  cites; never `rejected` unless the owner says so. Script paths, actor
+  identity, and notification behavior are the project skill's facts.
 ## The flow
 
 1. **List** — run the project's read-only list script (path in the project
@@ -133,12 +140,13 @@ this file never carries a path, uid, or collection name — the process and the 
    doc id beside it is optional) — a plan whose Context does not name its source
    ticket cannot be closed cleanly later.
 
-6. **Write back — the three-step rule above, at the owner's own words.** The
+6. **Write back — the two-step rule above, at the owner's own words.** The
    approval step fires the moment the owner approves a plan whose Context
-   cites the ticket; every step writes directly and reports the text
-   afterwards (no "show first" round trip); the project skill names the
-   script, the actor identity, and whether a bell notification accompanies
-   the write.
+   cites the ticket, and writes STATUS ONLY; the reply itself is written once,
+   at the owner's push. **A gate PASS writes NOTHING to the ticket.** Both
+   writes go directly and report the text afterwards (no "show first" round
+   trip); the project skill names the script, the actor identity, and whether a
+   bell notification accompanies the write.
 
 ## Output notes
 
