@@ -115,10 +115,15 @@ Firebase service-account key from `.env.local` — it must exist.
 
    ⚠️ **The one thing that IS gated stays gated: a patch note goes out only as
    part of a landing the owner asked for — normally the push itself.** Publishing
-   notifies every active user through the bell, LINE and mail, and cannot be
-   recalled; a wrong note is corrected by publishing another version, never by
-   deleting. So never publish on your own initiative, on a schedule, or before
-   the work is actually live.
+   notifies every active user and cannot be recalled; a wrong note is corrected by
+   publishing another version, never by deleting. So never publish on your own
+   initiative, on a schedule, or before the work is actually live.
+   **Which CHANNELS a note reaches is a project FACT, not a rule — read it from
+   that project's patch-note skill and never assume.** A note may well be
+   bell-only: in AE49_Hub it is (`patch_note_published` is deliberately absent
+   from the LINE push filter, which carries only leave-category notifications and
+   policy announcements). Do not tell the owner a note went to LINE or to mail
+   without having checked that project's filter.
 
 6. **Publish.** Same `--commit`, plus `--apply`:
    ```
