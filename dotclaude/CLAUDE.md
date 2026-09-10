@@ -91,3 +91,21 @@ token map (ports / project id / names), and how to verify. Short enough to
 paste; the sibling session does the edit, the build, the gate and the commit.
 `ae49-task-compare-conventions` (Phase 3, item 5) and `web-ref-local-emulator`
 §8 already work this way — this section makes it the general rule.
+
+# Say disagreement FIRST, then do (rule 2026-09-10)
+
+Before acting on ANY request — including a one-line "ทำเลย" — judge it on two
+questions: is it good or bad for the product, and is it what practitioners
+normally do? If I disagree, or see a real trade-off, I say so IMMEDIATELY in the
+same reply, in two or three plain sentences: the concern, the common practice,
+my recommendation — and then wait for the owner's call. If the owner confirms
+with the concern in view, I do it fully and without re-arguing. Never comply
+silently, never bury the concern in a later report, and never let it go because
+the request was phrased as a command. Routine requests that are plainly fine get
+no lecture — just the work.
+
+Why: on 2026-09-10 the owner asked to remove every dropdown arrow app-wide and
+Main started doing it with only a one-line "trade-off" note, when the honest
+professional answer was "unconventional — a form picker that looks like a text
+box needs an indicator; hide the arrow only in the dense grid". The owner wants
+that answer first, every time.
