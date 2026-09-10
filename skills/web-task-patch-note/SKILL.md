@@ -5,7 +5,9 @@ description: >-
   project (AE49_Hub, Nuri_Hub, and future siblings): gather the git changelog
   since the last note, draft a plain-language staff-facing change list in the
   StructuredText body grammar, pick the version bump, dry-run, and publish to
-  Firestore only after the user confirms — notifying all active users. Use
+  Firestore as part of the landing the owner already asked for — notifying all
+  active users. Publishing needs NO separate approval of the wording (owner
+  ruling 2026-09-10). Use
   whenever the user wants to write, draft, publish, or release a patch note /
   release note / changelog entry in ANY hub project, alongside that project's
   own patch-note skill, which supplies the facts: script path, author email,
@@ -60,10 +62,12 @@ Firebase service-account key from `.env.local` — it must exist.
    (`<commitHash>..<this note's Git No.>`). If `commitHash=` is empty or "No
    patch notes published yet", there is no anchor — ask the user for a base.
 
-2. **Confirm the base + this note's Git No. The author is fixed — don't ask.**
-   - **Base commit or range** — default to step 1's `commitHash=`. Show it for
-     confirmation; the user may override with another SHA/tag/`HEAD~10`.
-   - **This note's Git No. (REQUIRED — ask the user; do NOT auto-use HEAD).**
+2. **Settle the base + this note's Git No. The author is fixed — don't ask.**
+   - **Base commit or range** — default to step 1's `commitHash=`. State it in
+     the report; the user may override with another SHA/tag/`HEAD~10`.
+   - **This note's Git No.** — when the note is published at a push (the normal
+     case), it is the commit that was just pushed; take it, don't ask. Ask only
+     when publishing OUTSIDE a push (a backdated or hand-picked note).
      It is BOTH the end of the changelog range AND the `commitHash` stamped on
      the note (what the NEXT note diffs from). Suggest a sensible default —
      usually the last *feature* commit, not HEAD when trivial commits sit on
@@ -103,12 +107,20 @@ Firebase service-account key from `.env.local` — it must exist.
    ```
    node <script> --draft scripts/patch-note-draft.json --commit <hash>
    ```
-   Confirm the preview's `commitHash (Git No.):` matches the user's choice.
-   Show the user the preview — version, title, body, **recipient count** —
-   and get an explicit yes on the bump, the version, and the content. Fix and
-   re-dry-run as often as needed. Never proceed without the yes.
+   Check the preview's `commitHash (Git No.):` yourself, and read the body
+   against the rules in the body-format reference before going on. **Do NOT ask
+   the owner to approve the draft** (ruling 2026-09-10, mirroring the ticket
+   write-back): a second approval of wording the owner will read in the app
+   anyway only slows the landing down. Fix and re-dry-run as often as you need.
 
-6. **Publish (only after confirmation).** Same `--commit`, plus `--apply`:
+   ⚠️ **The one thing that IS gated stays gated: a patch note goes out only as
+   part of a landing the owner asked for — normally the push itself.** Publishing
+   notifies every active user through the bell, LINE and mail, and cannot be
+   recalled; a wrong note is corrected by publishing another version, never by
+   deleting. So never publish on your own initiative, on a schedule, or before
+   the work is actually live.
+
+6. **Publish.** Same `--commit`, plus `--apply`:
    ```
    node <script> --draft scripts/patch-note-draft.json --commit <hash> --apply
    ```
