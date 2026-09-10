@@ -92,10 +92,13 @@ design rationale instead of revising the area's description.
   (indented 4 spaces, bullets indented 8), one bullet each, and only when a
   user could have noticed the bug.
 - **Per area per note: ≤ ~6 bullets**, headline area first (already the rule).
-- **The living handout is REVISED, never appended.** Each project names its
-  handout file (AE49: `docs/launch-patch-note.md`); it describes what the app
-  DOES today in 3–6 bullets per area. A landing rewrites or merges that area's
-  bullets in place. The version note's changelog is built from `git log` at
-  publish time (Flow), not read off the handout.
+- **The living handout is REVISED, never appended — where a project keeps one.**
+  Each project names its own handout file, and a project may keep NONE: AE49
+  deleted `docs/launch-patch-note.md` on 2026-09-10 (the owner had stopped using
+  it, and no app code ever read it), so this bullet simply does not apply there.
+  Where a handout does exist it describes what the app DOES today in 3–6 bullets
+  per area, and a landing rewrites or merges that area's bullets in place. Either
+  way the version note's changelog is built from `git log` at publish time (Flow),
+  never read off a handout.
 - **Before publishing, audit the body against these rules:** any bullet over
   ~150 characters, any "เดิม…", any programmer term is a finding to fix first.
