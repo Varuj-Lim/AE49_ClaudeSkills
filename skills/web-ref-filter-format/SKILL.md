@@ -1,6 +1,6 @@
 ---
 name: web-ref-filter-format
-description: The shared filter-bar canon for every hub web project (AE49_Hub, Nuri_Hub, future siblings) — when a list page gets tabs vs a pill dropdown vs an advanced panel, what `Clear` counts and resets, what "this filter group is inactive" means (all ticked, never empty), which controls are allowed, and the wording and DOM order of a toolbar. Use whenever adding, changing, reviewing or auditing ANY filtering surface in ANY hub project: a list page's search box or filter bar, a status tab strip, an advanced/collapsible filter panel, a date-range filter, a `Clear`/reset affordance, a row-count caption, or a filtered empty state. Trigger it even when the request only says "add a filter", "add a search box", "why doesn't Clear reset this", "add a status tab", "make this filterable", "the filters look different on this page", or "put the filters on the toolbar". Each project supplies its own component paths and tokens in its facts skill; the RULE lives here and changes here once.
+description: The shared filter-bar canon for every hub web project (AE49_Hub, Nuri_Hub, future siblings) — when a list page gets tabs vs a pill dropdown vs an advanced panel, what `Clear` counts and resets, what "this filter group is inactive" means (all ticked, never empty), which controls are allowed, how wide a filter pill is (fixed, as wide as its longest option), and the wording and DOM order of a toolbar. Use whenever adding, changing, reviewing or auditing ANY filtering surface in ANY hub project: a list page's search box or filter bar, a status tab strip, an advanced/collapsible filter panel, a date-range filter, a `Clear`/reset affordance, a row-count caption, or a filtered empty state. Trigger it even when the request only says "add a filter", "add a search box", "why doesn't Clear reset this", "add a status tab", "make this filterable", "the filters look different on this page", or "put the filters on the toolbar". Each project supplies its own component paths and tokens in its facts skill; the RULE lives here and changes here once.
 ---
 
 # Filter bars — shared canon
@@ -98,6 +98,16 @@ matching icon. A funnel on a button labelled `Date range` is a lie.
 - Placeholder: `Search by <field>, <field>…` — one real ellipsis character, never
   `...`, never a bare `Search`. Name the fields it actually matches.
 - Pill label: `<Label>: All` when inactive, `<Label> (N)` when active.
+- **Pill width: fixed, as wide as its LONGEST option** (owner ruling 2026-09-11: *"ของ Filter
+  ขนาดความกว้างที่บอกตายตัว ให้เอาความกว้างจากตัวเลือกที่ยาวที่สุดแทน"*). A filter pill never grows
+  or shrinks when the selection changes — `All Warehouses` and the longest warehouse name sit in
+  the same box, so nothing beside it on the toolbar moves. Size it by LAYOUT, not by a
+  hard-coded width: render every option label (and the inactive label) invisibly in the same
+  grid cell as the visible one, so the widest sets the width and a new, longer option widens the
+  pill instead of being cut. A multi-value pill sizes to the widest of its `<Label>: All` and
+  `<Label> (N)` forms. A project MAY cap the width for an unusually long list; past the cap the
+  label truncates with the full value on hover — record the cap in the facts skill. Tables have
+  the matching rule in `web-ref-table-columns`.
 - Tab label: Title Case, "All" first, a per-tab count preferred. **Never mix
   dimensions in one strip** — a payment state does not belong in a status strip.
 - The row-count caption in a page header counts **total**, never the filtered
