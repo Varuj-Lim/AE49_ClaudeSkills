@@ -20,13 +20,10 @@ consistency lives so the next duration is not invented per page.
 
 - The families never mix on one figure: a booked 3.5 h block is `3.5h`, never
   `3h 30m`; 64 clocked minutes are `1h 4m`, never `1.07h` or `64 นาที` in a cell.
-- **The one named exception — LATENESS in whole minutes where a project's HR asks
-  for it** (AE49_Hub Overtime `Late`, owner relaying HR 2026-09-11: *"HR เอาแค่ Late"*
-  — HR keys lateness in minutes). It stays minute-precise (no decimals, no seconds),
-  reads `65m` · `125m` (a total of none reads `0m`), goes through the project's
-  own named helper, and is listed in §5. Nothing else borrows it: the other
-  durations on the same page keep `Xh Ym`, and a project without the row in §5
-  writes lateness as `1h 4m`.
+- A project may hold an owner-ruled exception for one named column; it is listed in
+  that project's §5 row, and an audit treats it as conforming. The exception covers
+  that column only — every other duration on the same page keeps its family, and a
+  column with no §5 exception follows the table above.
 - A before → after pair keeps ONE family on both sides (`3h → 3.5h`, `4h 23m → 4h`).
 - Negative or impossible input never prints a minus sign — the figure renders its
   floor (`0h`) and the explanation lives in a caption beside it.
@@ -70,7 +67,7 @@ draftsman charts) — that is a chart rule, not a table one.
 
 | Project | Minute-precise `Xh Ym` | Half-hour grid `3.5h` |
 |---|---|---|
-| **AE49_Hub** | `formatHoursMinutes(minutes)` — `lib/overtime.ts` (Overtime Total Hours, Claim, Break, payable notes) · **§1 exception:** `formatLateMinutes(minutes)` — `lib/overtime.ts`, the Overtime `Late` cell and the print sheet's `Late` + its total in whole minutes (`65m`, HR 2026-09-11) | `fmtHours(hours)` — `lib/leave.ts`, and the call site appends the `h` (`${fmtHours(h)}h`; import review, draftsman bookings, leave hours) |
+| **AE49_Hub** | `formatHoursMinutes(minutes)` — `lib/overtime.ts` (Overtime Total Hours, Claim, Break, payable notes) · **Exception (owner ruling 2026-09-11, HR):** Overtime `Late` — screen and print, incl. its total — is whole minutes `65m` via `formatLateMinutes(minutes)`, `lib/overtime.ts`. Conforming; not a finding. | `fmtHours(hours)` — `lib/leave.ts`, and the call site appends the `h` (`${fmtHours(h)}h`; import review, draftsman bookings, leave hours) |
 | **Nuri_Hub** | no duration on screen yet — when one appears, add the same two helpers under the same names and point this row at them | — |
 
 A project adds a row here when it gains a duration; it never restates the rule in
