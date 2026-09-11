@@ -71,6 +71,10 @@ Which renders as:
 - **The user's own rows go last** (their gate, their push) so the ask is the final thing read.
 - **Put the table at the END of the message**, after the prose that explains it. The reader
   wants the reasoning first and the board as the summary they scroll back to.
+- **A cross-session handoff prompt is never a row** (owner rule 2026-09-11,
+  `web-task-handoff-prompt`). Once the block is pasted in chat it belongs to the
+  destination session: no "handoff delivered" row, no follow-up line, no mention in the
+  👤 line, and no asking later whether the sibling has done it.
 - A one-line takeaway may follow the table when something needs emphasis (e.g. what a push
   would deploy) — but the table is never *replaced* by that line.
 - **Close with the 👤 "your move" line — REQUIRED, never omitted (user rule, 2026-08-28).**

@@ -63,8 +63,12 @@ skill is the single source; those three point here.
   ruling is quoted with its date; every source is a path + sha; every number
   (ports, counts) is written out.
 - Never instruct the sibling to run anything against THIS hub's data or repo.
-- After delivering, note in this project's in-flight memory that the handoff was
-  delivered (what + date) — the sibling's session records its own landing.
+- **Delivering the prompt ENDS the job (owner rule 2026-09-11).** Paste the block in
+  chat and stop. It is NOT a task of this session: no board row, no line in a report,
+  no "handoff delivered" note in memory, no later check on whether the sibling has done
+  it. The owner carries the block across; the destination session owns everything after
+  it — its plan, build, gate, commit and its own memory. Owner: *"ตอนเราสั่งให้ทำ Prompt ข้าม Session ไม่ต้องเอามันมาเป็น Task ว่าทำส่งไปทางนั้น เดียวเราทำเอง แค่ส่งข้อความมา แล้วจบตรงนั้นได้เลย ไม่ต้องใส่ใน Report ไม่ต้องไปตามต่อว่าทางนั้นทำแล้วหรือยัง ให้เป็นหน้าที่ฝั่งปลายทางทำเอง"* (This replaces
+  the earlier bullet that told Main to record the delivery in its in-flight memory.)
 - When the sibling hub has a matching project skill or audit topic, the prompt
   names it (or says "create the equivalent") so the two hubs' canons stay
   section-for-section mirrors.
