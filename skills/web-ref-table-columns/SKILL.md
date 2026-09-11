@@ -96,6 +96,6 @@ empty state spans every column in one cell (`colSpan`) and leaves the header wid
 | AE49_Hub | not adopted yet (handoff 2026-09-11) | its `TableCard` + `lib/constants/tableStyles` are the natural home |
 | future siblings | create with the first table | copy the shape: one scale, one flexible column |
 
-Filter pills have their own width rule in `web-ref-filter-format` R4 — a pill is as wide as its
-longest option. Both rules serve the same goal: nothing on a list page changes size because the
-data or the selection changed.
+Filter pills have their own width rule in `web-ref-filter-format` R4 — a pill never changes width
+with the selection. Both rules serve the same goal: nothing on a list page changes size because
+the data or the selection changed.
