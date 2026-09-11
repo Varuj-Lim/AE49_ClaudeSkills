@@ -125,7 +125,7 @@ matching icon. A funnel on a button labelled `Date range` is a lie.
 | Project | Facts skill | Shared components |
 |---|---|---|
 | AE49_Hub | `ae49Hub-ref-list-page` (in-repo) | `SearchInput`, `FilterSelect`, `FilterMultiSelect`, `ClearFiltersButton`, `useMultiSelectFilter`, `TableCard`; date range per `ae49Hub-ref-date-range` |
-| NuriHub | `nurihub-ref-filter-bar` (in-repo, created 2026-09-10 at the first conversion) | single-value picks go through its one `SelectField` (`nurihub-ref-select-field`); a shared multi-value control was adopted by owner ruling B on 2026-09-10 and is not built yet — four sites still hand-roll one; `components/logs/LogTable.tsx` is the only already-shared toolbar and the conversion reference |
+| NuriHub | `nurihub-ref-filter-bar` (in-repo, created 2026-09-10 at the first conversion) | single-value picks go through its one `SelectField` (`nurihub-ref-select-field`); multi-value picks go through `FilterMultiSelect` (owner ruling B 2026-09-10, built 2026-09-11 — all four hand-rolled sites converted, and its exported pill class `FILTER_TRIGGER_CLASS` also dresses a `SelectField` filter beside it); `components/logs/LogTable.tsx` is the only already-shared toolbar and the conversion reference |
 | future siblings | create on the first sortable/filterable list | copy the shape: one component per control over the project's own tokens |
 
 **Note on a dangling name:** `ae49Hub-ref-list-page` and AE49's
