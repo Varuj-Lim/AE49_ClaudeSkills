@@ -61,6 +61,34 @@ this file never carries a path, uid, or collection name — the process and the 
   say WHAT changed for the requester, never the internals):
   - **PUSH:** `ขึ้นระบบแล้วครับ — <สิ่งที่เปลี่ยน 1 ประโยค> ลองใช้ได้เลย ถ้าไม่ตรงที่ต้องการแจ้งกลับได้ที่ ticket นี้`
 
+  **A `bug` ticket gets a FULLER reply — the one-sentence template is not enough
+  (owner ruling 2026-09-13).** A suggestion's author asked for a change and only
+  needs to know it is live. A bug's author *reported a symptom* and is owed an
+  answer to the question they actually asked: **was I right about what was
+  happening, and is it gone now?** A bare "ขึ้นระบบแล้วครับ — X เปลี่ยนแล้ว" lets
+  them assume their symptom is fixed when often only part of it is, and they find
+  out the hard way in front of a customer. So a bug reply covers, in plain Thai,
+  in this order — each a sentence or two, skipping any that genuinely does not
+  apply:
+
+  1. **What was actually wrong** — the real cause, in the requester's words, not
+     the code's. Say so plainly when it differs from what they guessed; they gave
+     you a symptom, not a diagnosis, and being corrected kindly is useful to them.
+  2. **What changed** — the fix, as they will experience it.
+  3. **What did NOT change, when part of the symptom remains** — never let silence
+     imply the whole thing is gone. Name what still behaves the old way and why
+     (an external system's rule we do not control, a deliberate decision, a
+     follow-up ticket).
+  4. **What they should do now** — including undoing any workaround they built.
+     People keep their workarounds running for months otherwise.
+  5. **How to tell it is working**, when that is not obvious from just using it.
+
+  Still plain words, still no internals — no file names, no field names, no
+  collection names, no commit ids. Length follows the bug: a one-line typo fix
+  stays one line; a bug whose cause turned out to be different from the report
+  needs all five points. The rule is that nothing true and useful to the reporter
+  is left out, not that the reply must be long.
+
   **Write directly — no approval round trip (owner ruling 2026-09-08 evening:
   "เขียนไปได้เลย แค่บอกผมว่าเขียนว่าอะไร ไม่ต้องขออนุญาต").** The owner's PUSH /
   approve word IS the authorization: compose the reply from the template,
