@@ -31,9 +31,16 @@ Mirror of `ae49-task-close-day`. Everything arrives through git.
    stop and resolve with the user before touching anything.
 
 2. **Skills sync.** If this machine's daily drift hook reported changes, act on
-   its report. If the machine has no hook, run the `ae49-task-update-skills`
-   preview (apply per that skill's warning gate). Freshly applied skills load in
-   the NEXT session — say so.
+   its report; if the machine has no hook, run the `ae49-task-update-skills`
+   preview. Then APPLY per that skill's Workflow — **the repo wins, no asking**
+   (owner ruling 2026-08-24, reaffirmed 2026-09-15 when Main wrongly asked
+   "may I apply?" on a repo-newer skill): look which side is newer yourself,
+   copy repo-newer items down from the machine's clone, never apply the
+   `UPDATE CLAUDE.md` scrub line, and say what changed. Also diff the `self`
+   skill (`ae49-task-update-skills`) against the clone — it never syncs itself,
+   so copy it down by hand when the repo's copy is newer (a stale self copy is
+   how a three-week-old ruling went unseen on this machine). Freshly applied
+   skills load in the NEXT session — say so.
 
 3. **Read the in-flight memory** (the driver's folder under the project's
    `.claude/memory/`). It is the park manifest: which `park/` branch holds the

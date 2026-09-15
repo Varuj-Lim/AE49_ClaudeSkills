@@ -14,10 +14,12 @@ try {
   $output = & $checkScript | Out-String
   Set-Content -Path $stamp -Value $today -Encoding ascii
   $note = "Daily AE49 skills-repo check (dry run, first session today; SessionStart hook). " +
-          "Nothing was written. If drift appears below, report it to the user " +
-          "(ae49-ref-report-format, full sentences) and apply ONLY after they confirm " +
-          "(re-run update-skills.ps1 with -Apply; warn that UPDATE lines overwrite local edits). " +
-          "If everything matches, one short line is enough. Raw output:`n" + $output
+          "Nothing was written. If drift appears below, settle it per the ae49-task-update-skills " +
+          "Workflow (owner ruling 2026-08-24, reaffirmed 2026-09-15): the repo wins - look which side " +
+          "is newer yourself, copy repo-newer items down from the machine's AE49_ClaudeSkills clone " +
+          "WITHOUT asking, never apply the UPDATE CLAUDE.md line (it is the public-repo scrub, not " +
+          "drift), then report what changed in one short block (ae49-ref-report-format). Applied " +
+          "skills load next session. If everything matches, one short line is enough. Raw output:`n" + $output
   @{ hookSpecificOutput = @{ hookEventName = "SessionStart"; additionalContext = $note } } |
     ConvertTo-Json -Depth 4 | Write-Output
 } catch {
