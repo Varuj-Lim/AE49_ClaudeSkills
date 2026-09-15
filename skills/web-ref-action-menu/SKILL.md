@@ -67,19 +67,23 @@ Separate sections with one thin divider (`my-1 border-t border-gray-100`), in th
   A decision verb inside the menu (Cancel request, Roll back, Restore) has no tone — the
   at-rest decision colours belong to the ICON form outside the menu; the menu-item form is
   a third rendering, like the bulk pill is a second.
-- **Hidden vs dimmed (owner 2026-09-15).** An action the viewer can NEVER take, or that
-  does not apply to this record (no permission; nothing to unlink; no app login to reset)
-  is **not listed** — a menu never advertises what cannot happen. An action they normally
-  can take but that a condition blocks right now (their own account, a row already being
-  acted on, dependent records, the wrong status) stays **listed, dimmed and inert, with the
-  reason in `title`** — the reader learns it exists and why it is off. No third state.
+- **Hidden vs dimmed (owner 2026-09-15).** The line is WHO YOU ARE versus THE STATE OF
+  THIS RECORD NOW. An action the viewer's role or ownership never permits (Delete is
+  RD's; Cancel request is the requester's) is **not listed** — a menu never advertises
+  what cannot happen for this person. An action they may take but that this record's
+  state blocks right now (no LINE link to unlink, no app login to reset or sign in as,
+  their own account, a row already being acted on, dependent records, the wrong status)
+  stays **listed, dimmed and inert, with the reason in `title`** — so the menu keeps
+  one shape per role and a dimmed row is information ("this person has no LINE").
+  Dimmed = `aria-disabled` + the shared dimmed classes, never native `disabled`, so
+  the reason tooltip shows in every browser. No third state.
 - **Every item that writes still opens its existing confirm, unchanged** — the menu changes
   where you click, never what happens after. A withdraw / cancel-request confirm is the
   project's primary (slate) tone, roll back the warning (orange) tone, a bulk approve the
   approve (green) tone; **never the red danger tone** (red means data is destroyed).
 - Item class: `w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50` (red
   variant for destructive); menu `w-40 bg-white border border-gray-200 rounded-lg shadow-lg py-1`;
-  a disabled item is one shared `disabled:` spelling.
+  a dimmed item is one shared spelling (`MENU_ITEM_DISABLED` + `aria-disabled`).
 
 ## Don't
 
