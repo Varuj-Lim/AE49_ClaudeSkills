@@ -67,6 +67,12 @@ Separate sections with one thin divider (`my-1 border-t border-gray-100`), in th
   A decision verb inside the menu (Cancel request, Roll back, Restore) has no tone — the
   at-rest decision colours belong to the ICON form outside the menu; the menu-item form is
   a third rendering, like the bulk pill is a second.
+- **Hidden vs dimmed (owner 2026-09-15).** An action the viewer can NEVER take, or that
+  does not apply to this record (no permission; nothing to unlink; no app login to reset)
+  is **not listed** — a menu never advertises what cannot happen. An action they normally
+  can take but that a condition blocks right now (their own account, a row already being
+  acted on, dependent records, the wrong status) stays **listed, dimmed and inert, with the
+  reason in `title`** — the reader learns it exists and why it is off. No third state.
 - **Every item that writes still opens its existing confirm, unchanged** — the menu changes
   where you click, never what happens after. A withdraw / cancel-request confirm is the
   project's primary (slate) tone, roll back the warning (orange) tone, a bulk approve the
@@ -81,6 +87,7 @@ Separate sections with one thin divider (`my-1 border-t border-gray-100`), in th
 - Don't hide the trigger until hover; don't blank the Actions header.
 - Don't keep a lone Edit / Delete icon beside a ⋮ "because it is only one" — one item is a menu.
 - Don't colour a menu item that is not a delete; don't put Delete anywhere but last.
+- Don't hide a temporarily blocked action, and don't list a never-permitted one.
 - Don't add Escape handling or an enter/exit animation without a ruling.
 
 ## Pair with an audit
