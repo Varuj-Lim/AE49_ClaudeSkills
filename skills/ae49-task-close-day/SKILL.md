@@ -81,7 +81,9 @@ or a Temp folder.
    drive or password manager — never chat, never git). Say "nothing to carry"
    out loud when the list is empty, so the user never has to guess. If a gate
    was open, warn that emulator/seeded test data is machine-local and must be
-   re-seeded on the other side. End with: Main can be closed and the machine
+   re-seeded on the other side. **A parked gate board travels AS-IS, so condense it
+   BEFORE parking: every section inside the 5–7 budget of `ae49-router` (never 10) —
+   the 16-item section parked on 2026-09-11 earned the owner's reminder.** End with: Main can be closed and the machine
    shut down (close a running emulator with Ctrl+C, never the window X).
 
 ## Notes

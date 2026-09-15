@@ -147,7 +147,11 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   FEATURE — a combined gate of several features is one section per feature, each
   section inside the budget (owner reminder 2026-09-08, after Main opened a 44-item
   combined list by pasting every plan checklist plus every audit drift line; the
-  drift lines are merged INTO the 7, never appended).** Condense by merging
+  drift lines are merged INTO the 7, never appended). Second reminder 2026-09-15,
+  after a 16-item section inherited from a close-day board — "ผมตรวจไม่ไหว … แต่ละเรื่องต้องมี
+  ไม่เกิน 7 ข้อ": a section over 7 is CONDENSED before it is handed over, whoever wrote it
+  and whenever; the owner asked for this to live HERE, in the skill read every session,
+  not in memory.** Condense by merging
   related checks into one item and covering only the core flow plus the risky edges —
   the audit already verified the rest; a gate checklist is the user's smoke test, not a
   re-audit. When a plan's Testing checklist is longer, Main condenses it at the gate.
