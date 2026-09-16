@@ -75,8 +75,8 @@ re-read from disk — never report from memory:
    (a lingering feature-branch worktree from another session = build in progress or
    awaiting integration — say which you can't tell, don't guess).
 3. Output ONE table, one row per item, most-active first, FOUR columns (user format
-   ruling 2026-08-13): **# | Feature / plan / task | Stage | Next** (owner 2026-09-16; the earlier
-   Item / Stage / Waiting on / Next set is retired — "waiting on" folds into Stage or Next).
+   ruling 2026-08-13): **# | Feature / plan / task | Stage | Waiting On | Next** (owner 2026-09-16: the
+   2026-08-13 set plus a row number so the owner can answer "ข้อ 3").
    **NEVER collapse items into one row** (user ruling 2026-08-14): no "Ready ×6", no
    "plan A + plan B" merged rows — every plan and tracked item gets its OWN row even
    when many share a state or share one gate.
