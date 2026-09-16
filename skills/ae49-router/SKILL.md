@@ -176,7 +176,10 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   owner the numbering shifted ("Reset ticks"). **Every item names the exact account to
   use** — "Sign in as Nattapat Hongbandalsuk (K. GORN)", "บัญชี RD ของคุณ" — never a
   placeholder such as "คน A" or "a non-RD employee" (owner 2026-09-16: "ทำไมไม่ระบุคนมาเลย");
-  when a seed was made in somebody's name, the item says whose. **At landing ("all pass, commit it") RESET it to the CLOSED payload** — shape and closed-line grammar live in the shared canon **`web-ref-gate-closed-format`** (single source, rule 2026-08-27; e.g. `<slug> landed <date> (gate N/N; commit <sha>)`) — so the page reads "No open gate" instead of showing an already-landed gate (user rule 2026-08-04); the shell renders that state. Write a fresh item list only when the NEXT gate opens.
+  when a seed was made in somebody's name, the item says whose. **Record titles and
+  values the reader must find or type on screen are QUOTED** — "ทดสอบ IT ยกเลิก", "28o" —
+  never floating bare in the sentence (owner 2026-09-16: "อย่าพิมพ์ลอย ๆ อ่านแล้วงง"); codes
+  (PJ9902, TK9901) and UI labels (Cancel request) stay unquoted. **At landing ("all pass, commit it") RESET it to the CLOSED payload** — shape and closed-line grammar live in the shared canon **`web-ref-gate-closed-format`** (single source, rule 2026-08-27; e.g. `<slug> landed <date> (gate N/N; commit <sha>)`) — so the page reads "No open gate" instead of showing an already-landed gate (user rule 2026-08-04); the shell renders that state. Write a fresh item list only when the NEXT gate opens.
   **Template adoption** — a project that doesn't yet carry the template adopts it in
   ONE docs commit (no manual-test gate needed for a docs-only adoption):
   1. Copy this skill's bundled `resources/gate-checklist.html` →
