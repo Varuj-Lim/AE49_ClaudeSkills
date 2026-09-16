@@ -61,6 +61,35 @@ Prefix `flex-1` when two buttons share a row. A read-only popup uses
 - **Confirm / form popup** — Cancel + Save / Delete / Import in a bottom
   `POPUP_ACTIONS_ROW`; the inline `POPUP_ERROR` sits DIRECTLY ABOVE that row.
 
+## Confirm wording — the confirm repeats the opener's verb (owner ruling 2026-09-16)
+
+A confirm popup is opened by ONE control — a ⋮ menu item, an icon button's `title`, a
+text button, a bulk pill. The popup's **title and its confirm button use exactly that
+control's verb**, so the person reads the same word three times: on the control, in the
+title, on the button they press.
+
+| Opener says | Title | Confirm button | Tone |
+|---|---|---|---|
+| `Cancel request` (⋮ item) | Cancel request | **Cancel request** | primary (slate) — nothing is destroyed |
+| `Delete` / `Remove` (whichever the control says) | Delete … / Remove … | **Delete** / **Remove** | danger (red) — data is destroyed |
+| `Reject` (decision icon) | Reject … | **Reject** | the decision's own tone |
+| `Roll back` | Roll back … | **Roll back** | warning (orange) |
+| `Approve` (bulk pill) | Approve … | **Approve** | approve (green) |
+
+- **Never a synonym.** `Withdraw` for a control that says Cancel request, `Remove` for a
+  control that says Delete, `Discard` for Cancel, `Revoke` for Unlink — each is a defect.
+  If the concept needs a gloss ("cancel = withdraw the request"), it goes in the Thai body
+  sentence, never on the title or the button.
+- **The dismiss button is the only place the bare word `Cancel` appears.** A confirm for a
+  cancel-type action therefore reads *Cancel* | **Cancel request** — the full verb phrase on
+  the confirming side, so the two buttons can never be confused.
+- **The tone follows the action, not the mood**: only Delete / Remove / Discard is red;
+  a cancel-request / withdraw confirm is slate even though it ends the request.
+- Found 2026-09-16 (AE49, gate ⑧): a ⋮ "Cancel request" opened "Withdraw proposal" with a
+  red "Withdraw" button — wrong verb AND wrong tone; the owner's words: *"เราไม่ควรใช้คำว่า
+  Withdraw นะ มันไม่ตรงกับปุ่ม ปุ่มบอก Cancel"*. Each hub's audit topic checks every confirm
+  against its opener (AE49: topic 33 detector PU6).
+
 ## Close conventions — the rule follows the KIND (owner rulings 2026-08, 2026-09-15)
 
 | Kind | Closes by button | Closes on click-outside | Why |

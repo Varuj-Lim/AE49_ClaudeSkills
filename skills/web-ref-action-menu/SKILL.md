@@ -81,6 +81,13 @@ Separate sections with one thin divider (`my-1 border-t border-gray-100`), in th
   where you click, never what happens after. A withdraw / cancel-request confirm is the
   project's primary (slate) tone, roll back the warning (orange) tone, a bulk approve the
   approve (green) tone; **never the red danger tone** (red means data is destroyed).
+- **The confirm repeats the item's verb (owner 2026-09-16).** The dialog's title and its
+  confirm button say exactly what the menu item said — `Cancel request` opens "Cancel
+  request" / **Cancel request**, `Delete` opens "Delete …" / **Delete** — never a synonym
+  (Withdraw, Remove for Delete, Discard for Cancel). The dismiss button is the only place
+  the bare word `Cancel` appears. Found on 2026-09-16: a ⋮ "Cancel request" opening
+  "Withdraw proposal" with a red "Withdraw" button — wrong verb AND wrong tone. The full
+  rule lives in `web-ref-popup` (confirm popups).
 - Item class: `w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50` (red
   variant for destructive); menu `w-40 bg-white border border-gray-200 rounded-lg shadow-lg py-1`;
   a dimmed item is one shared spelling (`MENU_ITEM_DISABLED` + `aria-disabled`).
