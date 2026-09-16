@@ -67,11 +67,25 @@
   var key = "ae49-gate-" + (data.feature || "unnamed");
   document.getElementById("title").textContent = data.title || "Gate checklist";
   document.getElementById("slug").textContent = data.feature || "";
+  // A tick is remembered by the CONTENT of its item (section heading + text), never by
+  // its position (owner 2026-09-16: "ทำไมบางทีเปิดมาเหมือนมีที่กาค้างไว้ทั้ง ๆ ที่เป็นของใหม่").
+  // Main rewrites this board many times a day — sections come and go, items are reworded
+  // mid-gate — and a positional key ("3.2") handed the new item 3.2 the tick of whatever
+  // used to sit there. With a content key an unchanged item keeps its tick across rewrites,
+  // a reworded or new item starts unticked, and ticks for items that no longer exist are
+  // pruned on load.
+  function tickId(section, text) {
+    var s = section + "\n" + text, h = 5381;
+    for (var i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+    return "t" + (h >>> 0).toString(16);
+  }
   var saved = {};
   try { saved = JSON.parse(localStorage.getItem(key) || "{}"); } catch (e) {}
   var list = document.getElementById("list");
   list.innerHTML = "";
   var boxes = [];
+  var live = {};   // tick ids present on this board — anything else in `saved` is pruned below
+  var section = "";
   var n = 0;   // parent item counter (the "≤ 7 per feature section" rule counts these)
   var sub = 0; // sub-step counter, reset at every parent; an item string starting with "- " is a sub-step
   data.items.forEach(function (item) {
@@ -79,16 +93,19 @@
       var h = document.createElement("h2");
       h.textContent = item.slice(3);
       list.appendChild(h);
+      section = item; // numbering keeps counting across sections, as before
       return;
     }
     var isSub = typeof item === "string" && item.indexOf("- ") === 0 && n > 0;
     var idx;
     if (isSub) { sub += 1; idx = n + "." + sub; } else { n += 1; sub = 0; idx = String(n); }
+    var id = tickId(section, item);
+    live[id] = true;
     var label = document.createElement("label");
     if (isSub) label.className = "sub";
     var cb = document.createElement("input");
     cb.type = "checkbox";
-    cb.checked = !!saved[idx];
+    cb.checked = !!saved[id];
     var num = document.createElement("span");
     num.className = "num";
     num.textContent = idx + (isSub ? "" : ".");
@@ -98,7 +115,7 @@
     label.appendChild(cb); label.appendChild(num); label.appendChild(text);
     if (cb.checked) label.classList.add("done");
     cb.addEventListener("change", function () {
-      saved[idx] = cb.checked;
+      saved[id] = cb.checked;
       label.classList.toggle("done", cb.checked);
       try { localStorage.setItem(key, JSON.stringify(saved)); } catch (e) {}
       update();
@@ -106,6 +123,10 @@
     boxes.push(cb);
     list.appendChild(label);
   });
+  // Prune ticks whose item is no longer on the board (and the old positional keys "3.2").
+  var pruned = false;
+  Object.keys(saved).forEach(function (k) { if (!live[k]) { delete saved[k]; pruned = true; } });
+  if (pruned) { try { localStorage.setItem(key, JSON.stringify(saved)); } catch (e) {} }
   function update() {
     var done = boxes.filter(function (b) { return b.checked; }).length;
     document.getElementById("count").textContent = done + " / " + boxes.length;

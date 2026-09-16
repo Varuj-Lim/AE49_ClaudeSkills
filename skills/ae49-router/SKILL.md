@@ -165,16 +165,27 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   the items file for this gate (`## <section>` strings become headers) and hand the user a
   clickable FULL file URL to the page (e.g.
   `file:///C:/…/<project>/docs/gate-checklist.html`, as a markdown link) — ticks persist
-  in their browser. **When the page exists, do NOT print the checklist items in chat**
-  (user rule, 2026-07-23): the chat message carries only the link, the item count, and
-  any gate-specific notes (seeded values, cautions, "Reset ticks" when numbering shifted).
+  in their browser. **A tick belongs to the item's CONTENT, never to its position**
+  (owner 2026-09-16: *"ทำไมบางทีเปิดมาเหมือนมีที่กาค้างไว้อยู่ ทั้ง ๆ ที่บางอันเป็นของใหม่"* — the
+  page used to key ticks by number, so after a board rewrite the new item 3.2 wore the
+  tick of whatever had been 3.2 before): the template keys each tick by a hash of its
+  section heading + item text, prunes keys whose item is gone, and so an unchanged item
+  keeps its tick across rewrites while a reworded or new one comes back unticked — by
+  itself, with no "Reset ticks" from anyone. Main's side of that rule: when a section is
+  re-added or an item reworded, SAY which items are new or changed (they are the unticked
+  ones), never ask the owner to reset, and never reword a passed item cosmetically — a
+  changed text is a fresh test in the owner's eyes. **When the page exists, do NOT print
+  the checklist items in chat** (user rule, 2026-07-23): the chat message carries only
+  the link, the item count, and any gate-specific notes (seeded values, cautions, which
+  items are new since the last look).
   Print items in chat only when the project has no checklist page. The items file is
   gitignored per-gate scratch: never commit it. **The board holds ONLY the open sections
   (owner 2026-09-16: "ล้าง Gate checklist เวลาทำเสร็จแล้ว เหลือแค่ที่ใช้ — ยาวจนจะเป็น 100 แล้ว"):
   the moment ONE feature's section passes and lands, delete that section from the file
   and renumber the rest from 1 — never let passed sections accumulate under new ones (the
-  2026-09-15/16 board reached 92 items across twelve sections before this rule). Tell the
-  owner the numbering shifted ("Reset ticks"). **Every item names the exact account to
+  2026-09-15/16 board reached 92 items across twelve sections before this rule). The
+  renumbering costs nothing now that ticks follow content, not numbers — just say which
+  sections remain. **Every item names the exact account to
   use** — "Sign in as Nattapat Hongbandalsuk (K. GORN)", "บัญชี RD ของคุณ" — never a
   placeholder such as "คน A" or "a non-RD employee" (owner 2026-09-16: "ทำไมไม่ระบุคนมาเลย");
   when a seed was made in somebody's name, the item says whose. **Record titles and
