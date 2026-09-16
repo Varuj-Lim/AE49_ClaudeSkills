@@ -28,34 +28,36 @@ agents, features, gates, tickets — render them as a **markdown table**, one ro
 never a bullet/numbered list. Prose stays for the surrounding explanation; the board itself is
 the table. One or two items may stay inline in a sentence — three or more always get the table.
 
-### The template (user-confirmed 2026-08-06 — copy this shape)
+### The template (owner ruling 2026-09-16 — copy this shape; it replaced the 2026-08-06 four-column set)
 
 ```markdown
-| Item | Stage | Waiting on | Next |
+| # | Feature / plan / task | Stage | Next |
 |---|---|---|---|
-| overtime-exact-minutes | 🔍 Audit running | Auditors | Fixes → stage → gate |
-| attendance-import-review-screen | 🔍 Audit running | Auditor | Fixes → stage → gate |
-| profile-attendance-report | 📋 Ready | Exact-minutes landing | Build (chain tail) |
-| Unpushed on `main` | 📦 17 items | Your "push" | One push deploys all |
+| 1 | plot-order-se-compose | 🚀 Live — `fb96ec0a`, V6.0 published | — |
+| 2 | rd-footing-help-legend-and-widths | 🧪 Gate ⑫ — builder applying 4 rulings | copy → your check → land |
+| 3 | thai-sweep-plot-and-strays | 🔨 Building | audit → gate → land |
+| 4 | action-menu-hybrid B1 | ⏳ Queued after #3 lands | dispatch |
+| 5 | Unpushed on `main` | 📦 2 commits (on backup) | your "push" deploys both |
 ```
 
 Which renders as:
 
-| Item | Stage | Waiting on | Next |
+| # | Feature / plan / task | Stage | Next |
 |---|---|---|---|
-| overtime-exact-minutes | 🔍 Audit running | Auditors | Fixes → stage → gate |
-| attendance-import-review-screen | 🔍 Audit running | Auditor | Fixes → stage → gate |
-| profile-attendance-report | 📋 Ready | Exact-minutes landing | Build (chain tail) |
-| Unpushed on `main` | 📦 17 items | Your "push" | One push deploys all |
+| 1 | plot-order-se-compose | 🚀 Live — `fb96ec0a`, V6.0 published | — |
+| 2 | rd-footing-help-legend-and-widths | 🧪 Gate ⑫ — builder applying 4 rulings | copy → your check → land |
+| 3 | thai-sweep-plot-and-strays | 🔨 Building | audit → gate → land |
+| 4 | action-menu-hybrid B1 | ⏳ Queued after #3 lands | dispatch |
+| 5 | Unpushed on `main` | 📦 2 commits (on backup) | your "push" deploys both |
 
 ### What each column is for
 
 | Column | Holds | Rule |
 |---|---|---|
-| **Item** | The plan slug, feature or standing concern — the name the user already uses for it | Never a sentence. Standing concerns (unpushed commits, a pending deploy) get a row too. |
-| **Stage** | Emoji + two or three words | One emoji, from the legend below. Not a percentage, not a guess at time remaining. |
-| **Waiting on** | **WHO or WHAT unblocks it** | The most important column — it tells the user whether the ball is theirs. Say "Your gate" / "Your push" plainly when it is. |
-| **Next** | The single next action once unblocked | An arrow chain (`Fixes → stage → gate`) is fine. Not a list of everything left. |
+| **#** | Row number, 1… in the order shown | So the user can answer "ข้อ 3" without retyping the slug; renumber every run — never carry old numbers. |
+| **Feature / plan / task** | The plan slug, feature or standing concern — the name the user already uses for it | Never a sentence. Standing concerns (unpushed commits, a pending deploy, a handoff) get a row too. |
+| **Stage** | Emoji + a few words — and, when the ball is the user's, say so HERE ("🧪 Gate ⑫ — waiting on you") | One emoji, from the legend below. Not a percentage, not a guess at time remaining. The retired "Waiting on" column folds in here or into Next. |
+| **Next** | The single next action once unblocked | An arrow chain (`audit → gate → land`) is fine; "your push" / "your check" names the user plainly when it is theirs. Not a list of everything left. |
 
 ### Stage emoji legend — same emoji, same meaning, every run
 
