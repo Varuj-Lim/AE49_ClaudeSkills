@@ -188,7 +188,13 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   **Sub-steps:** an item that needs several steps splits into sub-items `2.1`, `2.2` …
   (in the items file: a string starting with `- ` right after its parent) — ONE test step
   per sub-item, at most 5 per item; the ≤ 7 rule counts parent items per feature section.
-  Sub-items inherit the parent's tags unless one overrides them. **At landing ("all pass, commit it") RESET it to the CLOSED payload** — shape and closed-line grammar live in the shared canon **`web-ref-gate-closed-format`** (single source, rule 2026-08-27; e.g. `<slug> landed <date> (gate N/N; commit <sha>)`) — so the page reads "No open gate" instead of showing an already-landed gate (user rule 2026-08-04); the shell renders that state. Write a fresh item list only when the NEXT gate opens.
+  Sub-items inherit the parent's tags unless one overrides them. **A section is on the
+  board ONLY while the build it tests is complete in the hub tree** (audited, copied, gates
+  green) — never while a builder is still changing it. When the owner's gate feedback
+  sends the build back (a wording fix, a width rule, a new check), DELETE the section at
+  once and re-add it — with the new checks — only when the amended build has been copied
+  in; the owner must never read a section and wonder whether it is finished (owner
+  2026-09-16: "ทำให้เสร็จก่อนค่อยมาใส่ใน Gate เพราะผมงงนึกว่าเสร็จแล้ว"). **At landing ("all pass, commit it") RESET it to the CLOSED payload** — shape and closed-line grammar live in the shared canon **`web-ref-gate-closed-format`** (single source, rule 2026-08-27; e.g. `<slug> landed <date> (gate N/N; commit <sha>)`) — so the page reads "No open gate" instead of showing an already-landed gate (user rule 2026-08-04); the shell renders that state. Write a fresh item list only when the NEXT gate opens.
   **Template adoption** — a project that doesn't yet carry the template adopts it in
   ONE docs commit (no manual-test gate needed for a docs-only adoption):
   1. Copy this skill's bundled `resources/gate-checklist.html` →
