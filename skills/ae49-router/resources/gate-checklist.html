@@ -19,6 +19,8 @@
   label { display: flex; gap: .65rem; align-items: flex-start; padding: .55rem .6rem; border-radius: 10px; cursor: pointer; font-size: .95rem; line-height: 1.5; }
   label:hover { background: #f9fafb; }
   input[type="checkbox"] { width: 1.05rem; height: 1.05rem; margin-top: .2rem; accent-color: #475569; flex-shrink: 0; }
+  label.sub { margin-left: 1.75rem; font-size: .95em; }
+  label.sub .num { color: #64748b; }
   .num { font-weight: 700; color: #475569; flex-shrink: 0; }
   label.done .text { text-decoration: line-through; color: #9ca3af; }
   .footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
@@ -70,7 +72,8 @@
   var list = document.getElementById("list");
   list.innerHTML = "";
   var boxes = [];
-  var n = 0;
+  var n = 0;   // parent item counter (the "≤ 7 per feature section" rule counts these)
+  var sub = 0; // sub-step counter, reset at every parent; an item string starting with "- " is a sub-step
   data.items.forEach(function (item) {
     if (typeof item === "string" && item.indexOf("## ") === 0) {
       var h = document.createElement("h2");
@@ -78,18 +81,20 @@
       list.appendChild(h);
       return;
     }
-    n += 1;
-    var idx = n;
+    var isSub = typeof item === "string" && item.indexOf("- ") === 0 && n > 0;
+    var idx;
+    if (isSub) { sub += 1; idx = n + "." + sub; } else { n += 1; sub = 0; idx = String(n); }
     var label = document.createElement("label");
+    if (isSub) label.className = "sub";
     var cb = document.createElement("input");
     cb.type = "checkbox";
     cb.checked = !!saved[idx];
     var num = document.createElement("span");
     num.className = "num";
-    num.textContent = idx + ".";
+    num.textContent = idx + (isSub ? "" : ".");
     var text = document.createElement("span");
     text.className = "text";
-    text.textContent = item;
+    text.textContent = isSub ? item.slice(2) : item;
     label.appendChild(cb); label.appendChild(num); label.appendChild(text);
     if (cb.checked) label.classList.add("done");
     cb.addEventListener("change", function () {

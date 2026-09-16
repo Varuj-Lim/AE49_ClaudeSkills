@@ -179,7 +179,16 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   when a seed was made in somebody's name, the item says whose. **Record titles and
   values the reader must find or type on screen are QUOTED** — "ทดสอบ IT ยกเลิก", "28o" —
   never floating bare in the sentence (owner 2026-09-16: "อย่าพิมพ์ลอย ๆ อ่านแล้วงง"); codes
-  (PJ9902, TK9901) and UI labels (Cancel request) stay unquoted. **At landing ("all pass, commit it") RESET it to the CLOSED payload** — shape and closed-line grammar live in the shared canon **`web-ref-gate-closed-format`** (single source, rule 2026-08-27; e.g. `<slug> landed <date> (gate N/N; commit <sha>)`) — so the page reads "No open gate" instead of showing an already-landed gate (user rule 2026-08-04); the shell renders that state. Write a fresh item list only when the NEXT gate opens.
+  (PJ9902, TK9901) and UI labels (Cancel request) stay unquoted. **Every item opens with
+  three tags, in this order** (owner 2026-09-16): `[EMU]` / `[PRD]` / `[APH]` = where —
+  the emulator app (AE49 :3001), the production-data dev app (:3000), or the live App
+  Hosting site; `(ANY)` / `(RD)` / `(K. GORN)` = which account — the name to Sign in as,
+  `(RD)` = the owner's own login; `{R&D -> Footing Detail Design -> Design}` = the click
+  path to the screen. Example: `[EMU] (K. GORN) {Support -> Tickets} คลิกแถว "ทดสอบ ยกเลิก" → …`.
+  **Sub-steps:** an item that needs several steps splits into sub-items `2.1`, `2.2` …
+  (in the items file: a string starting with `- ` right after its parent) — ONE test step
+  per sub-item, at most 5 per item; the ≤ 7 rule counts parent items per feature section.
+  Sub-items inherit the parent's tags unless one overrides them. **At landing ("all pass, commit it") RESET it to the CLOSED payload** — shape and closed-line grammar live in the shared canon **`web-ref-gate-closed-format`** (single source, rule 2026-08-27; e.g. `<slug> landed <date> (gate N/N; commit <sha>)`) — so the page reads "No open gate" instead of showing an already-landed gate (user rule 2026-08-04); the shell renders that state. Write a fresh item list only when the NEXT gate opens.
   **Template adoption** — a project that doesn't yet carry the template adopts it in
   ONE docs commit (no manual-test gate needed for a docs-only adoption):
   1. Copy this skill's bundled `resources/gate-checklist.html` →
