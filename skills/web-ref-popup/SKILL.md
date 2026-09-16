@@ -64,27 +64,35 @@ Prefix `flex-1` when two buttons share a row. A read-only popup uses
 ## Confirm wording — the confirm repeats the opener's verb (owner ruling 2026-09-16)
 
 A confirm popup is opened by ONE control — a ⋮ menu item, an icon button's `title`, a
-text button, a bulk pill. The popup's **title and its confirm button use exactly that
-control's verb**, so the person reads the same word three times: on the control, in the
-title, on the button they press.
+text button, a bulk pill. The control shows a BARE verb (`Cancel`, `Delete`, `Edit` — the
+row names the object; `web-ref-action-menu`); the popup **carries that same verb** in its
+title and on its confirm button, so the person reads one verb three times: on the control,
+in the title, on the button they press. The title adds the object noun because the dialog
+stands alone.
 
-| Opener says | Title | Confirm button | Tone |
-|---|---|---|---|
-| `Cancel request` (⋮ item) | Cancel request | **Cancel request** | primary (slate) — nothing is destroyed |
-| `Delete` / `Remove` (whichever the control says) | Delete … / Remove … | **Delete** / **Remove** | danger (red) — data is destroyed |
-| `Reject` (decision icon) | Reject … | **Reject** | the decision's own tone |
-| `Roll back` | Roll back … | **Roll back** | warning (orange) |
-| `Approve` (bulk pill) | Approve … | **Approve** | approve (green) |
+| Control says | Title | Confirm button | Dismiss | Tone |
+|---|---|---|---|---|
+| `Cancel` (⋮ item / ⊘ icon) | Cancel request · Cancel claim · Cancel order | **Cancel request** (verb + noun — so it can never be read as the dismiss) | **Keep request** / Keep claim / Keep order | primary (slate) — nothing is destroyed |
+| `Delete` / `Remove` (whichever the control says) | Delete proposal / Remove device | **Delete** / **Remove** | Cancel | danger (red) — data is destroyed |
+| `Reject` (decision icon) | Reject leave request | **Reject** | Cancel | the decision's own tone |
+| `Roll back` | Roll back print request | **Roll back** | Cancel | warning (orange) |
+| `Approve` (bulk pill) | Approve selected requests | **Approve** | Cancel | approve (green) |
 
-- **Never a synonym.** `Withdraw` for a control that says Cancel request, `Remove` for a
-  control that says Delete, `Discard` for Cancel, `Revoke` for Unlink — each is a defect.
-  If the concept needs a gloss ("cancel = withdraw the request"), it goes in the Thai body
-  sentence, never on the title or the button.
-- **The dismiss button is the only place the bare word `Cancel` appears.** A confirm for a
-  cancel-type action therefore reads *Cancel* | **Cancel request** — the full verb phrase on
-  the confirming side, so the two buttons can never be confused.
+- **Never a synonym.** `Withdraw` for a control that says Cancel, `Remove` for a control
+  that says Delete, `Discard` for Cancel, `Refuse` for Reject, `Release` for Consent — each
+  is a defect. If the concept needs a gloss ("cancel = withdraw the request"), it goes in
+  the Thai body sentence, never on the title or the button.
+- **Delete vs Remove is a meaning, not a mood:** `Delete` destroys a record (an employee, a
+  request, a holiday); `Remove` detaches something from its parent and leaves the parent
+  (a device from a person, a login from an account, a pile spec from a set). One object
+  keeps ONE verb everywhere — row icon, ⋮ item, bulk pill, dialog.
+- **A cancel-type confirm never shows two "Cancel" buttons.** Its dismiss reads
+  **Keep <noun>** (the ticket precedent "Keep Ticket", 2026-09-11) and its confirm reads the
+  verb with the noun (**Cancel request**). Every other confirm dismisses with the bare
+  `Cancel`.
 - **The tone follows the action, not the mood**: only Delete / Remove / Discard is red;
-  a cancel-request / withdraw confirm is slate even though it ends the request.
+  a cancel confirm is slate even though it ends the request; ONE tone per verb family
+  (no amber cancels beside slate ones).
 - Found 2026-09-16 (AE49, gate ⑧): a ⋮ "Cancel request" opened "Withdraw proposal" with a
   red "Withdraw" button — wrong verb AND wrong tone; the owner's words: *"เราไม่ควรใช้คำว่า
   Withdraw นะ มันไม่ตรงกับปุ่ม ปุ่มบอก Cancel"*. Each hub's audit topic checks every confirm
