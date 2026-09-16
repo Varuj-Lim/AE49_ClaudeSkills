@@ -83,9 +83,14 @@ stands alone.
   is a defect. If the concept needs a gloss ("cancel = withdraw the request"), it goes in
   the Thai body sentence, never on the title or the button.
 - **Delete vs Remove is a meaning, not a mood:** `Delete` destroys a record (an employee, a
-  request, a holiday); `Remove` detaches something from its parent and leaves the parent
-  (a device from a person, a login from an account, a pile spec from a set). One object
-  keeps ONE verb everywhere — row icon, ⋮ item, bulk pill, dialog.
+  request, a holiday, a pile spec that exists only inside its calculation set); `Remove`
+  detaches something that keeps existing elsewhere and leaves the parent intact (a device
+  from a person, a login from an account, a member from a team). The test: after the act,
+  does the thing still exist anywhere? Yes → Remove; no → Delete. One object keeps ONE verb
+  everywhere — row icon, ⋮ item, bulk pill, dialog.
+- **Titles are sentence case:** verb + lowercase noun (`Delete pile spec`, `Cancel request`,
+  `Approve overtime claim`); codes and proper nouns keep their case (`Delete PJ0007`).
+  Never Title Case (`Delete Calculation Set`) — one shape across every dialog.
 - **A cancel-type confirm never shows two "Cancel" buttons.** Its dismiss reads
   **Keep <noun>** (the ticket precedent "Keep Ticket", 2026-09-11) and its confirm reads the
   verb with the noun (**Cancel request**). Every other confirm dismisses with the bare
