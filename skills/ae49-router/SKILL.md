@@ -182,7 +182,12 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   stay word-for-word (passed ones keep their ticks, unchecked ones stay open); an item the
   fix makes obsolete is REMOVED from ㉓, not reworded; ㉓ is dropped when its feature
   lands, ㉔ when the fix lands — so a section on the board is never edited underneath a
-  reader. **When the page exists, do NOT print
+  reader. The one escape hatch: **when the feedback on a section is extensive — several
+  rulings on one build — Main may PULL that whole section off the board, have the build
+  redone, and re-issue it as a FRESH section** (owner 2026-09-17: *"หากผมขอแก้เยอะมาก คุณ
+  สามารถเอา Gate หัวข้อนั้นออกก่อนได้ แล้วไปทำมาใหม่ ขึ้น Gate ใหม่ได้เช่นกัน"*); say so when
+  pulling it, and note that ticks on items whose text did not change still carry over by
+  content. **When the page exists, do NOT print
   the checklist items in chat** (user rule, 2026-07-23): the chat message carries only
   the link, the item count, and any gate-specific notes (seeded values, cautions, which
   items are new since the last look).
