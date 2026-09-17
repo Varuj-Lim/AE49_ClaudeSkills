@@ -160,6 +160,21 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   technical terms, UI labels, button names, codes and file paths in English (e.g.
   "เปิดแท็บ Approvals แล้วกด Approve ใบ OT9901 → ตัวเลขต้องอ่าน 5h 30m") — full,
   self-explanatory sentences still apply.
+  **Gate numbers are CIRCLED numerals (owner 2026-09-17: "ทำให้เป็นกติกาการบอก Gate เป็นเลข
+  ลักษณะนี้ ㊶").** Every gate section Main opens is named by the project's NEXT number written
+  as ONE circled numeral — ①…⑳ (U+2460–2473), ㉑…㉟ (U+3251–325F), ㊱…㊿ (U+32B1–32BF) —
+  never "Gate 3", "G3", "#3" or "(3)". The same glyph names that gate everywhere: the
+  checklist page's section heading (`## ㊶ <feature> — <what it proves>`), the chat message,
+  the board's Stage cell (`🧪 Gate ㊶`), plan notes, the in-flight memory and the landing
+  commit / closed line. The counter is PER PROJECT and only moves forward, across days,
+  machines and accounts: every new section takes the next unused number — a fix issued as a
+  new section during a gate, and a pulled section re-issued fresh, each get a NEW number too
+  (a number is never re-used for different content). Main may name the number at dispatch
+  ("จะขึ้น gate ㊶") so the owner can refer to it early. **Where the counter lives:** the
+  last number used is written into the project's in-flight memory each time a section opens;
+  a resuming session reads it there before numbering. **After ㊿** (Unicode has no circled
+  numeral past 50) numbering wraps to ① again — the board then holds only open sections, so
+  skip any number still open on it — and Main says "เลขวนกลับเป็น ①" once when it happens.
   **Clickable checklist page:** if the project carries a gate-checklist template (e.g.
   `docs/gate-checklist.html` reading a sibling `gate-checklist.js` items file), overwrite
   the items file for this gate (`## <section>` strings become headers) and hand the user a
