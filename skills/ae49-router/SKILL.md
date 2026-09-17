@@ -166,15 +166,23 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   never "Gate 3", "G3", "#3" or "(3)". The same glyph names that gate everywhere: the
   checklist page's section heading (`## ㊶ <feature> — <what it proves>`), the chat message,
   the board's Stage cell (`🧪 Gate ㊶`), plan notes, the in-flight memory and the landing
-  commit / closed line. The counter is PER PROJECT and only moves forward, across days,
-  machines and accounts: every new section takes the next unused number — a fix issued as a
-  new section during a gate, and a pulled section re-issued fresh, each get a NEW number too
-  (a number is never re-used for different content). Main may name the number at dispatch
-  ("จะขึ้น gate ㊶") so the owner can refer to it early. **Where the counter lives:** the
-  last number used is written into the project's in-flight memory each time a section opens;
-  a resuming session reads it there before numbering. **After ㊿** (Unicode has no circled
-  numeral past 50) numbering wraps to ① again — the board then holds only open sections, so
-  skip any number still open on it — and Main says "เลขวนกลับเป็น ①" once when it happens.
+  commit / closed line. **The counter is PER PROJECT and PER DEPLOY ROUND (owner 2026-09-17:
+  "อยากให้เลขขึ้นใหม่ทุกครั้งที่ push เพราะถือว่าส่ง Deploy แล้ว")** — one push = one deploy =
+  one patch-note version, so gates are numbered within that round. Inside a round the counter
+  only moves forward, across days, machines and accounts: every new section takes the next
+  unused number — a fix issued as a new section during a gate, and a pulled section re-issued
+  fresh, each get a NEW number too. **After a deploying push succeeds, the next gate starts
+  again at ①.** A gate still OPEN at push time keeps its number until it closes (its feature
+  is not in that deploy); the new round skips any number still open on the board so two open
+  sections never share a glyph. **Chat and the board use the bare glyph** (㊶); **durable
+  records — plan notes, in-flight memory, commit bodies, closed lines — prefix the round's
+  upcoming patch-note version** (`V6.3 ㉓`) so a glyph read later is never confused with the
+  same glyph from another round. Main may name the number at dispatch ("จะขึ้น gate ㊶") so
+  the owner can refer to it early. **Where the counter lives:** the round's version and the
+  last number used are written into the project's in-flight memory each time a section opens
+  and reset there at each push; a resuming session reads them before numbering. **Past ㊿ in
+  one round** (Unicode has no circled numeral beyond 50 — unlikely, a round runs ~25 gates)
+  numbering wraps to ①, skipping numbers still open, and Main says so once.
   **Clickable checklist page:** if the project carries a gate-checklist template (e.g.
   `docs/gate-checklist.html` reading a sibling `gate-checklist.js` items file), overwrite
   the items file for this gate (`## <section>` strings become headers) and hand the user a
