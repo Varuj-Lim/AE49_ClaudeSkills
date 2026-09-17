@@ -174,7 +174,15 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   itself, with no "Reset ticks" from anyone. Main's side of that rule: when a section is
   re-added or an item reworded, SAY which items are new or changed (they are the unticked
   ones), never ask the owner to reset, and never reword a passed item cosmetically — a
-  changed text is a fresh test in the owner's eyes. **When the page exists, do NOT print
+  changed text is a fresh test in the owner's eyes. **A ruling or fix given DURING a gate
+  goes on the board as a NEW section — never into the section under test** (owner
+  2026-09-17, after ㉔ was added beside ㉓: *"ถ้าผมสั่งแก้อะไรให้ขึ้น Gate ใหม่ ไม่ใช่เอาไปแก้
+  ของเดิมให้ตรวจซ้ำ เพราะบางทีผมตรวจผ่านไปแล้วมันจะงง"*): when the owner asks for a change
+  while ㉓ is open, the fix lands as ㉔ with ONLY the items that prove that fix; ㉓'s items
+  stay word-for-word (passed ones keep their ticks, unchecked ones stay open); an item the
+  fix makes obsolete is REMOVED from ㉓, not reworded; ㉓ is dropped when its feature
+  lands, ㉔ when the fix lands — so a section on the board is never edited underneath a
+  reader. **When the page exists, do NOT print
   the checklist items in chat** (user rule, 2026-07-23): the chat message carries only
   the link, the item count, and any gate-specific notes (seeded values, cautions, which
   items are new since the last look).
