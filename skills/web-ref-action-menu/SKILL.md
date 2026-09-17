@@ -107,6 +107,30 @@ Separate sections with one thin divider (`my-1 border-t border-gray-100`), in th
 - Don't hide a temporarily blocked action, and don't list a never-permitted one.
 - Don't add Escape handling or an enter/exit animation without a ruling.
 
+## Row ↔ view parity (owner ruling 2026-09-17)
+
+**A record's list row and its view surface offer the SAME set of actions — always.** Whatever
+a row's ⋮ (plus its inline decision icons and its job-navigation verb) can do, the record's
+view page header (its decision icons + Edit pill + header ⋮) — or, for a record that opens in
+a detail modal, that modal's header ⋮ + footer — can do too, and vice versa. Clicking a row to
+open the record must never LOSE a verb; it is the same record with more room. The owner's words:
+*"ในหน้าตาราง พอกด Row เพื่อเข้าไปใน View จะต้องมี Function เท่ากัน"* — found when
+`/attendance/orders` rows offered Edit · Cancel · Restore · Delete while the order's view page
+offered only the decisions, Edit and Cancel.
+
+The only two exemptions:
+- **View** itself — you are already on the view; a row's "View"/row-click has no counterpart.
+- **Bulk-toolbar pills** (`Approve (n)`, `Delete (n)`, …) — they act on a selection, not one
+  record; the per-record verb they aggregate must still exist on both surfaces.
+
+The same WHO/STATE gate governs both surfaces (hide by who you are, dim by record state with
+the same reason string), the same confirm opens from both, and the same service call runs —
+the view surface reuses the list page's handlers or the shared service, never a second
+implementation. A project's audit topic carries a parity detector: for every record type with
+a list and a view, diff the two verb sets; any verb on one side only (other than the two
+exemptions) is a finding.
+
+
 ## Pair with an audit
 
 Each hub's project audit carries (or adds) an action-menu topic: inventory every action
