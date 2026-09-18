@@ -109,7 +109,10 @@ Owner, on the draftsman order view's Parts row (clock 16px beside ⊖ ⊗ 20px):
 The cluster's size is the decision size where decisions are present (AE49: `DECISION_ICON.row`
 in rows); a cluster with no decision keeps its project's management size. Pills are their
 own cluster kind: a pill's leading glyph is sized by the pill, and pills beside pills share
-the pill size. An audit detector flags any cluster that mixes two sizes.
+the pill size — and that size is the DECISION pill's (the `md` rung) whenever a decision pill
+sits in the cluster: a View / Edit navigation pill beside Approve / Reject is `md` too, never
+the small header pill (owner 2026-09-18, the project-approvals popup: *"Icon View ขนาดไม่เท่ากับ
+Approve Reject"*). The small header pill remains only for clusters with no decision pill. An audit detector flags any cluster that mixes two sizes.
 
 ## Don't
 
