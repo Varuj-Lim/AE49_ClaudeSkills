@@ -89,16 +89,22 @@ On a list whose bulk toolbar appeared above the table the moment a row was ticke
 search, a filter, a toggle, a sort, a page change or a selection does may insert, remove or resize anything
 above or beside the table.
 
-- **The selection toolbar takes the FILTER BAR's slot — it never gets a row of its own.** While one or more
-  rows are ticked, the bar that says "N selected" and carries the bulk verbs renders IN PLACE of the filter
-  bar, at the same height; clearing the selection brings the filters back. Both layers are ALWAYS rendered,
-  stacked in one grid cell (`grid` on the wrapper, both children `[grid-area:1/1]`), and the inactive layer
-  is `invisible` + `inert` — hidden from pointer, keyboard and screen reader while it keeps its box — so the
-  row is always as tall as its taller layer and never changes height at any width. This is the same trick
-  `web-ref-filter-format` R4 uses to keep a pill's width fixed. Filters stay applied while the bar is up
-  (the URL still holds them); to change them the user clears the selection first, as in Gmail and every
-  Material table. Never render the bar conditionally above the table, never push the table down, never
-  overlay the header row.
+- **The selection cluster lives at the RIGHT END of the filter row — it never gets a row of its
+  own and never covers the filters.** "N selected" and the bulk verbs (`Clear selection` first, then
+  the decisions, then the destructive one) sit as the last flex child of the toolbar row (`ml-auto`),
+  the search box and filter pills stay left-aligned where they always were, and BOTH stay usable
+  at once — a user may narrow the list while rows are ticked. The cluster is ALWAYS laid out:
+  when nothing is ticked it is `invisible` + `inert` + `aria-hidden` (its box stays, its buttons
+  are unreachable), so the row's height and its line-wrapping are identical before and after the
+  first tick at every window width — the same trick `web-ref-filter-format` R4 uses to keep a
+  pill's width fixed. Its buttons are the same height family as the filter pills (no padded card,
+  no border) and its clear button reads `Clear selection` so it cannot be confused with the
+  filters' `Clear (N)` beside it. Never render the cluster conditionally, never insert a bar
+  between the toolbar and the table, never push the table down, never overlay the header row.
+  *(First cut, 2026-09-18 morning: the cluster REPLACED the filter row in place, Gmail-style; the
+  owner refused it the same evening at gate ⑲ — "ถ้า Bulk Selection แล้วไปทับ Search / Filter มันจะมี
+  ปัญหาได้ ถ้าเราอยากให้ทั้ง 2 อย่าง" — and chose the right-aligned cluster over a permanently
+  reserved row, which would have cost every list ~38px of empty band.)*
 - **The scroll container reserves its scrollbar** — `scrollbar-gutter: stable` on the element that scrolls
   the table (a fill-mode card's scroll wrapper; the page's main element otherwise), so a vertical scrollbar
   appearing or disappearing with the row count does not change the table's width.

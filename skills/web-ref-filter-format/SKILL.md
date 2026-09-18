@@ -97,9 +97,9 @@ matching icon. A funnel on a button labelled `Date range` is a lie.
 
 ## R4 · Wording and layout
 
-- DOM order: page header → tab strip → toolbar → advanced panel → table. **The bulk-action bar has no row
-  of its own:** while rows are ticked it renders IN PLACE of the toolbar, in the same stacked grid cell and at
-  the same height, so the table never moves (`web-ref-table-columns` T5, owner 2026-09-18).
+- DOM order: page header → tab strip → toolbar → advanced panel → table. **The bulk-action cluster has
+  no row of its own:** it is the LAST child of the toolbar row, right-aligned (`ml-auto`), always laid out
+  and merely invisible + inert while nothing is ticked, so the table never moves (`web-ref-table-columns` T5, owner 2026-09-18).
 - Toolbar order: search box → filter pills → `Clear (N)` → the row-count caption
   pushed right.
 - Placeholder: `Search by <field>, <field>…` — one real ellipsis character, never
