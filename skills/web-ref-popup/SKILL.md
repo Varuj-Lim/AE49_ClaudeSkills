@@ -62,8 +62,10 @@ Prefix `flex-1` when two buttons share a row. A read-only popup uses
   (owner ruling 2026-09-18, AE49 gate ④, the CP9901 print popup: *"ปุ่มทั้งหมด อยู่มุมบนขวาสุด
   ระดับเดียวกับชื่อ"*). Every header action — decision pills, View / Edit pills, the ⋮, the
   X — is a child of `POPUP_HEADER_ACTIONS` inside `POPUP_HEADER`, beside the `<h3>` and
-  aligned to its top edge (`items-start`). The title + subtitle column is `min-w-0`, so the
-  SUBTITLE wraps when the cluster takes its room; a subtitle that would wrap badly DROPS the
+  aligned to its top edge (`items-start`). The title line holds ONLY the `<h3>` (`min-w-0`)
+  and the cluster: the SUBTITLE is a full-width line UNDER the header row, never inside the
+  title column — squeezed beside a wide cluster it wraps word-by-word (owner, same day, on
+  the PA9901 popup: *"ไม่ต้องย่อคำอธิบาย เพราะปุ่มมันอยู่ระดับเดียวกับ Title"*). Trim a subtitle only of
   parts the body already shows (a requester name beside a Requester field). A status pill is
   not a button — it sits below the header, never in the cluster. A cluster that still does
   not fit beside the title is too big for a header: move the secondary verbs into the ⋮
@@ -163,7 +165,8 @@ popup WITH it are both defects — and a mixed component is easy to get half rig
 ## Don't
 
 - Don't render `POPUP_HEADER_ACTIONS` as a second row under the subtitle — the cluster
-  belongs beside the title (owner 2026-09-18); wrap or trim the subtitle instead.
+  belongs beside the title (owner 2026-09-18); the subtitle goes on its own full-width line
+  under the header row, never squeezed into the title column.
 
 - Don't hand-type the overlay, card, title or button strings — import the token;
   a hub that has no token file yet creates it (the AE49 file is the model).
