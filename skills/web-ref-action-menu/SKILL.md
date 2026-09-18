@@ -98,6 +98,19 @@ Separate sections with one thin divider (`my-1 border-t border-gray-100`), in th
   variant for destructive); menu `w-40 bg-white border border-gray-200 rounded-lg shadow-lg py-1`;
   a dimmed item is one shared spelling (`MENU_ITEM_DISABLED` + `aria-disabled`).
 
+## One size per cluster (owner ruling 2026-09-18)
+
+Every control that sits in ONE action cluster — a table row's Actions cell, a list card's
+action group, a view-page or popup header cluster — shares ONE glyph size and ONE button
+box. A job-navigation icon (AE49's Add Time clock), the ⋮ trigger and the decision discs
+beside them are all drawn at the cluster's size; never a 16px icon next to a 20px one.
+Owner, on the draftsman order view's Parts row (clock 16px beside ⊖ ⊗ 20px): *"ขนาดของ Icon
+นาฬิกาไม่เท่ากับของกากบาทและขีด เอาให้เท่ากัน … เวลาเอาปุ่มมาวางข้างกันต้องมีขนาดเท่ากันเสมอ"*.
+The cluster's size is the decision size where decisions are present (AE49: `DECISION_ICON.row`
+in rows); a cluster with no decision keeps its project's management size. Pills are their
+own cluster kind: a pill's leading glyph is sized by the pill, and pills beside pills share
+the pill size. An audit detector flags any cluster that mixes two sizes.
+
 ## Don't
 
 - Don't render the menu `absolute` inside a cell; don't share one open-id across rows.
