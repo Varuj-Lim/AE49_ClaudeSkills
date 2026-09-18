@@ -64,7 +64,11 @@
     document.getElementById("reset").style.display = "none";
     return;
   }
-  var key = "ae49-gate-" + (data.feature || "unnamed");
+  // ONE fixed store, never keyed by `feature` / `title` — Main rewrites both at every board
+  // change, and a per-feature bucket made every tick vanish on refresh the moment that line
+  // changed (owner 2026-09-18: "กดติ๊กไปแล้วคุณส่งอันใหม่เข้ามา ผมเลยกด Refresh ที่ติ๊กอยู่หายหมดเลย").
+  // Ticks are keyed by item CONTENT (below), so one bucket is enough.
+  var key = "ae49-gate-ticks";
   document.getElementById("title").textContent = data.title || "Gate checklist";
   document.getElementById("slug").textContent = data.feature || "";
   // A tick is remembered by the CONTENT of its item (section heading + text), never by
@@ -81,6 +85,23 @@
   }
   var saved = {};
   try { saved = JSON.parse(localStorage.getItem(key) || "{}"); } catch (e) {}
+  // Migrate + recover: earlier builds of this page stored ticks under "ae49-gate-<feature>".
+  // Merge every such bucket into the fixed store (the content ids are the same), then drop
+  // the old keys — ticks made under a previous feature line come back instead of being lost.
+  try {
+    var legacy = [];
+    for (var li = 0; li < localStorage.length; li++) {
+      var lk = localStorage.key(li);
+      if (lk && lk.indexOf("ae49-gate-") === 0 && lk !== key) legacy.push(lk);
+    }
+    legacy.forEach(function (lk2) {
+      var old = {};
+      try { old = JSON.parse(localStorage.getItem(lk2) || "{}"); } catch (e) {}
+      Object.keys(old).forEach(function (id) { if (old[id]) saved[id] = true; });
+      localStorage.removeItem(lk2);
+    });
+    if (legacy.length) localStorage.setItem(key, JSON.stringify(saved));
+  } catch (e) {}
   var list = document.getElementById("list");
   list.innerHTML = "";
   var boxes = [];

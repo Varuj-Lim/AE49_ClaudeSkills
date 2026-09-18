@@ -192,7 +192,7 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   (owner 2026-09-16: *"ทำไมบางทีเปิดมาเหมือนมีที่กาค้างไว้อยู่ ทั้ง ๆ ที่บางอันเป็นของใหม่"* — the
   page used to key ticks by number, so after a board rewrite the new item 3.2 wore the
   tick of whatever had been 3.2 before): the template keys each tick by a hash of its
-  section heading + item text, prunes keys whose item is gone, and so an unchanged item
+  section heading + item text, keeps them in ONE fixed browser bucket (`ae49-gate-ticks`) that is NEVER derived from the board's `feature` / `title` line (owner 2026-09-18: *"กดติ๊กไปแล้วคุณส่งอันใหม่เข้ามา ผมเลยกด Refresh ที่ติ๊กอยู่หายหมดเลย"* — a per-feature bucket emptied every tick the moment Main rewrote that line; the page now merges any old per-feature bucket back on load), prunes keys whose item is gone, and so an unchanged item
   keeps its tick across rewrites while a reworded or new one comes back unticked — by
   itself, with no "Reset ticks" from anyone. Main's side of that rule: when a section is
   re-added or an item reworded, SAY which items are new or changed (they are the unticked
