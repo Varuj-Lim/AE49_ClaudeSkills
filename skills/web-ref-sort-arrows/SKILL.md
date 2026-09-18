@@ -20,6 +20,32 @@ That is the point of the ruling, not a bug — an auditor or a new build must no
 "fix" it back. The inversion lives in exactly ONE place per project (the shared
 sort-icon component), so conforming and reverting are both one-line changes.
 
+## Which tables sort — every list, every ordered column (owner ruling 2026-09-18)
+
+The owner, finding a list with no sort at all: *"ผมเจอว่าบางตารางไม่มี Function Sort เช่น /account/overtime"*.
+Until then the rule lived only by example (a project's list-page template shows a sortable table, and
+~22 of its lists sort while ~11 do not). It is a rule now:
+
+- **Every LIST or QUEUE table sorts** — any page that lists records the user searches, filters or
+  decides on (directories, order / claim / ticket lists, approval queues, logs). A detail page's
+  line items, a report matrix, a print sheet, a drag-to-reorder list and an engineering grid do not
+  (they have an order of their own).
+- **Every column whose value has a natural order sorts** — text, code, name, date, time, number,
+  status (in the status set's own canonical order, `web-ref-option-order`, never alphabetical),
+  a person (by the displayed name). Columns that do not: the checkbox, Actions, a free-form
+  multi-value cell, a cell that renders a component with no single value.
+- **One default sort per table, stated and stable** — newest first for anything dated (the
+  reference is the record's created / filed date, with its code as the tie-break), name for a
+  directory. A table never shows rows "in query order"; the default is the first header state.
+- **Sort state is URL state** (the project's list-URL rule — `?sort=` / `?dir=`), written only
+  when off default, so a shared link and Back/Forward restore it like a filter.
+- **Sorting moves nothing but the rows** — the header keeps its width and its arrow slot
+  (`web-ref-table-columns` T4); the arrow follows this file's direction rule.
+- The header is the ONLY sort control (no "Sort by" in the toolbar) and every sortable header is
+  the same affordance on every page — the project's `thSortableClass` + `<SortIcon>`.
+- A project converts its unsorted lists in one sweep and keeps a detector in its audit
+  (a list-page table with no `<SortIcon>` is a finding); new lists follow this from birth.
+
 ## Rules that keep it honest
 
 - **One component per project renders all three states.** Never a hand-typed
