@@ -24,7 +24,7 @@ hub keeps its **own token file and reference implementation** (named in that hub
 | `POPUP_ACTIONS_ROW` | Bottom button row (`flex gap-3`). |
 | `POPUP_BTN.primary / .secondary / .danger / .warning / .approve / .approveBlocked` | The button tones — the POPUP rendering of the project's button ladder (full-width, `py-2`), composed from the ladder's tone map so a colour lives in ONE file. |
 | `POPUP_CLOSE_FULL` | Full-width single Close (read-only footer). |
-| `POPUP_PILL` (+ `_DANGER`) | Small pill for a header action (View eye link, Edit dates). |
+| `POPUP_PILL` (+ `_DANGER`) | Small pill for a header action (View eye link, Edit dates) — **only in a header that holds NO decision pills.** Beside worded decision pills the header link (View) is the project's md primary pill with a 16px glyph, because a cluster is ONE size throughout (owner 2026-09-18, AE49 gate ⑱: a small View beside Approve / Reject read as a different kind of control). |
 | `POPUP_CLOSE_ICON` | Square X icon-button (top-right corner variant). |
 | `POPUP_ERROR` | Inline error banner (red; swap the three colour words for amber / emerald). |
 

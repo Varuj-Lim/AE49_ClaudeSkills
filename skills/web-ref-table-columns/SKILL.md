@@ -81,6 +81,33 @@ A column's width does not change with a search, a filter, a tab, a sort directio
 the loading or empty state, the number of selected rows, or a row's hover or expanded state. The
 empty state spans every column in one cell (`colSpan`) and leaves the header widths alone.
 
+## T5 · Nothing moves the TABLE either (owner ruling 2026-09-18, AE49_Hub)
+
+On a list whose bulk toolbar appeared above the table the moment a row was ticked, the owner:
+*"ตารางห้ามขยับ ไม่ว่าจะ Search Filter อะไรก็ตาม … รวมถึงการกด check box หน้า row เพื่อทำ Bulk Selection ด้วย
+ห้ามให้ตารางขยับ"*. T1–T4 keep the COLUMNS still; T5 keeps the table's POSITION and SIZE still. Nothing a
+search, a filter, a toggle, a sort, a page change or a selection does may insert, remove or resize anything
+above or beside the table.
+
+- **The selection toolbar takes the FILTER BAR's slot — it never gets a row of its own.** While one or more
+  rows are ticked, the bar that says "N selected" and carries the bulk verbs renders IN PLACE of the filter
+  bar, at the same height; clearing the selection brings the filters back. Both layers are ALWAYS rendered,
+  stacked in one grid cell (`grid` on the wrapper, both children `[grid-area:1/1]`), and the inactive layer
+  is `invisible` + `inert` — hidden from pointer, keyboard and screen reader while it keeps its box — so the
+  row is always as tall as its taller layer and never changes height at any width. This is the same trick
+  `web-ref-filter-format` R4 uses to keep a pill's width fixed. Filters stay applied while the bar is up
+  (the URL still holds them); to change them the user clears the selection first, as in Gmail and every
+  Material table. Never render the bar conditionally above the table, never push the table down, never
+  overlay the header row.
+- **The scroll container reserves its scrollbar** — `scrollbar-gutter: stable` on the element that scrolls
+  the table (a fill-mode card's scroll wrapper; the page's main element otherwise), so a vertical scrollbar
+  appearing or disappearing with the row count does not change the table's width.
+- **After its first render the table is never swapped out.** A refetch, a filter that matches nothing, or
+  a toggle renders inside the same `<table>` (the `colSpan` empty row of T4, a row-level busy state); the
+  card does not collapse to a spinner or a message once it has shown a header.
+- **A count that changes with the data never sits on the row above the table** unless its slot has a fixed
+  width — `web-ref-filter-format` R4 keeps pills and toggles from carrying one.
+
 ## Rules that keep it honest
 
 - One scale per project, defined once in shared code, imported everywhere — never re-typed.
@@ -93,7 +120,7 @@ empty state spans every column in one cell (`colSpan`) and leaves the header wid
 | Project | Facts skill | Scale lives in |
 |---|---|---|
 | NuriHub | `nurihub-ref-table-columns` — created with the scale (planned 2026-09-11) | the shared table helpers, once built |
-| AE49_Hub | not adopted yet (handoff 2026-09-11) | its `TableCard` + `lib/constants/tableStyles` are the natural home |
+| AE49_Hub | `ae49Hub-ref-parameter-table` (the R&D footing grids, where the scale was seeded 2026-09-11) + `ae49Hub-ref-list-page` §Table columns (the list tables — adoption began 2026-09-18 with Overtime + Leave Orders under T5, plan `table-no-shift`; the rest convert list by list) | `COL_PX` in `lib/constants/tableStyles.ts`, rendered through `TableCard`'s `tableClassName` / `minWidthPx` |
 | future siblings | create with the first table | copy the shape: one scale, one flexible column |
 
 Filter pills have their own width rule in `web-ref-filter-format` R4 — a pill never changes width
