@@ -58,6 +58,16 @@ Prefix `flex-1` when two buttons share a row. A read-only popup uses
 
 - **Read-only detail popup** — View / Edit ride in the top-right header
   (`POPUP_HEADER` → `POPUP_HEADER_ACTIONS`); a full-width **Close** at the bottom.
+- **The header cluster sits ON THE TITLE LINE, top-right — never on a row of its own**
+  (owner ruling 2026-09-18, AE49 gate ④, the CP9901 print popup: *"ปุ่มทั้งหมด อยู่มุมบนขวาสุด
+  ระดับเดียวกับชื่อ"*). Every header action — decision pills, View / Edit pills, the ⋮, the
+  X — is a child of `POPUP_HEADER_ACTIONS` inside `POPUP_HEADER`, beside the `<h3>` and
+  aligned to its top edge (`items-start`). The title + subtitle column is `min-w-0`, so the
+  SUBTITLE wraps when the cluster takes its room; a subtitle that would wrap badly DROPS the
+  parts the body already shows (a requester name beside a Requester field). A status pill is
+  not a button — it sits below the header, never in the cluster. A cluster that still does
+  not fit beside the title is too big for a header: move the secondary verbs into the ⋮
+  (`web-ref-action-menu`).
 - **Confirm / form popup** — Cancel + Save / Delete / Import in a bottom
   `POPUP_ACTIONS_ROW`; the inline `POPUP_ERROR` sits DIRECTLY ABOVE that row.
 
@@ -151,6 +161,9 @@ popup WITH it are both defects — and a mixed component is easy to get half rig
 ```
 
 ## Don't
+
+- Don't render `POPUP_HEADER_ACTIONS` as a second row under the subtitle — the cluster
+  belongs beside the title (owner 2026-09-18); wrap or trim the subtitle instead.
 
 - Don't hand-type the overlay, card, title or button strings — import the token;
   a hub that has no token file yet creates it (the AE49 file is the model).
