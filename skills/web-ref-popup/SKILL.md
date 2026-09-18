@@ -66,10 +66,13 @@ Prefix `flex-1` when two buttons share a row. A read-only popup uses
   and the cluster: the SUBTITLE is a full-width line UNDER the header row, never inside the
   title column — squeezed beside a wide cluster it wraps word-by-word (owner, same day, on
   the PA9901 popup: *"ไม่ต้องย่อคำอธิบาย เพราะปุ่มมันอยู่ระดับเดียวกับ Title"*). Trim a subtitle only of
-  parts the body already shows (a requester name beside a Requester field). A status pill is
-  not a button — it sits below the header, never in the cluster. A cluster that still does
-  not fit beside the title is too big for a header: move the secondary verbs into the ⋮
-  (`web-ref-action-menu`).
+  parts the body already shows (a requester name beside a Requester field). A status pill or
+  a kind chip is not a button — it sits below the header, never on the title line. The title
+  is never truncated, clipped or overlapped by the cluster (owner, same day: *"บรรทัดชื่อต้องไม่โดน
+  บังด้วยปุ่ม หรือ Tag"*): a card whose content width cannot hold the longest realistic title
+  plus the widest cluster goes one card width up (`sm` → `md` → `lg` → `wide`), and a
+  cluster that still does not fit is too big for a header — move the secondary verbs into
+  the ⋮ (`web-ref-action-menu`).
 - **Confirm / form popup** — Cancel + Save / Delete / Import in a bottom
   `POPUP_ACTIONS_ROW`; the inline `POPUP_ERROR` sits DIRECTLY ABOVE that row.
 
