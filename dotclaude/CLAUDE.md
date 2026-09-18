@@ -62,6 +62,13 @@ line of its calculation spec was derived from. Both would have been unrecoverabl
   Thai date may be one day ahead of a UTC clock, so "วันนี้/เมื่อวาน" follow the Thai
   calendar day. Store absolute dates in artifacts as usual; this rule is about how we
   talk.
+- **A time you WRITE must come from the CLOCK, never from an estimate (rule 2026-09-18,
+  applies in every project).** Before you put a time into anything — memory notes, chat,
+  plans, patch notes — run `date` (Bash) or `Get-Date` (PowerShell) and use THAT value in ICT.
+  Never add up "how long things took" and never carry a stamp forward from an earlier note.
+  Why: on 2026-09-18 Main wrote "02:20" while the owner's screen showed 14:20 — every stamp
+  since noon had been an estimate stacked on an estimate, ~10 h adrift, and the whole day's
+  memory had to be corrected ("ทำไมคุณจดเวลาเป็นเวลาต่างประเทศ ที่นี้ที่ไทยนะ").
 - **Talk to me in THAI — everything, every turn (rule 2026-08-27, supersedes the
   2026-08-11 complex-explanation-only rule).** Default conversation language is Thai
   for ALL replies — answers, questions, confirmations, status updates, proposals —
