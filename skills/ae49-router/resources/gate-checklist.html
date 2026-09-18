@@ -107,14 +107,16 @@
   var boxes = [];
   var live = {};   // tick ids present on this board — anything else in `saved` is pruned below
   var section = "";
-  var n = 0;   // parent item counter (the "≤ 7 per feature section" rule counts these)
+  var n = 0;   // parent item counter (the "≤ 7 per feature section" rule counts these) — RESTARTS at every section header
   var sub = 0; // sub-step counter, reset at every parent; an item string starting with "- " is a sub-step
   data.items.forEach(function (item) {
     if (typeof item === "string" && item.indexOf("## ") === 0) {
       var h = document.createElement("h2");
       h.textContent = item.slice(3);
       list.appendChild(h);
-      section = item; // numbering keeps counting across sections, as before
+      section = item; n = 0; sub = 0; // item numbers restart at 1 under every section header (owner 2026-09-18:
+      // a running count moved every item's number whenever a landed section was dropped, so "ข้อ 11" pointed
+      // somewhere else after each rewrite) — an item is referenced as "<circled numeral> ข้อ N", e.g. ⑫ ข้อ 5
       return;
     }
     var isSub = typeof item === "string" && item.indexOf("- ") === 0 && n > 0;

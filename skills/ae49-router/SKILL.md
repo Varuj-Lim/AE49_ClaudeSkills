@@ -140,8 +140,12 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   **Checklists are written with caveman mode OFF** — every item a full, self-explanatory
   sentence ("Open X → do Y → you should see Z"); never compressed fragments, never a
   prose-run summary of items. **Checklist format:** each item on its own line as
-  `N. [ ] <sentence>` with ONE check per item, numbered sequentially 1..N through the
-  whole list (numbering continues across section groups, so "item 13" is unambiguous);
+  `N. [ ] <sentence>` with ONE check per item, **numbered 1..N WITHIN each feature section —
+  the count restarts at 1 under every section header** (owner 2026-09-18: a count running across
+  sections moved every later item's number whenever a landed section was dropped, so "ข้อ 11"
+  pointed at a different item after each board rewrite — *"ลำดับข้อจะขยับทำให้ผม Reference หาคุณ
+  ลำบาก และ สับสนได้ง่าย"*). An item is referenced by its section's circled numeral plus its
+  number — "⑫ ข้อ 5", never a bare number — and the checklist page numbers it the same way;
   when a list must exceed ~8 items it groups under short bold section headers.
   **Checklist budget (user rule 2026-08-13): aim for 5–7 items; only a genuinely
   complex gate may exceed that, and it should never reach 10. The budget is PER
@@ -217,11 +221,11 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
   Print items in chat only when the project has no checklist page. The items file is
   gitignored per-gate scratch: never commit it. **The board holds ONLY the open sections
   (owner 2026-09-16: "ล้าง Gate checklist เวลาทำเสร็จแล้ว เหลือแค่ที่ใช้ — ยาวจนจะเป็น 100 แล้ว"):
-  the moment ONE feature's section passes and lands, delete that section from the file
-  and renumber the rest from 1 — never let passed sections accumulate under new ones (the
-  2026-09-15/16 board reached 92 items across twelve sections before this rule). The
-  renumbering costs nothing now that ticks follow content, not numbers — just say which
-  sections remain. **Every item names the exact account to
+  the moment ONE feature's section passes and lands, delete that section from the file —
+  never let passed sections accumulate under new ones (the 2026-09-15/16 board reached 92 items
+  across twelve sections before this rule). Dropping a section moves NO other item's number
+  (numbers restart per section, 2026-09-18) and ticks follow content, so nothing else changes —
+  just say which sections remain. **Every item names the exact account to
   use** — "Sign in as Nattapat Hongbandalsuk (K. GORN)", "บัญชี RD ของคุณ" — never a
   placeholder such as "คน A" or "a non-RD employee" (owner 2026-09-16: "ทำไมไม่ระบุคนมาเลย");
   when a seed was made in somebody's name, the item says whose. **Record titles and
