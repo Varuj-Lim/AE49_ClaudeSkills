@@ -1,12 +1,19 @@
 # Patch-note body format (`body` field)
 
 The note's `body` is **not** plain paragraphs. Every hub's patch-notes page
-renders it through its `StructuredText` component, which reads each line by
+renders it through a small structured-text component, which reads each line by
 its **prefix and indentation**. Write the body to match this grammar, or
 lines come out as the wrong style (a plain paragraph silently renders as a
 **bold heading**, not a bullet — a real past mistake).
 
-## Line grammar (how `StructuredText` reads each line)
+**That component's NAME differs per hub — grep the patch-notes page, never assume.**
+AE49_Hub has `components/ui/StructuredText.tsx` (shared with the draftsman assignment
+guide); **NuriHub has `components/support/PatchNoteBody.tsx`** and no `StructuredText` at
+all. This line used to name `StructuredText` as if it were universal, which sent a 2026-09-22
+check grepping for a component that does not exist in NuriHub. The grammar below is the same
+in both — NuriHub's is a faithful port, verified line by line that day.
+
+## Line grammar (how that component reads each line)
 
 The body is split on `\n`. For each line, in this order:
 
@@ -15,8 +22,17 @@ The body is split on `\n`. For each line, in this order:
    text). This check runs *before* the heading check, so a `- ` line is
    always a bullet, at any indent depth.
 3. **Any other non-blank line** → a **heading**:
-   - **No indentation (level 0)** → top-level **bold** heading (the section name).
-   - **Indented** → a lighter **semibold sub-heading**.
+   - **No indentation (level 0)** → the section name, `font-bold text-gray-800`.
+   - **Indented** → a sub-heading, `font-bold text-gray-700`, pushed right `0.75rem`
+     per level.
+
+   ⚠️ **A sub-heading is NOT visually lighter than a section heading.** Same weight,
+   same size; the only difference on screen is the indent and one shade of grey. Read from
+   both hubs' source on 2026-09-22 (AE49's `TEXT.proseHeading` is
+   `text-sm font-bold text-gray-700`; NuriHub hard-codes the identical classes) after this
+   file had claimed "lighter semibold" for both. **So a sub-heading buys far less separation
+   than it reads like on paper** — prefer the default flat style, and use one only when a
+   section genuinely has sub-areas.
 
 **Indentation = 4 spaces per level.** Level is `floor(leadingSpaces / 4)`.
 Indentation also nudges bullets right, so bullets can nest under a sub-heading.
@@ -71,6 +87,10 @@ Settings (RD only)
 - [ ] One blank line (`\n\n`) between sections.
 - [ ] Sections are the app's nav areas, headline feature first — never one
       undifferentiated list.
+- [ ] The **≤ ~6 bullets** budget is counted per **level-0 section**. Sub-headings do
+      NOT reset it. NuriHub's V7.19 shipped 8 bullets under one `General`, split 5+3
+      by two sub-headings, on the reasoning that each sub-area was under the limit;
+      that is not what the rule says and it was corrected in place on 2026-09-22.
 
 ## Bullet style (owner ruling 2026-09-10 — "อ่าน Patch Note แล้ว Format เละ")
 

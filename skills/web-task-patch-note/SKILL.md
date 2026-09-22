@@ -4,7 +4,7 @@ description: >-
   The shared patch-note / release-note publishing workflow for every hub
   project (AE49_Hub, Nuri_Hub, and future siblings): gather the git changelog
   since the last note, draft a plain-language staff-facing change list in the
-  StructuredText body grammar, pick the version bump, dry-run, and publish to
+  structured body grammar, pick the version bump, dry-run, and publish to
   Firestore as part of the landing the owner already asked for — notifying all
   active users. Publishing needs NO separate approval of the wording (owner
   ruling 2026-09-10). Use
