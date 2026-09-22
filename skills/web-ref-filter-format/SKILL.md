@@ -56,7 +56,14 @@ matching icon. A funnel on a button labelled `Date range` is a lie.
   NuriHub: `type="search"` appears nowhere in that codebase, so every list page whose
   `Clear` also resets the search box is RIGHT, not deviant (verified 2026-09-10, the day
   this file was written).
-- The button **self-hides** at `count === 0`. Never render it disabled.
+- **The button is ALWAYS laid out.** At `count === 0` it goes `invisible` + `inert` +
+  `aria-hidden` + `tabIndex={-1}` + `disabled` — never `return null`, and never a
+  *visible* disabled button. A control that appears and disappears in the middle of
+  the toolbar row slides every pill after it and can re-wrap the row, which moves the
+  table (`web-ref-table-columns` T5). The label also reserves its widest counted form
+  with a measured `min-w-[…]`. *(2026-09-22, AE49 `table-columns-app-wide` B1 — this
+  supersedes the 2026-09-10 "self-hides / never disabled" clause: the `disabled` here
+  is invisible and exists only to take the control out of pointer and Tab reach.)*
 - **Multi-value group: ALL TICKED = inactive. An empty set shows nothing.** This
   is deliberately the opposite of the intuition that "unticking everything
   resets it" — the compensation is a `Select all` control, one click back to
