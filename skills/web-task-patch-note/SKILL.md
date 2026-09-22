@@ -5,9 +5,10 @@ description: >-
   project (AE49_Hub, Nuri_Hub, and future siblings): gather the git changelog
   since the last note, draft a plain-language staff-facing change list in the
   structured body grammar, pick the version bump, dry-run, and publish to
-  Firestore as part of the landing the owner already asked for — notifying all
-  active users. Publishing needs NO separate approval of the wording (owner
-  ruling 2026-09-10). Use
+  Firestore — notifying all active users. A note is published ONLY when the owner
+  asks for one, never automatically at a push (owner ruling 2026-09-22); one note
+  may cover several pushes. Publishing needs NO separate approval of the wording
+  (owner ruling 2026-09-10). Use
   whenever the user wants to write, draft, publish, or release a patch note /
   release note / changelog entry in ANY hub project, alongside that project's
   own patch-note skill, which supplies the facts: script path, author email,
@@ -65,9 +66,10 @@ Firebase service-account key from `.env.local` — it must exist.
 2. **Settle the base + this note's Git No. The author is fixed — don't ask.**
    - **Base commit or range** — default to step 1's `commitHash=`. State it in
      the report; the user may override with another SHA/tag/`HEAD~10`.
-   - **This note's Git No.** — when the note is published at a push (the normal
-     case), it is the commit that was just pushed; take it, don't ask. Ask only
-     when publishing OUTSIDE a push (a backdated or hand-picked note).
+   - **This note's Git No.** — the newest commit the note should cover. Since a note
+     is now asked for rather than fired at a push, it usually spans SEVERAL pushes:
+     take the last *feature* commit that is already LIVE, and say in the report which
+     pushes the range covers so the owner can see what the note is claiming.
      It is BOTH the end of the changelog range AND the `commitHash` stamped on
      the note (what the NEXT note diffs from). Suggest a sensible default —
      usually the last *feature* commit, not HEAD when trivial commits sit on
@@ -113,11 +115,31 @@ Firebase service-account key from `.env.local` — it must exist.
    write-back): a second approval of wording the owner will read in the app
    anyway only slows the landing down. Fix and re-dry-run as often as you need.
 
-   ⚠️ **The one thing that IS gated stays gated: a patch note goes out only as
-   part of a landing the owner asked for — normally the push itself.** Publishing
-   notifies every active user and cannot be recalled; a wrong note is corrected by
-   publishing another version, never by deleting. So never publish on your own
-   initiative, on a schedule, or before the work is actually live.
+   ⚠️ **A patch note is published ONLY when the owner asks for one (owner ruling
+   2026-09-22, replacing the 2026-09-10 "publish at the push" rule).** A push is no
+   longer a trigger. Publishing notifies every active user and cannot be recalled; a
+   wrong note is corrected by publishing another version, never by deleting. So never
+   publish on your own initiative, on a schedule, at a push, or before the work is
+   actually live.
+
+   **Why it changed:** on 2026-09-22 NuriHub shipped four notes in about eight hours
+   (V7.18–V7.21), each one ringing the bell for every active user. Staff who get four
+   notifications about button colours in an afternoon stop reading them, and the
+   channel is then unavailable for the release that actually matters. Notes are now
+   batched by the owner's judgement instead of by the deploy cadence.
+
+   **Batching needs no extra machinery** — the changelog is built from
+   `<last note's commitHash>..<this note's Git No.>`, so several pushes collapse into
+   one note with nothing lost. The anchor chain does the work.
+
+   **Main still SPEAKS UP, it just does not act.** When a landing carries something
+   the staff have a right to know — a change to what is recorded under their name, a
+   behaviour they will hit without warning, anything that compensates for a control
+   deliberately left out — say so in one line at the push and let the owner decide.
+   NuriHub's V7.21 is the worked example: `Sign in as` is developer-only and changes
+   nothing a staff member sees, but it leaves **no audit trail** by the owner's own
+   ruling, so the note was the only way anyone could learn that an action logged under
+   their name might not be theirs. Silence would have been the wrong default there.
    **Which CHANNELS a note reaches is a project FACT, not a rule — read it from
    that project's patch-note skill and never assume.** A note may well be
    bell-only: in AE49_Hub it is (`patch_note_published` is deliberately absent
