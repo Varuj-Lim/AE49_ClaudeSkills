@@ -63,6 +63,15 @@ kinds (the project's facts skill lists its real ones and their values):
   one-off width at the call site. The scale grows; call sites never invent widths.
 - Each scale width is chosen for the longest **realistic** value of its kind (the longest code
   format, a full date), so a well-formed value never truncates.
+- **The one sanctioned exception — a percentile cut** (owner ruling at AE49_Hub gate ⑱,
+  2026-09-22, Outsource Contacts): when a kind's longest values are one-off outliers (a
+  four-number phone list, a 342px category phrase) and taking every column at its longest
+  value would push the table past the screen, the owner may rule that a column is cut at its
+  90th percentile instead; the clipped rows then rely on T3 (one line, ellipsis, hover). The
+  cut is measured on the REAL distinct values, written into the kind's docblock as a stated
+  deviation from this rule (the basis, the percentile, how many values clip), and is never
+  applied silently — a kind cut this way is bound to the data it was measured on and is not
+  a general-purpose width for other pages to borrow.
 
 ## T3 · Too long for the column → one line, ellipsis, full value on hover
 
