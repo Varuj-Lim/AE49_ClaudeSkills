@@ -62,4 +62,5 @@ Until then the rule lived only by example (a project's list-page template shows 
 | Project | Facts skill | Component |
 |---|---|---|
 | AE49_Hub | `ae49Hub-ref-sort-arrows` (in-repo) | `components/ui/SortIcon.tsx` (AppIcon `chevron-down`/`chevron-up`/`sort-neutral`) |
-| NuriHub / future | create on first sortable table | copy the shape: one SortIcon component over the project's icon system |
+| NuriHub | `nurihub-ref-sort-arrows` (in-repo, written 2026-09-22 with audit topic 32) | `components/ui/SortIcon.tsx` (inline SVG — NuriHub has no icon registry) |
+| future | create on first sortable table | copy the shape: one SortIcon component over the project's icon system |
