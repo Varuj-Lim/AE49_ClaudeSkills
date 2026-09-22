@@ -91,6 +91,17 @@ even a one-line port "while I am here". Two sessions writing one checkout is how
 on 2026-09-08, a sibling session's commit swept another session's staged files
 along and a launcher was rewritten underneath a batch that was still running.
 
+**This rule is about PROJECT repos. The skills repo is the one exception (added
+2026-09-22).** The AE49_ClaudeSkills clone is not a project — it is the sync target
+for the very `~/.claude` files this session is already allowed to write, and "Skills
+repo sync" above REQUIRES the mirror, the commit and the push in the SAME turn. So
+whenever a session touches `~/.claude/skills/`, `~/.claude/agents/` or this file, it
+edits, commits and pushes in that clone as well, and that is NOT a cross-project
+write. Nothing else is excepted: a sibling hub's checkout is still off limits, and
+the handoff prompt below is still the deliverable for it. Written because on
+2026-09-22 a session stopped to reason the two rules against each other before a
+one-line doc fix — the answer belongs in the rule, not re-derived every time.
+
 When the OTHER project needs the change, the deliverable is a **handoff
 prompt**: a paste-ready block I hand to that project's own session — what to
 change, the exact source it may read (file path + commit in THIS repo), the
