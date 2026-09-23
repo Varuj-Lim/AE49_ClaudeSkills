@@ -107,8 +107,23 @@ matching icon. A funnel on a button labelled `Date range` is a lie.
 - DOM order: page header → tab strip → toolbar → advanced panel → table. **The bulk-action cluster has
   no row of its own:** it is the LAST child of the toolbar row, right-aligned (`ml-auto`), always laid out
   and merely invisible + inert while nothing is ticked, so the table never moves (`web-ref-table-columns` T5, owner 2026-09-18).
-- Toolbar order: search box → filter pills → `Clear (N)` → the row-count caption
-  pushed right.
+- Toolbar order: search box → filter pills → **the row-count caption** → `Clear (N)`, all
+  packed LEFT. **The caption is NOT pushed right** (owner ruling 2026-09-23, reversing the
+  `Clear (N)` → caption-pushed-right order this line carried until then).
+  - **Why it moved.** Pushed right, the caption floats alone in the empty middle of a sparse
+    toolbar with nothing to read it against — the owner's words were *"บางอันมันลอยๆอยู่เพราะคำสั่งไม่ครบ"*.
+    Sitting against the last filter pill it reads as the ANSWER to the filter just changed:
+    cause and effect side by side, which is the question the number exists to answer.
+  - **The cost, accepted with it in view:** `Clear (N)` clears the filters, and the caption now
+    sits between the pills and the button that clears them — a control separated from its
+    target. The owner was shown this and chose cause-and-effect adjacency over it.
+  - **`ml-auto` therefore belongs to the bulk-selection cluster**, which becomes the only member
+    of the right-hand group. Exactly ONE child of the toolbar row may carry it: two `ml-auto`
+    children split the free space between them and float the first one mid-row.
+  - **This reverses a rule both hubs had already built to.** NuriHub shipped twelve call sites
+    and AE49_Hub shipped its own `RowCountCaption` against the old order, correctly — neither
+    was in breach. A sibling asked to "fix" this is being asked to follow a CHANGED rule, not
+    to repair a mistake, and a handoff prompt must say so.
 - Placeholder: `Search by <field>, <field>…` — one real ellipsis character, never
   `...`, never a bare `Search`. Name the fields it actually matches.
 - Pill label: `<Label>: All` when inactive, `<Label> (N)` when active.
