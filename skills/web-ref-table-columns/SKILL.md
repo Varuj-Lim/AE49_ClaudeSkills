@@ -123,6 +123,56 @@ above or beside the table.
 - **A count that changes with the data never sits on the row above the table** unless its slot has a fixed
   width — `web-ref-filter-format` R4 keeps pills and toggles from carrying one.
 
+## T6 · A list page's chrome stays put; only the rows scroll (owner ruling 2026-09-23, NuriHub)
+
+**On a list page the page header, the toolbar and the column-header row do not move when the
+user scrolls. The rows scroll inside the table's own card.** The page itself does not scroll.
+
+The ruling came from the owner using AE49_Hub and asking why NuriHub's list pages behaved
+differently. They do: NuriHub scrolls its `<main>` element, so search, filters and — since the
+2026-09-18 cluster ruling — **the bulk-action verbs** all leave the screen on a long list. Tick a
+row eighty rows down and you must scroll back to the top to press the verb you ticked it for.
+
+### The shape, and why it is this one
+
+- The page root is a flex column that fills the viewport and lets its children shrink.
+- The table's card is the growing child: it fills what the chrome leaves and scrolls internally
+  on **both** axes.
+- The column-header row pins to the top of that scrollport.
+- **The card scrolls; the page does not.** There is exactly ONE scrollport on the screen, so a
+  mouse wheel does the same thing wherever the pointer is. A page that scrolls *and* a card
+  that scrolls is two scrollports and a guessing game.
+
+**AE49_Hub is the reference implementation** — `components/ui/TableCard.tsx`, a shared card with
+a `fill` prop, used at 61 call sites of which 31 opt in. A project adopting T6 ports that
+component rather than designing a new one, and a page opts in when it is ready: `fill` is
+per-call-site, so the conversion is page by page and never a single app-wide cutover.
+
+### Two traps AE49_Hub already hit, both closed in that component
+
+1. **The scrollport reserves its scrollbar** — `scrollbar-gutter: stable` on the element that
+   scrolls. Without it, a filter that drops the list from forty rows to three makes the vertical
+   bar disappear and **every column re-flows**: the table moving for a reason that has nothing to
+   do with the data in it. This is T5's rule applied to the card instead of the page.
+2. **A card must not scroll ITSELF.** Give it a fixed header, ONE `overflow-auto min-h-0` child,
+   and a fixed footer. A card whose own box scrolls drags its content up through its own padding
+   — the defect the owner caught at AE49_Hub's footing-legend gate, recorded in that project's
+   `projects/approvals` page. The same shape governs popups there.
+
+### What stays put includes the page title
+
+The chrome above the card is pinned **in full** — title, subtitle, header actions, tab strip and
+toolbar. Main argued at the ruling that a title costs vertical space for information that never
+changes, and proposed pinning only the toolbar and the column header. **The owner overruled it on
+the strength of using the built thing**: AE49_Hub has pinned the whole chrome for months and the
+cost is not felt. An argument from arithmetic loses to a year of use.
+
+### A table that is NOT a list
+
+Detail-page line items, report matrices and print sheets keep the natural-height card — they are
+read in place, they end, and there is nothing above them worth pinning. In AE49_Hub that is the
+default and `fill` is the opt-in, which is the right way round.
+
 ## Rules that keep it honest
 
 - One scale per project, defined once in shared code, imported everywhere — never re-typed.

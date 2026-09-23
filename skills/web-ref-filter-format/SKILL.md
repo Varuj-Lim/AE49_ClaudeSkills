@@ -125,6 +125,29 @@ matching icon. A funnel on a button labelled `Date range` is a lie.
   dimensions in one strip** — a payment state does not belong in a status strip.
 - The row-count caption in a page header counts **total**, never the filtered
   subset.
+- **EVERY list page carries a toolbar row-count caption, and it reads `{filtered} of {total}`**
+  (owner ruling 2026-09-23, NuriHub). Until that ruling this section said only WHERE a caption
+  sits, never whether one must exist or how it reads — so NuriHub had three shapes at once
+  (`{filtered} of {total}` on seven pages, `{filtered} results` on one, nothing on five) with
+  nobody breaking a rule. The owner's words were *"ควรเหมือนกัน แบบไหนก็ได้ มี หรือไม่มี แต่ต้องเหมือนกันทั้งหมด"*
+  and the direction was chosen deliberately: **adding the count to the pages that lack it beats
+  deleting it from the pages that have it**, because the number answers a question the user
+  actually has — did my filter do anything, and have I seen everything? `{filtered} results`
+  answers only the first half.
+  - **No trailing noun.** `12 of 40`, never `12 of 40 tickets` — one reservation has to serve
+    every page, and a noun makes each one a different width.
+  - **The caption reserves its width**, like `Clear (N)` and for the same reason: it sits on the
+    row directly above the table, so a caption that widens when the count crosses a digit
+    boundary re-lays the toolbar and drops the table (`web-ref-table-columns` T5). Reserve the
+    widest form the page can reach, and reserve it in ONE shared component — a per-page class is
+    how the three shapes happened.
+  - **The denominator is the unfiltered count of what THAT table shows**, which is not always the
+    collection it came from: a page showing one kind out of a mixed collection counts its kind, a
+    page behind a tab strip counts what the tab holds. Getting this wrong prints "4 of 91" on a
+    twelve-row list and reads as a bug in the filter.
+  - **A surface with no filter gets no caption.** A caption whose numerator can never differ from
+    its denominator is a constant wearing a filter's clothes. If a section already shows its own
+    count in its heading, that is the count.
 - A filtered list has **two mandatory empty states**:
   `total === 0 ? "No X yet." : "No X match your search or filters."` One flat
   message for both is how a user concludes the records are gone.
