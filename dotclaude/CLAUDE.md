@@ -15,6 +15,21 @@ user's request — invoke these five skills via the Skill tool, in order:
 
 Apply all five for the rest of the session.
 
+**A COMPACT is not a session start, and that is exactly why it hurts (rule 2026-09-23).**
+When the conversation is compacted, these five leave context with it: the summary survives,
+the skill BODIES do not, and nothing re-invokes them because no new session began. The
+session therefore keeps a perfect memory of WHAT it was doing and silently loses the rules
+for HOW. **Re-invoke all five immediately after any compact — before the next gate, report,
+landing or push.** A summary can carry a decision; it cannot carry a procedure it never
+mentioned.
+
+Written because on 2026-09-23, in the first gate after a compact, Main handed the checklist
+over as a chat message with 10 items. `ae49-router` says a gate is written into the project's
+clickable `docs/gate-checklist.js` page and handed over as a link, and that a section holds
+5–7 items and must never reach 10 — the owner had already said so twice. Neither rule was in
+context to be followed, and the owner spotted it before Main did (*เป็นเพราะ Compact Session
+แน่เลย*).
+
 **Emoji legend precedence (rule 2026-08-14):** `ae49-router` and `ae49-ref-report-format`
 both describe the four-column board and their column names agree, but their stage
 emoji sets differ. `ae49-ref-report-format` wins — it is the declared single source
