@@ -57,7 +57,7 @@ Which renders as:
 | **#** | Row number, 1… in the order shown | So the user can answer "ข้อ 3" without retyping the slug; renumber every run — never carry old numbers. |
 | **Feature / plan / task** | The plan slug, feature or standing concern — the name the user already uses for it | Never a sentence. Standing concerns (unpushed commits, a pending deploy, a handoff) get a row too. |
 | **Stage** | Emoji + two or three words | One emoji, from the legend below. Not a percentage, not a guess at time remaining. |
-| **Waiting On** | **WHO or WHAT unblocks it** | The most important column — it tells the user whether the ball is theirs. Say "Your gate" / "Your push" / "Your check" plainly when it is; name the agent or the other row (`#3 landing`) otherwise. |
+| **Waiting On** | **WHO or WHAT unblocks it** | The most important column — it tells the user whether the ball is theirs. Say "Your gate" / "Your push" / "Your check" plainly when it is; name the agent otherwise. **When the blocker is another feature / plan / task, write its ROW NUMBER on this board — `#3 landing` — never its name** (rule below). |
 | **Next** | The single next action once unblocked | An arrow chain (`audit → gate → land`) is fine. Not a list of everything left. |
 
 ### Stage emoji legend — same emoji, same meaning, every run
@@ -69,6 +69,20 @@ Which renders as:
 
 - **One row per item, always the same columns.** Adapt column *names* only if the domain
   genuinely differs (tickets, deploys); never drop "Waiting on".
+- **A blocker that is another item is written as its row number: `#N <event>`** (owner ruling
+  2026-09-23). When a row waits on another feature, plan or task — a plan in its `After:` chain,
+  a batch that shares its files, a gate that must land first — its *Waiting On* cell reads `#N`
+  plus the event that frees it (`#2 landing`, `#4 gate`, `#1 push`), where `#N` is THAT item's
+  row on THIS board. Never the item's slug or a prose description (not "row-count B3 landing
+  (shares Overtime page)"): the `#` column exists so the reader can jump to the blocker and see
+  its own state and its own *Waiting On* in one glance, which a name does not give. Consequences:
+  - **The blocker must have its own row.** If it is not on the board, add it — a row that points
+    at something the board does not show is a dead end.
+  - **Several blockers → several numbers**: `#2 + #5 landing`.
+  - **The WHY goes in *Next* or the prose, never in *Waiting On*** — "shares the Overtime page" is
+    a reason; the cell stays a pointer.
+  - Row numbers are renumbered every run (the `#` rule above), so every `#N` is re-derived from
+    the board being written — never copied from an earlier board.
 - **Never invent progress.** A background agent's result is unknown until its notification
   arrives — write "🔍 Audit running", never a predicted verdict or a percentage.
 - **The user's own rows go last** (their gate, their push) so the ask is the final thing read.

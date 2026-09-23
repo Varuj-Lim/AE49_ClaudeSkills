@@ -85,8 +85,10 @@ re-read from disk — never report from memory:
      (e.g. "Unpushed on main", a paused audit, tickets awaiting clarify).
    - **Stage** — ONE emoji from the set below + a 2–4 word label
      (e.g. "🧪 Your gate (8 items)", "🔨 Building", "🔍 In audit").
-   - **Waiting on** — whose move unblocks it: blocking plan names from the `After:`
-     chain, "your test", "your push", an audit verdict, or "—".
+   - **Waiting on** — whose move unblocks it: a blocking plan from the `After:` chain
+     written as ITS ROW NUMBER on this board (`#3 landing` — never its name; rule in
+     `ae49-ref-report-format`, owner 2026-09-23), "your test", "your push", an audit
+     verdict, or "—".
    - **Next** — one short phrase: what happens right after the wait clears
      (e.g. "pass → sweep → commit"). This column replaces the old after-table prose.
 
@@ -104,7 +106,8 @@ them and what is being waited on instead. The format lives THERE, not here.
 
 Board rows this lane adds on top of the shared legend:
 
-- **`⏸️ Blocked`** — name the unlanded plans from its `After:` chain in *Waiting on*.
+- **`⏸️ Blocked`** — point at the unlanded plans from its `After:` chain by their row numbers
+  in *Waiting on* (`#2 landing`); a blocker not yet on the board gets its own row first.
 - **`⏸️ On hold`** — a plan whose file says `Status: On hold`; say "on hold" in *Next*.
 - **`✅ Landed`** — show the newest 2–3 from `done/` so recent work stays visible.
 
