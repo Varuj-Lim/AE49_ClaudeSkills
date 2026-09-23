@@ -82,5 +82,5 @@ the bug this canon removes.
 | Project | Facts skill | What it records |
 |---|---|---|
 | AE49_Hub | `ae49Hub-ref-table-actions` §"Verbs on one selection" (+ `ae49Hub-ref-list-page` §Table columns for widths) | `components/ui/BulkCluster.tsx` (`bulkVerb`, `BulkSkipNote`), the pages carrying counted verbs, Leave's grandfathered bulk Reject, Asset Checkout's same-item refusal, the measured `min-w` table |
-| NuriHub | its own table-actions / list facts skill — named by its session when the handoff lands | its cluster component and pages |
+| NuriHub | `nurihub-ref-bulk-selection` (named 2026-09-23 when the handoff landed) | `components/ui/BulkSelectionCluster.tsx` (`bulkVerb`, `BulkSkipNote`); counted verbs on Sales Orders, Purchase Orders and Support Tickets; `withoutHover` splits on `/s+/`, not AE49's `/s+/` |
 | future siblings | create with the first bulk verb | copy the shape |
