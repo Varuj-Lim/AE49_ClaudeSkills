@@ -15,6 +15,13 @@ user's request — invoke these five skills via the Skill tool, in order:
 
 Apply all five for the rest of the session.
 
+**Sixth, the autopilot check (rule 2026-09-25):** right after the five, read
+`~/.claude/autopilot/<project-folder-name>/state.json`. If it says `"on": true`, this
+session is in `ae49-mode-autopilot` — invoke that skill's `tick` before touching anything
+else, and keep its NEVER list (no push of the deploy branch, no deploys, no migrations, no
+real-data deletes, nothing sent, no unsettled design decided). No file, or `"on": false`,
+means the normal attended workflow. The same check runs again right after any compact.
+
 **A COMPACT is not a session start, and that is exactly why it hurts (rule 2026-09-23).**
 When the conversation is compacted, these five leave context with it: the summary survives,
 the skill BODIES do not, and nothing re-invokes them because no new session began. The
@@ -32,7 +39,7 @@ context to be followed, and the owner spotted it before Main did (*เป็น�
 แน่เลย*).
 
 **Emoji legend precedence (rule 2026-08-14):** `ae49-router` and `ae49-ref-report-format`
-both describe the four-column board and their column names agree, but their stage
+both describe the five-column board and their column names agree, but their stage
 emoji sets differ. `ae49-ref-report-format` wins — it is the declared single source
 for report format.
 
