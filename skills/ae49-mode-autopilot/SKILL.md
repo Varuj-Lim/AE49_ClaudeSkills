@@ -43,12 +43,18 @@ and a decision log that is a FILE (a long unattended run WILL be compacted; the 
    git-synced per-person memory; `<person>` from the mapping in `.claude/memory/MEMORY.md`) with a
    header: since, scope, rulings, budget. Screenshots go to
    `~/.claude/autopilot/<project-folder-name>/<YYYY-MM-DD>/shots/` and are linked from the log as `file://`.
-6. **Start the heartbeat.** Agent completions wake Main by themselves; for the gaps, invoke the
+6. **Screen gates need the owner signed in first (owner 2026-09-25).** The emulator app's dev
+   login is a PASSWORD, and Main never types one. If any plan in the scope has screen items, open
+   the emulator app's login page in the built-in browser pane now (`http://localhost:<emulator app
+   port>/login`) and ask the owner to sign in there before leaving — the session stays in the
+   pane, and the owner's own "Sign in as" then covers other accounts. Without it every screen
+   item becomes WAITING-OWNER; say so.
+7. **Start the heartbeat.** Agent completions wake Main by themselves; for the gaps, invoke the
    `loop` skill self-paced with the prompt `/ae49-mode-autopilot tick` (the harness re-wakes Main via
    ScheduleWakeup). If the harness refuses the invocation, ask the owner to type
    `/loop /ae49-mode-autopilot tick` before leaving — and say so plainly; without a heartbeat the mode
    only moves when an agent finishes.
-7. **Say back, in Thai:** the scope as understood, the NEVER list in one line, the budget, that
+8. **Say back, in Thai:** the scope as understood, the NEVER list in one line, the budget, that
    nothing will reach production, how to switch off (`/ae49-mode-autopilot off` or "ปิดโหมด"), and
    that the morning report will list every decision. Then start the first `tick` at once.
 
@@ -81,6 +87,13 @@ and a decision log that is a FILE (a long unattended run WILL be compacted; the 
      the plan says the owner-only part is separate (a rules deploy before a push, for instance).
    Closed line: `gate P/N` counts Main-verified as passed; nothing is waived by Main — an item it
    cannot verify is WAITING-OWNER and named in the report.
+   **Two tiers (owner 2026-09-25, "(ก)"):** the board section keeps the owner's 5–7-item budget —
+   that page is what the owner reads in the morning and may re-click. On top of it Main runs an
+   **extended check set**, up to about 15 checks, drawn from the plan's Edge cases, the audit's
+   QUESTION / "cannot verify by reading" items and whatever only the running system can show
+   (a second job takes the next number, a duplicate-title folder maps its files, every file has
+   its story). It never re-checks logic the unit tests already cover. Each extended check is one
+   log line with its evidence and one line in the morning report; it is not written onto the board.
 5. **Forks.** When a choice arises — an agent's open question, a wording, a small design detail —
    choose the option the relevant canon recommends, or the safest cheaply-reversible one, and log it
    as a DECISION with the alternatives. A fork that changes product behaviour and is not cheaply
@@ -105,7 +118,8 @@ Set `on: false` in the state file, stop the heartbeat, then ONE report per `ae49
 
 1. **Decisions taken for you** — the table `# | Decision | Chosen | Alternatives | Undo | Risk`, every
    `D<n>` line, oldest first. This is the section the owner came for; it is never summarised away.
-2. **Landed** — slug, commit, gate score with the Main-verified count, evidence links.
+2. **Landed** — slug, commit, gate score with the Main-verified count, evidence links, and the
+   extended checks as one line each (what was checked → result).
 3. **Ready to push** — the commits on the deploy branch that the morning push would deploy, and any
    rules / functions / indexes deploy that must precede it.
 4. **Owner steps queued** — the one-sitting block(s), with the minutes they need.
