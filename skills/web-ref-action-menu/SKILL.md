@@ -21,6 +21,17 @@ stay visible; everything else goes behind one ⋮. Both hubs now follow this fil
 | Modal | the FOOTER keeps only the primary pair (Close, or Cancel + Save / the decision confirm) | secondary and destructive actions move to a ⋮ in the modal HEADER, beside the X — never into the footer |
 | Bulk toolbars · sidebar · pickers · sort / fold toggles | unchanged | — (out of scope) |
 
+- **Same verbs, different FORM — by surface (owner ruling 2026-09-25, NuriHub).** A table row
+  draws its visible verbs as ICONS, because a row is narrow. A record's view / detail page draws
+  the SAME visible verbs as WORDED PILLS at the cluster's pill size (`md`), because the page has
+  the room and a word needs no hover to be understood — *"ในหน้ารายละเอียดจะเป็นปุ่มใหญ่หน่อย และมี
+  คำพูดอยู่ในปุ่มด้วยเพราะพื้นที่เยอะ แต่ของตารางคงแบบเดิมเพราะตารางค่อนข้างแคบ"*. AE49_Hub already
+  did this (`DECISION_PILL` on its view pages, `DECISION_ICON.row` in rows); the table above said
+  only "the same decision verbs", so NuriHub's detail pages copied the row's icon form instead. What
+  does NOT change: WHICH verbs are visible versus in the ⋮ (the split above), row ↔ view parity,
+  the hide / dim rule, the confirms, and the ⋮ itself — a detail page's ⋮ trigger sits beside the
+  pills at their height ("One size per cluster"). A dimmed pill follows the same rule as a dimmed
+  item: `aria-disabled`, dimmed classes, the reason on hover, never native `disabled`.
 - **View is dropped** wherever the row itself or its name cell already opens the
   record; otherwise "View" is the menu's navigation item — never a second eye beside a ⋮.
 - **One item is enough for a ⋮** (owner 2026-09-15, overruling a "one-action floor"):
