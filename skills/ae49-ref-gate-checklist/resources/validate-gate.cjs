@@ -27,6 +27,9 @@ const err = (m) => errors.push(m), warn = (m) => warns.push(m);
 // One circled numeral: ①…⑳ U+2460–2473, ㉑…㉟ U+3251–325F, ㊱…㊿ U+32B1–32BF.
 const CIRCLED = "[①-⑳㉑-㉟㊱-㊿]";
 const TAGS = /^\[(EMU|PRD|APH)\] \([^)]+\) \{[^}]+\}/;
+// A check Main performs itself (reads a manifest, a log, a bucket) has no screen to click to:
+// `[ENV] (Main)` may stand without the {Nav -> Page} tag (owner 2026-09-25).
+const MAIN_TAGS = /^\[(EMU|PRD|APH)\] \(Main\)/;
 
 if (!d.feature) err("`feature` is missing");
 if (!d.title) err("`title` is missing");
@@ -35,7 +38,7 @@ if (d.closed) {
   // CLOSED payload — grammar per web-ref-gate-closed-format.
   if (!Array.isArray(d.items) || d.items.length) err("a closed payload must have `items: []`");
   const re = new RegExp(
-    "^\\S+ landed \\d{4}-\\d{2}-\\d{2} \\(gate \\d+/\\d+( dev \\+ \\d+/\\d+ prod)?; " +
+    "^\\S+ landed \\d{4}-\\d{2}-\\d{2} \\(gate \\d+/\\d+( dev \\+ \\d+/\\d+ prod)?( \\(\\d+ waived\\))?; " +
     "(commit [0-9a-f]{7,40}|commits [0-9a-f]{7,40}(/[0-9a-f]{7,40}){1,3}|commits [0-9a-f]{7,40}…[0-9a-f]{7,40} \\(\\d+\\))" +
     "(; deployed [a-z+]+)?\\)$");
   if (!re.test(d.closed)) err("`closed` does not match the grammar: " + JSON.stringify(d.closed));
@@ -70,15 +73,15 @@ if (d.closed) {
       subs++;
       if (subs > 5) err(`item ${n}: more than 5 sub-steps under one parent`);
       const body = it.slice(2);
-      if (/^\[(EMU|PRD|APH)\]/.test(body) && !TAGS.test(body)) err(`item ${n}: a sub-step that overrides the tags must give all three: [ENV] (account) {Nav -> Page}`);
+      if (/^\[(EMU|PRD|APH)\]/.test(body) && !TAGS.test(body) && !MAIN_TAGS.test(body)) err(`item ${n}: a sub-step that overrides the tags must give all three: [ENV] (account) {Nav -> Page}`);
     } else {
       parents++; subs = 0;
-      if (!TAGS.test(it)) err(`item ${n}: a parent item must open with the three tags [EMU|PRD|APH] (account) {Nav -> Page} — got ${JSON.stringify(it.slice(0, 50))}`);
+      if (!TAGS.test(it) && !MAIN_TAGS.test(it)) err(`item ${n}: a parent item must open with the three tags [EMU|PRD|APH] (account) {Nav -> Page} — or [ENV] (Main) for a check Main performs itself — got ${JSON.stringify(it.slice(0, 50))}`);
       if (/\((ANY|คน [A-Zก-ฮ]|a non-)/.test(it.slice(0, 40))) warn(`item ${n}: the account tag looks like a placeholder; name the exact account`);
     }
-    // The page renders text with textContent: markdown shows literally.
+    // The page renders `code` spans (URLs, paths, codes — 2026-09-25) but no other markdown.
     if (/\*\*[^*]+\*\*/.test(it)) warn(`item ${n}: **bold** renders as literal asterisks on the page`);
-    if (/`[^`]+`/.test(it)) warn(`item ${n}: backticks render literally on the page — quote values with "…" instead`);
+    if ((it.match(/`/g) || []).length % 2) warn(`item ${n}: an odd number of backticks — the page then shows every backtick literally`);
   });
   closeSection();
   if (!sectionCount) err("no section heading found");

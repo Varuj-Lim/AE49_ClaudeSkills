@@ -28,7 +28,7 @@ every gate, and the checkable half of them is a SCRIPT, which a compact cannot e
 | Script | Run | What it does |
 |---|---|---|
 | `resources/validate-gate.cjs` | `node ~/.claude/skills/ae49-ref-gate-checklist/resources/validate-gate.cjs docs/gate-checklist.js` — after EVERY write of the page | FAILS on: a section heading without a circled numeral; more than 7 parent items in a section; more than 5 sub-steps under a parent; a parent item without the three tags; a title without its numeral or environment; a closed payload off the grammar. WARNS on markdown (the page renders text literally) and on a section under 5 items. |
-| `resources/close-gate.cjs` | `node …/close-gate.cjs docs/gate-checklist.js --slug <slug> --score N/N --commit <sha>[,…] [--prod M/M] [--deployed web]` — at landing | Writes the CLOSED payload in `web-ref-gate-closed-format`'s grammar, keeping the gate's feature and title; the date comes from the clock in ICT; refuses a placeholder sha; validates before writing. |
+| `resources/close-gate.cjs` | `node …/close-gate.cjs docs/gate-checklist.js --slug <slug> --score P/N --commit <sha>[,…] [--waived W] [--prod M/M] [--deployed web]` — at landing | Writes the CLOSED payload in `web-ref-gate-closed-format`'s grammar, keeping the gate's feature and title; the date comes from the clock in ICT; refuses a placeholder sha; validates before writing. |
 | `resources/gate-checklist.html` | copied once into a project | The page template (see "Template adoption"). |
 
 The scripts do not replace the rules below — they cannot tell whether an item is a full Thai
@@ -190,6 +190,35 @@ ONE docs commit (no manual-test gate needed for a docs-only adoption):
    branch, explicit pathspec (e.g. `docs: adopt clickable gate-checklist page`).
 4. If the project defines a no-deploy backup push (e.g. `git push origin main:backup`),
    run it; a deploying push still needs the user's explicit go-ahead.
+
+## Waived and Main-verified items (owner 2026-09-25)
+
+The owner may decide not to click through a section — a feature they will rarely use, a
+production-only gate that costs real time, an item the audit and the automated tests already
+cover. Two outcomes exist, and both are RECORDED, never silently counted as passed:
+
+- **Waived** — the owner says an item (or the rest of a section) is not tested ("ไว้ใช้จริงค่อยดู",
+  "ข้ามได้"). The closed line then reads `gate 3/7 (4 waived)` (`web-ref-gate-closed-format`;
+  `close-gate.cjs --score 3/7 --waived 4`), and the plan's landing note lists WHICH items were
+  waived and why, so the next reader knows what production has never proved.
+- **Main-verified** — the owner asks Main to run the check instead ("(ก) Main รันเอง"): Main
+  creates TAGGED test data, drives the real system the way the button would (the same API route
+  or the same service call, never a shortcut that skips the code under test), verifies the result
+  with a read-only script, and reports the evidence. Such an item counts as PASSED; the landing
+  note says Main verified it and how. Main never verifies an item that needs the owner's eyes
+  (a rendering, a wording, a click path) — those are waived or tested, not "verified".
+
+Before either, Main says once, in plain words, what will NOT have been seen by anyone if the
+items are waived — then does what the owner decides.
+
+**Items Main performs itself** — reading a manifest, a bucket, a log, an execution — have no
+screen to click to. They open `[ENV] (Main)` without the `{Nav -> Page}` tag; `validate-gate.cjs`
+accepts that form. Keep them to one or two per section; the gate is the owner's smoke test.
+
+**Backticks are allowed** since 2026-09-25: the page renders `` `code` `` spans as code (URLs,
+file paths, codes, folder names), so a plan's Testing checklist can be copied onto the board as
+written. Other markdown (`**bold**`, links) still shows literally; an unpaired backtick shows
+every backtick literally — the validator warns on both.
 
 ## Test data
 

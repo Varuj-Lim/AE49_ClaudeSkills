@@ -38,9 +38,14 @@ diff is copied back. So, first:
    `git merge-base --is-ancestor <sha> HEAD`.
 3. If the fast-forward fails or a named commit is missing, **STOP and report** — never build
    on a stale or diverged base.
-4. A fresh worktree has no installed dependencies and no gitignored local env file: install
-   from the lockfile the project uses (e.g. `npm ci`) and copy the env file its build needs
-   (e.g. `.env.local`) from the main checkout. Never commit the env file.
+4. A fresh worktree has no installed dependencies: install from the lockfile the project
+   uses (e.g. `npm ci`). **Do NOT copy the main checkout's `.env.local`** (owner 2026-09-25):
+   in these hubs it holds the Admin SDK service-account key that can WRITE production, and a
+   builder must never hold it. If the project's build needs public values to prerender
+   (`NEXT_PUBLIC_*`), write a worktree `.env.local` containing ONLY lines whose names start
+   with `NEXT_PUBLIC_`, copied from the main checkout's file — nothing else. If the build still
+   fails only at prerender for want of a secret, run the typecheck and lint, report that the
+   full build is Main's to run in the hub checkout, and stop there. Never commit any env file.
 
 Report the base you started from and the base you built on.
 

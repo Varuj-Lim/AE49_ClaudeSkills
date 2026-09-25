@@ -32,7 +32,7 @@ window.GATE_CHECKLIST = {
 ## The closed line — grammar
 
 ```
-<slug> landed <YYYY-MM-DD> (gate <N>/<N>[ dev + <M>/<M> prod]; commit <sha>[; deployed <scope>])
+<slug> landed <YYYY-MM-DD> (gate <P>/<N>[ dev + <M>/<M> prod][ (<W> waived)]; commit <sha>[; deployed <scope>])
 ```
 
 Slot rules, in order, `; `-separated inside the parentheses:
@@ -41,7 +41,13 @@ Slot rules, in order, `; `-separated inside the parentheses:
    shipped, closed). Date is the landing date, `YYYY-MM-DD`.
 2. **`gate N/N`** — the checklist score. A double gate (dev then production)
    reads `gate 8/8 dev + 7/7 prod` — dev first, prod second, always those
-   two labels.
+   two labels. **Waived items (owner 2026-09-25):** when the owner WAIVES
+   some items instead of testing them, the score counts only the items that
+   PASSED and the slot ends with the waived count — `gate 3/7 (4 waived)`,
+   passed + waived = total. An item Main verified for the owner (a smoke run
+   the owner chose instead of clicking — `ae49-ref-gate-checklist` "Waived
+   and Main-verified items") counts as passed; WHICH items were waived or
+   Main-verified is written in the plan's landing note, not in this line.
 3. **`commit <sha>`** — the landing commit (short sha). Multiple landing
    commits: `commits <a>/<b>/<c>` slash-separated up to 4; five or more:
    `commits <first>…<last> (K)`.
@@ -55,6 +61,7 @@ Slot rules, in order, `; `-separated inside the parentheses:
 - `form-validation-bulk-mechanics landed 2026-08-27 (gate 7/7; commit 53ccc5f)`
 - `notification-senders landed 2026-08-27 (gate 8/8 dev + 7/7 prod; commits 719f641/444578f/0659dfe/e993c2e; deployed web+functions)`
 - `stock-model-per-warehouse-p3 landed 2026-08-28 (gate 6/6; commit abc1234; deployed web+rules)`
+- `tools-data-link-archiver-p2 landed 2026-09-25 (gate 3/7 (4 waived); commit 1a2b3c4)`
 
 ## Don'ts
 

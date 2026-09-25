@@ -26,6 +26,7 @@
   /* A long unbroken string (a URL, a path) must wrap inside the card, never push it wider (owner 2026-09-25):
      min-width:0 lets the flex item shrink below its longest word; overflow-wrap:anywhere gives that word break points. */
   .text { min-width: 0; overflow-wrap: anywhere; }
+  .text code { font-family: Consolas, "Courier New", monospace; font-size: .9em; background: #f3f4f6; padding: 0 .3em; border-radius: 4px; overflow-wrap: anywhere; }
   h1, h2, .slug { overflow-wrap: anywhere; }
   .footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
   .all-done { display: none; font-weight: 700; color: #059669; }
@@ -138,7 +139,18 @@
     num.textContent = idx + (isSub ? "" : ".");
     var text = document.createElement("span");
     text.className = "text";
-    text.textContent = isSub ? item.slice(2) : item;
+    // `code` spans (URLs, paths, codes) render as code; any other text is literal. An odd
+    // number of backticks means the author did not pair them — show the raw text then (2026-09-25).
+    var raw = isSub ? item.slice(2) : item;
+    var parts = raw.split("`");
+    if (parts.length > 1 && parts.length % 2 === 1) {
+      parts.forEach(function (p, k) {
+        if (k % 2) { var c = document.createElement("code"); c.textContent = p; text.appendChild(c); }
+        else if (p) text.appendChild(document.createTextNode(p));
+      });
+    } else {
+      text.textContent = raw;
+    }
     label.appendChild(cb); label.appendChild(num); label.appendChild(text);
     if (cb.checked) label.classList.add("done");
     cb.addEventListener("change", function () {

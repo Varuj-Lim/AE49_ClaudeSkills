@@ -74,9 +74,9 @@ re-read from disk — never report from memory:
 2. Detect live builds: implementers you spawned this session, plus `git worktree list`
    (a lingering feature-branch worktree from another session = build in progress or
    awaiting integration — say which you can't tell, don't guess).
-3. Output ONE table, one row per item, most-active first, FOUR columns (user format
-   ruling 2026-08-13): **# | Feature / plan / task | Stage | Waiting On | Next** (owner 2026-09-16: the
-   2026-08-13 set plus a row number so the owner can answer "ข้อ 3").
+3. Output ONE table, one row per item, most-active first, FIVE columns: **# | Feature /
+   plan / task | Stage | Waiting On | Next** (the four of the 2026-08-13 ruling plus the row
+   number added 2026-09-16 so the owner can answer "ข้อ 3").
    **NEVER collapse items into one row** (user ruling 2026-08-14): no "Ready ×6", no
    "plan A + plan B" merged rows — every plan and tracked item gets its OWN row even
    when many share a state or share one gate.
@@ -120,8 +120,10 @@ Collisions are prevented at **planning** time, not just by isolation:
 2. **Across independent chains → parallel** — one `ae49-implement` per chain, each in its own
    worktree.
 3. **Within a chain → sequential** — do not launch a chained plan's implementer until the
-   plan(s) it depends on are done and its worktree is **based on their branch** (so it builds
-   on updated code, never stale).
+   plan(s) it depends on have LANDED on the local default branch, so its worktree starts from
+   that branch with their code in it (the builder's Step 0 fast-forwards to the local default
+   branch and proves any commit Main names — name the dependency's landing sha in the
+   dispatch). Never from a feature branch: hub projects land straight on `main`.
 
 Chaining decides the *order*; the worktree isolates the *parallel* runs.
 

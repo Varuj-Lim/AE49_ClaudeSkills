@@ -114,6 +114,33 @@ file's line endings. Write the notes file with the Write tool: every inline arch
 wrote before this broke at least once on the shell layer (an apostrophe closing a single-quoted
 `node -e`, a backslash eaten on the way to disk).
 
+## 5b. Production-only gates — build from a transport branch, not from the deploy branch
+
+Some gates can only run on real infrastructure that is BUILT FROM A COMMIT — a Cloud Run
+worker image made by Cloud Build from a checkout, a Cloud Function, a scheduled job. The
+build needs the code on the remote, but rule 5 says nothing is committed to the deploy branch
+before the owner's test, and rule 1 says pushing the deploy branch deploys. The answer
+(owner, 2026-09-25, after `tools-dla-link-cap` was gated this way) is a **transport branch**:
+
+1. Main commits the audited build on a branch named `gate/<plan-slug>` — in the builder's
+   worktree or from the hub tree with an explicit pathspec — and pushes ONLY that branch
+   (`git push origin HEAD:refs/heads/gate/<plan-slug>`). Like the backup branch, it deploys
+   nothing, so it needs no go-ahead. The deploy branch stays untouched; the hub tree keeps the
+   same change UNCOMMITTED, and Main proves the two are byte-identical before handing over.
+2. The owner builds from it, then returns their checkout to the deploy branch, e.g.
+   `git fetch origin gate/<slug> && git switch --detach FETCH_HEAD` → build → deploy the
+   artifact → `git switch main`. Main hands this over as a ready block, and names the sha
+   `git log --oneline -1` must print.
+3. **Say it plainly at the gate: while the gate build is live, every real user runs it.**
+   Rollback before landing = rebuild the artifact from the deploy branch.
+4. After the gate passes, the change lands on the deploy branch as its ordinary one commit
+   (rule 5), and the transport branch is deleted: `git push origin --delete gate/<plan-slug>`.
+   If the gate fails, the branch is replaced by the fixed build under the same name.
+
+The older route — the owner's explicit "ตกลง" to commit on the deploy branch BEFORE the
+gate, then push — is still allowed when the owner chooses it, but it deploys the web half
+early and is no longer the default.
+
 ## 6. Tiny-fix fast path
 
 A tiny **cosmetic** change — one or two files, no new behaviour, no plan file —
