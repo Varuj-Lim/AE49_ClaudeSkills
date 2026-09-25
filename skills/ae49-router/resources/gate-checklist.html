@@ -23,6 +23,10 @@
   label.sub .num { color: #64748b; }
   .num { font-weight: 700; color: #475569; flex-shrink: 0; }
   label.done .text { text-decoration: line-through; color: #9ca3af; }
+  /* A long unbroken string (a URL, a path) must wrap inside the card, never push it wider (owner 2026-09-25):
+     min-width:0 lets the flex item shrink below its longest word; overflow-wrap:anywhere gives that word break points. */
+  .text { min-width: 0; overflow-wrap: anywhere; }
+  h1, h2, .slug { overflow-wrap: anywhere; }
   .footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
   .all-done { display: none; font-weight: 700; color: #059669; }
   .all-done.show { display: block; }
