@@ -36,6 +36,14 @@ rules from any other project:
    from the `ae49-task-plan-feature` skill — normally `~/.claude/skills/ae49-task-plan-feature/`,
    or `<repo>/.claude/skills/ae49-task-plan-feature/` when the skills are installed per-project.
    Read it first and match its structure, Status field, and `After:` convention exactly.
+5. **Keep it short enough to be read three times (owner 2026-09-25).** Main dispatches you only
+   for a feature with a data model, a migration, several batches or a footprint over ~5 files
+   (smaller plans Main writes itself, one page). Even so: aim for **≤ 250 lines**; treat
+   ~400 as the signal to split into batches — each with its own Testing checklist — or to
+   move reference material (upstream requirement docs, API tables, sample JSON) into
+   `docs/specs/` and cite it. The builder and the auditor each read the whole plan cold, so
+   every line is paid three times; decisions, footprint and checklist are the plan — the
+   background is a citation.
 
 ## Hard limits — you are headless
 

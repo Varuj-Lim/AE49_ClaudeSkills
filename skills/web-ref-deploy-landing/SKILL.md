@@ -141,12 +141,25 @@ The older route — the owner's explicit "ตกลง" to commit on the deploy 
 gate, then push — is still allowed when the owner chooses it, but it deploys the web half
 early and is no longer the default.
 
-## 6. Tiny-fix fast path
+## 6. Small-change fast path (widened 2026-09-25 — "ขนาดพิธีตามความเสี่ยง")
 
-A tiny **cosmetic** change — one or two files, no new behaviour, no plan file —
-is done by Main directly: propose → user approves → edit → commit. Anything
-larger (new behaviour, several files, anything touching data or permissions)
-takes the full plan → implement → audit → gate route.
+Two sizes are built by Main directly, without a builder:
+
+- **Cosmetic** — one or two files, no new behaviour, no plan file: propose → user
+  approves → edit → commit (unchanged since 2026-08).
+- **Small and low-risk** (owner 2026-09-25): up to about five files, no new data model
+  or migration, no new shared UI pattern, and small enough for Main to hold in one
+  head. Main writes the one-page plan (`ae49-router`, roster rule) and commits it,
+  builds inline in the hub tree, runs the project's gates, then dispatches
+  `ae49-audit` — SHORT when the change touches none of data shape, rules /
+  permissions / access lists, money or security; FULL when it touches any of them
+  (a two-literal access-list change is small to build and full to audit) — and then
+  opens the ordinary manual-test gate.
+
+Anything larger, or with a data model, a migration or a shared pattern, takes the
+full plan → implement → audit → gate route. **The audit is never skipped in any
+size**: every hand-off costs minutes, but the independent read is the one that has
+paid every time it ran.
 
 ## 7. Dev servers rewrite files — never commit their churn
 

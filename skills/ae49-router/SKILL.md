@@ -19,6 +19,25 @@ back. This layer is **project-agnostic**: apply the active project's own `CLAUDE
 - **`ae49-implement`** (sub-agent, may run several in parallel, each in its own git
   worktree) — builds ONE approved plan and runs the project's build + lint.
 
+**When each one is used — ceremony scaled to risk (owner 2026-09-25: "เอาทั้ง (ก)–(ง)").**
+Every hand-off starts a cold agent that re-reads the plan and the code, so a hand-off is
+paid in minutes and tokens; on 2026-09-25 a ~150-line change cost ~25 agent-minutes through
+plan → build → audit → fix against ~12 inline, and the audit was the part that paid (two
+defects that would have shipped). So the size of the change decides WHO builds, the risk
+decides how DEEP the audit goes, and the audit itself is never skipped:
+
+- **`ae49-plan`** — only for a feature with a data model, a migration, several batches or a
+  footprint over ~5 files. Otherwise **Main writes the plan itself**: one page in the
+  template's sections (Status, Created, After, Summary, Decisions numbered on from the
+  parent plan, Files to touch, Deploy, Testing checklist ≤ 7, Rollback), committed before
+  the build like any plan — `tools-access-director-tik` and `tools-dla-link-cap` are the shape.
+- **`ae49-implement`** — when the change is over ~5 files, adds a data model or migration,
+  introduces a shared UI pattern, or is more than Main can hold in one head. Below that
+  **Main builds inline** in the hub tree (`web-ref-deploy-landing` §6) and runs the gates.
+- **`ae49-audit`** — on EVERY build, Main's own included. FULL depth when the change touches
+  data shape, `firestore.rules` / permissions / access lists, money, security, or more than
+  ~5 files; SHORT depth (the diff, correctness, the touched files' canons, minutes) otherwise.
+
 Sub-agents are **headless**: they cannot ask the user anything. So every moment that needs
 the user's judgment happens **in you (Main)**.
 
@@ -29,7 +48,7 @@ Read the start of each user message for an explicit lane:
 | Prefix | You do |
 |---|---|
 | `refine:` | Refine the user's text (see below), show the draft, wait for confirm, then route it. |
-| `plan:` | Run the design interview **with the user in Main** (grill), then spawn `ae49-plan` to draft the plan(s). |
+| `plan:` | Run the design interview **with the user in Main** (grill); then write the one-page plan yourself for a small change, or spawn `ae49-plan` for a data-model / migration / multi-batch feature (roster rule). |
 | `impl:` | Against an **approved** plan, spawn `ae49-implement` per the chain graph. |
 | `status:` | Report the plan board — every plan's state as one emoji table (see below). No delegation. |
 | `self:` | Handle it yourself inline, no delegation. |
@@ -37,10 +56,11 @@ Read the start of each user message for an explicit lane:
 
 The user can also force a specific agent with **`@ae49-plan …` / `@ae49-implement …`**.
 
-**Delegation rule:** prefer spawning **background** sub-agents for plan/implement heavy
-lifting and hand the prompt back to the user immediately; do only trivial things inline.
-When several independent tasks arrive, spawn the sub-agents **in parallel** (multiple Agent
-calls in one message).
+**Delegation rule:** heavy lifting goes to **background** sub-agents so the user is never
+waiting on Main — but only when the roster rule above says the change is big enough to be
+worth a hand-off; small, low-risk work is planned and built inline and still audited. When
+several independent tasks arrive, spawn the sub-agents **in parallel** (multiple Agent calls
+in one message).
 
 **Start-now rule (owner feedback 2026-08-27):** the moment a piece of work becomes
 actionable in conversation (design settled, no unmet dependency), dispatch or do it **in
@@ -51,6 +71,17 @@ owner-only resource, a machine constraint) and the blocker must be named concret
 row that says "waiting" with no nameable blocker means Main self-queued, which reads to
 the owner as "ทำไม่ได้" when the truth is "ยังไม่ได้เริ่ม". If two tracks genuinely contend
 for the same resource, ask the owner to pick the priority — never pick silently.
+
+**Owner-only steps are batched into one sitting (owner 2026-09-25).** Waiting on a human is
+where a task's wall-clock goes (≈50 of the ~75 minutes of the 2026-09-25 link-cap landing were
+the owner's Cloud Shell turn and the waits around it). When a track needs the owner's hands —
+Cloud Shell, the Firebase console, a deploy, a sign-in — Main prepares the WHOLE block first
+(every command in order, the exact output to expect, the sha `git log` must print), groups
+such steps across every track that is pending together so the owner sits down once, says how
+many minutes of their time it needs, and keeps working the other tracks meanwhile. The
+Main-run smoke test with the owner waiving the eye-only items (`ae49-ref-gate-checklist`,
+"Waived and Main-verified items") is the same idea applied to the gate: offer it whenever a
+gate would cost the owner more than a few minutes on a feature they will rarely use.
 
 ## Inline refine (the `refine:` lane)
 
@@ -130,13 +161,18 @@ Chaining decides the *order*; the worktree isolates the *parallel* runs.
 ## Gates you (Main) always own — never delegate these
 
 - The **design interview / approval** (grill + plan approval) before drafting or building.
-- The **audit gate** (adopted 2026-08-01, owner mandate — EVERY build): after
-  `ae49-implement` returns and BEFORE the user sees anything, spawn the headless
-  **`ae49-audit`** agent with the plan path + the build worktree/diff. It adversarially
-  reviews the code (plan conformance, logic, edge cases, data safety, blast radius) and
-  returns findings or PASS. Main fixes or re-dispatches BLOCKER/MAJOR findings before
-  opening the user gate; MINOR findings are reported at the gate. Only after the audit
-  passes does the manual-test gate open.
+- The **audit gate** (adopted 2026-08-01, owner mandate — EVERY build, Main's inline builds
+  included): after the build is finished and BEFORE the user sees anything, spawn the headless
+  **`ae49-audit`** agent with the plan path + the build worktree/diff (or the hub file list).
+  **Its depth scales with the risk, never to zero (owner 2026-09-25):** a FULL audit — plan
+  conformance, logic, edge cases, data safety, blast radius, cross-feature callers — whenever
+  the change touches data shape, `firestore.rules` / permissions / access lists, money,
+  security, or more than ~5 files; a SHORT audit — the diff itself, correctness, the touched
+  files' canons, back in minutes — for the small low-risk changes Main built inline. Main
+  names the depth in the dispatch ("short audit"); the auditor never trusts the author,
+  Main included. Main fixes or re-dispatches BLOCKER/MAJOR findings before opening the user
+  gate; MINOR findings are reported at the gate. Only after the audit passes does the
+  manual-test gate open.
 - The **manual-test gate** — after `ae49-implement` returns **and `ae49-audit` passes**, show the user the change and
   **stop for their manual test** before any commit. A gate without a checklist is not a gate. **Every rule for
   opening, writing, numbering, handing over and closing that gate lives in `ae49-ref-gate-checklist` — INVOKE IT

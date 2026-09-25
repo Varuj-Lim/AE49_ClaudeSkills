@@ -60,9 +60,10 @@ applies if Main writes it inline.
    is a full, self-explanatory sentence naming where to click, what to do, and what
    the user should see ("Open X → do Y → you should see Z"); never compressed
    fragments. **Format:** one item per line as `N. [ ] <sentence>`, ONE check per
-   item, numbered sequentially 1..N through the whole list (numbering continues
-   across section groups); group under short bold section headers when the list
-   exceeds ~8 items. This is now the project's ONLY testing artefact (there is no
+   item; group under short bold section headers (one per batch / gate) when the list
+   exceeds ~8 items, and numbering RESTARTS at 1 under every header (owner
+   2026-09-18 — an item is referenced as `<gate numeral> ข้อ N`, so a count that ran
+   across sections moved every later number whenever a landed section was dropped). This is now the project's ONLY testing artefact (there is no
    docs/TESTING.md), and ae49-implement quotes it **verbatim** in its final report —
    so it must be present, non-empty, and accurate. Never write "none".
 
@@ -127,6 +128,12 @@ applies if Main writes it inline.
 
 ## Notes
 
+- **Who writes the plan, and how long it may be (owner 2026-09-25).** Main writes a
+  one-page plan itself for a small change (≤ ~5 files, no data model, migration or new
+  shared pattern) and dispatches `ae49-plan` only for a data-model, migration or
+  multi-batch feature. Either way aim for ≤ 250 lines and treat ~400 as the signal to
+  split into batches or move reference material into `docs/specs/` — the builder and
+  the auditor each read the whole plan cold.
 - **Never edit application code here.** This skill produces one document.
 - **Never commit or push from ae49-plan.** All git landing is Main's, after the
   user's gate.
