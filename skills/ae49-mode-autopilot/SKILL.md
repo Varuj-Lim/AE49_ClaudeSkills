@@ -141,6 +141,25 @@ reads the state file for the current project; ON → invoke `tick` before touchi
 A session in the mode that is asked a question by the owner answers it normally — the mode is not
 a gag; a new ruling from the owner is logged as `ruling:` and applied.
 
+## Lessons from the first run (2026-09-25, AE49_Hub stories B1 → B2)
+
+- **Evidence is page text, not image files.** The browser pane returns screenshots for Main to
+  look at but cannot save them to disk, so "screenshots under `shots/`" means: Main views the
+  screenshot and writes the page text / DOM readings (`get_page_text`, `read_page`, a
+  `javascript_tool` inspection) into evidence files under the run's folder, one per gate item.
+- **The pane blocks `window.open`.** A "Sign in as …" that opens a NEW tab never opens one there;
+  that walk is left for the owner, while the enforcement behind it is verified through the
+  Firestore emulator's REST API with the other user's token (rules) and the app's routes.
+- **A route call from Git Bash mangles `/api/...` into a Windows path** — run it with
+  `MSYS_NO_PATHCONV=1` (or from PowerShell).
+- **"While the job runs" checks need a job that runs long enough.** A one-page job finishes in
+  under ten seconds; use three medium pages, or read the state right after `create`.
+- **A gate section goes on the board only after its build is in the hub tree** — Main wrote one
+  during an audit once and had to take it down; keep the items in the scratchpad until then.
+- **The pane may refuse mouse input while the app window is not drawing** ("could not get the
+  tab ready for input"); `navigate`, `find`, `form_input` and `get_page_text` still work, and the
+  click usually works again a minute later.
+
 ## What this mode is not
 
 Not a licence to deploy, not a replacement for the owner's design decisions, not a way to skip the
