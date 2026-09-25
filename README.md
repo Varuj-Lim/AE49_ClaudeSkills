@@ -45,7 +45,7 @@ For a single project instead of globally, copy into `<your-repo>/.claude/skills/
 
 To auto-load skills every session, put a `CLAUDE.md` at `~/.claude/CLAUDE.md` (or a repo root). One is provided:
 
-- [`dotclaude/CLAUDE.md`](./dotclaude/CLAUDE.md) — **the full setup, and the one `/ae49-task-update-skills` syncs.** Loads four skills: `ae49-task-grill`, `ae49-ref-guidelines`, `ae49-ref-caveman`, and `ae49-router`. Use this if you want the router workflow (Main delegates to the `ae49-plan` / `ae49-implement` agents). For a minimal setup without the router, trim it to just `ae49-ref-caveman` + `ae49-ref-guidelines`.
+- [`dotclaude/CLAUDE.md`](./dotclaude/CLAUDE.md) — **the full setup, and the one `/ae49-task-update-skills` syncs.** Loads four skills: `ae49-task-grill`, `ae49-ref-guidelines`, `ae49-mode-caveman`, and `ae49-router`. Use this if you want the router workflow (Main delegates to the `ae49-plan` / `ae49-implement` agents). For a minimal setup without the router, trim it to just `ae49-mode-caveman` + `ae49-ref-guidelines`.
 
 Adapt or omit as you like — but note the sync overwrites `~/.claude/CLAUDE.md` from `dotclaude/`, so put local edits there if you want them to survive.
 
@@ -78,7 +78,7 @@ Agents accelerate coding — and software entropy with it. The fix is to care ab
 
 Agents use twenty words where one will do, and explain code at the wrong altitude for the audience.
 
-- [`/ae49-ref-caveman`](./skills/ae49-ref-caveman/SKILL.md) — ultra-compressed communication mode that cuts token usage ~75% while keeping full technical accuracy.
+- [`/ae49-mode-caveman`](./skills/ae49-mode-caveman/SKILL.md) — ultra-compressed communication mode that cuts token usage ~75% while keeping full technical accuracy.
 - [`/ae49-task-management-talk`](./skills/ae49-task-management-talk/SKILL.md) — rewrite engineer-to-engineer content for leadership, shaped for the channel it's going to (JIRA, Slack, standup, email, meeting).
 
 ## Reference
@@ -106,7 +106,7 @@ General workflow tools, not code-specific.
 
 | Skill | What it does |
 |-------|--------------|
-| **[ae49-ref-caveman](./skills/ae49-ref-caveman/SKILL.md)** | Ultra-compressed communication mode. Cuts token usage ~75% by dropping filler while keeping full technical accuracy. |
+| **[ae49-mode-caveman](./skills/ae49-mode-caveman/SKILL.md)** | Ultra-compressed communication mode. Cuts token usage ~75% by dropping filler while keeping full technical accuracy. |
 | **[ae49-task-management-talk](./skills/ae49-task-management-talk/SKILL.md)** | Rewrite engineer-to-engineer content for leadership and shape it for the target channel (JIRA, Slack, standup, email, meeting talking-points). |
 | **[ae49-task-handoff](./skills/ae49-task-handoff/SKILL.md)** | Compact the current conversation into a handoff document so another agent can pick up the work. |
 | **[ae49-task-teach](./skills/ae49-task-teach/SKILL.md)** | Teach the user a new skill or concept, using the current directory as a stateful teaching workspace. |

@@ -47,12 +47,13 @@ Skill name is kebab-case: `<scope>-<type>-<name>`.
 
 **Type segment** — what kind (required, immediately after the scope):
 
-- `ref` — a REFERENCE skill: a convention, pattern, or knowledge the model auto-applies whenever the relevant work comes up (style guides, display rules, component patterns, behavior modes). Fires on relevance; the user rarely types it. e.g. `ae49Hub-ref-colors`, `ae49-ref-guidelines`.
+- `ref` — a REFERENCE skill: a convention, pattern, or knowledge the model auto-applies whenever the relevant work comes up (style guides, display rules, component patterns). Fires on relevance; the user rarely types it. e.g. `ae49Hub-ref-colors`, `ae49-ref-guidelines`.
 - `task` — a TASK skill: an action/workflow the user invokes (usually `/name`) that runs a process or produces an artifact (publish, audit, plan, implement, generate). e.g. `ae49Hub-task-patch-note`, `ae49-task-plan-feature`.
+- `mode` — a MODE skill (owner 2026-09-25): an ON/OFF state the user switches that changes how the model behaves on EVERY turn until switched off. It must say four things: how it is turned on, how it is turned off, how it shows it is active (a marker on every reply, or a state file), and what it may never do while on. e.g. `ae49-mode-caveman`, `ae49-mode-ask`, `ae49-mode-autopilot`. A discipline that starts and ends by itself with the work (a debugging routine, a checklist) is a `ref`, not a mode.
 
-Classify by Anthropic's two content patterns: Reference content (knowledge applied to current work) → `ref`; Task content (step-by-step action) → `task`. If a skill truly does both, name it by how the user reaches it most often.
+Classify by Anthropic's two content patterns: Reference content (knowledge applied to current work) → `ref`; Task content (step-by-step action) → `task`; a persistent switch the user flips → `mode`. If a skill truly does both ref and task, name it by how the user reaches it most often.
 
-Invocation pairing (guideline, not enforced): `task` skills are typically `/`-invoked — set `disable-model-invocation: true` if it should run ONLY when the user calls it. `ref` skills stay model-invokable so they auto-apply.
+Invocation pairing (guideline, not enforced): `task` skills are typically `/`-invoked — set `disable-model-invocation: true` if it should run ONLY when the user calls it. `ref` skills stay model-invokable so they auto-apply. `mode` skills stay model-invokable too (the model must re-enter one after a compact, or at session start when its state says ON) but switch ON only on the user's word.
 
 ## Skill Structure
 

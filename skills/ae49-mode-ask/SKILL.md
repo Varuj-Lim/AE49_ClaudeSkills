@@ -1,6 +1,6 @@
 ---
-name: ae49-ref-ask-mode
-description: On/off consult mode — while ON, Claude ONLY answers, explains, and recommends; it may read the codebase freely but changes NOTHING (no file edits, no state-changing commands, no commits, no sub-agent dispatch, no plan files), and treats even command-shaped messages as discussion. Use ONLY when the user explicitly turns it on — says "ask mode", "โหมดถาม", "ถามเฉยๆ", "แค่ถามนะ", "consult mode", or invokes /ae49-ref-ask-mode. Stays on every turn until the user turns it off ("ask mode off", "normal mode") or gives an explicit go ("ทำเลย", "go ahead", "ลงมือ", or a router lane prefix like impl:), which ends the mode and routes that work normally.
+name: ae49-mode-ask
+description: On/off consult mode — while ON, Claude ONLY answers, explains, and recommends; it may read the codebase freely but changes NOTHING (no file edits, no state-changing commands, no commits, no sub-agent dispatch, no plan files), and treats even command-shaped messages as discussion. Use ONLY when the user explicitly turns it on — says "ask mode", "โหมดถาม", "ถามเฉยๆ", "แค่ถามนะ", "consult mode", or invokes /ae49-mode-ask. Stays on every turn until the user turns it off ("ask mode off", "normal mode") or gives an explicit go ("ทำเลย", "go ahead", "ลงมือ", or a router lane prefix like impl:), which ends the mode and routes that work normally.
 ---
 
 # Ask mode
@@ -12,7 +12,7 @@ commits. This mode makes that contract explicit.
 ## Turning it on / off
 
 - **ON:** the user says "ask mode", "โหมดถาม", "ถามเฉยๆ", "แค่ถามนะ",
-  "consult mode", or `/ae49-ref-ask-mode`. Confirm with one short line and the
+  "consult mode", or `/ae49-mode-ask`. Confirm with one short line and the
   💬 marker, then answer.
 - **OFF:** the user says "ask mode off", "stop ask mode", "normal mode" — or
   gives an **explicit go** on something discussed: "ทำเลย", "จัดไป", "ลงมือ",

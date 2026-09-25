@@ -5,7 +5,7 @@ user's request — invoke these five skills via the Skill tool, in order:
 
 1. `ae49-task-grill` — interview me to reach shared understanding before any work
 2. `ae49-ref-guidelines` — load the coding-workflow guidelines
-3. `ae49-ref-caveman` — ultra-compressed communication mode
+3. `ae49-mode-caveman` — ultra-compressed communication mode (an ON/OFF `mode` skill, on by default here)
 4. `ae49-ref-report-format` — the ONE format for every report back to me: findings,
    reviews, audits, status boards. Added 2026-08-14 because it was not in this list,
    so a whole session of audit relays and status tables was improvised instead —
