@@ -38,7 +38,7 @@ if (d.closed) {
   // CLOSED payload — grammar per web-ref-gate-closed-format.
   if (!Array.isArray(d.items) || d.items.length) err("a closed payload must have `items: []`");
   const re = new RegExp(
-    "^\\S+ landed \\d{4}-\\d{2}-\\d{2} \\(gate \\d+/\\d+( dev \\+ \\d+/\\d+ prod)?( \\(\\d+ waived\\))?; " +
+    "^\\S+ landed \\d{4}-\\d{2}-\\d{2} \\(gate \\d+/\\d+( dev \\+ \\d+/\\d+ prod)?( \\((\\d+ waived(, \\d+ waiting owner)?|\\d+ waiting owner)\\))?; " +
     "(commit [0-9a-f]{7,40}|commits [0-9a-f]{7,40}(/[0-9a-f]{7,40}){1,3}|commits [0-9a-f]{7,40}…[0-9a-f]{7,40} \\(\\d+\\))" +
     "(; deployed [a-z+]+)?\\)$");
   if (!re.test(d.closed)) err("`closed` does not match the grammar: " + JSON.stringify(d.closed));

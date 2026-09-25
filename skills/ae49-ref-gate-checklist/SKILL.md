@@ -28,7 +28,7 @@ every gate, and the checkable half of them is a SCRIPT, which a compact cannot e
 | Script | Run | What it does |
 |---|---|---|
 | `resources/validate-gate.cjs` | `node ~/.claude/skills/ae49-ref-gate-checklist/resources/validate-gate.cjs docs/gate-checklist.js` — after EVERY write of the page | FAILS on: a section heading without a circled numeral; more than 7 parent items in a section; more than 5 sub-steps under a parent; a parent item without the three tags; a title without its numeral or environment; a closed payload off the grammar. WARNS on markdown (the page renders text literally) and on a section under 5 items. |
-| `resources/close-gate.cjs` | `node …/close-gate.cjs docs/gate-checklist.js --slug <slug> --score P/N --commit <sha>[,…] [--waived W] [--prod M/M] [--deployed web]` — at landing | Writes the CLOSED payload in `web-ref-gate-closed-format`'s grammar, keeping the gate's feature and title; the date comes from the clock in ICT; refuses a placeholder sha; validates before writing. |
+| `resources/close-gate.cjs` | `node …/close-gate.cjs docs/gate-checklist.js --slug <slug> --score P/N --commit <sha>[,…] [--waived W] [--waiting O] [--prod M/M] [--deployed web]` — at landing | Writes the CLOSED payload in `web-ref-gate-closed-format`'s grammar, keeping the gate's feature and title; the date comes from the clock in ICT; refuses a placeholder sha; validates before writing. |
 | `resources/gate-checklist.html` | copied once into a project | The page template (see "Template adoption"). |
 
 The scripts do not replace the rules below — they cannot tell whether an item is a full Thai
@@ -195,7 +195,7 @@ ONE docs commit (no manual-test gate needed for a docs-only adoption):
 
 The owner may decide not to click through a section — a feature they will rarely use, a
 production-only gate that costs real time, an item the audit and the automated tests already
-cover. Two outcomes exist, and both are RECORDED, never silently counted as passed:
+cover. Three outcomes exist, and all three are RECORDED, never silently counted as passed:
 
 - **Waived** — the owner says an item (or the rest of a section) is not tested ("ไว้ใช้จริงค่อยดู",
   "ข้ามได้"). The closed line then reads `gate 3/7 (4 waived)` (`web-ref-gate-closed-format`;
@@ -207,6 +207,14 @@ cover. Two outcomes exist, and both are RECORDED, never silently counted as pass
   with a read-only script, and reports the evidence. Such an item counts as PASSED; the landing
   note says Main verified it and how. Main never verifies an item that needs the owner's eyes
   (a rendering, a wording, a click path) — those are waived or tested, not "verified".
+- **Waiting owner** (owner 2026-09-25) — the owner passes the section but leaves an item they
+  were asked to REPORT (a line count at 1366, a measurement, a screenshot) unanswered, and the
+  landing goes ahead. The item is neither passed nor waived: the closed line reads
+  `gate 32/34 (2 waiting owner)` (`close-gate.cjs --score 32/34 --waiting 2`; both kinds:
+  `--waived 2 --waiting 2` → `(2 waived, 2 waiting owner)`), the landing note names the items
+  and what is still owed, and the in-flight memory carries a dated follow-up until the owner
+  answers. The count is never folded into "waived" — the bulk-actions landing of 2026-09-25
+  (items 4.4 / 5.3, the toolbar line counts) had no slot for it and was written as waived.
 
 Before either, Main says once, in plain words, what will NOT have been seen by anyone if the
 items are waived — then does what the owner decides.
