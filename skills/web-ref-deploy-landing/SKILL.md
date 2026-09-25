@@ -11,7 +11,8 @@ project-specific, and no project should restate the process below in its own
 `CLAUDE.md`.
 
 The *routing* half of the workflow — who grills, who plans, who builds, the audit
-gate, the manual-test gate and its checklist — lives in **`ae49-router`**. This
+gate — lives in **`ae49-router`**, and the manual-test gate and its checklist in
+**`ae49-ref-gate-checklist`** (split out of the router 2026-09-25). This
 skill starts where that one ends: at the moment there is something to commit.
 
 ## What each project must state in its own CLAUDE.md
@@ -55,7 +56,7 @@ npx firebase-tools deploy --only firestore:rules --project <project-id>
 otherwise the tester hits `permission-denied` on a feature whose code is
 perfectly correct.
 
-**When the gate runs on the EMULATOR (the default — see `ae49-router`), it needs
+**When the gate runs on the EMULATOR (the default — see `ae49-ref-gate-checklist`), it needs
 no deploy at all.** `firebase.json` points the emulator at the very same
 `firestore.rules` file in the working tree, so the local suite is already
 running the new rules the moment they are saved. Deploying "for the gate" in
@@ -104,6 +105,14 @@ to the working tree, and pass the pathspec to `git commit` itself
 (`git commit -m … -- <paths>`), never rely on what `git add` happened to
 stage. A new file the patch created is untracked after the reset — `git add`
 it explicitly at landing.
+
+**Archiving the plan after landing — use the script, not an inline one (2026-09-25).**
+`node ~/.claude/skills/web-ref-deploy-landing/resources/archive-plan.cjs docs/plans/<slug>.md
+--status "Done — landed <date> (gate <sha> <numeral> N/N; commit <sha>)" --notes <notes.md>` sets the
+Status line, appends the landing notes and moves the file to `docs/plans/done/`, keeping the
+file's line endings. Write the notes file with the Write tool: every inline archive script Main
+wrote before this broke at least once on the shell layer (an apostrophe closing a single-quoted
+`node -e`, a backslash eaten on the way to disk).
 
 ## 6. Tiny-fix fast path
 

@@ -24,6 +24,26 @@ from any hardcoded list. Before and while implementing:
   patterns (input components, validation rules, naming, tokens, logging, etc.). Apply
   whichever fire for the files you touch.
 
+## Step 0 — make sure your worktree is not stale (BEFORE reading or editing anything)
+
+Your worktree can be cut from the last PUSHED commit (`origin/<default branch>`), not from the
+project's local default branch — which is usually AHEAD, because landings are committed locally
+and pushed later. Every builder on NuriHub between 2026-09-23 and 2026-09-25 started this way,
+and a builder that edits a stale snapshot silently reverts every landing it cannot see when its
+diff is copied back. So, first:
+
+1. `git merge --ff-only <default branch>` — the LOCAL branch (usually `main`; the project's
+   `CLAUDE.md` names it). This fast-forwards you onto everything already landed.
+2. If Main's dispatch names commits your base must contain, prove each one:
+   `git merge-base --is-ancestor <sha> HEAD`.
+3. If the fast-forward fails or a named commit is missing, **STOP and report** — never build
+   on a stale or diverged base.
+4. A fresh worktree has no installed dependencies and no gitignored local env file: install
+   from the lockfile the project uses (e.g. `npm ci`) and copy the env file its build needs
+   (e.g. `.env.local`) from the main checkout. Never commit the env file.
+
+Report the base you started from and the base you built on.
+
 ## What you do
 
 1. **Read the approved plan** Main points you at (`docs/plans/<slug>.md`) and implement it

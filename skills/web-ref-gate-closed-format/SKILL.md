@@ -7,7 +7,7 @@ description: >-
   (AE49_Hub, Nuri_Hub, future siblings). Use whenever landing a feature and
   resetting the gate-checklist page, writing or reviewing a closed payload,
   or when the user says the No-open-gate line looks different between
-  projects. ae49-router's gate section points here; this file changes once
+  projects. ae49-ref-gate-checklist points here (and its close-gate.cjs writes it); this file changes once
   and every project's page reads the same.
 ---
 

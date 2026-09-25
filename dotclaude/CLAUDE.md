@@ -24,7 +24,8 @@ landing or push.** A summary can carry a decision; it cannot carry a procedure i
 mentioned.
 
 Written because on 2026-09-23, in the first gate after a compact, Main handed the checklist
-over as a chat message with 10 items. `ae49-router` says a gate is written into the project's
+over as a chat message with 10 items. The gate rules (now `ae49-ref-gate-checklist`, split out of
+`ae49-router` on 2026-09-25 for this reason) say a gate is written into the project's
 clickable `docs/gate-checklist.js` page and handed over as a link, and that a section holds
 5–7 items and must never reach 10 — the owner had already said so twice. Neither rule was in
 context to be followed, and the owner spotted it before Main did (*เป็นเพราะ Compact Session
