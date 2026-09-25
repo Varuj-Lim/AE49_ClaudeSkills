@@ -185,7 +185,7 @@ default and `fill` is the opt-in, which is the right way round.
 | Project | Facts skill | Scale lives in |
 |---|---|---|
 | NuriHub | `nurihub-ref-table-columns` — created with the scale (planned 2026-09-11) | the shared table helpers, once built |
-| AE49_Hub | `ae49Hub-ref-parameter-table` (the R&D footing grids, where the scale was seeded 2026-09-11) + `ae49Hub-ref-list-page` §Table columns (the list tables — adoption began 2026-09-18 with Overtime + Leave Orders under T5, plan `table-no-shift`; the rest convert list by list) | `COL_PX` in `lib/constants/tableStyles.ts`, rendered through `TableCard`'s `tableClassName` / `minWidthPx` |
+| AE49_Hub | `ae49Hub-ref-parameter-table` (the R&D footing grids, where the scale was seeded 2026-09-11) + `ae49Hub-ref-list-page` §Table columns (the list tables — adoption began 2026-09-18 with Overtime + Leave Orders under T5, plan `table-no-shift`, and finished 2026-09-25 with `table-columns-app-wide`: 32 list files on `ListColGroup` + the `COL_PX` scale of 58 kinds; the exempt tables are listed in that skill's Exclude registry. One deliberate divergence from T2: AE49 makes the LAST column flexible when no text column exists — owner ruling 2026-09-16) | `COL_PX` in `lib/constants/tableStyles.ts`, rendered through `TableCard`'s `tableClassName` / `minWidthPx` |
 | future siblings | create with the first table | copy the shape: one scale, one flexible column |
 
 Filter pills have their own width rule in `web-ref-filter-format` R4 — a pill never changes width
