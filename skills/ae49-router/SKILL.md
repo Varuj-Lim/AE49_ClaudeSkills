@@ -168,6 +168,20 @@ Collisions are prevented at **planning** time, not just by isolation:
 
 Chaining decides the *order*; the worktree isolates the *parallel* runs.
 
+**Removing a builder's worktree — scan for junctions FIRST (owner "จดเลย" 2026-09-30).** On
+Windows every worktree that has run `npm run build` holds two **junctions** under
+`.next/node_modules/` (Next.js writes `firebase-admin-<hash>` and `rimraf-<hash>` links pointing
+into a `node_modules` folder). A recursive delete that FOLLOWS a junction deletes its TARGET —
+that is how the hub's own `node_modules` was emptied on 2026-09-25 (the builder had been given
+the hub's `node_modules` by link). The safe recipe, used four times on 2026-09-30 with the hub's
+`node_modules` intact each time: (1) `Get-ChildItem <worktree> -Recurse -Depth 3 -Force
+-Attributes ReparsePoint` (PowerShell) and read each link's `Target`; (2) delete each link AS A
+LINK — `[System.IO.Directory]::Delete(<link path>)`, never recursive — and leave any link whose
+target is OUTSIDE the worktree for a human to look at; (3) only then `git worktree remove
+--force <path>` + `git worktree prune`; (4) `ls <hub>/node_modules | wc -l` afterwards and
+compare with before. Never `rm -rf`, `Remove-Item -Recurse` or `rmdir /s` a tree you have not
+scanned.
+
 ## Gates you (Main) always own — never delegate these
 
 - The **design interview / approval** (grill + plan approval) before drafting or building.
