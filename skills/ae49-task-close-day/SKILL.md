@@ -66,6 +66,16 @@ or a Temp folder.
    record: parked-by machine name, date, gate state, the step-5 🎒 carry list
    with each item's reason, and what open-day should restore first. Commit it:
    `docs(memory): close-day park <date>`.
+   **The open-items register goes in first (owner ruling 2026-09-30, `ae49-router`
+   §"The open-items register").** Before writing the memory, read
+   `docs/plans/_open-items.md` and run the router's backstop sweep (spec
+   `open-questions.md` files, Draft / On hold plans, the memory's own "Parked" /
+   "deferred" / "Owner steps" lines); anything open with no plan and no register
+   row gets a row now, committed with the register. The memory's queue then LISTS
+   the register rows by ID. **"Backlog cleared" / "nothing parked" may be written
+   only when the register is EMPTY** — the 2026-09-30 close-day wrote it while the
+   seismic tool, T0202 Q18 and four deferrals were open, and they stayed invisible
+   for 12 days.
 
 7. **Backup push.** Run the project's no-deploy backup push, e.g.
    `git push origin main:backup`. This carries the memory commit plus every

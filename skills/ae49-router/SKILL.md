@@ -112,6 +112,13 @@ re-read from disk — never report from memory:
 
 1. Read every `docs/plans/*.md` → its `Status:` field + `After:` edges; list
    `docs/plans/done/` newest-first for recent landings.
+1b. **Read the OPEN-ITEMS REGISTER `docs/plans/_open-items.md` — every row goes on the board**
+   (owner ruling 2026-09-30, below). Then run the **backstop sweep** before rendering: grep the
+   project's spec `open-questions.md` files for questions still awaiting a ruling (`pending`,
+   `Still open`, `rulings pending`, an unanswered `OQ`/`Q` with no "ANSWERED"/"RULED" mark), every
+   plan whose `Status:` is Draft / On hold / Parked, and the in-flight memory's "Parked" /
+   "Owner steps" / "deferred" lines — anything found that has neither a plan row nor a register
+   row gets a register row FIRST, then the board is rendered.
 2. Detect live builds: implementers you spawned this session, plus `git worktree list`
    (a lingering feature-branch worktree from another session = build in progress or
    awaiting integration — say which you can't tell, don't guess).
@@ -151,6 +158,31 @@ Board rows this lane adds on top of the shared legend:
   in *Waiting on* (`#2 landing`); a blocker not yet on the board gets its own row first.
 - **`⏸️ On hold`** — a plan whose file says `Status: On hold`; say "on hold" in *Next*.
 - **`✅ Landed`** — show the newest 2–3 from `done/` so recent work stays visible.
+- **Register rows** — one row per `_open-items.md` entry, `⏸️` + what it waits on (your ruling,
+  your hands, data). **A board may say "nothing is open" only when BOTH the plans and the register
+  are empty.**
+
+## The open-items register — nothing discussed may live only in chat or memory prose
+
+**Owner ruling 2026-09-30** (*"ทำไมงานพวกนี้ถึงไม่เจอตอนคุณรายงานสถานะ … ผมไม่อยากให้เกิดขึ้นอีก"*):
+the seismic tool (decoded 2026-09-18, Q1–Q14 awaiting the owner), T0202 Q18 and several deferred
+follow-ups vanished for 12+ days because the board read only `docs/plans/*.md` while those items
+lived as prose inside a ~2,900-line in-flight memory file, and a close-day then wrote "backlog
+cleared". The fix is ONE register file in the project, next to the plans:
+`docs/plans/_open-items.md` (git-synced, travels with the repo).
+
+- **Write a row the moment an item exists and is not a plan in that same turn:** a question put
+  to the owner and not yet answered, a ruling given only in part, a decode/spec with open
+  questions, a deferral ("ทำทีหลัง"), an audit finding left for "later", a parked autopilot item,
+  an owner step still owed, a ticket put on hold. Columns: `ID` (OI-n, never reused) · item ·
+  since (date) · waiting on (owner ruling / owner's hands / data / external) · source (plan, spec
+  or memory line) · next.
+- **A row leaves only two ways:** it becomes a plan (the row says "→ plan <slug>" and is deleted
+  in the same commit that commits the plan), or the owner drops it (the row is deleted with the
+  owner's words in the commit message). Main never deletes a row because it "seems stale".
+- **The status board, the close-day and the open-day render every row.** None of them may say
+  "backlog cleared" / "nothing open" while a row exists.
+- Commit the register like a plan (docs commit, explicit pathspec) every time it changes.
 
 ## Chain graph — dispatching implementers safely
 

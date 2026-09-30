@@ -121,6 +121,10 @@ this list bends — not for a pre-authorisation given at switch-on, not for a re
    as a DECISION with the alternatives. A fork that changes product behaviour and is not cheaply
    undone → PARK (NEVER 8). A ticket or request outside the scope → write the plan, PARK it for
    approval, never build (owner default 2026-09-25).
+   **Every PARK and every WAITING-OWNER item also gets a row in the project's open-items
+   register `docs/plans/_open-items.md` in the same tick** (owner ruling 2026-09-30, `ae49-router`
+   §"The open-items register") — the log is a diary, the register is the list the status board
+   reads; an item that exists only in the log is exactly what went missing for 12 days.
 6. **Log immediately, never later.** One line per event, appended as it happens:
    ```
    - HH:MM ICT · D<n> DECISION · <what> · chosen: <x> · alternatives: <y | z> · why: <one line> · undo: <sha / file / step> · risk: low|medium|high

@@ -81,6 +81,11 @@ Mirror of `ae49-task-close-day`. Everything arrives through git.
 8. **Update memory + report.** Note "resumed on <machine> <date>" in the
    in-flight file (the commit can ride the next landing). Report the board per
    `ae49-ref-report-format` and name the single next action.
+   **The board renders every row of `docs/plans/_open-items.md`** (owner ruling
+   2026-09-30, `ae49-router` §"The open-items register") — one `⏸️` row per entry
+   with what it waits on — so the day starts with the whole picture, not only the
+   plans and the park. An open-day report that says "clean board" while the
+   register holds rows is wrong.
 
 ## Notes
 
