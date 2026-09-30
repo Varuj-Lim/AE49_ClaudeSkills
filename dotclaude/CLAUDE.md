@@ -169,15 +169,15 @@ The ladder (Main's own level — sub-agent effort is already fixed per role in
 - `xhigh` / `max` — design work (a grill, a new data model, a migration plan, a
   `firestore.rules` / permission change, a spec decode), a large multi-batch feature,
   a hard debug (`ae49-task-debug-hard`), anything that reaches production data or money.
-- `high` — the normal attended day: routing, one-page plans, inline builds, gates,
-  landings, audit relays.
-- `medium` / `low` — housekeeping: open/close-day, memory notes, status boards, docs
-  ticks, running scripts whose logic is settled.
+- `high` — everything else, housekeeping included: routing, one-page plans, inline
+  builds, gates, landings, audit relays, open/close-day, memory notes, status boards.
+- **`high` is the FLOOR (owner 2026-09-30: "ไม่ต้องลงต่ำกว่า High ผมยอมเปลืองนิดหน่อยได้
+  จะได้งานไม่ซับซ้อนมาก").** Never suggest `medium` or `low`, however light the work.
 
 Down matters as much as up (owner 2026-09-30: "ไม่ใช่แค่ขยับขึ้นนะ ถ้าตอนนั้นอยู่ที่
 xhigh / max แต่คุณมองว่าควรลงมา high ก็บอกผมด้วย"): a session left at `xhigh` for a grill
-is told when the grill is over and the rest is `high` work, and told again when only
-housekeeping remains. One reminder per stretch of work — a fresh one only when the
+is told when the grill is over and the rest is `high` work — and that is the only
+downward step there is. One reminder per stretch of work — a fresh one only when the
 KIND of work changes, never on every message. If the owner says "keep it", keep it and
 do not raise it again for that stretch.
 
