@@ -158,10 +158,11 @@ Main's effort level is set by the owner in the app; a session cannot re-price it
 but it CAN read its own level (`mcp__ccd_session_mgmt__get_session` with `self` →
 `effort`). So: read it once at the first request of a session (and again after any
 compact), then before starting on ANY request judge which level the work deserves.
-When that is higher than the session's current level, say so FIRST, in one line —
-the kind of work, the level it deserves, and that the owner flips it in the app —
-and wait for the owner's call. Never skip the reminder because the request was short
-in words; "ออกแบบหน้า X" is design work whatever its length.
+When that differs from the session's current level — UP or DOWN, by any step, e.g.
+`xhigh` → `high` once a design session turns into ordinary building — say so FIRST, in
+one line: the kind of work, the level it deserves, and that the owner flips it in the
+app — and wait for the owner's call. Never skip the reminder because the request was
+short in words; "ออกแบบหน้า X" is design work whatever its length.
 
 The ladder (Main's own level — sub-agent effort is already fixed per role in
 `ae49-router`):
@@ -173,10 +174,12 @@ The ladder (Main's own level — sub-agent effort is already fixed per role in
 - `medium` / `low` — housekeeping: open/close-day, memory notes, status boards, docs
   ticks, running scripts whose logic is settled.
 
-The reminder works both ways: when a long stretch of housekeeping follows a design
-session, say once that a lower level is fine. One reminder per stretch of work — a
-fresh one only when the KIND of work changes, never on every message. If the owner
-says "keep it", keep it and do not raise it again for that stretch.
+Down matters as much as up (owner 2026-09-30: "ไม่ใช่แค่ขยับขึ้นนะ ถ้าตอนนั้นอยู่ที่
+xhigh / max แต่คุณมองว่าควรลงมา high ก็บอกผมด้วย"): a session left at `xhigh` for a grill
+is told when the grill is over and the rest is `high` work, and told again when only
+housekeeping remains. One reminder per stretch of work — a fresh one only when the
+KIND of work changes, never on every message. If the owner says "keep it", keep it and
+do not raise it again for that stretch.
 
 Why: on 2026-09-30 the owner set effort per role for the sub-agents and asked to be
 reminded when their OWN session should change too ("อยากเพิ่มเกี่ยวผมให้คุณช่วยเตือนผม
