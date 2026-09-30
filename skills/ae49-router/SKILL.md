@@ -18,6 +18,16 @@ back. This layer is **project-agnostic**: apply the active project's own `CLAUDE
   from a settled spec, records each plan's **file footprint**, sets `After:` chain-edges.
 - **`ae49-implement`** (sub-agent, may run several in parallel, each in its own git
   worktree) — builds ONE approved plan and runs the project's build + lint.
+  **Variants (owner 2026-09-30, effort/model tuned per role):** `ae49-implement-heavy` (Opus,
+  xhigh) for a batch over ~5 files, a data model / migration, rules / permissions, money or a new
+  shared UI pattern — fewer audit rounds on the first pass; `ae49-implement-docs` (Sonnet, high) for
+  a DOCS-ONLY batch (skills, topics, specs, guides, plan ticks, code comments — no behaviour change).
+  Plain `ae49-implement` (Opus, high) is the default for everything in between.
+- **`ae49-explore`** (sub-agent, Haiku, low) — read-only fan-out SEARCH: where is X, who calls Y,
+  which files do Z. Answers with locations, never reviews or edits. Use it instead of Main
+  grepping through many files itself.
+- **`ae49-audit`** runs at **xhigh** (owner 2026-09-30) — it is the step that found every Major
+  on 2026-09-25, so it gets the deepest reasoning of the roster.
 
 **When each one is used — ceremony scaled to risk (owner 2026-09-25: "เอาทั้ง (ก)–(ง)").**
 Every hand-off starts a cold agent that re-reads the plan and the code, so a hand-off is

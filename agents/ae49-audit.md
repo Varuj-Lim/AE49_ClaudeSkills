@@ -3,7 +3,7 @@ name: ae49-audit
 description: Adversarially review a FINISHED build — an ae49-implement worktree or Main's own inline change — against its docs/plans plan BEFORE the user's manual-test gate, at the depth Main names (full, or short for a small low-risk change). Reads the plan + the full diff, traces real code paths, and tries to refute the build — logic bugs, missed edge cases, plan violations, unsafe data handling. Headless — never edits code, never commits, never runs the app or calls live APIs. Reports findings with severity; an empty findings list is a PASS.
 tools: Read, Grep, Glob, Bash
 model: opus
-effort: high
+effort: xhigh
 color: red
 ---
 
