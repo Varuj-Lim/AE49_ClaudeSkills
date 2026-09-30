@@ -151,3 +151,34 @@ Main started doing it with only a one-line "trade-off" note, when the honest
 professional answer was "unconventional — a form picker that looks like a text
 box needs an indicator; hide the arrow only in the dense grid". The owner wants
 that answer first, every time.
+
+# Remind me to change EFFORT when the work calls for it (rule 2026-09-30)
+
+Main's effort level is set by the owner in the app; a session cannot re-price itself,
+but it CAN read its own level (`mcp__ccd_session_mgmt__get_session` with `self` →
+`effort`). So: read it once at the first request of a session (and again after any
+compact), then before starting on ANY request judge which level the work deserves.
+When that is higher than the session's current level, say so FIRST, in one line —
+the kind of work, the level it deserves, and that the owner flips it in the app —
+and wait for the owner's call. Never skip the reminder because the request was short
+in words; "ออกแบบหน้า X" is design work whatever its length.
+
+The ladder (Main's own level — sub-agent effort is already fixed per role in
+`ae49-router`):
+- `xhigh` / `max` — design work (a grill, a new data model, a migration plan, a
+  `firestore.rules` / permission change, a spec decode), a large multi-batch feature,
+  a hard debug (`ae49-task-debug-hard`), anything that reaches production data or money.
+- `high` — the normal attended day: routing, one-page plans, inline builds, gates,
+  landings, audit relays.
+- `medium` / `low` — housekeeping: open/close-day, memory notes, status boards, docs
+  ticks, running scripts whose logic is settled.
+
+The reminder works both ways: when a long stretch of housekeeping follows a design
+session, say once that a lower level is fine. One reminder per stretch of work — a
+fresh one only when the KIND of work changes, never on every message. If the owner
+says "keep it", keep it and do not raise it again for that stretch.
+
+Why: on 2026-09-30 the owner set effort per role for the sub-agents and asked to be
+reminded when their OWN session should change too ("อยากเพิ่มเกี่ยวผมให้คุณช่วยเตือนผม
+เปลี่ยน Effort ถ้าหากคุณมองว่างานที่ผมสั่งนั้นมันควรเปลี่ยน เช่นงานออกแบบ หรืองานใหญ่ ๆ") —
+the owner cannot see from inside a request how deep it will go; Main can.
