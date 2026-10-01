@@ -40,6 +40,22 @@ same breath removed the last module-wide English exemption (the plot-order scree
 - **A dialog is two languages by design:** the title is a heading (English), the body is
   an explainer (Thai). Every confirm in every hub reads this way; a body left English
   "because the module is English" is a finding — module-wide English exemptions are gone.
+- **Column heads are English in EVERY table — screen, popup, print sheet, export header
+  (owner ruling 2026-10-01, AE49 OI-15: *"หัวคอลัมน์ทุกตารางเป็นอังกฤษ ข้อความอธิบายเป็นไทย"*).**
+  A column head is an IDENTIFIER — people point at it ("the Value column") — so it follows
+  the identifier rule whatever the rest of the table's language. The test is POSITIONAL,
+  not semantic: text that renders in a `<th>` (or a column-definition `label` / `header`
+  that becomes one) is a head and is English; Thai belongs in the cells' prose (the CONTENT
+  of a Description column), captions under the table, notes, legends and empty states. The
+  only non-English heads allowed are the domain's own NOTATION — a unit or currency sign
+  (`(฿)`, `m²`), a standard's category letter (ข ค ง), a formula symbol (`fc′`) — never
+  a Thai WORD. Written because AE49's parameter tables shipped
+  `คำอธิบาย · สัญลักษณ์ · ค่า · หน่วย` under an older per-table order (2026-08-28) that was
+  never registered as an exception, a second card copied them a month later, and the
+  audit found the conflict (plan `ui-table-heads-english`). The rule for that case: an
+  earlier owner order for ONE table does not create an exception unless it is written into
+  the hub's audit registry with its date — and the hub's project audit greps `<th>` text
+  for Thai (AE49 topic 27, detector T-HEAD).
 
 ## Failure strings — the three-way split (rulings consolidated 2026-08-26)
 
