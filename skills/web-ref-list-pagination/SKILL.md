@@ -63,9 +63,10 @@ there are two.
 - **The caption** extends the hub's row-count caption (`{filtered} of {total}`): default view
   `1–50 จาก 1,811 · หน้า 1 / 37`; question view `แสดง 1–50 จาก 123 ที่ตรง (ทั้งหมด 1,811)`. Thai sentence,
   English identifiers, per `web-ref-ui-language`.
-- **"Show all" (owner Q4)** — a secondary control (a text link in the toolbar, `แสดงทั้งหมด`), never the
-  default; it loads the full scope and shows it unpaged, as today; the choice is per visit (URL state
-  `?all=1`), not remembered. A page over ~500 rows may warn in the caption that the table is long.
+- **"Show all" (owner Q4)** — a secondary control (a text link in the toolbar reading `Show all` /
+  `Show 50 per page` — ENGLISH, like every control, per `web-ref-ui-language`; the Thai explainer
+  rides in its `title`), never the default; it loads the full scope and shows it unpaged, as today;
+  the choice is per visit (URL state `?all=1`), not remembered. A page over ~500 rows may warn in the caption that the table is long.
 - **Page state lives in the URL** (`?page=3` for the default view; the question view's page resets to
   1 whenever the question changes) so a refresh or a shared link lands on the same page — the hub's
   URL-state helper, not component state.
@@ -84,7 +85,12 @@ there are two.
   query (the year, the collection) — one read, no documents transferred.
 - Sorting in the default view is the query's `orderBy` (newest first). Another column's sort is a
   QUESTION (mode 2) — the page never sorts 50 rows and pretends that is the collection's order.
-- Year scope stays what it is: a page with `?year=` pages INSIDE the year; the year picker stays.
+- Year scope stays what it is: a page with `?year=` pages INSIDE the year; the year picker stays —
+  but NOT as a date RANGE when the default order is another field: Firestore makes the range
+  field the first sort, so a list ordered by its own sequence number scopes the year through an
+  EQUALITY field (`year`, stored at create, backfilled once) + one composite index
+  (`year ASC, <seq> DESC`). AE49 learned this on 2026-10-01 when a production read showed
+  `createdAt` and `orderSeq` disagree on migrated rows.
 - Other readers of the same getter (schedule grids, aggregates, home cards, cron routes) are NOT
   changed by a page's pagination — they keep their full reads; the list page gets a NEW limited
   query, it never narrows the shared getter.
