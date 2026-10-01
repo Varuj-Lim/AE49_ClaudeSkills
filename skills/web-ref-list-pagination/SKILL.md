@@ -89,8 +89,11 @@ there are two.
   but NOT as a date RANGE when the default order is another field: Firestore makes the range
   field the first sort, so a list ordered by its own sequence number scopes the year through an
   EQUALITY field (`year`, stored at create, backfilled once) + one composite index
-  (`year ASC, <seq> DESC`). AE49 learned this on 2026-10-01 when a production read showed
-  `createdAt` and `orderSeq` disagree on migrated rows.
+  (`year ASC, <seq> DESC, <tie-break> DESC` — the tie-break is whatever orders rows that SHARE
+  the sequence number, e.g. a part index; without it the cursor falls back to the document id and
+  a page boundary can split siblings). AE49 learned this on 2026-10-01 when a production read showed
+  `createdAt` and `orderSeq` disagree on migrated rows, and the tie-break the same day (audit D11:
+  parts of one order share `orderSeq` AND `createdAt`).
 - Other readers of the same getter (schedule grids, aggregates, home cards, cron routes) are NOT
   changed by a page's pagination — they keep their full reads; the list page gets a NEW limited
   query, it never narrows the shared getter.
