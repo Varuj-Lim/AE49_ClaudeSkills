@@ -13,6 +13,11 @@ Interview me relentlessly about every aspect of this plan until we reach a share
 
 Ask the questions one at a time, waiting for feedback on each question before continuing.
 
+**Every question is written in the shape of `ae49-ref-question-format` (owner rule 2026-10-01):**
+context the owner can picture, what goes wrong if the choice is wrong, options labelled ก/ข/ค each
+with how / pros / cons / cost, a recommendation with its reason, and how to answer — never a
+compressed one-liner, even in caveman mode.
+
 If a question can be answered by exploring the codebase, explore the codebase instead.
 
 **Risk-tiered question depth (user rule, 2026-07-22):** scale how much you probe the USER

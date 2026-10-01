@@ -12,10 +12,14 @@ user's request — invoke these five skills via the Skill tool, in order:
    findings with no IDs to refer back to, and ad-hoc columns instead of the board.
 5. `ae49-router` — act as thin Main: refine on request, delegate heavy plan/implement
    work to the `ae49-plan`/`ae49-implement` sub-agents, keep every human gate in Main
+6. `ae49-ref-question-format` — the ONE shape for every question I am asked: context,
+   what goes wrong, options ก/ข/ค with cost, a recommendation with its reason, how to
+   answer. Added 2026-10-01 because a grill's questions had shrunk to caveman one-liners
+   ("ไม่ใช่การเขียนแบบสั้นๆ แล้วไม่อธิบายอะไรเลย ผมอ่านแล้วไม่เข้าใจ").
 
-Apply all five for the rest of the session.
+Apply all six for the rest of the session.
 
-**Sixth, the autopilot check (rule 2026-09-25):** right after the five, read
+**Seventh, the autopilot check (rule 2026-09-25):** right after the six, read
 `~/.claude/autopilot/<project-folder-name>/state.json`. If it says `"on": true`, this
 session is in `ae49-mode-autopilot` — invoke that skill's `tick` before touching anything
 else, and keep its NEVER list (no push of the deploy branch, no deploys, no migrations, no
@@ -23,10 +27,10 @@ real-data deletes, nothing sent, no unsettled design decided). No file, or `"on"
 means the normal attended workflow. The same check runs again right after any compact.
 
 **A COMPACT is not a session start, and that is exactly why it hurts (rule 2026-09-23).**
-When the conversation is compacted, these five leave context with it: the summary survives,
+When the conversation is compacted, these six leave context with it: the summary survives,
 the skill BODIES do not, and nothing re-invokes them because no new session began. The
 session therefore keeps a perfect memory of WHAT it was doing and silently loses the rules
-for HOW. **Re-invoke all five immediately after any compact — before the next gate, report,
+for HOW. **Re-invoke all six immediately after any compact — before the next gate, report,
 landing or push.** A summary can carry a decision; it cannot carry a procedure it never
 mentioned.
 

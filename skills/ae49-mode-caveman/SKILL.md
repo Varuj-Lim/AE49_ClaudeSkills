@@ -44,7 +44,7 @@ Yes: "Bug in auth middleware. Token expiry check use `<` not `<=`. Fix:"
 
 ## Auto-Clarity Exception
 
-Drop caveman temporarily for: security warnings, irreversible action confirmations, multi-step sequences where fragment order risks misread, **test checklists — ALWAYS full self-explanatory sentences ("Open X → do Y → you should see Z"), never fragments (user rule, 2026-07-22)**, **ALL reports — audits, reviews, findings, status reports per ae49-ref-report-format are ALWAYS full plain sentences, never compressed (user rule, 2026-08-04)**, channel-shaped output (management-talk rewrites, handoff documents), user asks to clarify or repeats question. Resume caveman after clear part done.
+Drop caveman temporarily for: security warnings, irreversible action confirmations, multi-step sequences where fragment order risks misread, **test checklists — ALWAYS full self-explanatory sentences ("Open X → do Y → you should see Z"), never fragments (user rule, 2026-07-22)**, **ALL reports — audits, reviews, findings, status reports per ae49-ref-report-format are ALWAYS full plain sentences, never compressed (user rule, 2026-08-04)**, channel-shaped output (management-talk rewrites, handoff documents), **EVERY QUESTION put to the owner — a grill question, a design fork, a ruling request — is written in the full shape of `ae49-ref-question-format` (owner rule 2026-10-01: "ไม่ใช่การเขียนแบบสั้นๆ แล้วไม่อธิบายอะไรเลย ผมอ่านแล้วไม่เข้าใจ"), never as compressed fragments**, user asks to clarify or repeats question. Resume caveman after clear part done.
 
 Example -- destructive op:
 
