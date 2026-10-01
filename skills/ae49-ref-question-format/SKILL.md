@@ -1,6 +1,6 @@
 ---
 name: ae49-ref-question-format
-description: The ONE format for every question Main puts to the owner — a grill question, a design fork, a ruling request, an audit QUESTION relayed for a decision, a "which option" during a gate, a "did you mean X" check. Owner rule 2026-10-01 ("วิธีการถามคำถามของคุณที่ส่งมาให้ผมตอบนั้นแย่ ไม่มี Format … ไม่ใช่การเขียนแบบสั้นๆ แล้วไม่อธิบายอะไรเลย ผมอ่านแล้วไม่เข้าใจ") — a question is never a terse fragment; it carries the context the owner needs to picture the situation, what goes wrong if the choice is wrong, labelled options each with how / pros / cons / cost / whose hands, a recommendation with its reason, and how to answer. Use whenever you are about to ask the owner anything that needs a decision — trigger even when the question feels small or obvious, and even in caveman mode (questions are an auto-clarity exception).
+description: The ONE format for every question Main puts to the owner — a grill question, a design fork, a ruling request, an audit QUESTION relayed for a decision, a "which option" during a gate, a "did you mean X" check. Owner rule 2026-10-01 ("วิธีการถามคำถามของคุณที่ส่งมาให้ผมตอบนั้นแย่ ไม่มี Format … ไม่ใช่การเขียนแบบสั้นๆ แล้วไม่อธิบายอะไรเลย ผมอ่านแล้วไม่เข้าใจ") — a question is never a terse fragment; it carries the context the owner needs to picture the situation, labelled options each with how / pros / cons / cost / whose hands (a consequence lives inside its option's ข้อเสีย — no separate "what goes wrong" block, owner 2026-10-01), a recommendation with its reason, and how to answer. Use whenever you are about to ask the owner anything that needs a decision — trigger even when the question feels small or obvious, and even in caveman mode (questions are an auto-clarity exception).
 ---
 
 # Question format — how Main asks the owner anything
@@ -21,9 +21,6 @@ option spelled out with its consequence, and a recommendation with the reason. T
 
 **เรื่องอะไร:** 2–4 ประโยค — ตอนนี้ระบบ/งานเป็นอย่างไร (ชี้ไปที่หน้า/ปุ่ม/ข้อมูลจริงที่เจ้าของเคยเห็น),
 ทำไมต้องตัดสินใจเรื่องนี้ตอนนี้, และคำถามนี้เกี่ยวกับคำถามก่อนหน้าอย่างไร (ถ้ามี)
-
-**ถ้าเลือกผิดจะเกิดอะไร:** ตัวอย่างผลเสียที่เป็นรูปธรรม 1–3 ข้อ ในภาษาคน
-("พนักงานปิดหัวข้อนี้ → ใบลาถูกปฏิเสธแต่เขาไม่รู้ → มาทำงานไม่ทัน")
 
 **ตัวเลือก:**
 - **(ก) <ชื่อสั้น> — แนะนำ** · ทำอย่างไร (1 ประโยค) · ข้อดี · ข้อเสีย/ต้นทุน (งานกี่ไฟล์, ใครต้องกดอะไร, ต้อง deploy อะไร)
@@ -50,8 +47,9 @@ option spelled out with its consequence, and a recommendation with the reason. T
 4. **Context before options.** The owner cannot see the code or the previous ten tool calls;
    the "เรื่องอะไร" block must let them picture the screen or the data. Name the page, the button,
    the record (quoted values per `ae49-ref-gate-checklist`), the number that matters.
-5. **Consequences are concrete, not abstract.** "เสี่ยง" is not a consequence; "ผู้เขียนแบบไม่เห็นว่า
-   งานถูกยกเลิก แล้วทำต่อฟรี 2 วัน" is.
+5. **No separate "what goes wrong" section (owner 2026-10-01: "ตัดหัวข้อว่า ถ้าเลือกผิดจะเกิดอะไรขึ้น").**
+   A consequence that matters belongs inside the option it belongs to, as that option's ข้อเสีย,
+   in one concrete phrase — never as a block of its own above the options.
 6. **Every option says who does what and what it costs** — files, a deploy, the owner's hands,
    a migration, a wait. The owner decides by trade-off, not by label.
 7. **A recommendation is mandatory, with a plain reason.** "แนะนำ (ก)" alone is not a reason.
@@ -75,10 +73,9 @@ option spelled out with its consequence, and a recommendation with the reason. T
 **Good (understood, answered "ก" at once):**
 > **คำถามคือ:** ทุกหัวข้อจะเป็น checkbox ให้ปิดเองได้ — แต่ควรมีบางหัวข้อที่ "ติ๊กออกไม่ได้" ไหม (ติ๊กถาวร สีเทา)
 > เพราะถ้าปิดแล้วเขาจะพลาดเรื่องที่กระทบตัวเองหรือกฎบริษัท
-> **ตัวอย่างผลเสียถ้าปล่อยให้ปิดได้หมด:** พนักงานปิด "ผลใบลาของฉัน" → ใบลาถูกปฏิเสธแต่เขาไม่รู้ → มาทำงานไม่ทัน; ปิด
-> "การขาดงาน" → ระบบเตือนว่ากำลังจะถูกบันทึกขาดงาน แต่เขาไม่เห็น → โทษระบบทีหลัง
 > **(ก) แนะนำ** — ล็อกไว้ 3 อย่าง: ผลใบลาของฉัน · การขาดงาน/ลงเวลา · ข้อความระบบ; ที่เหลือปิดได้ตามใจ
-> **(ข)** ไม่ล็อกอะไรเลย — ง่ายสุด แต่เสี่ยงตามตัวอย่าง · **(ค)** ล็อกแค่การขาดงาน
+> **(ข)** ไม่ล็อกอะไรเลย — ง่ายสุด แต่พนักงานที่ปิด "ผลใบลาของฉัน" จะไม่รู้ว่าใบลาถูกปฏิเสธและมาทำงานไม่ทัน
+> **(ค)** ล็อกแค่การขาดงาน
 > **รอคุณ:** ก / ข / ค
 
 ## Where this sits
