@@ -182,15 +182,19 @@ popup WITH it are both defects — and a mixed component is easy to get half rig
   different family — not governed by these tokens.
 - **Don't put a default-presentation picker inside a SCROLLING card (owner ruling
   2026-10-01, AE49 gate ⑧: "การมี Dropdown หรืออะไรก็ตาม ต้องล้นออกจาก popup ได้").** A
-  card variant with `max-h-* overflow-y-auto` (AE49's `POPUP_CARD.lg` / `wideScroll`) clips
-  every `position: absolute` child at its edge, so a dropdown / date picker / employee picker
-  that opens as a popover is CUT OFF the moment its list is taller than the space below the
-  trigger — the Add Footing pile-spec list showed three rows and a scrollbar. Every picker
-  whose trigger sits inside such a card declares the picker's scroll-safe presentation
-  (AE49: `presentation="inline"` so the list unfolds in flow and the body scrolls; `"fixed"`
-  only for a scroll-clipped grid cell — the decision table is `ae49Hub-ref-dropdown`). Writing
-  the popup is the moment to check: the card variant decides the picker prop, not the other
-  way round. The project audit's popup topic greps for the pairing (AE49 PU10).
+  `max-h-* overflow-y-auto` box — a card variant that scrolls itself (AE49's `POPUP_CARD.lg`)
+  or the one scrolling child of a card that does not (AE49's `POPUP_SCROLL_BODY` /
+  `POPUP_LIST_BODY` inside `wideScroll`) — clips every `position: absolute` child at its
+  edge, so a dropdown / employee picker that opens as a popover is CUT OFF the moment its
+  list is taller than the space below the trigger — the Add Footing pile-spec list showed
+  three rows and a scrollbar. Every picker whose TRIGGER sits inside such a box declares the
+  picker's scroll-safe presentation (AE49: `presentation="inline"` so the list unfolds in
+  flow and the body scrolls; `"fixed"` when unfolding would wreck the layout — a grid cell,
+  or a person picker in a two-column grid whose panel is wider than the half-column — the
+  decision table is `ae49Hub-ref-dropdown`). A picker in the card's header row, outside the
+  scroll box, is fine. Writing the popup is the moment to check: the card variant decides
+  the picker prop, not the other way round. The project audit's popup topic greps for the
+  pairing (AE49 PU10).
 
 ## Pair with an audit
 
