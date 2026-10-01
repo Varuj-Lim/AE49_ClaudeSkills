@@ -180,6 +180,17 @@ popup WITH it are both defects — and a mixed component is easy to get half rig
   one; don't add Escape or a slide/fade animation.
 - An inline popover anchored under a field (a date-range calendar) is a
   different family — not governed by these tokens.
+- **Don't put a default-presentation picker inside a SCROLLING card (owner ruling
+  2026-10-01, AE49 gate ⑧: "การมี Dropdown หรืออะไรก็ตาม ต้องล้นออกจาก popup ได้").** A
+  card variant with `max-h-* overflow-y-auto` (AE49's `POPUP_CARD.lg` / `wideScroll`) clips
+  every `position: absolute` child at its edge, so a dropdown / date picker / employee picker
+  that opens as a popover is CUT OFF the moment its list is taller than the space below the
+  trigger — the Add Footing pile-spec list showed three rows and a scrollbar. Every picker
+  whose trigger sits inside such a card declares the picker's scroll-safe presentation
+  (AE49: `presentation="inline"` so the list unfolds in flow and the body scrolls; `"fixed"`
+  only for a scroll-clipped grid cell — the decision table is `ae49Hub-ref-dropdown`). Writing
+  the popup is the moment to check: the card variant decides the picker prop, not the other
+  way round. The project audit's popup topic greps for the pairing (AE49 PU10).
 
 ## Pair with an audit
 
