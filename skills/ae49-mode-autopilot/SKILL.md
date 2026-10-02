@@ -116,10 +116,19 @@ this list bends — not for a pre-authorisation given at switch-on, not for a re
    (a second job takes the next number, a duplicate-title folder maps its files, every file has
    its story). It never re-checks logic the unit tests already cover. Each extended check is one
    log line with its evidence and one line in the morning report; it is not written onto the board.
-5. **Forks.** When a choice arises — an agent's open question, a wording, a small design detail —
-   choose the option the relevant canon recommends, or the safest cheaply-reversible one, and log it
-   as a DECISION with the alternatives. A fork that changes product behaviour and is not cheaply
-   undone → PARK (NEVER 8). A ticket or request outside the scope → write the plan, PARK it for
+5. **Forks — a QUESTION goes to the owner, the TESTING stays with Main (owner ruling 2026-10-02,
+   run 8: *"ถ้าติดคำถามให้มาถามมากกว่าการตัดสินใจเอง แต่ให้ระบบ Test เองนะ"*).** Whenever the work hits
+   a fork that is a question — an agent's or an audit's open question, a wording, a design detail, a
+   width-vs-scroll trade of the D118 kind ("wider but it scrolls" vs "narrower but it clips"), anything
+   with two defensible answers — Main ASKS the owner in chat in the `ae49-ref-question-format` shape,
+   logs it as `ASKED Q<n>` (with the options and Main's recommendation), gives it a register row when
+   it blocks a batch, and keeps working on everything that does not depend on the answer. It does NOT
+   pick an option and log a DECISION. The only calls Main still makes itself — and still logs — are
+   mechanical readings with one defensible answer: a measured string width that binds a kind, a count,
+   a wrong path, a default the canon mandates. The gates stay Main-run, with evidence: the owner is not
+   asked to test. The older default (choose the canon's option, log a `D<n>` DECISION, PARK only a
+   product-impact fork) applies only when the owner said at switch-on that they are unreachable for the
+   run ("ผมจะไปนอน") — and even then NEVER 8 holds: a product-impact fork is PARKED, not decided. A ticket or request outside the scope → write the plan, PARK it for
    approval, never build (owner default 2026-09-25).
    **Every PARK and every WAITING-OWNER item also gets a row in the project's open-items
    register `docs/plans/_open-items.md` in the same tick** (owner ruling 2026-09-30, `ae49-router`
