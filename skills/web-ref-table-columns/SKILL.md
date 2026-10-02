@@ -35,6 +35,13 @@ be sized by what it holds.
 - Never let content size a column — not on screen, not in print.
 - A table wider than its container gets a `min-width` and scrolls sideways inside its card
   (`overflow-x-auto`). Never squeeze fixed columns below their scale width to make them fit.
+- **T1 has no exemptions** (AE49_Hub plan `table-widths-sweep`, 2026-10-02 — an audit had found
+  ~40 tables still auto-sized under the word "exempt"): a table excused from `fill`, from a
+  project's list width scale, from sorting, from pagination or from a conversion batch is still
+  `table-fixed` with every column but one given an explicit width from its own registry —
+  "exempt" there means exempt from THOSE, never from the fixed layout. A column holds its widest
+  content (bind the kind on the widest string the code can print); a few px of sideways scroll
+  is accepted before a kind is squeezed.
 
 ## T2 · The width comes from the column's KIND, on one scale
 
@@ -179,13 +186,21 @@ default and `fill` is the opt-in, which is the right way round.
 - A project that deliberately diverges says so in its facts skill, with the reason.
 - The owner asked for EVERY table, so this is an app-wide conversion driven by each project's
   audit — not only a rule for new tables. New tables follow it from birth.
+- **A bare-table detector runs in every project audit** (AE49_Hub `table-widths-sweep` B3,
+  2026-10-02): `rg -nP '<table(?![^>]*table-fixed)' app components` — every hit is either in the
+  project's NAMED residue (print sheets with their own mm colgroups; an allowed-debt list the owner
+  ruled, converted when next touched) in its audit topic, or it is a finding. "Exempt" without a
+  file name is not a residue.
+- **Every plan that touches a table page carries ONE edge-stability test item**: make the pick,
+  keystroke or load that changes the rows → the column edges stay where they were (the item shape
+  lives in `ae49-task-plan-feature`'s template and `ae49-ref-gate-checklist`).
 
 ## Each project supplies its FACTS in its own ref skill
 
 | Project | Facts skill | Scale lives in |
 |---|---|---|
 | NuriHub | `nurihub-ref-table-columns` — created with the scale (planned 2026-09-11) | the shared table helpers, once built |
-| AE49_Hub | `ae49Hub-ref-parameter-table` (the R&D footing grids, where the scale was seeded 2026-09-11) + `ae49Hub-ref-list-page` §Table columns (the list tables — adoption began 2026-09-18 with Overtime + Leave Orders under T5, plan `table-no-shift`, and finished 2026-09-25 with `table-columns-app-wide`: 32 list files on `ListColGroup` + the `COL_PX` scale of 58 kinds; the exempt tables are listed in that skill's Exclude registry. One deliberate divergence from T2: AE49 makes the LAST column flexible when no text column exists — owner ruling 2026-09-16) | `COL_PX` in `lib/constants/tableStyles.ts`, rendered through `TableCard`'s `tableClassName` / `minWidthPx` |
+| AE49_Hub | `ae49Hub-ref-parameter-table` (the R&D footing grids, where the scale was seeded 2026-09-11) + `ae49Hub-ref-list-page` §Table columns (the list tables — adoption began 2026-09-18 with Overtime + Leave Orders under T5, plan `table-no-shift`, and finished 2026-09-25 with `table-columns-app-wide`: 32 list files on `ListColGroup` + the `COL_PX` scale of 58 kinds; the exempt tables are listed in that skill's Exclude registry. One deliberate divergence from T2: AE49 makes the LAST column flexible when no text column exists — owner ruling 2026-09-16. Plan `table-widths-sweep` (2026-10-01/02) added the PARAMETER BLOCKS — the R&D Description / Symbol / Value / Unit cards on two shared column lists, `PARAM_BLOCK_COLS` and `PARAM_WIDE_COLS` — and a THIRD padding tier, the MID tier (`mid*` kinds at `px-2`, the Foundation Optimizer's input and result tables); a kind never crosses a tier) | `COL_PX` in `lib/constants/tableStyles.ts`, rendered through `TableCard`'s `tableClassName` / `minWidthPx`; the parameter blocks and the mid tier through `ListColGroup` + `listMinPx` directly |
 | future siblings | create with the first table | copy the shape: one scale, one flexible column |
 
 Filter pills have their own width rule in `web-ref-filter-format` R4 — a pill never changes width

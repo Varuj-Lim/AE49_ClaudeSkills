@@ -228,6 +228,16 @@ file paths, codes, folder names), so a plan's Testing checklist can be copied on
 written. Other markdown (`**bold**`, links) still shows literally; an unpaired backtick shows
 every backtick literally — the validator warns on both.
 
+## A table page always carries one edge-stability item
+
+**Canon `web-ref-table-columns` (AE49_Hub plan `table-widths-sweep` B3, 2026-10-02).** When the
+feature under test touches a page with a table — a list, a detail's line items, a parameter block, a
+result table, a print sheet — the section carries ONE item of this shape, and condensing never drops
+it: `[EMU] (RD) {Nav -> Page} <ทำ pick / พิมพ์ / โหลด ที่ทำให้แถวเปลี่ยน> → เส้นแบ่งคอลัมน์อยู่ที่เดิม`
+(e.g. "กด `Show all (N)` แล้วกดกลับ → เส้นแบ่งคอลัมน์อยู่ที่เดิม"). It is the one check that catches a
+column sized by its content, which no build gate sees; Main-verified form: read the `<th>` right
+edges before and after and compare the arrays.
+
 ## Test data
 
 If the checklist needs data that doesn't

@@ -86,6 +86,10 @@ project defines (typecheck / build / lint — see its CLAUDE.md), then check wha
      section is the project's ONLY testing artefact. Plain, numbered click-through steps
      for the USER (not the build session), no jargon, no file paths — same audience as
      the Plain-language summary. ae49-implement quotes this section **verbatim** in its
-     final report, and Main hands it straight to the user for the manual-test gate. -->
+     final report, and Main hands it straight to the user for the manual-test gate.
+     A plan that touches a TABLE page carries ONE item of this shape (canon
+     web-ref-table-columns, AE49_Hub plan table-widths-sweep B3, 2026-10-02):
+     "<make the pick / keystroke / load that changes the rows> → the column edges stay
+     where they were" — the edge-stability item, never dropped when the list is condensed. -->
 1. [ ] <do this in the app> → you should see <this>
 2. [ ] <do this in the app> → you should see <this>
