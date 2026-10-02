@@ -81,6 +81,14 @@ line of its calculation spec was derived from. Both would have been unrecoverabl
 
 # Communication
 
+- **Commands I hand the owner run in WINDOWS POWERSHELL — write them so (rule 2026-10-02, applies in
+  every project).** The owner pastes deploy / backfill / emulator commands into a plain PowerShell window,
+  never Git Bash. So an owner-facing command block is tagged `powershell`, uses backslash paths and
+  PowerShell syntax (`$env:X = "y"; cmd`, no `&&`), and every npm shim is called by its `.cmd` name —
+  `npx.cmd firebase-tools …`, `npm.cmd run …` — because the machine's execution policy refuses `npx.ps1`
+  ("running scripts is disabled on this system"). `node …` is fine as is. Main's own Bash tool calls are
+  unaffected. Written because on 2026-10-02 the pre-push block was handed over as `bash` blocks with
+  plain `npx`, failed on the first line, and the owner had to ask twice ("มันรันไม่ได้ ต้องเป็น npx.cmd").
 - **All times are THAI TIME (rule 2026-08-26, applies in every project).** I work in
   Thailand and speak in Thailand time — Asia/Bangkok, UTC+7, no DST. Interpret every
   time I mention as ICT, and present every time you mention to me in ICT (no "UTC"
