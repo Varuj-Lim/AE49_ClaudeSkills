@@ -89,6 +89,9 @@ line of its calculation spec was derived from. Both would have been unrecoverabl
   ("running scripts is disabled on this system"). `node …` is fine as is. Main's own Bash tool calls are
   unaffected. Written because on 2026-10-02 the pre-push block was handed over as `bash` blocks with
   plain `npx`, failed on the first line, and the owner had to ask twice ("มันรันไม่ได้ ต้องเป็น npx.cmd").
+  **Addendum 2026-10-02 13:4x (owner):** paste every owner-facing command as PLAIN TEXT on its own line as well as
+  in the code block — twice today the owner could not see the fenced block ("คำสั่งอยู่ไหนละ … ให้ผมพิมพ์ว่าอะไร")
+  and had to ask three times; a bare line survives whatever the client does with fences.
 - **All times are THAI TIME (rule 2026-08-26, applies in every project).** I work in
   Thailand and speak in Thailand time — Asia/Bangkok, UTC+7, no DST. Interpret every
   time I mention as ICT, and present every time you mention to me in ICT (no "UTC"
