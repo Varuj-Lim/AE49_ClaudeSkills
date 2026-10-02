@@ -164,36 +164,15 @@ professional answer was "unconventional — a form picker that looks like a text
 box needs an indicator; hide the arrow only in the dense grid". The owner wants
 that answer first, every time.
 
-# Remind me to change EFFORT when the work calls for it (rule 2026-09-30)
+# Effort: no reminders for Main (owner ruling 2026-10-02, withdraws the 2026-09-30 rule)
 
-Main's effort level is set by the owner in the app; a session cannot re-price itself,
-but it CAN read its own level (`mcp__ccd_session_mgmt__get_session` with `self` →
-`effort`). So: read it once at the first request of a session (and again after any
-compact), then before starting on ANY request judge which level the work deserves.
-When that differs from the session's current level — UP or DOWN, by any step, e.g.
-`xhigh` → `high` once a design session turns into ordinary building — say so FIRST, in
-one line: the kind of work, the level it deserves, and that the owner flips it in the
-app — and wait for the owner's call. Never skip the reminder because the request was
-short in words; "ออกแบบหน้า X" is design work whatever its length.
+The owner sets Main's effort level in the app and does NOT want Main to suggest changing it —
+up or down — at any point ("ปรับไปปรับมา มันเละ"). Main never reads its own level to compare it
+with the work, never opens a request with an effort reminder, never mentions `xhigh` / `high` /
+`max` for itself. The per-ROLE effort of the sub-agents stays exactly as set in `ae49-router` and
+the agent definitions (`ae49-audit` xhigh, `ae49-implement-heavy` xhigh, `ae49-implement` high,
+`ae49-implement-docs` high, `ae49-explore` low) — that part the owner keeps.
 
-The ladder (Main's own level — sub-agent effort is already fixed per role in
-`ae49-router`):
-- `xhigh` / `max` — design work (a grill, a new data model, a migration plan, a
-  `firestore.rules` / permission change, a spec decode), a large multi-batch feature,
-  a hard debug (`ae49-task-debug-hard`), anything that reaches production data or money.
-- `high` — everything else, housekeeping included: routing, one-page plans, inline
-  builds, gates, landings, audit relays, open/close-day, memory notes, status boards.
-- **`high` is the FLOOR (owner 2026-09-30: "ไม่ต้องลงต่ำกว่า High ผมยอมเปลืองนิดหน่อยได้
-  จะได้งานไม่ซับซ้อนมาก").** Never suggest `medium` or `low`, however light the work.
-
-Down matters as much as up (owner 2026-09-30: "ไม่ใช่แค่ขยับขึ้นนะ ถ้าตอนนั้นอยู่ที่
-xhigh / max แต่คุณมองว่าควรลงมา high ก็บอกผมด้วย"): a session left at `xhigh` for a grill
-is told when the grill is over and the rest is `high` work — and that is the only
-downward step there is. One reminder per stretch of work — a fresh one only when the
-KIND of work changes, never on every message. If the owner says "keep it", keep it and
-do not raise it again for that stretch.
-
-Why: on 2026-09-30 the owner set effort per role for the sub-agents and asked to be
-reminded when their OWN session should change too ("อยากเพิ่มเกี่ยวผมให้คุณช่วยเตือนผม
-เปลี่ยน Effort ถ้าหากคุณมองว่างานที่ผมสั่งนั้นมันควรเปลี่ยน เช่นงานออกแบบ หรืองานใหญ่ ๆ") —
-the owner cannot see from inside a request how deep it will go; Main can.
+Written because on 2026-10-02 a morning of reminders moved the session xhigh → high → max in two
+hours and the owner found the replies worse at the lower level; the ladder that used to live here
+(design = xhigh/max, everything else = high, high the floor) is withdrawn for Main.
