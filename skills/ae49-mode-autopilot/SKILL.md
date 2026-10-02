@@ -1,6 +1,6 @@
 ---
 name: ae49-mode-autopilot
-description: An ON/OFF mode for the Main session of an ae49-workflow project (AE49_Hub, Nuri_Hub, future siblings) — while ON, Main keeps working unattended inside a scope the owner set at switch-on, dispatches and audits agents itself, runs every gate itself (scripts for logic and data, the built-in browser on the emulator for screens, screenshots as evidence), lands and backs up — but never pushes the deploy branch on its own (only on the owner's live "push" command), never deploys, never migrates, never deletes real data, never sends anything, never decides an unsettled design; every decision it takes for the owner goes into a dated log file the moment it is made. While OFF (the normal state) nothing here applies. Invoke on "/ae49-mode-autopilot on|off|status|tick", "เปิดโหมด autopilot", "ผมจะไปนอน ทำต่อเองเลย", "รันต่อเองทั้งคืน", "ปิดโหมด", "ตั้งแต่เปิดโหมดคุณตัดสินอะไรไปบ้าง", and at every session start or compact when the state file says ON.
+description: An ON/OFF mode for the Main session of an ae49-workflow project (AE49_Hub, Nuri_Hub, future siblings) — while ON, Main keeps working unattended inside a scope the owner set at switch-on, dispatches and audits agents itself, runs every gate itself (scripts for logic and data, the built-in browser on the emulator for screens, screenshots as evidence), lands and backs up — but never pushes the deploy branch on its own (only on the owner's live "push" command), never deploys, never migrates, never deletes real data, never sends anything, never decides an unsettled design; every decision it takes for the owner goes into a dated log file the moment it is made. While OFF (the normal state) nothing here applies. Invoke on "/ae49-mode-autopilot on [ask|decide] <scope>|off|status|tick", "เปิดโหมด autopilot", "ผมจะไปนอน ทำต่อเองเลย", "รันต่อเองทั้งคืน", "ปิดโหมด", "ตั้งแต่เปิดโหมดคุณตัดสินอะไรไปบ้าง", and at every session start or compact when the state file says ON.
 ---
 
 # ae49-mode-autopilot — unattended Main, with a decision log
@@ -49,18 +49,36 @@ this list bends — not for a pre-authorisation given at switch-on, not for a re
    PARKED with the options written out, not chosen.
 9. **Never invent work.** When the scope is exhausted the mode goes quiet; it does not look for more.
 
-## `on <scope…>` — switching on (the owner is still awake: this is the one moment to ask)
+## `on [ask|decide] <scope…>` — switching on (the owner is still awake: this is the one moment to ask)
+
+**Two sub-modes (owner ruling 2026-10-02, run 8, names chosen ก):** the word right after `on` picks how
+Main treats a FORK — a question with two defensible answers (an agent's or audit's open question, a
+wording, a design detail, a width-vs-scroll trade of the D118 kind):
+- **`ask` — the DEFAULT (no word given) — "โหมดถาม".** Main ASKS the owner in chat in the
+  `ae49-ref-question-format` shape, logs `ASKED Q<n>`, and keeps working on everything that does not
+  depend on the answer. Nothing is decided for the owner. Use it whenever the owner is reachable.
+- **`decide` — "โหมดตัดสิน".** Main chooses the option the relevant canon recommends, or the safest
+  cheaply-reversible one, logs it as `D<n> DECISION` with the alternatives and the undo, and the `off`
+  report lists every one for the owner to change. Use it when the owner will be away for the run
+  ("ผมจะไปนอน", "ออกไปข้างนอกทั้งบ่าย").
+In BOTH: the gates are Main-run with evidence (the owner never tests); the mechanical readings — a
+measured string width that binds a kind, a count, a wrong path, a canon-mandated default — are
+Main's and logged; the NEVER list holds, so a product-impact fork that is not cheaply undone is PARKED
+in `decide` too (NEVER 8), never chosen. The word is recorded as `"forks": "ask" | "decide"` in the
+state file, shown by `status`, and can be switched mid-run by the owner ("เปลี่ยนเป็น decide") — logged
+as a ruling.
 
 1. **Take the scope from the owner's words** — plan slugs / batches / named tasks, e.g.
-   `on stories-B1 stories-B2 table-columns-B8`. Read those plans; check their `After:` chains are
-   satisfied or inside the scope. No scope given → ask ONCE ("คืนนี้ให้ทำอะไรบ้าง") — never start on a guess.
+   `on stories-B1 stories-B2 table-columns-B8` or `on decide stories-B1 stories-B2`. Read those plans;
+   check their `After:` chains are satisfied or inside the scope. No scope given → ask ONCE
+   ("คืนนี้ให้ทำอะไรบ้าง") — never start on a guess.
 2. **Collect pre-answered rulings** the owner gives now ("ถ้าถามเรื่อง X ให้เลือก ก") into the state.
 3. **Budget** (defaults unless the owner says otherwise): at most **2** agents at once; at most **3**
    audit rounds per build before the build is parked; no time box unless given.
 4. **Write the state file** `~/.claude/autopilot/<project-folder-name>/state.json`:
-   `{ "on": true, "project": "<absolute path>", "since": "<clock, ICT>", "scope": [...],
-   "rulings": [...], "budget": {...}, "log": "<path of the decision log>" }` — machine-local on
-   purpose: a session on the other machine must not believe it is in the mode.
+   `{ "on": true, "forks": "ask" | "decide", "project": "<absolute path>", "since": "<clock, ICT>",
+   "scope": [...], "rulings": [...], "budget": {...}, "log": "<path of the decision log>" }` —
+   machine-local on purpose: a session on the other machine must not believe it is in the mode.
 5. **Open the decision log** `<project>/.claude/memory/<person>/autopilot-<YYYY-MM-DD>.md` (the
    git-synced per-person memory; `<person>` from the mapping in `.claude/memory/MEMORY.md`) with a
    header: since, scope, rulings, budget. Screenshots go to
@@ -76,9 +94,10 @@ this list bends — not for a pre-authorisation given at switch-on, not for a re
    ScheduleWakeup). If the harness refuses the invocation, ask the owner to type
    `/loop /ae49-mode-autopilot tick` before leaving — and say so plainly; without a heartbeat the mode
    only moves when an agent finishes.
-8. **Say back, in Thai:** the scope as understood, the NEVER list in one line, the budget, that
-   nothing will reach production, how to switch off (`/ae49-mode-autopilot off` or "ปิดโหมด"), and
-   that the morning report will list every decision. Then start the first `tick` at once.
+8. **Say back, in Thai:** the sub-mode (`ask` = ติดคำถามจะถามคุณ / `decide` = ตัดสินเองแล้วรายงาน), the
+   scope as understood, the NEVER list in one line, the budget, that nothing will reach production,
+   how to switch off (`/ae49-mode-autopilot off` or "ปิดโหมด"), and that the morning report will list
+   every decision and every question. Then start the first `tick` at once.
 
 ## `tick` — one unattended step (every wakeup, every agent completion)
 
@@ -116,19 +135,22 @@ this list bends — not for a pre-authorisation given at switch-on, not for a re
    (a second job takes the next number, a duplicate-title folder maps its files, every file has
    its story). It never re-checks logic the unit tests already cover. Each extended check is one
    log line with its evidence and one line in the morning report; it is not written onto the board.
-5. **Forks — a QUESTION goes to the owner, the TESTING stays with Main (owner ruling 2026-10-02,
-   run 8: *"ถ้าติดคำถามให้มาถามมากกว่าการตัดสินใจเอง แต่ให้ระบบ Test เองนะ"*).** Whenever the work hits
-   a fork that is a question — an agent's or an audit's open question, a wording, a design detail, a
-   width-vs-scroll trade of the D118 kind ("wider but it scrolls" vs "narrower but it clips"), anything
-   with two defensible answers — Main ASKS the owner in chat in the `ae49-ref-question-format` shape,
-   logs it as `ASKED Q<n>` (with the options and Main's recommendation), gives it a register row when
-   it blocks a batch, and keeps working on everything that does not depend on the answer. It does NOT
-   pick an option and log a DECISION. The only calls Main still makes itself — and still logs — are
-   mechanical readings with one defensible answer: a measured string width that binds a kind, a count,
-   a wrong path, a default the canon mandates. The gates stay Main-run, with evidence: the owner is not
-   asked to test. The older default (choose the canon's option, log a `D<n>` DECISION, PARK only a
-   product-impact fork) applies only when the owner said at switch-on that they are unreachable for the
-   run ("ผมจะไปนอน") — and even then NEVER 8 holds: a product-impact fork is PARKED, not decided. A ticket or request outside the scope → write the plan, PARK it for
+5. **Forks — by the sub-mode in the state file (`forks`), owner ruling 2026-10-02 run 8:
+   *"ถ้าติดคำถามให้มาถามมากกว่าการตัดสินใจเอง แต่ให้ระบบ Test เองนะ"*, split into two named modes the same day.**
+   A fork = a question with two defensible answers: an agent's or audit's open question, a wording, a
+   design detail, a width-vs-scroll trade of the D118 kind ("wider but it scrolls" vs "narrower but it
+   clips").
+   - **`ask` (default):** Main ASKS the owner in chat in the `ae49-ref-question-format` shape, logs
+     `ASKED Q<n>` with the options and its recommendation, gives it a register row when it blocks a
+     batch, and keeps working on everything that does not depend on the answer. It does NOT pick an
+     option. An answer arriving later is logged as `ruling:` and applied.
+   - **`decide`:** Main chooses the option the relevant canon recommends, or the safest
+     cheaply-reversible one, and logs `D<n> DECISION · chosen · alternatives · why · undo · risk`; the
+     `off` report's first table lists every one. A fork that changes product behaviour and is not
+     cheaply undone → PARK (NEVER 8), in this mode too.
+   In both modes the mechanical readings with one defensible answer — a measured string width that
+   binds a kind, a count, a wrong path, a default the canon mandates — are Main's and are logged; the
+   gates stay Main-run with evidence (the owner is never asked to test). A ticket or request outside the scope → write the plan, PARK it for
    approval, never build (owner default 2026-09-25).
    **Every PARK and every WAITING-OWNER item also gets a row in the project's open-items
    register `docs/plans/_open-items.md` in the same tick** (owner ruling 2026-09-30, `ae49-router`
@@ -166,8 +188,8 @@ the `undo:` column is the recipe; a landed commit is reverted, never rewritten.
 
 ## `status`
 
-One paragraph: ON/OFF, since when, scope left, agents running, last tick, log path — read from the
-files, not from memory.
+One paragraph: ON/OFF, the sub-mode (`ask` / `decide`), since when, scope left, agents running, last
+tick, questions awaiting the owner, log path — read from the files, not from memory.
 
 ## Session start and compaction
 
