@@ -131,6 +131,38 @@ When at least one `plan` topic has a finding, write the audit as a plan in the
 - **Commit:** stage ONLY the plan file, message
   `docs(plans): add audit fix plan (<scope>)`.
 
+## A new rule sweeps the project FIRST (owner ruling 2026-10-06)
+
+A rule that is written and not swept is an inconsistency waiting for someone to find it. On
+2026-10-06 canon T7 (`web-ref-table-columns`) was created in the morning; the builder of the first
+T7 batch added a detector on its own initiative and it found two more cells that broke the rule —
+they became an owner question the same day only because an auditor happened to look. The owner:
+*"Every time I create new rule sent the audit to check about those topic in our project first"*.
+
+So, **whenever a canon rule is created or changed** — a T-rule in a table canon, a rule in any
+`web-ref-*` / `<proj>-ref-*` skill, a ruling the owner turns into a rule — Main does, IN THE SAME
+TURN, before any build that depends on the rule:
+
+1. **Detector.** Add or update the rule's detector in the project's audit topic that owns it
+   (`<proj>-task-audit-project/topics/NN-*.md`): the grep(s), what a hit means, the allowed-debt
+   list it subtracts. A rule with no mechanical detector gets a written "sweep by hand: read every
+   file that <criterion>" line instead — never nothing.
+2. **Sweep.** Run the detector over the whole project — an `ae49-explore` fan-out for a grep-shaped
+   rule, an `ae49-audit` pass for one that needs judgement — and collect every hit with
+   `file:line` + a one-line excerpt.
+3. **Report, do not fix.** Hand the owner the hit LIST as findings (`ae49-ref-report-format`, one ID
+   per hit or per file). The sweep decides nothing: a rule that turns up 23 old tables is not an
+   order to convert 23 tables today.
+4. **The owner sorts every hit into exactly one of three bins, and each bin leaves a row somewhere:**
+   fix now → a plan (or a batch of an open plan); accept as debt → the topic's named allowed-debt
+   list that the detector subtracts (dated, with the reason); exempt → the topic's Exclude registry
+   with the reason. A hit with no row is the failure this section exists to prevent.
+5. The rule's own text records the sweep: "swept <date>: N hits → <plan> / <debt list>".
+
+In autopilot `ask` mode steps 1–3 run unattended and step 4 is ASKED; a sweep that returns zero hits
+is still logged ("swept, 0 hits"). This is distinct from the whole-project audit above: the sweep is
+one rule, the moment it is born; the audit is every rule, on request.
+
 ## Don't
 
 - Don't fix anything in the audit run — the impl lane does. Edit no app code.
