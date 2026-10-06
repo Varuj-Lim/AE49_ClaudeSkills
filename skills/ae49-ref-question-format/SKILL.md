@@ -23,9 +23,17 @@ option spelled out with its consequence, and a recommendation with the reason. T
 ทำไมต้องตัดสินใจเรื่องนี้ตอนนี้, และคำถามนี้เกี่ยวกับคำถามก่อนหน้าอย่างไร (ถ้ามี)
 
 **ตัวเลือก:**
-- **(a) <ชื่อสั้น> — แนะนำ** · ทำอย่างไร (1 ประโยค) · ข้อดี · ข้อเสีย/ต้นทุน (งานกี่ไฟล์, ใครต้องกดอะไร, ต้อง deploy อะไร)
-- **(b) <ชื่อสั้น>** · ทำอย่างไร · ข้อดี · ข้อเสีย/ต้นทุน
-- **(c) <ชื่อสั้น>** · … (มีเท่าที่จำเป็น 2–4 ตัวเลือก)
+- **(a) <ชื่อสั้น> — แนะนำ**
+  - ทำอย่างไร: 1 ประโยค
+  - ข้อดี: …
+  - ข้อเสีย: …
+  - ต้นทุน: งานกี่ไฟล์, ใครต้องกดอะไร, ต้อง deploy อะไร
+- **(b) <ชื่อสั้น>**
+  - ทำอย่างไร: …
+  - ข้อดี: …
+  - ข้อเสีย: …
+  - ต้นทุน: …
+- **(c) <ชื่อสั้น>** … (มีเท่าที่จำเป็น 2–4 ตัวเลือก แต่ละตัวเลือกมี 4 บรรทัดนี้เสมอ)
 
 **ผมแนะนำ (a) เพราะ** <เหตุผล 1–2 ประโยค ในภาษาคน — ไม่ใช่ "ตาม canon">
 
@@ -64,10 +72,11 @@ option spelled out with its consequence, and a recommendation with the reason. T
 10. **When the owner says "ไม่เข้าใจ" / "ขอละเอียดหน่อย"**, do not repeat the same text longer:
    add a worked example from the app (a real record, a real screen) and restate each option as
    "ถ้าเลือก (a) คุณจะเห็น … / ต้องทำ …".
-11. **Numbering:** `Q<n>` within one grill; a decode's questions keep the spec's IDs (`DQ1` / `Q6`);
+11. **Each option's four facts stand on their OWN lines (owner rule 2026-10-06).** Under every option, ทำอย่างไร / ข้อดี / ข้อเสีย / ต้นทุน are four separate sub-bullets — never one run-on line joined with " · ". The owner reads the options by scanning down the same four slots in each; a run-on line hides which phrase is the cost and which the drawback ("Create new format rule … you have to create new line for ข้อดี ข้อเสีย ต้นทุน separate for each choice"). A fact that genuinely does not apply is written "—", not dropped, so the four slots stay aligned across options.
+12. **Numbering:** `Q<n>` within one grill; a decode's questions keep the spec's IDs (`DQ1` / `Q6`);
     an audit's open question relayed to the owner keeps its audit ID. Never reuse a number in one
     grill. The log line records the ruling as `ruling: owner Q<n> (a) — <one line>`.
-12. **The board's 👤 line still names the pending question** ("รอคุณ: Q5 a/b") — that line is a
+13. **The board's 👤 line still names the pending question** ("รอคุณ: Q5 a/b") — that line is a
     pointer, never the question itself; the question lives in its own block above.
 
 ## A good one and a bad one (the 2026-10-01 pair)
