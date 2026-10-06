@@ -22,6 +22,18 @@ or a Temp folder.
 
 ## Ceremony
 
+0. **Stop the engines (owner rule 2026-10-06).** Nothing may still be WRITING when the survey
+   runs — an agent mid-build makes step 1 lie and step 3 park a half-written tree.
+   - `ListAgents` + the background-task list: an agent, a builder, an audit or a Bash task still
+     running → ASK the owner "รอให้เสร็จ หรือหยุดเลย" (a build minutes from done is worth the wait;
+     an exploration is not). Stop with `TaskStop`; never park a worktree whose builder is alive.
+   - Emulator / dev server that MAIN started (`preview_start`) → `preview_stop`, then the safe-kill
+     check of `web-ref-local-emulator` (ports free, no orphan `java` / `node`). One the OWNER started
+     in their own terminal → tell them: close it with Ctrl+C, never the window X (as before).
+   - A backup push or skills push still in flight → wait for it; step 7 / 8 re-run them anyway.
+   Record "engines: all stopped" (or what was left running and why) in the step-9 report; step 10
+   refuses to shut the machine down while this line is not clean.
+
 1. **Survey.** `git status --short`, `git worktree list`, and the driver's
    in-flight memory (the per-person folder under the project's `.claude/memory/`).
    List what exists: a staged-uncommitted feature tree on main? queued builds in
@@ -101,8 +113,9 @@ or a Temp folder.
     the browser, a terminal, or another session. Main shuts the machine down only when the owner says
     so explicitly in chat in that same sitting ("ปิดเครื่องด้วย", "shut it down") — never from a
     standing instruction, never because the report said "the machine can be shut down", and never
-    while a background agent, a build, a backup push or an emulator is still running (check step 7
-    finished and `git -C <clone> status -sb` is quiet first). The report's last line offers it once:
+    while step 0's "engines: all stopped" line is not clean (re-run its checks now — an agent may
+    have been started since — and confirm step 7's push landed and `git -C <clone> status -sb` is
+    quiet). The report's last line offers it once:
     *"ปิดเครื่องให้ไหม — ถ้าต้องการพิมพ์ว่า ปิดเครื่อง"*.
 
     When the owner DOES say so, run it from the **PowerShell tool** (the Bash tool eats `/` switches —
