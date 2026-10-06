@@ -23,20 +23,20 @@ option spelled out with its consequence, and a recommendation with the reason. T
 ทำไมต้องตัดสินใจเรื่องนี้ตอนนี้, และคำถามนี้เกี่ยวกับคำถามก่อนหน้าอย่างไร (ถ้ามี)
 
 **ตัวเลือก:**
-- **(ก) <ชื่อสั้น> — แนะนำ** · ทำอย่างไร (1 ประโยค) · ข้อดี · ข้อเสีย/ต้นทุน (งานกี่ไฟล์, ใครต้องกดอะไร, ต้อง deploy อะไร)
-- **(ข) <ชื่อสั้น>** · ทำอย่างไร · ข้อดี · ข้อเสีย/ต้นทุน
-- **(ค) <ชื่อสั้น>** · … (มีเท่าที่จำเป็น 2–4 ตัวเลือก)
+- **(a) <ชื่อสั้น> — แนะนำ** · ทำอย่างไร (1 ประโยค) · ข้อดี · ข้อเสีย/ต้นทุน (งานกี่ไฟล์, ใครต้องกดอะไร, ต้อง deploy อะไร)
+- **(b) <ชื่อสั้น>** · ทำอย่างไร · ข้อดี · ข้อเสีย/ต้นทุน
+- **(c) <ชื่อสั้น>** · … (มีเท่าที่จำเป็น 2–4 ตัวเลือก)
 
-**ผมแนะนำ (ก) เพราะ** <เหตุผล 1–2 ประโยค ในภาษาคน — ไม่ใช่ "ตาม canon">
+**ผมแนะนำ (a) เพราะ** <เหตุผล 1–2 ประโยค ในภาษาคน — ไม่ใช่ "ตาม canon">
 
-**ตอบได้ว่า:** ก / ข / ค หรือพิมพ์ทางของคุณเอง · เมื่อตอบแล้วผมจะ <สิ่งที่เกิดต่อ เช่น "ถามข้อถัดไปเรื่อง LINE" / "เขียน plan ให้อนุมัติ">
+**ตอบได้ว่า:** a / b / c หรือพิมพ์ทางของคุณเอง · เมื่อตอบแล้วผมจะ <สิ่งที่เกิดต่อ เช่น "ถามข้อถัดไปเรื่อง LINE" / "เขียน plan ให้อนุมัติ">
 ```
 
 ## Rules
 
 1. **Every question to the owner uses this shape — no exceptions for "small" questions.** A
-   one-line "ก/ข/ค?" is exactly what the owner refused. If the question is genuinely tiny
-   ("ชื่อ ก หรือ ข"), the sections shrink to one sentence each; they never disappear.
+   one-line "a/b/c?" is exactly what the owner refused. If the question is genuinely tiny
+   ("ชื่อ a หรือ b"), the sections shrink to one sentence each; they never disappear.
 2. **Caveman mode is OFF inside a question** (added to `ae49-mode-caveman`'s auto-clarity list
    2026-10-01). Full Thai sentences; English only for identifiers, labels, codes, file paths and
    technical terms; no programmer shorthand; no abbreviations the owner has not used himself.
@@ -52,17 +52,22 @@ option spelled out with its consequence, and a recommendation with the reason. T
    in one concrete phrase — never as a block of its own above the options.
 6. **Every option says who does what and what it costs** — files, a deploy, the owner's hands,
    a migration, a wait. The owner decides by trade-off, not by label.
-7. **A recommendation is mandatory, with a plain reason.** "แนะนำ (ก)" alone is not a reason.
+7. **A recommendation is mandatory, with a plain reason.** "แนะนำ (a)" alone is not a reason.
    If Main has no preference, say why the options are equal and what would tip it.
 8. **Say what happens after the answer** so the owner knows whether another question follows
    or the work starts.
-9. **When the owner says "ไม่เข้าใจ" / "ขอละเอียดหน่อย"**, do not repeat the same text longer:
+9. **Option letters are LATIN — (a) (b) (c) (d) — never Thai ก/ข/ค (owner rule 2026-10-06).** The
+   owner answers from an English keyboard and the board, the log and the register carry the
+   letter; a Thai letter costs a layout switch and reads differently in every font. The sentences
+   around the options stay Thai; only the label changes. Rulings recorded BEFORE 2026-10-06 keep
+   their ก/ข letters in the plans and logs — they are history, not to be rewritten.
+10. **When the owner says "ไม่เข้าใจ" / "ขอละเอียดหน่อย"**, do not repeat the same text longer:
    add a worked example from the app (a real record, a real screen) and restate each option as
-   "ถ้าเลือก (ก) คุณจะเห็น … / ต้องทำ …".
-10. **Numbering:** `Q<n>` within one grill; a decode's questions keep the spec's IDs (`DQ1` / `Q6`);
+   "ถ้าเลือก (a) คุณจะเห็น … / ต้องทำ …".
+11. **Numbering:** `Q<n>` within one grill; a decode's questions keep the spec's IDs (`DQ1` / `Q6`);
     an audit's open question relayed to the owner keeps its audit ID. Never reuse a number in one
-    grill. The log line records the ruling as `ruling: owner Q<n> (ก) — <one line>`.
-11. **The board's 👤 line still names the pending question** ("รอคุณ: Q5 ก/ข") — that line is a
+    grill. The log line records the ruling as `ruling: owner Q<n> (a) — <one line>`.
+12. **The board's 👤 line still names the pending question** ("รอคุณ: Q5 a/b") — that line is a
     pointer, never the question itself; the question lives in its own block above.
 
 ## A good one and a bad one (the 2026-10-01 pair)

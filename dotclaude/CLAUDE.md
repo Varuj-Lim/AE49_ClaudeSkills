@@ -13,7 +13,7 @@ user's request — invoke these five skills via the Skill tool, in order:
 5. `ae49-router` — act as thin Main: refine on request, delegate heavy plan/implement
    work to the `ae49-plan`/`ae49-implement` sub-agents, keep every human gate in Main
 6. `ae49-ref-question-format` — the ONE shape for every question I am asked: context,
-   what goes wrong, options ก/ข/ค with cost, a recommendation with its reason, how to
+   what goes wrong, options a/b/c with cost, a recommendation with its reason, how to
    answer. Added 2026-10-01 because a grill's questions had shrunk to caveman one-liners
    ("ไม่ใช่การเขียนแบบสั้นๆ แล้วไม่อธิบายอะไรเลย ผมอ่านแล้วไม่เข้าใจ").
 
