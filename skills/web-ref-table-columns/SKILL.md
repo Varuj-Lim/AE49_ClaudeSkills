@@ -180,6 +180,30 @@ Detail-page line items, report matrices and print sheets keep the natural-height
 read in place, they end, and there is nothing above them worth pinning. In AE49_Hub that is the
 default and `fill` is the opt-in, which is the right way round.
 
+## T7 · A long explanation never lives in a cell — a marker in the cell, the note under the table (owner ruling 2026-10-06, AE49_Hub)
+
+On the Foundation Optimizer's Design card, a footing type that cannot be designed showed `No design`
+with its Thai reason (two or three sentences) wrapped under it inside the 160-px Status column — 4–5
+lines in one cell, every other row one line. The owner, shown a real failing set: *"we should have
+`**` and then comment the bottom of table instead of long explanation inside the table"*. The rule:
+
+- **A cell holds a VALUE, a verdict word or a short label — never a sentence.** A reason, a caveat,
+  a condition, a "why" of any length that a reader must read in full does not wrap inside a cell
+  (that is T3's one-line rule from the other side: a cell that NEEDS to wrap is carrying prose).
+- **The cell carries a MARKER after its value — `**`** (the owner's shape; a project may use `*` /
+  `**` / `***` or ¹ ² ³ for several distinct notes, declared in its facts skill) — and **the
+  explanation is a NOTE under the table**, one line per distinct marker, in the table's caption
+  tier, left-aligned under the first column: `** ไม่มีความหนาใดจนถึง 400 ซม. …`. One note per DISTINCT
+  reason, not per row: ten rows that fail the same way share one `**` and one line.
+- Markers are assigned in reading order (the first distinct reason met top-down gets the first
+  marker) and the notes list follows the same order; a table with no marked row shows no note block.
+- The column that used to hold the prose goes back to a VALUE-bound width (the verdict word + the
+  marker + the cell padding) — the wrap budget it was given disappears with the wrap.
+- Paper follows the same shape: markers in the cells, the notes under the table on the same page
+  (a printed sheet may not push the notes to the next page away from their table).
+- Hover is NOT the place for the reason (T3's `title` is for a long VALUE, cut short); a reason the
+  reader must act on has to be visible without a mouse, so it sits under the table.
+
 ## Rules that keep it honest
 
 - One scale per project, defined once in shared code, imported everywhere — never re-typed.
