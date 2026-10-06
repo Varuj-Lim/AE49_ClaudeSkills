@@ -217,6 +217,28 @@ scanned.
 ## Gates you (Main) always own — never delegate these
 
 - The **design interview / approval** (grill + plan approval) before drafting or building.
+  **Auto-approval when the plan holds nothing beyond the grill (owner ruling 2026-10-06, Q9 a:
+  *"if you grill me so it mean I already know what you will do right?"*).** Once a plan is
+  written — by Main or `ae49-plan` — Main compares it with the grill's answers line by line:
+  - **Nothing beyond the grill** — every Decision traces to an owner answer, a ruling already on
+    record, or a mechanical reading (a measured width, an existing canon, an unchanged precedent);
+    the plan opens no new question; it adds no change the owner will SEE or that alters data,
+    permissions or money that was not grilled → the plan is **auto-approved**. Main sets
+    `Status: Approved — auto (matches grill, owner rule 2026-10-06)`, commits it, says so in ONE
+    line in chat ("plan `<slug>` อนุมัติอัตโนมัติ — ตรงกับที่ grill ไว้") and dispatches the build in
+    the same turn. Approval-time side effects run as if the owner had approved (e.g. a cited
+    ticket → `in_progress`, `web-task-ticket-to-plan`).
+  - **Anything beyond the grill** — an open question the plan raises, a user-visible decision
+    nobody asked about, a bug the planner found and proposes to fix, a widened scope, an extra
+    file outside the agreed area that changes behaviour → Main does NOT auto-approve. It asks the
+    owner ONLY about the extra items, each in the `ae49-ref-question-format` shape, and the plan
+    is approved when those are answered (the owner need not read the whole plan). Doubt counts
+    as "beyond": when Main is unsure whether an item was covered, it asks.
+  Why the split, not "every grilled plan is approved": on 2026-10-06 the plan `rd-project-first`,
+  written after a one-question grill, carried a decision nobody asked about (first Save stops
+  asking for the project), a bug the planner found, and two new questions — a blanket
+  auto-approval would have put all of them into the build unseen. The audit and the gate still
+  run on every auto-approved build.
 - The **audit gate** (adopted 2026-08-01, owner mandate — EVERY build, Main's inline builds
   included): after the build is finished and BEFORE the user sees anything, spawn the headless
   **`ae49-audit`** agent with the plan path + the build worktree/diff (or the hub file list).

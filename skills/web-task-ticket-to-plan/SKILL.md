@@ -34,7 +34,9 @@ this file never carries a path, uid, or collection name — the process and the 
   NuriHub's older 2026-08-17 status-only rule. Picking a ticket up for
   reading/clarifying still writes nothing, because a picked ticket may turn
   out to be a duplicate or a no-plan):**
-  1. **At the owner's APPROVAL of the plan that cites the ticket** →
+  1. **At the owner's APPROVAL of the plan that cites the ticket** — or its AUTO-approval
+     (a plan holding nothing beyond the grill, `ae49-router` owner rule 2026-10-06, counts as
+     the owner's approval) →
      `status: in_progress` and NOTHING else — no response text (owner ruling
      2026-09-08: "แค่เปลี่ยน Status พอ ไม่ต้องอธิบาย"). Silent (no bell). Run the
      project's update script with `--status in_progress` and no response
