@@ -203,6 +203,16 @@ lines in one cell, every other row one line. The owner, shown a real failing set
   (a printed sheet may not push the notes to the next page away from their table).
 - Hover is NOT the place for the reason (T3's `title` is for a long VALUE, cut short); a reason the
   reader must act on has to be visible without a mouse, so it sits under the table.
+- **The cell keeps the part that is the ROW'S OWN VALUE; the sentence that repeats is the note (owner
+  ruling 2026-10-06, Q6).** Shown the Foundation Optimizer's Infeasible table, where every failed option
+  carried `Joint 453 ไม่มีฐานรากแบบใดรับได้ (แรงอัดหรือแรงดึงเกินทุกชนิดของตัวเลือกนี้)` wrapped on three lines,
+  the owner asked: *"Can we use * for the sentence and then in Reason write only Joint No. instead?"* — yes,
+  and that is the rule: split a reason into the part that differs per row (the joint number, a code, a
+  count — the VALUE) and the part that is the same sentence for every row that fails that way (the
+  explanation); the value stays in the cell with the marker after it (`Joint 453 *`), the sentence is the
+  note under the table, one per distinct sentence. A cell that is FREE TEXT unique to its row (a reject
+  reason a person typed) has no repeated part to split out: it is a long VALUE and follows T3 — one line,
+  ellipsis, full text on hover (and wraps on paper).
 
 ## Rules that keep it honest
 
