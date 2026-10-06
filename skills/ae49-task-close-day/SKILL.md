@@ -94,7 +94,27 @@ or a Temp folder.
    re-seeded on the other side. **A parked gate board travels AS-IS, so condense it
    BEFORE parking: every section inside the 5–7 budget of `ae49-router` (never 10) —
    the 16-item section parked on 2026-09-11 earned the owner's reminder.** End with: Main can be closed and the machine
-   shut down (close a running emulator with Ctrl+C, never the window X).
+   shut down (close a running emulator with Ctrl+C, never the window X) — then step 10.
+
+10. **Shut down the computer — DEFAULT: DON'T (owner rule 2026-10-06).** The ceremony ends with
+    the machine READY to be shut down, never shut down by Main on its own: the owner may still want
+    the browser, a terminal, or another session. Main shuts the machine down only when the owner says
+    so explicitly in chat in that same sitting ("ปิดเครื่องด้วย", "shut it down") — never from a
+    standing instruction, never because the report said "the machine can be shut down", and never
+    while a background agent, a build, a backup push or an emulator is still running (check step 7
+    finished and `git -C <clone> status -sb` is quiet first). The report's last line offers it once:
+    *"ปิดเครื่องให้ไหม — ถ้าต้องการพิมพ์ว่า ปิดเครื่อง"*.
+
+    When the owner DOES say so, run it from the **PowerShell tool** (the Bash tool eats `/` switches —
+    see the machine's `cmd /c` MSYS trap) with a 60-second grace so a wrong click is still cancellable:
+
+    ```powershell
+    shutdown.exe /s /t 60 /c "AE49 close-day: shutting down in 60 s - run  shutdown.exe /a  to cancel"
+    ```
+
+    Cancel inside the grace period: `shutdown.exe /a`. Hand the owner the same two lines as plain
+    text as well (owner-facing commands are PowerShell, pasted bare — `~/.claude/CLAUDE.md`
+    §Communication). Say the shutdown is scheduled and how to cancel; do not keep working after it.
 
 ## Notes
 
