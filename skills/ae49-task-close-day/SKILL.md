@@ -115,8 +115,21 @@ or a Temp folder.
     standing instruction, never because the report said "the machine can be shut down", and never
     while step 0's "engines: all stopped" line is not clean (re-run its checks now — an agent may
     have been started since — and confirm step 7's push landed and `git -C <clone> status -sb` is
-    quiet). The report's last line offers it once:
-    *"ปิดเครื่องให้ไหม — ถ้าต้องการพิมพ์ว่า ปิดเครื่อง"*.
+    quiet).
+
+    **It is the ceremony's LAST STEP and it is ASKED, every close-day (owner rule 2026-10-06,
+    second sitting: "ask me to close the computer or not, default is NOT close").** After the
+    report, Main ends the message with one short question in the `ae49-ref-question-format`
+    shape (small — one sentence per section), the default stated in it:
+
+    > ## ❓ ปิดเครื่องไหม
+    > **เรื่องอะไร:** งานทั้งหมดเก็บขึ้น git แล้ว เครื่องพร้อมปิด
+    > - **(a) ไม่ปิด — ค่าเริ่มต้น** — เครื่องเปิดไว้ตามเดิม
+    > - **(b) ปิดเครื่อง** — สั่งปิดภายใน 60 วินาที ยกเลิกได้ด้วย `shutdown.exe /a`
+    > **ตอบได้ว่า:** a / b · ไม่ตอบ = (a) ไม่ปิด
+
+    No answer, an unrelated reply, or anything but a clear (b) / "ปิดเครื่อง" means **don't shut
+    down** — the question is never repeated and never re-read as a yes later.
 
     When the owner DOES say so, run it from the **PowerShell tool** (the Bash tool eats `/` switches —
     see the machine's `cmd /c` MSYS trap) with a 60-second grace so a wrong click is still cancellable:
