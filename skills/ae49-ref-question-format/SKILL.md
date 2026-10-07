@@ -48,10 +48,22 @@ option spelled out with its consequence, and a recommendation with the reason. T
 2. **Caveman mode is OFF inside a question** (added to `ae49-mode-caveman`'s auto-clarity list
    2026-10-01). Full Thai sentences; English only for identifiers, labels, codes, file paths and
    technical terms; no programmer shorthand; no abbreviations the owner has not used himself.
-3. **One question per message by default** (the grill rule — resolve a branch before the next).
-   Batch several ONLY when the owner asked to answer item by item (e.g. decode questions DQ1–DQ5,
-   or "ตอบทีละข้อ"); then every item still carries the full shape, compactly, and the message ends
-   with one "ตอบได้ว่า" line listing them.
+3. **Ask every ready question in ONE message — up to 10 (owner rule 2026-10-07, replaces "one
+   question per message").** When several questions are waiting, send them together instead of one
+   per turn: *"if you have many question you can ask all of them within one time not have to step by
+   step asking limit 10 question in one time"* — on 2026-10-07 the owner asked for OQ4–OQ8 to be
+   sent at once after three one-by-one rounds, then answered seven ETABS questions in one reply.
+   - **Cap: 10 per message.** More than 10 → send the 10 that unblock the most work first, say how
+     many follow, and send the rest in the next message.
+   - **Every item keeps the full shape** (rules 1, 4–11): its own `## ❓` heading, context, options
+     with the four slots, a recommendation with a reason — compact, never shrunk to one line.
+   - **Only questions that are READY go in.** A question whose options depend on the answer to
+     another (the grill's "resolve a branch before the next") waits for the next message; say in
+     one line that it will follow and why.
+   - **End with ONE "ตอบได้ว่า" line** giving a copyable answer template with the recommendations,
+     e.g. `EQ1 a / EQ2 a / EQ3 b`, and put the same pointer in the 👤 line.
+   - **Questions from different features keep their own prefixes** (OQ / EQ / Q) so a reply like
+     "OQ4 a" can never be read against the wrong plan.
 4. **Context before options.** The owner cannot see the code or the previous ten tool calls;
    the "เรื่องอะไร" block must let them picture the screen or the data. Name the page, the button,
    the record (quoted values per `ae49-ref-gate-checklist`), the number that matters.
@@ -94,7 +106,8 @@ option spelled out with its consequence, and a recommendation with the reason. T
 
 ## Where this sits
 
-- `ae49-task-grill` asks its questions in this format (one at a time, recommendation each).
+- `ae49-task-grill` asks its questions in this format (every independent question at once, up to
+  10 per message — rule 3; recommendation each).
 - `ae49-ref-report-format` owns reports and the board; a question embedded in a report (an audit
   QUESTION the owner must rule on) uses THIS shape inside the report.
 - `ae49-mode-caveman` lists "questions to the owner" as an auto-clarity exception.
