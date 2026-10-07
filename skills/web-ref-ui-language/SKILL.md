@@ -1,6 +1,6 @@
 ---
 name: web-ref-ui-language
-description: The ONE UI-language canon for every hub project (AE49_Hub, Nuri_Hub, future siblings) — EXPLANATIONS ARE THAI, IDENTIFIERS ARE ENGLISH. Every long explanatory sentence an ordinary staff member reads (page / section intro lines, hints, captions, footnotes, empty states, confirm-dialog BODIES, validation errors, toasts, notification messages, picker placeholders) is plain Thai, while everything that NAMES something on screen (headings, section titles, dialog TITLES, labels, column names, button / pill / tab / toggle / status text, codes, employee labels, dates, times, numbers, technical terms) stays English so it matches what people click; never Thai on a control; failure strings follow the three-way split (staff-facing → Thai, actor-limited API / dev-only → English by ruling, machine text → English) and each hub's deliberate-English registry lives in its audit topic. Use whenever writing, translating, reviewing or auditing ANY user-facing string in a hub — trigger even when the user only says "ทำไมไม่เป็นไทย", "this dialog is English", "translate this", "add an error message", "what language should this be", or asks whether a label may be Thai. Per-project facts (rulings history, registry, template pages, module notes) live in each hub's own <hub>-ref-… facts skill; the rule changes HERE once.
+description: The ONE UI-language canon for every hub project (AE49_Hub, Nuri_Hub, future siblings) — EXPLANATIONS ARE THAI, IDENTIFIERS ARE ENGLISH, and English is US-spelled (Story not Storey, color, canceled; stored words change only by a ruled migration). Every long explanatory sentence an ordinary staff member reads (page / section intro lines, hints, captions, footnotes, empty states, confirm-dialog BODIES, validation errors, toasts, notification messages, picker placeholders) is plain Thai, while everything that NAMES something on screen (headings, section titles, dialog TITLES, labels, column names, button / pill / tab / toggle / status text, codes, employee labels, dates, times, numbers, technical terms) stays English so it matches what people click; never Thai on a control; failure strings follow the three-way split (staff-facing → Thai, actor-limited API / dev-only → English by ruling, machine text → English) and each hub's deliberate-English registry lives in its audit topic. Use whenever writing, translating, reviewing or auditing ANY user-facing string in a hub — trigger even when the user only says "ทำไมไม่เป็นไทย", "this dialog is English", "translate this", "add an error message", "what language should this be", or asks whether a label may be Thai. Per-project facts (rulings history, registry, template pages, module notes) live in each hub's own <hub>-ref-… facts skill; the rule changes HERE once.
 ---
 
 # UI language — shared canon (Thai explainers · English identifiers)
@@ -101,6 +101,32 @@ Thai at the source (SelectField "เลือก …", DateField "เลือ�
   dialects exist, the sweep picks one and rewrites the others (AE49's Excel-import
   vocabulary, 2026-08-26). Each hub's facts skill lists its fixed terms (AE49:
   ผู้เขียนแบบ never ช่างเขียนแบบ; ใบสั่งพล็อต; ผู้สั่งงาน / ผู้อนุมัติ).
+
+## English is US English (owner ruling 2026-10-07, Q25 c)
+
+Every English word the hubs write is spelled the **US** way — on screen, in printed sheets and
+Excel headers, AND in code identifiers, routes, stored values, field names and new docs. The
+engineers live in ETABS / ACI / ASCE, which are US-spelled; a page that says "Storey" beside an
+ETABS paste that says "Story" reads as two different things. Common pairs:
+
+| Write (US) | Never (UK) |
+|---|---|
+| Story / stories | Storey / storeys |
+| color, gray | colour, grey |
+| center, meter, liter | centre, metre, litre |
+| canceled / canceling (cancellation stays) | cancelled / cancelling |
+| behavior, favor, honor, labor | behaviour, favour, honour, labour |
+| catalog, license (noun and verb), defense, program | catalogue, licence, defence, programme |
+| organize, analyze, modeling, traveled, judgment, fulfill, aluminum | organise, analyse, modelling, travelled, judgement, fulfil, aluminium |
+
+- **A word that is STORED is changed only by a ruled migration**, never by a text sweep: a status
+  value (`"cancelled"`), a field or collection name, an id, an Excel import header people's files
+  carry. The order is expand → migrate → contract: code that reads BOTH spellings ships first,
+  rules accept both, the data is backed up (`web-ref-migration-backups`) and migrated, and only
+  then is the old spelling dropped. Each hub's facts skill lists the stored UK words still
+  waiting for that, so a sweep never touches them by accident.
+- History is not rewritten: landed plans in `docs/plans/done/`, commit messages, logs and quoted
+  standards (a มยผ. or BS title) keep their spelling.
 
 ## Where the rule does NOT apply
 
