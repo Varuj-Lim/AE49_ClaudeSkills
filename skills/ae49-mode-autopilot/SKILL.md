@@ -73,6 +73,16 @@ as a ruling.
    check their `After:` chains are satisfied or inside the scope. No scope given → ask ONCE
    ("คืนนี้ให้ทำอะไรบ้าง") — never start on a guess.
 2. **Collect pre-answered rulings** the owner gives now ("ถ้าถามเรื่อง X ให้เลือก ก") into the state.
+   **The scope GROWS with the owner's live commands (owner Q24 a, 2026-10-07).** While the mode is
+   ON, work the owner orders in their own chat message — a clear command, not a mention or a musing —
+   joins the scope at once: append it to `scope` in the state file, log `ruling: owner "<words>" →
+   added to scope`, and say so in ONE line of the reply ("เพิ่มเข้า scope แล้ว"). From then on it is
+   treated exactly like the switch-on scope (Main lands it after the Main-run gate). Work already in
+   flight when the mode was switched on joins the same way when the owner asks. Unsure whether a
+   message is a command → ask, never assume. The NEVER list is unchanged: nothing added this way may
+   push, deploy, migrate, delete real data, send, or settle a design. Why: on 2026-10-07 the owner
+   asked whether work ordered after switch-on was in scope — it was not, so a finished, gated build
+   would have waited at the landing step for a "land" the owner did not know was needed.
 3. **Budget** (defaults unless the owner says otherwise): at most **2** agents at once; at most **3**
    audit rounds per build before the build is parked; no time box unless given.
 4. **Write the state file** `~/.claude/autopilot/<project-folder-name>/state.json`:
