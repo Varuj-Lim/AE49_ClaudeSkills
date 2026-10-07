@@ -117,19 +117,12 @@ or a Temp folder.
     have been started since — and confirm step 7's push landed and `git -C <clone> status -sb` is
     quiet).
 
-    **It is the ceremony's LAST STEP and it is ASKED, every close-day (owner rule 2026-10-06,
-    second sitting: "ask me to close the computer or not, default is NOT close").** After the
-    report, Main ends the message with one short question in the `ae49-ref-question-format`
-    shape (small — one sentence per section), the default stated in it:
-
-    > ## ❓ ปิดเครื่องไหม
-    > **เรื่องอะไร:** งานทั้งหมดเก็บขึ้น git แล้ว เครื่องพร้อมปิด
-    > - **(a) ไม่ปิด — ค่าเริ่มต้น** — เครื่องเปิดไว้ตามเดิม
-    > - **(b) ปิดเครื่อง** — สั่งปิดภายใน 60 วินาที ยกเลิกได้ด้วย `shutdown.exe /a`
-    > **ตอบได้ว่า:** a / b · ไม่ตอบ = (a) ไม่ปิด
-
-    No answer, an unrelated reply, or anything but a clear (b) / "ปิดเครื่อง" means **don't shut
-    down** — the question is never repeated and never re-read as a yes later.
+    **It is NOT asked (owner rule 2026-10-07, replacing the 2026-10-06 "ask every close-day"
+    rule: *"ปกติไม่ต้องถามผมสิ ต้องเป็นแบบไม่ปิดเป็น Default เลยถ้าผมไม่ได้บอกอะไร"*).** The report
+    ends WITHOUT a shutdown question and the machine stays on. Main shuts down only when the
+    owner's own message in that sitting asks for it ("ปิดวันและปิดเครื่อง", "close day and close
+    computer"). The report may say once, plainly, that the machine CAN be shut down; it never
+    offers it as a choice to answer.
 
     **Exception — the owner's emulator, once the owner has said to shut down (owner rule
     2026-10-07: "once I told you to close computer I allow you to close emulator by using
