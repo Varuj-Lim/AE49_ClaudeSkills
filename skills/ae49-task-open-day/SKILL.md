@@ -86,12 +86,10 @@ Mirror of `ae49-task-close-day`. Everything arrives through git.
    with what it waits on — so the day starts with the whole picture, not only the
    plans and the park. An open-day report that says "clean board" while the
    register holds rows is wrong.
-   **The board also carries one `Autopilot` row, every open-day** (owner Q11 a,
-   2026-10-07): `ON` + its scope, or `OFF` + when it was switched off — read from
-   the state file the session-start check in `~/.claude/CLAUDE.md` already read.
-   The CHECK itself stays there (one home, no second copy here); this row only
-   makes the mode visible, because on 2026-10-07 the owner had to ask "did you
-   go into autopilot?" after a report that mentioned the mode in one prose line.
+   The autopilot state is NOT a board row: like every message, the report ends
+   with the `🤖 Autopilot mode: On (ask|decide) / Off` line of
+   `ae49-ref-report-format` (owner 2026-10-07 — it replaced the open-day row of
+   Q11 a the same day). The CHECK itself stays in `~/.claude/CLAUDE.md`.
 
 ## Notes
 

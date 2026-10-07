@@ -102,7 +102,8 @@ Which renders as:
   - One or two lines, in the conversation's language (the table itself stays English).
   - Concrete verbs the user can act on ("test the 7 gate items, then say ผ่านหมด"), never a
     restatement of a Stage ("gate is open").
-  - It comes AFTER the table and after any takeaway line — nothing follows it.
+  - It comes AFTER the table and after any takeaway line — nothing follows it except the
+    🤖 autopilot line below.
   - Never dropped on the grounds that the *Waiting on* column already says it: a reader
     scanning a ten-row board must not have to re-read a column to learn the ball is theirs.
 
@@ -112,6 +113,22 @@ Which renders as:
 
   ```markdown
   👤 **ไม่มีอะไรรอคุณตอนนี้** — รอ builder เสร็จ แล้วผมจะรายงานพร้อม gate ต่อไป
+  ```
+
+- **Then the 🤖 autopilot line — on EVERY message to the owner, ON or OFF (owner ruling
+  2026-10-07).** In an ae49-workflow project the very last line is the mode's state, read
+  from `~/.claude/autopilot/<project-folder>/state.json` (no file = Off):
+  `🤖 Autopilot mode: On (ask)` · `🤖 Autopilot mode: On (decide)` · `🤖 Autopilot mode: Off`.
+  It is a status line, never a board row — the Autopilot state is NOT a table row on any
+  board, the open-day board included (this line replaced the open-day row of owner Q11 a the
+  same day). Why: the owner had to ask "did you go into autopilot?"; a fixed last line answers
+  that at a glance without putting a no-action row on the board they scan for their own moves.
+  It follows the 👤 line because the ask is still the last thing to READ; the 🤖 line is only
+  glanced at.
+
+  ```markdown
+  👤 **รอคุณ:** ตอบ Q14 ด้วย a / b / c
+  🤖 Autopilot mode: On (ask)
   ```
 
 ## 2. Emoji-tag every section
