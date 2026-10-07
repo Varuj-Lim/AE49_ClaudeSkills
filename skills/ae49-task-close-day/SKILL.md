@@ -131,6 +131,20 @@ or a Temp folder.
     No answer, an unrelated reply, or anything but a clear (b) / "ปิดเครื่อง" means **don't shut
     down** — the question is never repeated and never re-read as a yes later.
 
+    **Exception — the owner's emulator, once the owner has said to shut down (owner rule
+    2026-10-07: "once I told you to close computer I allow you to close emulator by using
+    stop-emu.cmd, don't ask me … sometime I already away from keyboard").** An emulator suite or
+    emulator dev server the OWNER started is normally theirs to close (step 0). But when the owner's
+    live message in this sitting says to shut the machine down, Main closes it ITSELF instead of
+    asking: run the project's safe-stop launcher (AE49: `.claude\stop-emu.cmd`, which EXPORTS the
+    data first and stops only java / node on the emulator ports) from the PowerShell tool, then
+    re-check the ports are free and the launcher printed its `[OK]` line. If the export FAILS the
+    launcher stops nothing — then Main does NOT shut down and reports the exact message (data must
+    never be lost to a shutdown). Afterwards discard the dev noise the launcher leaves (the project
+    CLAUDE.md names it, e.g. `next-env.d.ts`, the tsconfig include) so `main` is clean. This covers
+    ONLY the project's own emulator / dev servers; anything else still running (an agent, a build,
+    an unknown program) still blocks the shutdown as above.
+
     When the owner DOES say so, run it from the **PowerShell tool** (the Bash tool eats `/` switches —
     see the machine's `cmd /c` MSYS trap) with a 60-second grace so a wrong click is still cancellable:
 
