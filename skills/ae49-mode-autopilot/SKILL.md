@@ -83,8 +83,11 @@ as a ruling.
    push, deploy, migrate, delete real data, send, or settle a design. Why: on 2026-10-07 the owner
    asked whether work ordered after switch-on was in scope — it was not, so a finished, gated build
    would have waited at the landing step for a "land" the owner did not know was needed.
-3. **Budget** (defaults unless the owner says otherwise): at most **2** agents at once; at most **3**
-   audit rounds per build before the build is parked; no time box unless given.
+3. **Budget** (defaults unless the owner says otherwise): **no cap on agents at once** — dispatch
+   every actionable track, as the router's start-now rule does (owner ruling 2026-10-07: *"อยากให้ไม่
+   จำกัดไปเลยผมจะดูจาก Token เอง"* — the owner watches usage himself; the old default of 2 only
+   spread the same tokens over more hours); at most **3** audit rounds per build before the build is
+   parked; no time box unless given.
 4. **Write the state file** `~/.claude/autopilot/<project-folder-name>/state.json`:
    `{ "on": true, "forks": "ask" | "decide", "project": "<absolute path>", "since": "<clock, ICT>",
    "scope": [...], "rulings": [...], "budget": {...}, "log": "<path of the decision log>" }` —
