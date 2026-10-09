@@ -22,9 +22,12 @@ hub's pricing page:
 - **A family priced by size** (per pile diameter, per concrete strength, per bar size) is a BAND with
   one row per size (`dp 35 cm`, `fc′ 280 ksc`) inside the same matrix — never a separate
   "size | Material | Labor | Amount" input table beside it.
-- **A list that can grow or shrink keeps its controls inside the matrix** (under its band / on its
-  row); the hub's facts file says exactly how. A second table to hold the editable part is the
-  thing this rule forbids.
+- **A list that can grow or shrink keeps its controls inside the matrix** — a last **Action** column
+  (owner PQ3 a, 2026-10-09: *"ให้มี Column Action ต่อท้ายว่าจะลบ Row นั้นหรือเพิ่ม Row ใต้ Row นั้น"*):
+  on each sized row an icon to ADD a row right below it and an icon to DELETE that row (delete asks
+  first); band, header and fixed rows leave the cell empty. The size itself is typed in the
+  Description cell (), so a pasted block may carry size + Material + Labor. A second
+  table to hold the editable part is the thing this rule forbids.
 - Everything else is the calculation canon: column widths by kind (`columns.md`), arrow keys and
   Excel paste in the price boxes (`keyboard.md` T8), number boxes per `parameter-table.md` §10.
 
