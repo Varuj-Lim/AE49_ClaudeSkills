@@ -1,9 +1,6 @@
----
-name: web-ref-table-columns
-description: The shared table-column canon for every hub web project (AE49_Hub, Nuri_Hub, future siblings) — every table, on screen AND on a printed A4 sheet, lays out with FIXED column widths that never depend on the data (no auto-fit). A column's width comes from its KIND on one shared scale per project, so the same kind of column (checkbox, code, date, status, quantity, money, actions…) is the same width on every page, and exactly one main text column takes the remaining space. A value too long for its column truncates to one line with an ellipsis and shows in full on hover; on paper, where nothing can hover, it wraps inside its fixed column instead. Use whenever adding, changing, reviewing or auditing ANY table in ANY hub project — a list page, a detail page's line items, a table in a modal, a report matrix, a printed sheet — and whenever the user says "the columns jump", "column widths keep changing", "the table looks different on this page", "fix the column width", "the table auto-fits", "ความกว้างคอลัมน์", or "ตารางขยับ". Each project supplies its own width scale and helpers in its facts skill; the RULE lives here and changes here once.
----
+**Scope (was web-ref-table-columns):** The shared table-column canon for every hub web project (AE49_Hub, Nuri_Hub, future siblings) — every table, on screen AND on a printed A4 sheet, lays out with FIXED column widths that never depend on the data (no auto-fit). A column's width comes from its KIND on one shared scale per project, so the same kind of column (checkbox, code, date, status, quantity, money, actions…) is the same width on every page, and exactly one main text column takes the remaining space. A value too long for its column truncates to one line with an ellipsis and shows in full on hover; on paper, where nothing can hover, it wraps inside its fixed column instead. Use whenever adding, changing, reviewing or auditing ANY table in ANY hub project — a list page, a detail page's line items, a table in a modal, a report matrix, a printed sheet — and whenever the user says "the columns jump", "column widths keep changing", "the table looks different on this page", "fix the column width", "the table auto-fits", "ความกว้างคอลัมน์", or "ตารางขยับ". Each project supplies its own width scale and helpers in its facts skill; the RULE lives here and changes here once.
 
-# Table columns — shared canon
+## Table columns — shared canon
 
 One rule for every table in every hub project. Projects supply the width scale and the
 helpers; nothing here is project-specific.
@@ -112,7 +109,7 @@ above or beside the table.
   at once — a user may narrow the list while rows are ticked. The cluster is ALWAYS laid out:
   when nothing is ticked it is `invisible` + `inert` + `aria-hidden` (its box stays, its buttons
   are unreachable), so the row's height and its line-wrapping are identical before and after the
-  first tick at every window width — the same trick `web-ref-filter-format` R4 uses to keep a
+  first tick at every window width — the same trick `web-ref-table/general/filter-format.md` R4 uses to keep a
   pill's width fixed. Its buttons are the same height family as the filter pills (no padded card,
   no border) and its clear button reads `Clear selection` so it cannot be confused with the
   filters' `Clear (N)` beside it. Never render the cluster conditionally, never insert a bar
@@ -128,7 +125,7 @@ above or beside the table.
   a toggle renders inside the same `<table>` (the `colSpan` empty row of T4, a row-level busy state); the
   card does not collapse to a spinner or a message once it has shown a header.
 - **A count that changes with the data never sits on the row above the table** unless its slot has a fixed
-  width — `web-ref-filter-format` R4 keeps pills and toggles from carrying one.
+  width — `web-ref-table/general/filter-format.md` R4 keeps pills and toggles from carrying one.
 
 ## T6 · A list page's chrome stays put; only the rows scroll (owner ruling 2026-09-23, NuriHub)
 
@@ -233,10 +230,10 @@ lines in one cell, every other row one line. The owner, shown a real failing set
 
 | Project | Facts skill | Scale lives in |
 |---|---|---|
-| NuriHub | `nurihub-ref-table-columns` — created with the scale (planned 2026-09-11) | the shared table helpers, once built |
-| AE49_Hub | `ae49Hub-ref-parameter-table` (the R&D footing grids, where the scale was seeded 2026-09-11) + `ae49Hub-ref-list-page` §Table columns (the list tables — adoption began 2026-09-18 with Overtime + Leave Orders under T5, plan `table-no-shift`, and finished 2026-09-25 with `table-columns-app-wide`: 32 list files on `ListColGroup` + the `COL_PX` scale of 58 kinds; the exempt tables are listed in that skill's Exclude registry. One deliberate divergence from T2: AE49 makes the LAST column flexible when no text column exists — owner ruling 2026-09-16. Plan `table-widths-sweep` (2026-10-01/02) added the PARAMETER BLOCKS — the R&D Description / Symbol / Value / Unit cards on two shared column lists, `PARAM_BLOCK_COLS` and `PARAM_WIDE_COLS` — and a THIRD padding tier, the MID tier (`mid*` kinds at `px-2`, the Foundation Optimizer's input and result tables); a kind never crosses a tier) | `COL_PX` in `lib/constants/tableStyles.ts`, rendered through `TableCard`'s `tableClassName` / `minWidthPx`; the parameter blocks and the mid tier through `ListColGroup` + `listMinPx` directly |
+| NuriHub | `nurihub-ref-table/columns.md` — created with the scale (planned 2026-09-11) | the shared table helpers, once built |
+| AE49_Hub | `ae49Hub-ref-table/calculation/parameter-table.md` (the R&D footing grids, where the scale was seeded 2026-09-11) + `ae49Hub-ref-table/columns.md` §Table columns (the list tables — adoption began 2026-09-18 with Overtime + Leave Orders under T5, plan `table-no-shift`, and finished 2026-09-25 with `table-columns-app-wide`: 32 list files on `ListColGroup` + the `COL_PX` scale of 58 kinds; the exempt tables are listed in that skill's Exclude registry. One deliberate divergence from T2: AE49 makes the LAST column flexible when no text column exists — owner ruling 2026-09-16. Plan `table-widths-sweep` (2026-10-01/02) added the PARAMETER BLOCKS — the R&D Description / Symbol / Value / Unit cards on two shared column lists, `PARAM_BLOCK_COLS` and `PARAM_WIDE_COLS` — and a THIRD padding tier, the MID tier (`mid*` kinds at `px-2`, the Foundation Optimizer's input and result tables); a kind never crosses a tier) | `COL_PX` in `lib/constants/tableStyles.ts`, rendered through `TableCard`'s `tableClassName` / `minWidthPx`; the parameter blocks and the mid tier through `ListColGroup` + `listMinPx` directly |
 | future siblings | create with the first table | copy the shape: one scale, one flexible column |
 
-Filter pills have their own width rule in `web-ref-filter-format` R4 — a pill never changes width
+Filter pills have their own width rule in `web-ref-table/general/filter-format.md` R4 — a pill never changes width
 with the selection. Both rules serve the same goal: nothing on a list page changes size because
 the data or the selection changed.

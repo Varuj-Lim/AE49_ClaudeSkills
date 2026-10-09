@@ -88,7 +88,7 @@ project defines (typecheck / build / lint — see its CLAUDE.md), then check wha
      the Plain-language summary. ae49-implement quotes this section **verbatim** in its
      final report, and Main hands it straight to the user for the manual-test gate.
      A plan that touches a TABLE page carries ONE item of this shape (canon
-     web-ref-table-columns, AE49_Hub plan table-widths-sweep B3, 2026-10-02):
+     web-ref-table, AE49_Hub plan table-widths-sweep B3, 2026-10-02):
      "<make the pick / keystroke / load that changes the rows> → the column edges stay
      where they were" — the edge-stability item, never dropped when the list is condensed. -->
 1. [ ] <do this in the app> → you should see <this>

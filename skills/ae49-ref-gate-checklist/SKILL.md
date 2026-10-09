@@ -230,7 +230,7 @@ every backtick literally — the validator warns on both.
 
 ## A table page always carries one edge-stability item
 
-**Canon `web-ref-table-columns` (AE49_Hub plan `table-widths-sweep` B3, 2026-10-02).** When the
+**Canon `web-ref-table` (AE49_Hub plan `table-widths-sweep` B3, 2026-10-02).** When the
 feature under test touches a page with a table — a list, a detail's line items, a parameter block, a
 result table, a print sheet — the section carries ONE item of this shape, and condensing never drops
 it: `[EMU] (RD) {Nav -> Page} <ทำ pick / พิมพ์ / โหลด ที่ทำให้แถวเปลี่ยน> → เส้นแบ่งคอลัมน์อยู่ที่เดิม`

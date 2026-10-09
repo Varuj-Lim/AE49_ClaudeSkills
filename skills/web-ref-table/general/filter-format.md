@@ -1,9 +1,6 @@
----
-name: web-ref-filter-format
-description: The shared filter-bar canon for every hub web project (AE49_Hub, Nuri_Hub, future siblings) — when a list page gets tabs vs a pill dropdown vs an advanced panel, what `Clear` counts and resets, what "this filter group is inactive" means (all ticked, never empty), which controls are allowed (a list-page filter is a multi-select checklist by default), why a filter pill never changes width with the selection, and the wording and DOM order of a toolbar. Use whenever adding, changing, reviewing or auditing ANY filtering surface in ANY hub project: a list page's search box or filter bar, a status tab strip, an advanced/collapsible filter panel, a date-range filter, a `Clear`/reset affordance, a row-count caption, or a filtered empty state. Trigger it even when the request only says "add a filter", "add a search box", "why doesn't Clear reset this", "add a status tab", "make this filterable", "the filters look different on this page", or "put the filters on the toolbar". Each project supplies its own component paths and tokens in its facts skill; the RULE lives here and changes here once.
----
+**Scope (was web-ref-filter-format):** The shared filter-bar canon for every hub web project (AE49_Hub, Nuri_Hub, future siblings) — when a list page gets tabs vs a pill dropdown vs an advanced panel, what `Clear` counts and resets, what "this filter group is inactive" means (all ticked, never empty), which controls are allowed (a list-page filter is a multi-select checklist by default), why a filter pill never changes width with the selection, and the wording and DOM order of a toolbar. Use whenever adding, changing, reviewing or auditing ANY filtering surface in ANY hub project: a list page's search box or filter bar, a status tab strip, an advanced/collapsible filter panel, a date-range filter, a `Clear`/reset affordance, a row-count caption, or a filtered empty state. Trigger it even when the request only says "add a filter", "add a search box", "why doesn't Clear reset this", "add a status tab", "make this filterable", "the filters look different on this page", or "put the filters on the toolbar". Each project supplies its own component paths and tokens in its facts skill; the RULE lives here and changes here once.
 
-# Filter bars — shared canon
+## Filter bars — shared canon
 
 One set of rules for every list page in every hub project. Projects supply component
 paths and tokens; nothing here is project-specific.
@@ -60,7 +57,7 @@ matching icon. A funnel on a button labelled `Date range` is a lie.
   `aria-hidden` + `tabIndex={-1}` + `disabled` — never `return null`, and never a
   *visible* disabled button. A control that appears and disappears in the middle of
   the toolbar row slides every pill after it and can re-wrap the row, which moves the
-  table (`web-ref-table-columns` T5). The label also reserves its widest counted form
+  table (`web-ref-table` T5). The label also reserves its widest counted form
   with a measured `min-w-[…]`. *(2026-09-22, AE49 `table-columns-app-wide` B1 — this
   supersedes the 2026-09-10 "self-hides / never disabled" clause: the `disabled` here
   is invisible and exists only to take the control out of pointer and Tab reach.)*
@@ -99,14 +96,14 @@ matching icon. A funnel on a button labelled `Date range` is a lie.
 - **No debounce** while filters run over an already-loaded in-memory array.
   Revisit only if a filter ever queries the server.
 - **Sort never moves into the toolbar.** Sorting lives on the table header with
-  the project's sort icon (see `web-ref-sort-arrows`).
+  the project's sort icon (see `web-ref-table/general/sort-arrows.md`).
 - **No active-filter chips.** A tinted pill is already the affordance.
 
 ## R4 · Wording and layout
 
 - DOM order: page header → tab strip → toolbar → advanced panel → table. **The bulk-action cluster has
   no row of its own:** it is the LAST child of the toolbar row, right-aligned (`ml-auto`), always laid out
-  and merely invisible + inert while nothing is ticked, so the table never moves (`web-ref-table-columns` T5, owner 2026-09-18).
+  and merely invisible + inert while nothing is ticked, so the table never moves (`web-ref-table` T5, owner 2026-09-18).
 - Toolbar order: search box → filter pills → **the row-count caption** → `Clear (N)`, all
   packed LEFT. **The caption is NOT pushed right** (owner ruling 2026-09-23, reversing the
   `Clear (N)` → caption-pushed-right order this line carried until then).
@@ -135,7 +132,7 @@ matching icon. A funnel on a button labelled `Date range` is a lie.
   "as wide as its longest option" rule that lived for a few hours the same day — it only made
   sense while a pill could display the selected value.)* A genuine single-value filter (R3's
   rare case) keeps a fixed width from its container. Tables have the matching rule in
-  `web-ref-table-columns`.
+  `web-ref-table`.
 - Tab label: Title Case, "All" first, a per-tab count preferred. **Never mix
   dimensions in one strip** — a payment state does not belong in a status strip.
 - The row-count caption in a page header counts **total**, never the filtered
@@ -153,7 +150,7 @@ matching icon. A funnel on a button labelled `Date range` is a lie.
     every page, and a noun makes each one a different width.
   - **The caption reserves its width**, like `Clear (N)` and for the same reason: it sits on the
     row directly above the table, so a caption that widens when the count crosses a digit
-    boundary re-lays the toolbar and drops the table (`web-ref-table-columns` T5). Reserve the
+    boundary re-lays the toolbar and drops the table (`web-ref-table` T5). Reserve the
     widest form the page can reach, and reserve it in ONE shared component — a per-page class is
     how the three shapes happened.
   - **The denominator is the unfiltered count of what THAT table shows**, which is not always the
@@ -185,11 +182,11 @@ matching icon. A funnel on a button labelled `Date range` is a lie.
 
 | Project | Facts skill | Shared components |
 |---|---|---|
-| AE49_Hub | `ae49Hub-ref-list-page` (in-repo) | `SearchInput`, `FilterSelect`, `FilterMultiSelect`, `ClearFiltersButton`, `useMultiSelectFilter`, `TableCard`; date range per `ae49Hub-ref-date-range` |
-| NuriHub | `nurihub-ref-filter-bar` (in-repo, created 2026-09-10 at the first conversion) | single-value picks go through its one `SelectField` (`nurihub-ref-select-field`); multi-value picks go through `FilterMultiSelect` (owner ruling B 2026-09-10, built 2026-09-11 — all four hand-rolled sites converted), and its exported pill class `FILTER_TRIGGER_CLASS` dresses EVERY filter pill, single- and multi-value (all single-value pills converted 2026-09-11); `components/logs/LogTable.tsx` is the only already-shared toolbar and the conversion reference |
+| AE49_Hub | `ae49Hub-ref-table/general/filter-format.md` + `ae49Hub-ref-table/general/list-page.md` (in-repo) | `SearchInput`, `FilterSelect`, `FilterMultiSelect`, `ClearFiltersButton`, `useMultiSelectFilter`, `TableCard`; date range per `ae49Hub-ref-date-range` |
+| NuriHub | `nurihub-ref-table/general/filter-format.md` (in-repo, created 2026-09-10 at the first conversion) | single-value picks go through its one `SelectField` (`nurihub-ref-select-field`); multi-value picks go through `FilterMultiSelect` (owner ruling B 2026-09-10, built 2026-09-11 — all four hand-rolled sites converted), and its exported pill class `FILTER_TRIGGER_CLASS` dresses EVERY filter pill, single- and multi-value (all single-value pills converted 2026-09-11); `components/logs/LogTable.tsx` is the only already-shared toolbar and the conversion reference |
 | future siblings | create on the first sortable/filterable list | copy the shape: one component per control over the project's own tokens |
 
-**Note on a dangling name:** `ae49Hub-ref-list-page` and AE49's
+**Note on a dangling name:** `ae49Hub-ref-table/general/filter-format.md` and AE49's
 `useMultiSelectFilter` both cite a skill called `web-ref-filter-dropdown`, which
 has never existed. **This file is what those references meant** — repoint them
 here rather than creating a second canon.

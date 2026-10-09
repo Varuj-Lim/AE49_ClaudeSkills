@@ -134,7 +134,7 @@ When at least one `plan` topic has a finding, write the audit as a plan in the
 ## A new rule sweeps the project FIRST (owner ruling 2026-10-06)
 
 A rule that is written and not swept is an inconsistency waiting for someone to find it. On
-2026-10-06 canon T7 (`web-ref-table-columns`) was created in the morning; the builder of the first
+2026-10-06 canon T7 (`web-ref-table`) was created in the morning; the builder of the first
 T7 batch added a detector on its own initiative and it found two more cells that broke the rule —
 they became an owner question the same day only because an auditor happened to look. The owner:
 *"Every time I create new rule sent the audit to check about those topic in our project first"*.

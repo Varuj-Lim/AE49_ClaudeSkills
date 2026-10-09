@@ -1,9 +1,6 @@
----
-name: web-ref-bulk-actions
-description: The ONE bulk-action canon for every hub project (AE49_Hub, Nuri_Hub, future siblings) — what the verbs inside a list page's selection cluster show and do. Every verb the viewer's ROLE can use is VISIBLE whenever the cluster shows (never hidden because of what happens to be ticked); each shows its own eligible count `Verb (N)`; pressing it acts ONLY on those N rows and skips the rest; its confirm says how many will be acted on, how many are skipped, and why in one plain sentence; at N = 0 it stays visible but dimmed with the reason on hover; a verb the viewer's role never permits is absent. Use whenever adding, changing or reviewing ANY bulk verb, bulk toolbar, selection cluster, select-all action or bulk confirm in a hub project — trigger even when the user only says "approve all the ticked ones", "bulk approve", "the Approve button disappeared when I ticked", "why can't I approve these", "apply to selected", or "ทำทีละหลายรายการ". Each project keeps its component paths, pages and grandfathered exceptions in its own facts skill; the rule changes HERE once.
----
+**Scope (was web-ref-bulk-actions):** The ONE bulk-action canon for every hub project (AE49_Hub, Nuri_Hub, future siblings) — what the verbs inside a list page's selection cluster show and do. Every verb the viewer's ROLE can use is VISIBLE whenever the cluster shows (never hidden because of what happens to be ticked); each shows its own eligible count `Verb (N)`; pressing it acts ONLY on those N rows and skips the rest; its confirm says how many will be acted on, how many are skipped, and why in one plain sentence; at N = 0 it stays visible but dimmed with the reason on hover; a verb the viewer's role never permits is absent. Use whenever adding, changing or reviewing ANY bulk verb, bulk toolbar, selection cluster, select-all action or bulk confirm in a hub project — trigger even when the user only says "approve all the ticked ones", "bulk approve", "the Approve button disappeared when I ticked", "why can't I approve these", "apply to selected", or "ทำทีละหลายรายการ". Each project keeps its component paths, pages and grandfathered exceptions in its own facts skill; the rule changes HERE once.
 
-# Bulk actions — shared canon
+## Bulk actions — shared canon
 
 ## Why (owner ruling 2026-09-23, AE49_Hub)
 
@@ -46,20 +43,20 @@ tooltip that explains the state. Never a button that looks live and does nothing
 where a verb used to be.
 
 **B6 · A verb the viewer's ROLE never permits is ABSENT.** RD's Delete is simply not there for a
-Team Leader. The line is the one `web-ref-action-menu` draws: hide by WHO YOU ARE, dim by THE STATE
+Team Leader. The line is the one `web-ref-table/general/action-menu.md` draws: hide by WHO YOU ARE, dim by THE STATE
 OF THE DATA. A role-bound condition may name only session-constant facts (department, permission
 flags, "decides this module at all"); a condition that reads the selection, a count or a status is
 the bug this canon removes.
 
 ## How it composes
 
-- **`web-ref-table-columns` T5 — unchanged.** The CLUSTER is still always laid out at the right end
+- **`web-ref-table` T5 — unchanged.** The CLUSTER is still always laid out at the right end
   of the toolbar row, still `invisible` + `inert` while nothing is ticked, and still ONE width in
   every state. This canon governs the VERBS inside it: a dimmed verb keeps its box, and every
   counted label reserves its widest `(999)` form with a measured minimum width, so ticking,
   unticking or changing the mix never resizes the cluster. Role-absence is constant for the whole
   session, so it moves nothing either.
-- **`web-ref-action-menu` — the same WHO / STATE line**, and bulk-toolbar pills stay exempt from its
+- **`web-ref-table/general/action-menu.md` — the same WHO / STATE line**, and bulk-toolbar pills stay exempt from its
   list↔view parity rule (they aggregate a per-record verb that must still exist on both surfaces).
 - **`web-ref-ui-language`** — the tooltip and the confirm body are explanations (Thai in AE49 /
   Nuri); the verb labels, counts and dialog titles are identifiers (English).
@@ -81,6 +78,6 @@ the bug this canon removes.
 
 | Project | Facts skill | What it records |
 |---|---|---|
-| AE49_Hub | `ae49Hub-ref-table-actions` §"Verbs on one selection" (+ `ae49Hub-ref-list-page` §Table columns for widths) | `components/ui/BulkCluster.tsx` (`bulkVerb`, `BulkSkipNote`), the pages carrying counted verbs, Leave's grandfathered bulk Reject, Asset Checkout's same-item refusal, the measured `min-w` table |
-| NuriHub | `nurihub-ref-bulk-selection` (named 2026-09-23 when the handoff landed) | `components/ui/BulkSelectionCluster.tsx` (`bulkVerb`, `BulkSkipNote`); counted verbs on Sales Orders, Purchase Orders and Support Tickets; `withoutHover` splits on `/\s+/` (whitespace), not AE49's `/s+/` (the letter s) |
+| AE49_Hub | `ae49Hub-ref-table/general/bulk-actions.md` §"Verbs on one selection" (+ `ae49Hub-ref-table/columns.md` §Table columns for widths) | `components/ui/BulkCluster.tsx` (`bulkVerb`, `BulkSkipNote`), the pages carrying counted verbs, Leave's grandfathered bulk Reject, Asset Checkout's same-item refusal, the measured `min-w` table |
+| NuriHub | `nurihub-ref-table/general/bulk-actions.md` (named 2026-09-23 when the handoff landed) | `components/ui/BulkSelectionCluster.tsx` (`bulkVerb`, `BulkSkipNote`); counted verbs on Sales Orders, Purchase Orders and Support Tickets; `withoutHover` splits on `/\s+/` (whitespace), not AE49's `/s+/` (the letter s) |
 | future siblings | create with the first bulk verb | copy the shape |

@@ -1,9 +1,6 @@
----
-name: web-ref-sort-arrows
-description: The shared table-sort ARROW canon for every hub web project (AE49_Hub, NuriHub, future siblings) — the direction glyph on a sortable column header points the way VALUES GROW as the eye travels DOWN the rows (owner ruling 2026-09-03), which deliberately INVERTS the common spreadsheet convention: ascending (น้อยไปมาก) shows ▼ (down), descending (มากไปน้อย) shows ▲ (up), and an unsorted column shows a muted neutral glyph. One shared SortIcon-style component per project renders all three states — never a hand-typed ▲/▼/↑/↓ literal at a call site, and never flipping fold/expand or dropdown chevrons, which share the glyph but not the meaning. Each project's own ref skill supplies the FACTS (its component, its glyph names). Use whenever adding, editing, or reviewing ANY sortable table header, sort indicator, sort direction icon, or when the user mentions ลูกศร sort, "เรียงจากน้อยไปมาก" arrows, sort chevrons, or a column-sort UI — and when standing up a NEW project's first sortable table, create its facts skill + component from this canon.
----
+**Scope (was web-ref-sort-arrows):** The shared table-sort ARROW canon for every hub web project (AE49_Hub, NuriHub, future siblings) — the direction glyph on a sortable column header points the way VALUES GROW as the eye travels DOWN the rows (owner ruling 2026-09-03), which deliberately INVERTS the common spreadsheet convention: ascending (น้อยไปมาก) shows ▼ (down), descending (มากไปน้อย) shows ▲ (up), and an unsorted column shows a muted neutral glyph. One shared SortIcon-style component per project renders all three states — never a hand-typed ▲/▼/↑/↓ literal at a call site, and never flipping fold/expand or dropdown chevrons, which share the glyph but not the meaning. Each project's own ref skill supplies the FACTS (its component, its glyph names). Use whenever adding, editing, or reviewing ANY sortable table header, sort indicator, sort direction icon, or when the user mentions ลูกศร sort, "เรียงจากน้อยไปมาก" arrows, sort chevrons, or a column-sort UI — and when standing up a NEW project's first sortable table, create its facts skill + component from this canon.
 
-# Sort arrows — shared canon (hub web projects)
+## Sort arrows — shared canon (hub web projects)
 
 ## The rule (owner ruling 2026-09-03)
 
@@ -40,7 +37,7 @@ Until then the rule lived only by example (a project's list-page template shows 
 - **Sort state is URL state** (the project's list-URL rule — `?sort=` / `?dir=`), written only
   when off default, so a shared link and Back/Forward restore it like a filter.
 - **Sorting moves nothing but the rows** — the header keeps its width and its arrow slot
-  (`web-ref-table-columns` T4); the arrow follows this file's direction rule.
+  (`web-ref-table` T4); the arrow follows this file's direction rule.
 - The header is the ONLY sort control (no "Sort by" in the toolbar) and every sortable header is
   the same affordance on every page — the project's `thSortableClass` + `<SortIcon>`.
 - A project converts its unsorted lists in one sweep and keeps a detector in its audit
@@ -61,6 +58,6 @@ Until then the rule lived only by example (a project's list-page template shows 
 
 | Project | Facts skill | Component |
 |---|---|---|
-| AE49_Hub | `ae49Hub-ref-sort-arrows` (in-repo) | `components/ui/SortIcon.tsx` (AppIcon `chevron-down`/`chevron-up`/`sort-neutral`) |
-| NuriHub | `nurihub-ref-sort-arrows` (in-repo, written 2026-09-22 with audit topic 32) | `components/ui/SortIcon.tsx` (inline SVG — NuriHub has no icon registry) |
+| AE49_Hub | `ae49Hub-ref-table/general/sort-arrows.md` (in-repo) | `components/ui/SortIcon.tsx` (AppIcon `chevron-down`/`chevron-up`/`sort-neutral`) |
+| NuriHub | `nurihub-ref-table/general/sort-arrows.md` (in-repo, written 2026-09-22 with audit topic 32) | `components/ui/SortIcon.tsx` (inline SVG — NuriHub has no icon registry) |
 | future | create on first sortable table | copy the shape: one SortIcon component over the project's icon system |

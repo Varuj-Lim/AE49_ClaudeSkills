@@ -72,7 +72,7 @@ Prefix `flex-1` when two buttons share a row. A read-only popup uses
   บังด้วยปุ่ม หรือ Tag"*): a card whose content width cannot hold the longest realistic title
   plus the widest cluster goes one card width up (`sm` → `md` → `lg` → `wide`), and a
   cluster that still does not fit is too big for a header — move the secondary verbs into
-  the ⋮ (`web-ref-action-menu`).
+  the ⋮ (`web-ref-table/general/action-menu.md`).
 - **Confirm / form popup** — Cancel + Save / Delete / Import in a bottom
   `POPUP_ACTIONS_ROW`; the inline `POPUP_ERROR` sits DIRECTLY ABOVE that row.
 
@@ -80,7 +80,7 @@ Prefix `flex-1` when two buttons share a row. A read-only popup uses
 
 A confirm popup is opened by ONE control — a ⋮ menu item, an icon button's `title`, a
 text button, a bulk pill. The control shows a BARE verb (`Cancel`, `Delete`, `Edit` — the
-row names the object; `web-ref-action-menu`); the popup **carries that same verb** in its
+row names the object; `web-ref-table/general/action-menu.md`); the popup **carries that same verb** in its
 title and on its confirm button, so the person reads one verb three times: on the control,
 in the title, on the button they press. The title adds the object noun because the dialog
 stands alone.
