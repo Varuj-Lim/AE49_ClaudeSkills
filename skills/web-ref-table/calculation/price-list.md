@@ -29,6 +29,12 @@ hub's pricing page:
   first); band, header and fixed rows leave the cell empty. The size itself is typed in the
   Description cell (`dp [35] cm`), so a pasted block may carry size + Material + Labor. A second
   table to hold the editable part is the thing this rule forbids.
+- **A Description is a plain Thai phrase, never a bare symbol** (owner 2026-10-09, at the Pile
+  Prices gate: *"dp กับ fc' เปลี่ยนให้เป็นคำพูดที่ชัดเจน เขียนระบุไว้ใน Skill ตาราง BOQ ด้วยนะ"*). A sized row
+  reads like its neighbours in the workbook — `เสาเข็มเจาะขนาด Ø [35] ซม.`, `คอนกรีตผสมเสร็จ [240] ksc
+  (สำหรับงานเสาเข็มเจาะ)`, like the fixed rows `คอนกรีตผสมเสร็จ 180 ksc (สำหรับงานฐานราก)` /
+  `เหล็กเสริมกลมขนาด 6 มม.` — not `dp [35] cm` / `fc′ [240] ksc`. Symbols (`dp`, `fc′`, `L`) belong to the
+  engineering parameter tables, not to a price list a buyer or estimator reads.
 - Everything else is the calculation canon: column widths by kind (`columns.md`), arrow keys and
   Excel paste in the price boxes (`keyboard.md` T8), number boxes per `parameter-table.md` §10.
 
