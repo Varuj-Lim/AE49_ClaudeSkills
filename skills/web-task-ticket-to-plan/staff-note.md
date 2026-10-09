@@ -1,19 +1,6 @@
----
-name: web-task-staff-note
-description: >-
-  The shared staff-note workflow for every hub project (AE49_Hub, NuriHub, future
-  siblings) — an OWNER-authored ticket that asks the team something (ask) or tells the
-  team something (inform), filed so a decision surfaced mid-work is never lost before
-  the next conversation. Use whenever the owner says "เปิด ticket บอก user", "จดไว้ถามทีม",
-  "เขียน ticket แจ้งทีม", or a session surfaces a policy question staff must weigh in on.
-  The PROCESS lives here and changes here once; each project's own skill supplies the
-  FACTS: its filing script path, how ask/inform are marked (dedicated ticket types or a
-  title prefix), owner identity, and status vocabulary. Reverse direction of a normal
-  ticket (owner → staff); never a release note (that is the patch-note workflow) and
-  never a broadcast — filing notifies nobody.
----
+**Scope (was web-task-staff-note):** The shared staff-note workflow for every hub project (AE49_Hub, NuriHub, future siblings) — an OWNER-authored ticket that asks the team something (ask) or tells the team something (inform), filed so a decision surfaced mid-work is never lost before the next conversation. Use whenever the owner says "เปิด ticket บอก user", "จดไว้ถามทีม", "เขียน ticket แจ้งทีม", or a session surfaces a policy question staff must weigh in on. The PROCESS lives here and changes here once; each project's own skill supplies the FACTS: its filing script path, how ask/inform are marked (dedicated ticket types or a title prefix), owner identity, and status vocabulary. Reverse direction of a normal ticket (owner → staff); never a release note (that is the patch-note workflow) and never a broadcast — filing notifies nobody.
 
-# Staff note — owner → team agenda ticket (shared canon)
+## Staff note — owner → team agenda ticket (shared canon)
 
 ## What it is
 

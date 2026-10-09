@@ -35,7 +35,7 @@ if (!d.feature) err("`feature` is missing");
 if (!d.title) err("`title` is missing");
 
 if (d.closed) {
-  // CLOSED payload — grammar per web-ref-gate-closed-format.
+  // CLOSED payload — grammar per ae49-ref-gate-checklist/closed-format.md.
   if (!Array.isArray(d.items) || d.items.length) err("a closed payload must have `items: []`");
   const re = new RegExp(
     "^\\S+ landed \\d{4}-\\d{2}-\\d{2} \\(gate \\d+/\\d+( dev \\+ \\d+/\\d+ prod)?( \\((\\d+ waived(, \\d+ waiting owner)?|\\d+ waiting owner)\\))?; " +

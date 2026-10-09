@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // close-gate.cjs — reset a project's docs/gate-checklist.js to the CLOSED payload at landing,
-// in the exact grammar of web-ref-gate-closed-format, then validate it.
+// in the exact grammar of ae49-ref-gate-checklist/closed-format.md, then validate it.
 //
 // Usage:
 //   node close-gate.cjs <docs/gate-checklist.js> --slug <slug> --score <P/N> --commit <sha>[,<sha>…]

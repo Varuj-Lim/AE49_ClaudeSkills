@@ -64,8 +64,8 @@ The most common failure in software is misalignment — you think the agent unde
 
 When the agent flies blind without feedback, it produces crap. The fix is a tight feedback loop and a disciplined debugging method instead of guess-and-check.
 
-- [`/ae49-ref-debug-soft`](./skills/ae49-ref-debug-soft/SKILL.md) — the lightweight default: a four-mantra discipline (reproduce, trace the fail path, falsify the hypothesis, cross-reference) applied before proposing any fix.
-- [`/ae49-task-debug-hard`](./skills/ae49-task-debug-hard/SKILL.md) — for hard or intermittent bugs and performance regressions: reproduce → minimise → hypothesise → instrument → fix → regression-test, built around a repro harness and a post-mortem.
+- [`/ae49-ref-debug`](./skills/ae49-ref-debug/SKILL.md) — the lightweight default: a four-mantra discipline (reproduce, trace the fail path, falsify the hypothesis, cross-reference) applied before proposing any fix.
+- [`ae49-ref-debug/hard.md`](./skills/ae49-ref-debug/hard.md) — for hard or intermittent bugs and performance regressions: reproduce → minimise → hypothesise → instrument → fix → regression-test, built around a repro harness and a post-mortem.
 
 ### #3: We built a ball of mud
 
@@ -91,8 +91,8 @@ Skills for code work.
 |-------|--------------|
 | **[ae49-task-grill](./skills/ae49-task-grill/SKILL.md)** | Relentlessly interview the user about a plan or design until shared understanding is reached, resolving each branch of the decision tree. Challenges the plan against `CONTEXT.md` / `docs/adr/` and updates them inline. |
 | **[ae49-task-scrutinize](./skills/ae49-task-scrutinize/SKILL.md)** | Outsider-perspective, end-to-end review of a plan, PR, or change. Questions intent first, then traces the actual code path to verify the change does what it claims. |
-| **[ae49-ref-debug-soft](./skills/ae49-ref-debug-soft/SKILL.md)** | The everyday four-mantra debugging discipline: reproduce, trace the fail path, falsify the hypothesis, cross-reference every breadcrumb — before proposing any fix. |
-| **[ae49-task-debug-hard](./skills/ae49-task-debug-hard/SKILL.md)** | Disciplined diagnosis loop for hard/intermittent bugs and performance regressions: reproduce → minimise → hypothesise → instrument → fix → regression-test, with a repro harness and post-mortem. |
+| **[ae49-ref-debug](./skills/ae49-ref-debug/SKILL.md)** | The everyday four-mantra debugging discipline: reproduce, trace the fail path, falsify the hypothesis, cross-reference every breadcrumb — before proposing any fix. |
+| **[ae49-ref-debug › hard.md](./skills/ae49-ref-debug/hard.md)** | Disciplined diagnosis loop for hard/intermittent bugs and performance regressions: reproduce → minimise → hypothesise → instrument → fix → regression-test, with a repro harness and post-mortem. |
 | **[ae49-task-improve-codebase-architecture](./skills/ae49-task-improve-codebase-architecture/SKILL.md)** | Find deepening opportunities in a codebase, consolidate tight coupling, and make it more testable and AI-navigable, informed by the domain language and ADRs. |
 | **[ae49-ref-guidelines](./skills/ae49-ref-guidelines/SKILL.md)** | Behavioral guidelines for code work: question vs. command, ≥95% understanding before coding, reuse-first, surgical changes, verifiable success criteria, commit per logical change. |
 | **[ae49-task-audit-lib](./skills/ae49-task-audit-lib/SKILL.md)** | Non-destructive reuse audit of the codebase: finds inline logic that's duplicated or reusable enough to belong in shared code (a helper, module, or component), reports a prioritized list with `file:line` and a proposed home, and changes nothing until you approve. |
@@ -118,4 +118,4 @@ General workflow tools, not code-specific.
 
 ## Credits
 
-These skills are adapted from Matt Pocock's [Skills For Real Engineers](https://github.com/mattpocock/skills) (`caveman`, `grill`, `improve-codebase-architecture`, `handoff`, `teach`, `write-a-skill`, and the `diagnose` debugging loop), retuned for AE49 and extended with AE49 originals: `ae49-task-scrutinize`, `ae49-task-management-talk`, `ae49-ref-guidelines`, `ae49-ref-debug-soft`, `ae49-ref-report-format`, `ae49-task-plan-feature`, and `ae49-task-implement-feature`. Huge thanks to Matt for the original work.
+These skills are adapted from Matt Pocock's [Skills For Real Engineers](https://github.com/mattpocock/skills) (`caveman`, `grill`, `improve-codebase-architecture`, `handoff`, `teach`, `write-a-skill`, and the `diagnose` debugging loop), retuned for AE49 and extended with AE49 originals: `ae49-task-scrutinize`, `ae49-task-management-talk`, `ae49-ref-guidelines`, `ae49-ref-debug`, `ae49-ref-report-format`, `ae49-task-plan-feature`, and `ae49-task-implement-feature`. Huge thanks to Matt for the original work.

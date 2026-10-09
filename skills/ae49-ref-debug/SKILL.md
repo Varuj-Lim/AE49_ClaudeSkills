@@ -1,9 +1,33 @@
 ---
-name: ae49-ref-debug-soft
-description: A simple 4-step habit for debugging — first make the bug happen again reliably, then find exactly where it breaks, then try to prove your best guess wrong before trusting it, then keep track of every test you've run so you don't repeat yourself. Say this discipline's short reminder out loud at the start of any debugging session, then follow the four steps in order before suggesting a fix. This is the everyday, lightweight version for normal bugs. Trigger on /ae49-ref-debug-soft and automatically whenever debugging starts — the user reports a bug, says something is broken/crashing/failing, asks you to debug/diagnose/investigate, or pastes an error message or stack trace. For tougher or on-and-off bugs that need a proper repeatable test setup, performance slowdowns, permanent regression tests, or a written post-mortem, switch to ae49-task-debug-hard instead.
+name: ae49-ref-debug
+description: The debugging discipline in two levels. EVERYDAY (this file) is a four-step habit said out loud in the first reply and followed in order before any fix is suggested - make the bug happen again reliably, find exactly where it breaks, try to prove your best guess wrong, keep a trail of every test. HARD (hard.md, Matt Pocock's diagnose loop) is a fast repeatable pass/fail check, reproduce, 3-5 ranked causes, one change at a time, a regression test that locks the fix, then a clean-up and write-up. AUTO-LOAD whenever debugging starts - the user reports a bug, says something is broken / crashing / failing, asks to debug / diagnose / investigate, or pastes an error message or stack trace. Also read hard.md when the user says "diagnose this" or describes an intermittent / on-and-off bug, a slowdown or performance regression, or a bug that came back after a first fix. Trigger on /ae49-ref-debug. For a manager-facing write-up of the fix use ae49-task-management-talk.
 ---
 
-# Debug Mantra (Debugging Reminder)
+# Debugging — the everyday mantra, and the hard-bug loop
+
+Merged 2026-10-09 (plan `skills-merge-sweep` M3, owner SQ1 a): `ae49-ref-debug-soft` and
+`ae49-task-debug-hard` were one subject that pointed at each other and were loaded together, so they
+are one folder. The everyday mantra stays in THIS file (it must fire on every bug report); the hard
+loop is `hard.md`. Nothing was reworded.
+
+## Read X when Y
+
+| File | Read it when |
+|---|---|
+| this file (below) | ANY debugging start — a bug report, "broken / crashing / failing", an error message or stack trace: say the reminder out loud, follow the four steps |
+| [hard.md](hard.md) | the bug is hard or on-and-off, a slowdown, came back after a first fix, or the user says "diagnose this": the six-step diagnose loop, pass/fail check first |
+| [scripts/hitl-loop.template.sh](scripts/hitl-loop.template.sh) | a human has to click through the repro — `hard.md` step 1, way 10 |
+
+## Old name → where it lives now
+
+| Old skill | Now |
+|---|---|
+| `ae49-ref-debug-soft` | this file (`SKILL.md`), whole, from "Debug Mantra" down |
+| `ae49-task-debug-hard` (+ `scripts/hitl-loop.template.sh`) | `hard.md` (+ the same script path) |
+
+**Scope (was ae49-ref-debug-soft):** A simple 4-step habit for debugging — first make the bug happen again reliably, then find exactly where it breaks, then try to prove your best guess wrong before trusting it, then keep track of every test you've run so you don't repeat yourself. Say this discipline's short reminder out loud at the start of any debugging session, then follow the four steps in order before suggesting a fix. This is the everyday, lightweight version for normal bugs. Trigger on /ae49-ref-debug-soft and automatically whenever debugging starts — the user reports a bug, says something is broken/crashing/failing, asks you to debug/diagnose/investigate, or pastes an error message or stack trace. For tougher or on-and-off bugs that need a proper repeatable test setup, performance slowdowns, permanent regression tests, or a written post-mortem, switch to ae49-task-debug-hard instead.
+
+## Debug Mantra (Debugging Reminder)
 
 > *Adapted from [thananon/9arm-skills](https://github.com/thananon/9arm-skills) — original skill `debug-mantra`. Credit: [@thananon](https://github.com/thananon).*
 
@@ -75,3 +99,14 @@ Keep a running list of every test you try during this session: what you changed,
   - Don't call a guess confirmed until step 4 checks it against everything you've seen so far.
 - If you notice yourself suggesting a fix without being able to reliably trigger the bug, stop and go back to step 1.
 - This discipline is something **you** follow through the session — not advice to just tell the user about.
+
+---
+
+## When to escalate → `hard.md`
+
+The four steps above are the everyday level for normal bugs. Switch to [hard.md](hard.md) — and keep
+this file's reminder and ground rules — when the bug needs a proper repeatable test setup, is
+intermittent or on-and-off, is a slowdown / performance problem, came back after a first fix
+attempt, needs a permanent regression test or a written post-mortem, or the user says "diagnose
+this". For turning the fix into a write-up for managers / leadership afterward, use
+`ae49-task-management-talk`.

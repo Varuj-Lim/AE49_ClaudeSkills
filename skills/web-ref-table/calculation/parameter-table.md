@@ -224,5 +224,5 @@ Every editable table here is wired for arrow-key movement — `web-ref-table` T8
 
 | Project | Facts skill | Reference page |
 |---|---|---|
-| AE49_Hub | `ae49Hub-ref-table/calculation/parameter-table.md` (tokens, components, the measured `COL_PX` widths, every dated ruling; canon §8 (AE49 §10) numeric cells → `ae49Hub-ref-form-errors` §Numeric inputs: no stepper arrows, red frame on letters) | `/rd/foundation-design/detail/design` — `RdFootingGlobalsForm.tsx` (P + R), `FootingDesignTables.tsx` / `FootingInputRow.tsx` (W), `FootingLegendPopup.tsx` (§4), `FootingGlobalsPrintBlock.tsx` (§9) |
+| AE49_Hub | `ae49Hub-ref-table/calculation/parameter-table.md` (tokens, components, the measured `COL_PX` widths, every dated ruling; canon §8 (AE49 §10) numeric cells → `ae49Hub-ref-form-errors/number-inputs.md` §Numeric inputs: no stepper arrows, red frame on letters) | `/rd/foundation-design/detail/design` — `RdFootingGlobalsForm.tsx` (P + R), `FootingDesignTables.tsx` / `FootingInputRow.tsx` (W), `FootingLegendPopup.tsx` (§4), `FootingGlobalsPrintBlock.tsx` (§9) |
 | NuriHub | not adopted yet — its first calculation table writes its facts skill from this canon | — |

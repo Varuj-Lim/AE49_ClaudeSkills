@@ -1,9 +1,6 @@
----
-name: web-ref-ticket-queue
-description: The shared ticket-queue ordering canon for every hub project (AE49_Hub, Nuri_Hub, and future siblings) — how any ticket listing is ordered and columned, regardless of which app's tickets they are. Use when listing, tabling, or triaging support/IT tickets in any project, when editing a project's ticket-to-plan skill or list script, or when a ruling about ticket priority/ordering lands — the rule changes HERE once, project skills only carry their own facts.
----
+**Scope (was web-ref-ticket-queue):** The shared ticket-queue ordering canon for every hub project (AE49_Hub, Nuri_Hub, and future siblings) — how any ticket listing is ordered and columned, regardless of which app's tickets they are. Use when listing, tabling, or triaging support/IT tickets in any project, when editing a project's ticket-to-plan skill or list script, or when a ruling about ticket priority/ordering lands — the rule changes HERE once, project skills only carry their own facts.
 
-# Ticket queue — shared ordering canon
+## Ticket queue — shared ordering canon
 
 One rule for every hub's ticket listings (skill scripts, app Open tabs,
 boards), so a ruling lands ONCE here instead of once per project.

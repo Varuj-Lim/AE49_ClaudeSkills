@@ -1,9 +1,32 @@
 ---
 name: web-task-ticket-to-plan
-description: The shared ticket-to-plan doorway workflow for every hub project (AE49_Hub, Nuri_Hub, and future siblings) — read the support tickets, let the owner pick, clarify until the intent is settled, then hand off into the project's NORMAL plan flow. Use when the user wants to work from tickets in ANY hub project — "ticket to plan", "read the tickets", "ดู ticket", "what did staff request/report" — alongside that project's own ticket skill, which supplies the facts: script paths, collection/status vocabulary, priority tiers, attachment markers, actor identity, and notification behavior — the two-step write-back itself (plan APPROVAL → in_progress only, no reply, owner ruling 2026-09-08; PUSH → resolved + the ONE Thai reply — deliberately NO reply at the gate PASS, owner ruling 2026-09-10 collapsing the former three-step rule) lives HERE and is identical in every hub. The process changes HERE once; project skills never restate it. Tickets are cited by their HUMAN CODE (AE49 `TK0007`) wherever the owner reads, never by the raw doc id (owner ruling 2026-09-09).
+description: The shared ticket-to-plan doorway for every hub project (AE49_Hub, Nuri_Hub, siblings) - read the support tickets, let the owner pick, clarify until the intent is settled, then hand off into the NORMAL plan flow - plus the ticket-queue ORDER (priority tier first, missing = normal, oldest first within a tier, Priority after Status) in queue-order.md and the owner-to-team STAFF NOTE (an ask / inform ticket, notifies nobody) in staff-note.md. Use for "ticket to plan", "read the tickets", "ดู ticket", "what did staff request/report", any ticket listing, any priority or ordering ruling, "เปิด ticket บอก user", "จดไว้ถามทีม", "เขียน ticket แจ้งทีม", or when a session surfaces a policy question staff must weigh in on. The two-step write-back (plan APPROVAL = in_progress only; PUSH = resolved + the ONE Thai reply; none at the gate PASS) is in hard-rules.md; tickets are cited by HUMAN CODE (TK0007). The project's own ticket skill supplies the facts.
 ---
 
 # Ticket → Plan — shared doorway workflow
+
+Merged 2026-10-09 (plan `skills-merge-sweep` M2, owner SQ1 a): the ticket-queue ordering canon and the
+staff-note workflow are topics of this folder; the doorway's own long sections moved into topic files
+(owner MQ1 b) so this index stays under the 150-line cap. Every section was moved WHOLE.
+
+## Read X when Y
+
+| File | Read it when |
+|---|---|
+| [hard-rules.md](hard-rules.md) | citing a ticket (human code, not doc id), the two-step write-back (approval = status only, push = the one reply), the fuller reply for a `bug` ticket, writing directly with no approval round trip |
+| [flow.md](flow.md) | running the flow: list → pick → read in full (attachments, the ticket card first) → clarify → hand off → write back; listing-table output notes |
+| [queue-order.md](queue-order.md) | ordering or columning ANY ticket listing, editing a project's ticket list script, or a ruling on ticket priority / ordering |
+| [staff-note.md](staff-note.md) | the owner files a ticket TO the team ("เปิด ticket บอก user", "จดไว้ถามทีม", "เขียน ticket แจ้งทีม"): ask / inform, filing, resolution |
+
+## Old name → where it lives now
+
+| Old skill | Now |
+|---|---|
+| `web-ref-ticket-queue` | `web-task-ticket-to-plan/queue-order.md` |
+| `web-task-staff-note` | `web-task-ticket-to-plan/staff-note.md` |
+| this skill's sections "Shared hard rules" / "The flow" + "Output notes" | `hard-rules.md` / `flow.md` (headings unchanged) |
+
+**Scope (old description of this skill, 2026-10-09):** The shared ticket-to-plan doorway workflow for every hub project (AE49_Hub, Nuri_Hub, and future siblings) — read the support tickets, let the owner pick, clarify until the intent is settled, then hand off into the project's NORMAL plan flow. Use when the user wants to work from tickets in ANY hub project — "ticket to plan", "read the tickets", "ดู ticket", "what did staff request/report" — alongside that project's own ticket skill, which supplies the facts: script paths, collection/status vocabulary, priority tiers, attachment markers, actor identity, and notification behavior — the two-step write-back itself (plan APPROVAL → in_progress only, no reply, owner ruling 2026-09-08; PUSH → resolved + the ONE Thai reply — deliberately NO reply at the gate PASS, owner ruling 2026-09-10 collapsing the former three-step rule) lives HERE and is identical in every hub. The process changes HERE once; project skills never restate it. Tickets are cited by their HUMAN CODE (AE49 `TK0007`) wherever the owner reads, never by the raw doc id (owner ruling 2026-09-09).
 
 Staff file bugs and suggestions at each hub's Support → Tickets. This skill is
 the ONE process for turning them into `docs/plans/` work: **read and clarify,
@@ -12,180 +35,9 @@ project's ticket skill (`ae49Hub-task-ticket-to-plan`,
 `nurihub-task-ticket-to-plan`) declares its facts;
 this file never carries a path, uid, or collection name — the process and the response templates live here.
 
-## Shared hard rules
-
-- **Cite tickets by their HUMAN CODE, never by the doc id (owner ruling
-  2026-09-09: "ตอนคุณบอกระบุมาเป็น ID ที่มองไม่ได้ง่ายๆ ใน web").** A Firestore doc
-  id is invisible on the web; the code (AE49 and NuriHub: `TK0007`, first column of
-  Support → Tickets, in the modal title, the bells and the search box) is what
-  the owner can find. So chat cards, listing tables, plan `Context` lines,
-  commit messages and patch notes name the CODE + title. The doc id is only
-  ever a script argument, and the project scripts accept the code there too.
-  A project that has no code yet cites the doc id and says so in its project
-  skill — none today: AE49_Hub and NuriHub both mint `TK` codes (2026-09-09).
-- **No plan writing here.** After clarification, hand off to the normal flow —
-  short grill in Main, then dispatch `ae49-plan` per the router skill. One plan
-  per settled spec; a ticket may also turn out to be a tiny fix (router's
-  tiny-fix fast path) or a duplicate of an existing plan — say so instead of
-  forcing a plan.
-- **Ticket writes happen at exactly TWO moments, both owned by the owner —
-  never on Main's initiative (owner ruling 2026-09-10, which COLLAPSED the
-  former three-step rule; it supersedes the 2026-08-26 unification and
-  NuriHub's older 2026-08-17 status-only rule. Picking a ticket up for
-  reading/clarifying still writes nothing, because a picked ticket may turn
-  out to be a duplicate or a no-plan):**
-  1. **At the owner's APPROVAL of the plan that cites the ticket** — or its AUTO-approval
-     (a plan holding nothing beyond the grill, `ae49-router` owner rule 2026-10-06, counts as
-     the owner's approval) →
-     `status: in_progress` and NOTHING else — no response text (owner ruling
-     2026-09-08: "แค่เปลี่ยน Status พอ ไม่ต้องอธิบาย"). Silent (no bell). Run the
-     project's update script with `--status in_progress` and no response
-     argument.
-  2. **At the owner's PUSH** (production deploy) → `status: resolved` + a
-     Thai response saying it is live now. **This is the ONLY moment a reply is
-     ever written.**
-
-  **There is deliberately NO reply at the gate PASS (owner ruling 2026-09-10,
-  "ยุบเหลือตอบตอน push").** A "done, waiting for the next deploy" reply used to go
-  out at the gate; it is removed because the gap between a PASS and a push is
-  not reliably short — NuriHub was sitting on 23 unpushed commits the day this
-  was ruled. A reply saying เสร็จแล้ว while the feature is not on production
-  sends the requester looking for something that is not there, which is exactly
-  the 2026-08-17 burn: **a landed-but-unpushed feature is invisible to the
-  requester.** Silence until the push is the honest state, and `in_progress`
-  already tells staff the ticket is being worked on. That clause — **never
-  write a reply before the work is on PRODUCTION** — now governs every write
-  with nothing contradicting it; under the old three-step rule it sat in direct
-  tension with the gate-PASS step, which is how the rule came to be
-  re-examined.
-
-  Template (plain Thai, keep the app's English labels; one or two sentences,
-  say WHAT changed for the requester, never the internals):
-  - **PUSH:** `ขึ้นระบบแล้วครับ — <สิ่งที่เปลี่ยน 1 ประโยค> ลองใช้ได้เลย ถ้าไม่ตรงที่ต้องการแจ้งกลับได้ที่ ticket นี้`
-
-  **A `bug` ticket gets a FULLER reply — the one-sentence template is not enough
-  (owner ruling 2026-09-13).** A suggestion's author asked for a change and only
-  needs to know it is live. A bug's author *reported a symptom* and is owed an
-  answer to the question they actually asked: **was I right about what was
-  happening, and is it gone now?** A bare "ขึ้นระบบแล้วครับ — X เปลี่ยนแล้ว" lets
-  them assume their symptom is fixed when often only part of it is, and they find
-  out the hard way in front of a customer. So a bug reply covers, in plain Thai,
-  in this order — each a sentence or two, skipping any that genuinely does not
-  apply:
-
-  1. **What was actually wrong** — the real cause, in the requester's words, not
-     the code's. Say so plainly when it differs from what they guessed; they gave
-     you a symptom, not a diagnosis, and being corrected kindly is useful to them.
-  2. **What changed** — the fix, as they will experience it.
-  3. **What did NOT change, when part of the symptom remains** — never let silence
-     imply the whole thing is gone. Name what still behaves the old way and why
-     (an external system's rule we do not control, a deliberate decision, a
-     follow-up ticket).
-  4. **What they should do now** — including undoing any workaround they built.
-     People keep their workarounds running for months otherwise.
-  5. **How to tell it is working**, when that is not obvious from just using it.
-
-  Still plain words, still no internals — no file names, no field names, no
-  collection names, no commit ids. Length follows the bug: a one-line typo fix
-  stays one line; a bug whose cause turned out to be different from the report
-  needs all five points. The rule is that nothing true and useful to the reporter
-  is left out, not that the reply must be long.
-
-  **Write directly — no approval round trip (owner ruling 2026-09-08 evening:
-  "เขียนไปได้เลย แค่บอกผมว่าเขียนว่าอะไร ไม่ต้องขออนุญาต").** The owner's PUSH /
-  approve word IS the authorization: compose the reply from the template,
-  `--apply` it, and REPORT the exact text written (the owner checks it in the
-  app when it goes out). The script's dry-run stays Main's own sanity check
-  (ticket found, status transition right, bell decision as expected), not a
-  gate the owner has to read; it replaced an "always show first" rule that cost
-  a round trip per ticket. One ticket per call; only for a ticket the plan
-  cites; never `rejected` unless the owner says so. Script paths, actor
-  identity, and notification behavior are the project skill's facts.
-## The flow
-
-1. **List** — run the project's read-only list script (path in the project
-   skill). Default scope = **open + in_progress + on_hold** (owner ruling
-   2026-08-13); `--status all` / `--status <one>` widens on request. Render as
-   a table (English, per `ae49-ref-report-format`): Code · Status · Priority ·
-   Type · Date · Requester · Title (Code = the human code; the doc id only
-   where the project has no code yet), one row per ticket, **ordered per
-   `web-ref-ticket-queue`** (priority tier first, oldest first within each
-   tier). Tier vocabulary and attachment/answered markers are the project
-   skill's facts.
-
-   **`in_progress` tickets are NOT rows (owner rule 2026-09-08).** A ticket
-   that is `in_progress` AND cited by an open plan (grep its code — or its
-   doc id where no code exists — in `docs/plans/*.md`) is work already moving — nothing blocks it, so it only
-   pads the table. Leave it out and say it in ONE line under the table:
-   `N in_progress — carried by <plan slugs>`. Show an `in_progress` ticket as
-   a row ONLY when no plan carries it, flagged ⚠️ — that is a ticket someone
-   flipped and then forgot, and it needs a pick like any open one.
-
-2. **Pick** — ask the owner which ticket(s) to take up (by code or title). Don't
-   auto-pick, don't rank by your own judgment unless asked.
-
-3. **Read in full** — `--id <code|docId>` (the project script resolves the
-   human code; the doc id still works) for the full description and any
-   existing response. **Attachments: fetch and LOOK at them yourself — never ask the
-   owner to open the app (owner ruling 2026-09-08, standing authorization in
-   every hub; asking each time was the complaint).** Each image field on the
-   doc is a plain download URL (Firebase Storage `?alt=media&token=…`, no
-   auth needed); pull every attachment into the session scratchpad and view it
-   with the image-capable Read tool BEFORE asking any question the picture
-   might already answer:
-
-   ```
-   curl -sSL --max-time 60 -o "<scratchpad>/ticket-<id6>-<n>.png" "<attachmentUrl>"
-   ```
-
-   Then say in the card, in one line, what the screenshot shows. The list
-   scripts stay text-only on purpose — the fetch is a shell step, not a script
-   feature. If a fetch fails (expired token, deleted file), say so and only then
-   ask the owner to open it in the app.
-
-   **Always show the owner the ticket card FIRST (owner rule 2026-08-25,
-   shared).** The moment a ticket is picked up — and again whenever work on it
-   resumes in a later message — render its full card in chat BEFORE any
-   analysis, question, or action: **Title · Description (verbatim, in full) ·
-   Type · Priority · Status · Date · Requester** (+ attachment markers and the
-   CODE). Never discuss a ticket by row number or bare doc id alone: the owner must
-   never have to scroll back or open the app to know which ticket is on the
-   table. **Every batch of clarifying questions opens by restating which
-   ticket it is about** (title + requester at minimum, the full card if
-   anything else was said in between) — a question block arriving after
-   unrelated output with no ticket header caused real confusion on 2026-08-25.
-
-4. **Clarify — the point of this skill.** Before any planning, ask the owner
-   the questions the ticket leaves open, per the grill discipline (one at a
-   time, each with a recommendation). Typical gaps in staff tickets: what
-   outcome the requester actually wants vs what they suggested; bug vs change
-   request; scope (one page or app-wide); who else is affected; priority vs
-   the current board. A vague two-line suggestion usually needs 2–4 questions.
-   Stop when Main could defend the spec to the `ae49-plan` agent.
-
-5. **Hand off** — summarise the settled spec in 2–3 sentences, name the source
-   ticket (code + title) so the plan's Context section can cite it, and continue
-   exactly as a `plan:` request: remaining grill → dispatch `ae49-plan` →
-   approve → `impl:` → audit → gate chain. **Carry the ticket CODE forward** (the
-   doc id beside it is optional) — a plan whose Context does not name its source
-   ticket cannot be closed cleanly later.
-
-6. **Write back — the two-step rule above, at the owner's own words.** The
-   approval step fires the moment the owner approves a plan whose Context
-   cites the ticket, and writes STATUS ONLY; the reply itself is written once,
-   at the owner's push. **A gate PASS writes NOTHING to the ticket.** Both
-   writes go directly and report the text afterwards (no "show first" round
-   trip); the project skill names the script, the actor identity, and whether a
-   bell notification accompanies the write.
-
-## Output notes
-
-Listing tables and finding-style output follow `ae49-ref-report-format`;
-clarifying questions follow `ae49-task-grill`.
-
 ## What each project's ticket skill must declare
 
 Script paths and invocations · collection name and doc shape · status
-vocabulary · priority tiers (the `web-ref-ticket-queue` facts) · attachment
+vocabulary · priority tiers (the `queue-order.md` facts) · attachment
 markers and image-field semantics · write-back FACTS (script, actor identity,
 notification behavior) · any project-only statuses or fields.

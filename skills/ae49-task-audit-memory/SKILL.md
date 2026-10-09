@@ -1,17 +1,21 @@
 ---
 name: ae49-task-audit-memory
-description: Review this project's auto-memory files and report suggested keep / update / delete / create changes WITHOUT modifying anything until the user approves. Use when the user asks to audit, review, check, or clean up the project's memory.
+description: Review this project's memory - the machine-local auto-memory folder AND, when the repo carries one, the git-synced `.claude/memory/` (router, `shared/`, the driver's folder; see ae49-task-setup-git-memory) - and report suggested keep / update / delete / create changes WITHOUT modifying anything until the user approves. Use when the user asks to audit, review, check, or clean up the project's memory.
 ---
 
 # Audit Memory
 
-Perform a **non-destructive review** of the current project's auto-memory and report findings.
+Perform a **non-destructive review** of the current project's memory (the machine-local auto-memory and, where the repo has it, the git-synced memory) and report findings.
 
 **Hard rule: make NO changes to any memory file until the user explicitly approves a specific suggestion.** This skill reads and recommends only.
 
-## Step 1 — Locate the memory directory
+## Step 1 — Locate the memory
 
-The memory lives at:
+Up to TWO places hold this project's memory. Read BOTH when both exist.
+
+**A. The repo's git-synced memory** (per `ae49-task-setup-git-memory`) — present when the repo has `<project>/.claude/memory/MEMORY.md`. Read that router `MEMORY.md` (it carries the git-user → folder mapping table), then `shared/MEMORY.md`, then the driver's own folder's `MEMORY.md` (the driver = the current `git config user.name`, looked up in the mapping table), then **every** other `.md` in `shared/` and in the driver's folder. Read another person's folder only down to its index lines unless the user asks. A project fact found only in the machine-local folder (B) is 📦 misfiled — suggest moving it into the repo.
+
+**B. The machine-local folder** — where the harness keeps the project's auto-memory (on a machine whose project uses git-synced memory it is often only a pointer to A). It lives at:
 
 ```
 <home>/.claude/projects/<flattened-project-path>/memory/
@@ -22,7 +26,7 @@ Example: `C:\Users\alex\Documents\my_app` → `C--Users-alex-Documents-my-app`.
 
 Read `MEMORY.md` (the always-loaded index) first, then read **every** other `.md` file in that folder.
 
-If the folder or `MEMORY.md` does not exist, report "no memory saved yet for this project" and stop.
+Report "no memory saved yet for this project" and stop only when BOTH A and B are absent (no `.claude/memory/MEMORY.md` in the repo AND no folder or `MEMORY.md` at B).
 
 ## Step 2 — Assess each memory file
 

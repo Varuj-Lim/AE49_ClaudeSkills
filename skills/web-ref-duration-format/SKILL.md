@@ -1,6 +1,6 @@
 ---
 name: web-ref-duration-format
-description: The ONE way a duration (a span of time — hours worked, minutes late, payable overtime, a booked block, leave hours) is written on screen and on paper in every hub project (AE49_Hub, Nuri_Hub, future siblings). Two families that never mix — MINUTE-PRECISE durations read `1h 4m` / `42m` / `2h` (compact, no zero parts, no decimals, no minus sign), HALF-HOUR-GRID quantities read `3.5h` / `4h` (decimal hours with the `h` suffix) — plus the header rule (a column is named for the quantity, `Late` / `Total Hours`, never for the unit like `Late (min)`) and the Thai-prose rule (`สาย 64 นาที` in a sentence, `1h 4m` in a cell). Use whenever adding, formatting, relabelling or reviewing ANY duration, hours figure, minutes figure, lateness figure, or time-span column, tooltip, caption, print cell or log line — trigger even when the user only says "show the hours", "add a minutes column", "how long", "late by", "format the time worked", or pastes a duration that looks different from the others. Each project keeps only its helper names here; the rule changes HERE once.
+description: The ONE way a duration (a span of time — hours worked, minutes late, payable overtime, a booked block, leave hours) is written on screen and on paper in every hub project (AE49_Hub, Nuri_Hub, siblings). Two families that never mix — MINUTE-PRECISE durations read `1h 4m` / `42m` / `2h`, HALF-HOUR-GRID quantities read `3.5h` / `4h` — plus the header rule (a column is named for the quantity, `Late` / `Total Hours`, never for the unit like `Late (min)`) and the Thai-prose rule (`สาย 64 นาที` in a sentence, `1h 4m` in a cell). Use whenever adding, formatting, relabelling or reviewing ANY duration, hours figure, minutes figure, lateness figure, or time-span column, tooltip, print cell or log line — also when the user only says "show the hours", "add a minutes column", "how long", "late by", "format the time worked", or a duration that looks different. Each project keeps its helper names and owner-ruled exceptions in its own facts file (§5); the rule changes HERE once.
 ---
 
 # Duration format — shared canon
@@ -21,9 +21,9 @@ consistency lives so the next duration is not invented per page.
 - The families never mix on one figure: a booked 3.5 h block is `3.5h`, never
   `3h 30m`; 64 clocked minutes are `1h 4m`, never `1.07h` or `64 นาที` in a cell.
 - A project may hold an owner-ruled exception for one named column; it is listed in
-  that project's §5 row, and an audit treats it as conforming. The exception covers
+  that project's duration facts file (§5), and an audit treats it as conforming. The exception covers
   that column only — every other duration on the same page keeps its family, and a
-  column with no §5 exception follows the table above.
+  column with no listed exception follows the table above.
 - A before → after pair keeps ONE family on both sides (`3h → 3.5h`, `4h 23m → 4h`).
 - Negative or impossible input never prints a minus sign — the figure renders its
   floor (`0h`) and the explanation lives in a caption beside it.
@@ -58,17 +58,20 @@ draftsman charts) — that is a chart rule, not a table one.
 ## 4. Don'ts
 
 - Don't format a duration by hand (`${h}h ${m}m`, `toFixed(1) + "h"`) — call the
-  project's helper (below), so a future change to the shape happens once.
+  project's helper (§5 points at where each project names them), so a future change to the shape happens once.
 - Don't show seconds anywhere; the clock data is minute-precise by design.
 - Don't pad (`1h 04m`), don't use colons for durations (`1:04` reads as a clock
   time), don't write `hrs`, `mins`, `นาที` inside a cell.
 
-## 5. Per-project helpers (facts only — the rule above is the canon)
+## 5. Per-project facts (the rule above is the canon)
 
-| Project | Minute-precise `Xh Ym` | Half-hour grid `3.5h` |
-|---|---|---|
-| **AE49_Hub** | `formatHoursMinutes(minutes)` — `lib/overtime.ts` (Overtime Total Hours, Claim, Break, payable notes) · **Exception (owner ruling 2026-09-11, HR):** Overtime `Late` — screen and print, incl. its total — is whole minutes `65m` via `formatLateMinutes(minutes)`, `lib/overtime.ts`. Conforming; not a finding. | `fmtHours(hours)` — `lib/leave.ts`, and the call site appends the `h` (`${fmtHours(h)}h`; import review, draftsman bookings, leave hours) |
-| **Nuri_Hub** | no duration on screen yet — when one appears, add the same two helpers under the same names and point this row at them | — |
+Helper names, file paths and owner-ruled exceptions are a project's FACTS, so they live in that
+project's own facts skill — not here. Each row points at where to find them.
+
+| Project | Where its duration helpers and exceptions live |
+|---|---|
+| **AE49_Hub** | `ae49Hub-ref-date-time/duration.md` — the minute-precise and half-hour-grid helpers, the call-site convention and the owner-ruled Overtime `Late` exception |
+| **Nuri_Hub** | none yet — no duration on screen; when one appears, its own facts skill holds the same two helpers under the same names |
 
 A project adds a row here when it gains a duration; it never restates the rule in
 its own skills (`ae49Hub-ref-text` covers the TYPE of a cell, this file covers the

@@ -89,7 +89,7 @@ Cloud Shell, the Firebase console, a deploy, a sign-in — Main prepares the WHO
 (every command in order, the exact output to expect, the sha `git log` must print), groups
 such steps across every track that is pending together so the owner sits down once, says how
 many minutes of their time it needs, and keeps working the other tracks meanwhile. The
-Main-run smoke test with the owner waiving the eye-only items (`ae49-ref-gate-checklist`,
+Main-run smoke test with the owner waiving the eye-only items (`ae49-ref-gate-checklist/waived.md`,
 "Waived and Main-verified items") is the same idea applied to the gate: offer it whenever a
 gate would cost the owner more than a few minutes on a feature they will rarely use.
 

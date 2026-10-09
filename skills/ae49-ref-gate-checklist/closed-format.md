@@ -1,17 +1,6 @@
----
-name: web-ref-gate-closed-format
-description: >-
-  The one format for a hub project's gate-checklist "No open gate" closed
-  payload — the exact JS shape and the closed-line grammar Main writes into
-  docs/gate-checklist.js when a feature lands, identical in every project
-  (AE49_Hub, Nuri_Hub, future siblings). Use whenever landing a feature and
-  resetting the gate-checklist page, writing or reviewing a closed payload,
-  or when the user says the No-open-gate line looks different between
-  projects. ae49-ref-gate-checklist points here (and its close-gate.cjs writes it); this file changes once
-  and every project's page reads the same.
----
+**Scope (was web-ref-gate-closed-format):** The one format for a hub project's gate-checklist "No open gate" closed payload — the exact JS shape and the closed-line grammar Main writes into docs/gate-checklist.js when a feature lands, identical in every project (AE49_Hub, Nuri_Hub, future siblings). Use whenever landing a feature and resetting the gate-checklist page, writing or reviewing a closed payload, or when the user says the No-open-gate line looks different between projects. ae49-ref-gate-checklist points here (and its close-gate.cjs writes it); this file changes once and every project's page reads the same.
 
-# Gate-checklist CLOSED payload — one format
+## Gate-checklist CLOSED payload — one format
 
 At landing ("all pass, commit it") Main RESETS the project's gitignored
 `docs/gate-checklist.js` to the CLOSED payload so the page reads
@@ -46,7 +35,7 @@ Slot rules, in order, `; `-separated inside the parentheses:
    some items instead of testing them, the score counts only the items that
    PASSED and the slot ends with the waived count — `gate 3/7 (4 waived)`,
    passed + waived = total. An item Main verified for the owner (a smoke run
-   the owner chose instead of clicking — `ae49-ref-gate-checklist` "Waived
+   the owner chose instead of clicking — `waived.md` "Waived
    and Main-verified items") counts as passed; WHICH items were waived or
    Main-verified is written in the plan's landing note, not in this line.
    **Waiting owner (owner 2026-09-25):** an item the owner was asked to

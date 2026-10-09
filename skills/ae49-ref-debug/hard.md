@@ -1,11 +1,10 @@
----
-name: ae49-task-debug-hard
-description: A careful step-by-step process for hard bugs — make it happen again → shrink it to the smallest case that still shows the bug → guess possible causes → test those guesses → fix it → add a test that locks the fix in place. Built around having a fast, repeatable way to check pass/fail, a lasting test that guards against the bug coming back, and a short write-up afterward. Use when the user explicitly says "diagnose this", describes a hard or on-and-off bug, a slowdown/performance problem, or a bug that came back after a first fix attempt. For everyday bugs, use the lighter ae49-ref-debug-soft instead (a short 4-step reminder); escalate here when that isn't enough. For turning the fix into a write-up for managers/leadership afterward, use ae49-task-management-talk.
----
+**Scope (was ae49-task-debug-hard):** A careful step-by-step process for hard bugs — make it happen again → shrink it to the smallest case that still shows the bug → guess possible causes → test those guesses → fix it → add a test that locks the fix in place. Built around having a fast, repeatable way to check pass/fail, a lasting test that guards against the bug coming back, and a short write-up afterward. Use when the user explicitly says "diagnose this", describes a hard or on-and-off bug, a slowdown/performance problem, or a bug that came back after a first fix attempt. For everyday bugs, use the lighter ae49-ref-debug-soft instead (a short 4-step reminder); escalate here when that isn't enough. For turning the fix into a write-up for managers/leadership afterward, use ae49-task-management-talk.
+
+*(Since 2026-10-09 this file is a topic of the `ae49-ref-debug` folder; the "lighter ae49-ref-debug-soft" above is now the `SKILL.md` index of that folder.)*
 
 > *Adapted from [mattpocock/skills — engineering/diagnose](https://github.com/mattpocock/skills/tree/main/skills/engineering/diagnose) by Matt Pocock ([MIT License](https://github.com/mattpocock/skills/blob/main/LICENSE)).*
 
-# Diagnose
+## Diagnose
 
 A careful process for hard bugs. Only skip a step when you have a clear, stated reason to.
 
