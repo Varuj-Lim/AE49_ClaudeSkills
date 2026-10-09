@@ -91,7 +91,7 @@ always a thousands separator, `1,145.77` = 1145.77). The summary is a Thai sente
 
 | Project | Facts skill |
 |---|---|
-| AE49_Hub | `ae49Hub-ref-table/keyboard.md` "Arrow keys" (helper `lib/gridArrowNav.ts`, `TableCard arrowNav` / `stickyLeftPx`, the table registry) + audit topic 38; paste: plan `table-paste-excel` (facts land with its build) |
+| AE49_Hub | `ae49Hub-ref-table/keyboard.md` "Arrow keys" (helper `lib/gridArrowNav.ts`, `TableCard arrowNav` / `stickyLeftPx`, the table registry) + audit topic 38; paste: `ae49Hub-ref-table/keyboard.md` §12 (helper `lib/gridPaste.ts`, markers `data-grid-slot` / `data-grid-band` / `data-grid-reflow`, the paste registry; plan `table-paste-excel`, done 2026-10-09) |
 | NuriHub | not adopted yet — when its first editable table is wired, write its facts skill from this canon |
 
 When the rule changes, it changes HERE; the facts skills hold paths and registries only.
