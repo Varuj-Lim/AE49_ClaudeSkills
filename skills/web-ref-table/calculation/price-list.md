@@ -31,8 +31,8 @@ hub's pricing page:
   table to hold the editable part is the thing this rule forbids.
 - **A Description is a plain Thai phrase, never a bare symbol** (owner 2026-10-09, at the Pile
   Prices gate: *"dp กับ fc' เปลี่ยนให้เป็นคำพูดที่ชัดเจน เขียนระบุไว้ใน Skill ตาราง BOQ ด้วยนะ"*). A sized row
-  reads like its neighbours in the workbook — `เสาเข็มเจาะเส้นผ่านศูนย์กลาง [35] ซม.`, `คอนกรีตผสมเสร็จ [240] ksc`, like the fixed rows `คอนกรีตผสมเสร็จ 180 ksc` /
-  `เหล็กเสริมกลมขนาด 6 มม.` — not `dp [35] cm` / `fc′ [240] ksc`. No symbol at all — not `Ø` either: write `เส้นผ่านศูนย์กลาง` (owner 2026-10-09, at the Pile Prices gate: *"เปลี่ยน Ø เป็นเส้นผ่านศูนย์กลางแทน อย่าใช้สัญลักษณ์เลย"*). Symbols (`dp`, `fc′`, `L`, `Ø`) belong to the
+  reads like its neighbours in the workbook — `เสาเข็มเจาะเส้นผ่านศูนย์กลาง [35] ซม.`, `คอนกรีตผสมเสร็จ [240] ksc`, like the workbook rows `คอนกรีตผสมเสร็จ 180 ksc` /
+  `เหล็กเสริมกลมขนาด 6 มม.` (sized rows too, since 2026-10-09) — not `dp [35] cm` / `fc′ [240] ksc`. No symbol at all — not `Ø` either: write `เส้นผ่านศูนย์กลาง` (owner 2026-10-09, at the Pile Prices gate: *"เปลี่ยน Ø เป็นเส้นผ่านศูนย์กลางแทน อย่าใช้สัญลักษณ์เลย"*). Symbols (`dp`, `fc′`, `L`, `Ø`) belong to the
   engineering parameter tables, not to a price list a buyer or estimator reads.
 - **No repeated scope in a row** (owner 2026-10-09: *"เอาคำว่า (สำหรับงานฐานราก) ออกด้วยนะ … เพราะมีระบุไว้ที่หัวตาราง"*). A
   row never repeats what its band heading already says — no `(สำหรับงานฐานราก)` under `2.1. งานคอนกรีตใน
@@ -50,6 +50,6 @@ different things on one page.
 ## Facts
 
 Each hub names its BOQ matrix tokens, its reference price page and how a sized band adds or drops
-a row in its own `<hub>-ref-table/calculation/` facts. AE49_Hub: the R&D pricing page
-(`rd/directory/pricing`), `FOOTING_BOQ_MATRIX_COLS` / `boqCellClass` / `boqPriceInputClass` /
+a row in its own `<hub>-ref-table/calculation/` facts. AE49_Hub: the R&D pricing pages
+(`rd/directory/pricing/pile` and `/footing`, one tab per price category), `FOOTING_BOQ_MATRIX_COLS` / `boqCellClass` / `boqPriceInputClass` /
 `formatBoqMoney` / `BOQ_COLUMNS`.
