@@ -21,20 +21,22 @@ hub's pricing page:
   Labor) and read-only. No. / Description / Unit are text — except the size number of a sized row
   that can grow (below).
 - **A family priced by size** (per pile diameter, per concrete strength, per bar size) is a BAND with
-  one row per size (`dp 35 cm`, `fc′ 280 ksc`) inside the same matrix — never a separate
+  one row per size (`เสาเข็มเจาะขนาด Ø 35 ซม.`, `คอนกรีตผสมเสร็จ 280 ksc`) inside the same matrix — never a separate
   "size | Material | Labor | Amount" input table beside it.
 - **A list that can grow or shrink keeps its controls inside the matrix** — a last **Action** column
   (owner PQ3 a, 2026-10-09: *"ให้มี Column Action ต่อท้ายว่าจะลบ Row นั้นหรือเพิ่ม Row ใต้ Row นั้น"*):
   on each sized row an icon to ADD a row right below it and an icon to DELETE that row (delete asks
   first); band, header and fixed rows leave the cell empty. The size itself is typed in the
-  Description cell (`dp [35] cm`), so a pasted block may carry size + Material + Labor. A second
+  Description cell (`เสาเข็มเจาะขนาด Ø [35] ซม.`), so a pasted block may carry size + Material + Labor. A second
   table to hold the editable part is the thing this rule forbids.
 - **A Description is a plain Thai phrase, never a bare symbol** (owner 2026-10-09, at the Pile
   Prices gate: *"dp กับ fc' เปลี่ยนให้เป็นคำพูดที่ชัดเจน เขียนระบุไว้ใน Skill ตาราง BOQ ด้วยนะ"*). A sized row
-  reads like its neighbours in the workbook — `เสาเข็มเจาะขนาด Ø [35] ซม.`, `คอนกรีตผสมเสร็จ [240] ksc
-  (สำหรับงานเสาเข็มเจาะ)`, like the fixed rows `คอนกรีตผสมเสร็จ 180 ksc (สำหรับงานฐานราก)` /
+  reads like its neighbours in the workbook — `เสาเข็มเจาะขนาด Ø [35] ซม.`, `คอนกรีตผสมเสร็จ [240] ksc`, like the fixed rows `คอนกรีตผสมเสร็จ 180 ksc` /
   `เหล็กเสริมกลมขนาด 6 มม.` — not `dp [35] cm` / `fc′ [240] ksc`. Symbols (`dp`, `fc′`, `L`) belong to the
   engineering parameter tables, not to a price list a buyer or estimator reads.
+- **No repeated scope in a row** (owner 2026-10-09: *"เอาคำว่า (สำหรับงานฐานราก) ออกด้วยนะ … เพราะมีระบุไว้ที่หัวตาราง"*). A
+  row never repeats what its band heading already says — no `(สำหรับงานฐานราก)` under `2.1. งานคอนกรีตใน
+  งานฐานราก`. A stored or printed workbook label may keep it; the price list shows it without.
 - Everything else is the calculation canon: column widths by kind (`columns.md`), arrow keys and
   Excel paste in the price boxes (`keyboard.md` T8), number boxes per `parameter-table.md` §10.
 
