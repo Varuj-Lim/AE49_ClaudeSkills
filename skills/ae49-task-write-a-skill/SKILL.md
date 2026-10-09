@@ -23,7 +23,8 @@ description: Create new agent skills with proper structure, progressive disclosu
    frontmatter (plus the session's available-skills list). If an existing skill already
    covers — or partly covers — the request: STOP. Show the user that skill's name and
    description, and ask whether to update/extend it instead, and what to change.
-   Create a new skill only after the user confirms nothing existing fits.
+   Create a new skill only after the user confirms nothing existing fits — and decide
+   merge / topic file / new skill by [Merge, topic file, or new skill](#merge-topic-file-or-new-skill).
 
 3. **Draft the skill** - create:
    - SKILL.md with concise instructions
@@ -64,6 +65,18 @@ skill-name/
 ├── EXAMPLES.md        # Usage examples (if needed)
 └── scripts/           # Utility scripts (if needed)
     └── helper.js
+```
+
+A **folder skill** (one subject family, several topics) — `SKILL.md` is the index:
+
+```
+web-ref-table/
+├── SKILL.md           # the shared rule + a table "read X when Y", linking EVERY topic file
+├── general/
+│   ├── sort-arrows.md
+│   └── filter-format.md
+└── calculation/
+    └── parameter-table.md
 ```
 
 ## SKILL.md Template
@@ -129,9 +142,34 @@ Add utility scripts when:
 
 Scripts save tokens and improve reliability vs generated code.
 
-## When to Split Files
+## Merge, topic file, or new skill
 
-Split into separate files when:
+Owner ruling 2026-10-09 (SQ4 a), after a survey found 89 skills of which 42 broke the 1,024-character
+description limit and ~65 surfaced with NO description in the session's skill listing — the model
+could only find them by name. A topic file inside a folder skill costs nothing in that listing; a new
+skill costs a description slot. So:
+
+- **Add a TOPIC FILE, not a new skill,** when the new rule belongs to a family that already has a skill
+  (tables, buttons, dates, tickets…). Add one row to that skill's index.
+- **MERGE** skills at the SAME level that are one subject family AND show it: they point at each other
+  both ways, they are loaded together, or one defines itself against the other. The result is one folder
+  skill — `SKILL.md` = the shared rule + an index table; each former skill becomes a topic file, moved
+  WHOLE (section codes kept, so citations stay valid).
+- **Create a NEW skill** only for a new subject with its own trigger words, a different level, a `mode`
+  (its own ON/OFF state), or a task the user calls by its own `/` command.
+- **Never merge across levels, projects or modes.** A shared canon (`web-ref-*`) and a hub's facts
+  (`<hub>-ref-*`) stay a PAIR; each hub's facts stay in that hub.
+- **Before merging, count the live references** to every old name (excluding done plans, memory,
+  `node_modules`, `.next`) and update them in the SAME change — skills, agents, `CLAUDE.md`,
+  `AGENTS.md`, audit topics, code comments, plus a handoff prompt for each sibling hub that cites them —
+  or keep the most-cited skill's name as the folder name.
+- **Description ≤ 1,024 characters**, index `SKILL.md` ≤ 150 lines; it links every topic file directly
+  (one level of links, even into subfolders). A topic file over ~500 lines gets its own subfolder.
+- **Split a topic back out** only when it needs triggers the index description cannot carry, or must load
+  on its own — the 2026-09-25 split of the gate rules out of `ae49-router` (to survive a compact) is the
+  example.
+
+### When to split files inside one skill
 
 - SKILL.md exceeds 150 lines
 - Content has distinct domains (finance vs sales schemas)
@@ -167,6 +205,7 @@ After drafting, verify:
 - [ ] No time-sensitive info
 - [ ] Consistent terminology
 - [ ] Concrete examples included
-- [ ] References one level deep
+- [ ] References one level deep (a folder skill's index links every topic file)
+- [ ] Merge / topic file / new skill decided by the section above; no sibling skill at the same level covers the family
 - [ ] Each `ref` rule has (or plans) a matching audit topic; many-rule audits split into `topics/NN-*.md`
 - [ ] If the skill outputs a report, its Report/Output section points at `ae49-ref-report-format` (not a copied format) and gives findings referenceable IDs
