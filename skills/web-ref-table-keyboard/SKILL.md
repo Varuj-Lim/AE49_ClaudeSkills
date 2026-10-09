@@ -51,7 +51,11 @@ pinned header. A table with frozen columns / a pinned header pads its own scroll
 (scroll padding), and the helper ARRIVES with focus-without-scroll followed by a "scroll into view,
 nearest" call: a browser's plain `focus()` does not scroll an element that is already PARTLY
 visible, so padding alone leaves a cell half hidden (measured on AE49's Footing Inputs: 41px under
-the name column). The padding is derived from the column registry, never typed.
+the name column). The offset is derived from the column registry, never typed. Two details found
+at the gate: use `scroll-margin-left` on the NON-frozen cells' controls (a container
+`scroll-padding` also drags the card while typing in a frozen cell), and a control INSIDE a frozen
+(sticky) cell never scrolls its table sideways — it is always visible by construction. A frozen
+cell is marked by the `sticky` class on the cell itself.
 
 ## Paste from Excel (owner XQ1–XQ7 a, 2026-10-09)
 
@@ -61,13 +65,16 @@ Every table wired for the arrow keys also takes a multi-cell paste:
 | # | Rule |
 |---|---|
 | P1 | **Where:** every arrow-wired table (XQ1 a) — one delegated paste handler per table, beside the arrow-key helper, never per cell. |
-| P2 | **Shape:** the clipboard's tab-separated block fills from the FOCUSED cell, right then down, onto the editable cells (STOPS) in order; derived / read-only columns, links and icon buttons are skipped, so a block copied from the source sheet lands column for column (XQ2 a). |
+| P2 | **Shape:** the clipboard's tab-separated block fills from the FOCUSED cell, right then down, onto the table's EDITABLE COLUMNS in order — derived / read-only columns, links and icon buttons are skipped, so a block copied from the source sheet lands column for column (XQ2 a). A cell that is only TEMPORARILY disabled in that row still takes its column's value and skips it (counted), so later values never shift a column (VQ2 a). |
 | P3 | **Too many rows:** a table with an Add Row action grows to fit; a fixed-row table fills what it has and says how many rows were not placed (XQ3 a). Columns past the row's last stop are dropped and counted the same way. |
 | P4 | **Bad values still land:** a number box shows its red frame and Save refuses until fixed — the project's number-input Save guard, nothing new (XQ4 a). A dedicated whole-table import that validates all-or-nothing keeps its own rule. |
 | P5 | **Pickers and tick boxes:** a picker takes the option whose LABEL matches, ignoring case and extra spaces; no match → the cell is left as it was. A tick box takes TRUE/FALSE, 1/0, Y/N. One summary sentence says how many cells were skipped (XQ5 a). |
 | P6 | **Undo:** Ctrl+Z right after a paste puts back every cell the paste changed — one level, the last paste only (XQ6 a). |
-| P7 | **One value is not a block:** a clipboard with no tab and no line break pastes exactly as the browser always did (XQ7 a). |
+| P7 | **One value is not a block:** a single cell — no tab, and at most ONE trailing line break (Excel adds one to a copied cell) — pastes exactly as the browser always did (XQ7 a, VQ1 a). |
 | P8 | **Hands off:** a locked / read-only table, an open picker panel, and a paste target outside a cell do nothing special. |
+| P9 | **Dates are skipped** (counted): Excel's `9/10/2026` is day-first or month-first depending on the PC, and a silently swapped date is worse than a skipped one (VQ3 a). |
+| P10 | **A blank Excel cell clears a text / number box** (as Excel does); it leaves a picker or tick box alone (VQ5 a). |
+| P11 | **Feedback:** a clean paste shows a short success toast with the cell count and the Ctrl+Z hint; a paste with skips shows how many and why (VQ6 a). A table that saves on every pick (a schedule grid) still takes a paste — one save per cell (VQ4 a). |
 
 Numbers read from a paste follow the project's existing paste-number rule (in AE49: a comma is
 always a thousands separator, `1,145.77` = 1145.77). The summary is a Thai sentence per
