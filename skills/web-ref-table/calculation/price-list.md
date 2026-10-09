@@ -18,7 +18,8 @@ hub's pricing page:
 - **Bands are header rows** (`1.2.` `งานเสาเข็มเจาะ`), items are rows under them, numbered the way
   the source workbook numbers them (`1.2.1.`, `1.2.2.` …). Rows keep the workbook's order.
 - **Only the price cells are input boxes** — Material and Labor; Amount is computed (Material +
-  Labor) and read-only. No. / Description / Unit are text.
+  Labor) and read-only. No. / Description / Unit are text — except the size number of a sized row
+  that can grow (below).
 - **A family priced by size** (per pile diameter, per concrete strength, per bar size) is a BAND with
   one row per size (`dp 35 cm`, `fc′ 280 ksc`) inside the same matrix — never a separate
   "size | Material | Labor | Amount" input table beside it.
@@ -26,7 +27,7 @@ hub's pricing page:
   (owner PQ3 a, 2026-10-09: *"ให้มี Column Action ต่อท้ายว่าจะลบ Row นั้นหรือเพิ่ม Row ใต้ Row นั้น"*):
   on each sized row an icon to ADD a row right below it and an icon to DELETE that row (delete asks
   first); band, header and fixed rows leave the cell empty. The size itself is typed in the
-  Description cell (), so a pasted block may carry size + Material + Labor. A second
+  Description cell (`dp [35] cm`), so a pasted block may carry size + Material + Labor. A second
   table to hold the editable part is the thing this rule forbids.
 - Everything else is the calculation canon: column widths by kind (`columns.md`), arrow keys and
   Excel paste in the price boxes (`keyboard.md` T8), number boxes per `parameter-table.md` §10.
