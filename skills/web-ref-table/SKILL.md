@@ -1,6 +1,6 @@
 ---
 name: web-ref-table
-description: The ONE table canon for every hub project (AE49_Hub, Nuri_Hub, siblings), in three types - GENERAL (record lists, directories, queues), CALCULATION (engineering/parameter tables ported from a spreadsheet) and SCHEDULE (Gantt/calendar grids). Holds fixed column widths by kind (T1-T7, "ตารางขยับ"), search + filter bar + Clear, sort arrows, pagination (cap 50, "โหลดนาน"), bulk verbs, the ⋮ action menu on rows, cards, view-page and modal headers, arrow keys and Excel paste in editable cells, the Detail Design table format ("ทำตารางแบบหน้า Detail Design"), and schedule grids (month fold, month divider, today/weekend/holiday, signed-in-user highlight, bar chips, cell-marking mode). Use for ANY table, "ลูกศร sort", "เรียงจากน้อยไปมาก", "กดลูกศรแล้วเลื่อนช่อง", "วางข้อมูลจาก Excel", "table format แบบเดิม", list page, filter, sort header, row action ("three dots", kebab), bulk approve, page buttons, Gantt or grid, or when columns jump. Each hub's <hub>-ref-table holds its tokens and paths.
+description: The ONE table canon for every hub project (AE49_Hub, Nuri_Hub, siblings), in three types - GENERAL (record lists, directories, queues), CALCULATION (engineering/parameter tables ported from a spreadsheet) and SCHEDULE (Gantt/calendar grids). Holds fixed column widths by kind (T1-T7, "ตารางขยับ"), search + filter bar + Clear, sort arrows, pagination (cap 50, "โหลดนาน"), bulk verbs, the ⋮ action menu on rows, cards, view-page and modal headers, arrow keys and Excel paste in editable cells, the Detail Design table format ("ทำตารางแบบหน้า Detail Design"), BOQ price lists ("ใส่ราคา"), and schedule grids (month fold, month divider, today/weekend/holiday, signed-in-user highlight, bar chips, cell-marking mode). Use for ANY table, "ลูกศร sort", "เรียงจากน้อยไปมาก", "กดลูกศรแล้วเลื่อนช่อง", "วางข้อมูลจาก Excel", "table format แบบเดิม", list page, filter, sort header, row action ("three dots", kebab), bulk approve, page buttons, Gantt or grid, or when columns jump. Each hub's <hub>-ref-table holds its tokens and paths.
 ---
 
 # Table canon - one folder, three table types
@@ -14,7 +14,7 @@ you need, not all of them. A rule changes HERE; the hub files never restate it.
 | Type | What it is | Read |
 |---|---|---|
 | **general** | a record LIST, directory, queue, log, or any existing page's table | `columns.md` (every table) + the `general/` files below |
-| **calculation** | an engineering table: parameter block, repeated-row table, wide grid, spreadsheet port (R&D tools) | `columns.md` + `calculation/parameter-table.md`; editable cells also `keyboard.md` |
+| **calculation** | an engineering table: parameter block, repeated-row table, wide grid, spreadsheet port (R&D tools); a price list | `columns.md` + `calculation/parameter-table.md` (prices: `calculation/price-list.md`); editable cells also `keyboard.md` |
 | **schedule** | a Gantt / calendar grid whose columns or rows are dates | `schedule/schedule-grid.md` |
 
 ## Read X when Y
@@ -29,6 +29,7 @@ you need, not all of them. A rule changes HERE; the hub files never restate it.
 | [general/bulk-actions.md](general/bulk-actions.md) | the verbs inside a selection cluster: `Verb (N)`, skip lines, role-absent verbs (B1-B6) |
 | [general/action-menu.md](general/action-menu.md) | the ⋮ menu or visible verbs on rows, list cards, view-page headers, modal headers |
 | [calculation/parameter-table.md](calculation/parameter-table.md) | a parameter block, repeated-row table or wide grid; "ทำตารางแบบหน้า Detail Design" (section 1-12) |
+| [calculation/price-list.md](calculation/price-list.md) | ANY table where prices are typed: a price list, a price snapshot, prices per size - always the BOQ matrix (owner 2026-10-09) |
 | [schedule/schedule-grid.md](schedule/schedule-grid.md) | a schedule / Gantt / calendar grid: month fold, divider, highlight, bar chip, marking mode (section 1-11); an editable cell also `keyboard.md` |
 
 ## The T-rules (columns.md and keyboard.md)
