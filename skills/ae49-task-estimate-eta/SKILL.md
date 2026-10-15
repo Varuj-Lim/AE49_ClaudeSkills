@@ -58,6 +58,21 @@ audit budget being hit (owner decides — the item stops), an owner question rai
 merge onto a `main` that moved, a gate item only the owner can check (Excel, LINE, a real download), the
 machine or the emulator not running.
 
+## Ways to finish sooner (owner ETA1 a, 2026-10-15)
+
+Every report also looks for time the queue is wasting and OFFERS it — never acts on it (the owner rules on the
+order; `ae49-router` start-now rule). Check, in this order:
+
+- **Chained only by a small file overlap** — two items queued one after the other because they share a file in
+  DIFFERENT sections (e.g. both add strings to `labels.ts`). Offer to run them in parallel: minutes saved (the
+  shorter item's whole range) vs. the merge cost (+5–15 per shared file, Main resolves it).
+- **An idle owner step** — a push, a deploy or an answer that would unblock a long chain. Name it and the minutes
+  it frees.
+- **A batch that could split** — a heavy batch whose part B does not need part A's code. Offer the split only when
+  the plan's file footprint shows it.
+
+Each offer is one Thai line under the risks: what to change, minutes saved, what it costs. None found → say so.
+
 ## Report
 
 Format per `ae49-ref-report-format` (Thai prose, English table, `#` column, the 👤 and 🤖 lines last):
@@ -71,5 +86,5 @@ Format per `ae49-ref-report-format` (Thai prose, English table, `#` column, the 
 - `Est. time` is the remaining work only (no owner waits); `Est. finish` follows the chain (`Waiting On` = `#N`
   for a blocker on the board, `Your …` for the owner).
 - Above the table, 3–5 Thai sentences: the overall finish window, the method (measured baselines, chains in
-  parallel), and the biggest risk. Below it: one line per risk that applies.
+  parallel), and the biggest risk. Below it: one line per risk that applies, then the "ways to finish sooner" offers.
 - Say what the window EXCLUDES (owner waits, items with no plan yet).
