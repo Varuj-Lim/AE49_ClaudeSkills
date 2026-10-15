@@ -61,7 +61,7 @@ Every table wired for the arrow keys also takes a multi-cell paste:
 
 | # | Rule |
 |---|---|
-| P1 | **Where:** every arrow-wired table (XQ1 a) — one delegated paste handler per table, beside the arrow-key helper, never per cell. |
+| P1 | **Where:** every arrow-wired table (XQ1 a) — one delegated paste handler per table, beside the arrow-key helper, never per cell — unless the project narrows it in its facts skill (AE49_Hub: R&D tables only, owner PQ1 a 2026-10-15). |
 | P2 | **Shape:** the clipboard's tab-separated block fills from the FOCUSED cell, right then down, onto the table's EDITABLE COLUMNS in order — derived / read-only columns, links and icon buttons are skipped, so a block copied from the source sheet lands column for column (XQ2 a). A cell that is only TEMPORARILY disabled in that row still takes its column's value and skips it (counted), so later values never shift a column (VQ2 a). |
 | P3 | **Too many rows:** a table with an Add Row action grows to fit; a fixed-row table fills what it has and says how many rows were not placed (XQ3 a). Columns past the row's last stop are dropped and counted the same way. |
 | P4 | **Bad values still land:** a number box shows its red frame and Save refuses until fixed — the project's number-input Save guard, nothing new (XQ4 a). A dedicated whole-table import that validates all-or-nothing keeps its own rule. |
@@ -71,7 +71,7 @@ Every table wired for the arrow keys also takes a multi-cell paste:
 | P8 | **Hands off:** a locked / read-only table, an open picker panel, and a paste target outside a cell do nothing special. |
 | P9 | **Dates are skipped** (counted): Excel's `9/10/2026` is day-first or month-first depending on the PC, and a silently swapped date is worse than a skipped one (VQ3 a). |
 | P10 | **A blank Excel cell clears a text / number box** (as Excel does); it leaves a picker or tick box alone (VQ5 a). |
-| P11 | **Feedback:** a clean paste shows a short success toast with the cell count and the Ctrl+Z hint; a paste with skips shows how many and why (VQ6 a). A table that saves on every pick (a schedule grid) still takes a paste — one save per cell (VQ4 a). |
+| P11 | **Feedback:** a clean paste shows a short success toast with the cell count and the Ctrl+Z hint; a paste with skips shows how many and why (VQ6 a). A table that saves on every pick (a schedule grid) still takes a paste — one save per cell (VQ4 a; AE49_Hub retired its schedule grid's paste with PQ1 a). |
 
 Numbers read from a paste follow the project's existing paste-number rule (in AE49: a comma is
 always a thousands separator, `1,145.77` = 1145.77). The summary is a Thai sentence per
