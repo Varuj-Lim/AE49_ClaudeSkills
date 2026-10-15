@@ -38,7 +38,7 @@ invent progress). It says how it was computed so the owner can judge it.
 | Plan — `ae49-plan` agent (+ rewrite after rulings) | 5 | 12 | each rewrite again 4–6 |
 | Build — `ae49-implement`, small (≤ 5 files) | 8 | 16 | today 8 / 8 / 12 / 16 |
 | Build — UI measuring or shared component | 20 | 40 | CQ7 35 |
-| Build — `ae49-implement-heavy` (engine, file format, data shape) | 60 | 100 | B3 rework 97 |
+| Build — `ae49-implement-heavy` (engine, file format, data shape) | 30 | 100 | B3 rework 97 · matrix B1 28 · matrix B2 52 (recalibrated 2026-10-15) |
 | Fold after an audit (builder resumed or Main inline) | 3 | 8 | |
 | Audit — SHORT | 4 | 10 | today 4–9 |
 | Audit — FULL | 10 | 20 | today 10–19 |
