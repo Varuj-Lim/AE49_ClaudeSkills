@@ -26,6 +26,8 @@ invent progress). It says how it was computed so the owner can judge it.
    `landed`. The owner then put the "missing" work in scope and there was nothing to build.
 3. **Place each item on its chain** — `After:` edges and shared files (`ae49-router` chain graph). Items on one
    chain run one after another; independent chains run in parallel (no cap on agents unless the owner set one).
+   Two plans that share ONLY a strings / constants file in different sections are NOT a chain (`ae49-router`
+   chain graph rule 4, owner 2026-10-16) — run them in parallel and add +5–15 min merge to the second landing.
 4. **Cost the remaining stages** with the baselines below — a LOW–HIGH range per stage, summed per item. An
    agent already running costs `max(0, baseline − minutes so far)`, floored at the low end of the next stage.
 5. **Owner-bound waits are NOT time** — an item waiting on the owner's answer, hands or push gets the stage

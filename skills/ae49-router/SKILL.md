@@ -199,6 +199,23 @@ Collisions are prevented at **planning** time, not just by isolation:
    that branch with their code in it (the builder's Step 0 fast-forwards to the local default
    branch and proves any commit Main names — name the dependency's landing sha in the
    dispatch). Never from a feature branch: hub projects land straight on `main`.
+4. **A shared STRINGS file is not a chain (owner ruling 2026-10-16: *"ผมอยากให้แผนพร้อมกันเลยถ้าติดแค่
+   labels.ts ไฟล์เดียว"*, agreed with Main's narrower wording).** Two plans that overlap ONLY in files of
+   text or constants are built in PARALLEL, not chained. Those files are `labels.ts` and other `*Text` /
+   `*_TEXT` string tables, token / class-name tables, and skill or spec docs. Each plan must edit a
+   DIFFERENT section of the file. Rules:
+   - The plan's `After:` line names the shared file and the sections each plan owns, and says "edge
+     waived — strings only". Main decides this on its own and states it in one line at dispatch. The
+     owner is not asked each time.
+   - Each builder touches only its own sections and never reformats or reorders the rest of the file.
+   - Main merges at the SECOND landing, then re-runs tsc, lint and the touched harnesses before it
+     commits.
+   - **Still a chain:** any overlap in a file that RUNS. That covers a component or page,
+     `layout.tsx`, a hook, an engine or calculation module, `firestore.rules`, a data shape or a
+     migration. Two edits in different places of such a file can merge cleanly and still break each
+     other, and no conflict marker would show it. When unsure, keep the chain.
+   Why: on 2026-10-16 the Options-table rebuild waited 35–80 min behind `rd-row-actions` B1 only
+   because both added words to `lib/rd/foundation/labels.ts`, in disjoint sections.
 
 Chaining decides the *order*; the worktree isolates the *parallel* runs.
 

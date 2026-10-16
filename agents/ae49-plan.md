@@ -29,6 +29,9 @@ rules from any other project:
    footprints:
    - **Overlap** with another plan's files → add `After: <those plan slugs>` so this plan is
      chained to build *after* them.
+   - **Overlap ONLY in a strings / constants file** (`labels.ts`, a `*_TEXT` table, tokens, skill or spec docs) in
+     DIFFERENT sections → no chain: write "`<file>` shared — edge waived, strings only; this plan owns `<sections>`"
+     (`ae49-router` chain graph rule 4, owner 2026-10-16). Overlap in a file that RUNS stays a chain.
    - **No overlap** → leave it a **new independent chain** (no `After:` edge).
    This mirrors the overlap model in `ae49-task-plan-feature` step 7. Main reads these
    edges into a DAG to decide which implementers can run in parallel worktrees.
