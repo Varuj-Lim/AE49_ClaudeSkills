@@ -13,9 +13,17 @@ invent progress). It says how it was computed so the owner can judge it.
 ## Workflow
 
 1. **Read the clock** — `date` (Bash; already ICT on the owner's machines). Never a stamp carried from earlier.
-2. **Collect the open items, from files** — every plan in `docs/plans/*.md` not `Done` (its batches left), every
-   row of `docs/plans/_open-items.md`, the agents running now (`ListAgents` — name, kind, minutes running), and
-   the unpushed commits. One row per batch that still has work; never merge items (`ae49-router` status rule).
+2. **Collect the open items, from files** — the batches left come from the SCRIPT, never from a hand grep or the
+   plan's `Status:` line: `node ~/.claude/skills/ae49-task-estimate-eta/resources/open-batches.cjs` (project root).
+   It lists every batch of every open plan as `LANDED` (a landing note, case-insensitive, with its sha), `OPEN`, or
+   `CHECK` (a code commit names the batch but no landing note does — read the plan and the commit before choosing;
+   a batch can ship in parts), and flags `STALE STATUS` (every batch landed, `Status:` not flipped) — such a plan is
+   CLOSED with `archive-plan.cjs`, never estimated. Then add every row of `docs/plans/_open-items.md`, the agents
+   running now (`ListAgents` — name, kind, minutes running), and the unpushed commits. One row per batch that still
+   has work; never merge items (`ae49-router` status rule). **Why the script (owner 2026-10-16, "มันไม่ควรมีปัญหา"):**
+   an ETA listed `unsaved-leave-popup` B2–B8 as "not started" two days after all seven landed — the plan's `Status:`
+   was never flipped after B9, and Main grepped the landing notes for `LANDED` in capitals while they said
+   `landed`. The owner then put the "missing" work in scope and there was nothing to build.
 3. **Place each item on its chain** — `After:` edges and shared files (`ae49-router` chain graph). Items on one
    chain run one after another; independent chains run in parallel (no cap on agents unless the owner set one).
 4. **Cost the remaining stages** with the baselines below — a LOW–HIGH range per stage, summed per item. An
