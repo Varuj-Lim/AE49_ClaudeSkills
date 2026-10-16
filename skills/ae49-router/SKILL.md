@@ -110,7 +110,9 @@ Never auto-run a refined prompt before the user confirms it.
 When the user sends `status:` (or asks for plan status), render the board inline. Always
 re-read from disk — never report from memory:
 
-1. Read every `docs/plans/*.md` → its `Status:` field + `After:` edges; list
+1. Run `node ~/.claude/skills/ae49-task-estimate-eta/resources/open-batches.cjs` for each plan's batches
+   (LANDED / OPEN / CHECK, and STALE STATUS — a plan whose `Status:` was never flipped; close it, never
+   board it as open — 2026-10-16). Then read every `docs/plans/*.md` → its `Status:` field + `After:` edges; list
    `docs/plans/done/` newest-first for recent landings.
 1b. **Read the OPEN-ITEMS REGISTER `docs/plans/_open-items.md` — every row goes on the board**
    (owner ruling 2026-09-30, below). Then run the **backstop sweep** before rendering: grep the
