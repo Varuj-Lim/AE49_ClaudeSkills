@@ -1,27 +1,37 @@
-**Scope (part of ae49-ref-gate-checklist, added 2026-10-16):** Main runs gates through `ae49-gate` sub-agents, several at once. Main keeps the verdict.
+**Scope (part of ae49-ref-gate-checklist, added 2026-10-16):** Main-run gates handed to `ae49-gate` sub-agents, several at once, with Main keeping the verdict.
 
 # Delegated gates (owner AQ1 a, 2026-10-16)
 
-**Why:** builders and auditors already run in parallel, so the gate queue became the slowest step. Every gate ran through Main in one Chrome, 20–35 min each. On 2026-10-16, rd-row-actions B2/B3/B4 were built at once and then queued about 40–70 min for gates. The owner on cost: *"ถ้าเทียบเป็นต่องานก็ไม่ได้เพิ่มขึ้น"*. That is right. Per task, the only extra is the agent's cold start and a re-gate when a MAJOR lands mid-gate.
+**Why:** builders and auditors already ran in parallel, so the gate queue became the slowest step. Every gate went through Main in one Chrome, 20–35 min each. On 2026-10-16, rd-row-actions B2/B3/B4 were all built at once and then queued about 40–70 min for gates. The owner on cost: *"ถ้าเทียบเป็นต่องานก็ไม่ได้เพิ่มขึ้น"*. That is right: per task, the only extra is the agent's cold start, plus a re-gate when a MAJOR lands mid-gate.
+
+## Where it applies
+Delegation covers only **Main-run gates**: autopilot (`ae49-mode-autopilot`, the Main-run gate) and items the owner has left to Main (`waived.md`). The owner's own gate on the page is unchanged.
 
 ## The split
-- **Main** writes the section on the page, and it must pass `validate-gate.cjs`. Main names the port, the testBatch tag and the sets the agent may use. Main reads the evidence and decides each item. The closed line still says **Main-verified**. Main spot-checks at least one item per section in its own Chrome on 9333 whenever an agent's reading looks off.
-- **`ae49-gate`** (`~/.claude/agents/ae49-gate.md`) runs one section in its own headless Chrome and returns evidence for each item: PASS / FAIL / CANNOT-VERIFY. It never decides the gate.
+- **Main** decides which items run and gives each agent:
+  - a port;
+  - a `testBatch` tag;
+  - the sets it may use;
+  - a scratch dir.
+- **Main** reads the evidence and screenshots and decides each item. Main spot-checks **at least one item per section** in its own Chrome on 9333. That is always required until plan `ae49-gate-agent` items 3–5 have passed, and after that whenever a reading looks off.
+- **Wording:** the landing note says "run by ae49-gate :<port>, verdict Main". The log line keeps `(M Main-verified)`. The closed line's grammar is unchanged (`closed-format.md`).
+- **`ae49-gate`** (`~/.claude/agents/ae49-gate.md`) runs one section in its own headless Chrome and returns per-item evidence: PASS / FAIL / CANNOT-VERIFY. It never decides the gate.
 
 ## When gates may run at once
-- Every batch being gated must be in the hub tree, because the emulator app is one server. Gate batches at the same time only when their changed files are disjoint. A shared strings file (router chain rule 4) is merged into the tree first.
-- One port per agent: 9334, 9335 and so on. Main keeps 9333. Each agent stops only its own port (`gate-tools/stop-port.ps1`).
-- Each gate uses its own sets or records and its own `testBatch`. Two gates never open the same record.
+- **One server:** everything being gated must be in the hub tree, because the emulator app is one server. Only batches whose changed files are disjoint may be gated at once. A shared strings file (router chain rule 4) is merged into the tree first.
+- **No merge or fold under a running gate.** While a gate agent runs, Main merges no other batch and folds nothing into the hub tree, because :3001 would hot-reload under it. If a merge cannot wait, every item run before it is re-gated.
+- **Ports:** one port per agent (9334, 9335 …). Main keeps 9333. Each agent stops only its own port, with `stop-port.ps1` called through `powershell -NoProfile -ExecutionPolicy Bypass -File`. Nobody ever kills Chrome by name.
+- **Data:** each gate uses its own sets and its own `testBatch`. Data goes only through `gate-tools/emu-admin.cjs`, which refuses unless the host is 127.0.0.1, and is swept with `emu-sweep.cjs`. Never use a project script that reads `.env.local`.
 
-## Gate during audit
-Main may dispatch the gate as soon as the build is in the hub tree, without waiting for the audit.
-- A BLOCKER or MAJOR fold is re-gated, but only on the items that fold touches.
+## Gate during audit (Main-run gates only)
+A Main-run gate may start as soon as the build is in the hub tree.
+- A BLOCKER or MAJOR fold re-gates the items it touches.
 - A MINOR fold is re-checked by Main.
-- **The land still waits for both a passed audit and a passed gate.**
+- **The land still waits for both** the audit and the gate.
 
 ## What stays Main's
-- Every CANNOT-VERIFY item. That covers a visible pane, Excel, a phone, the owner, production-only steps, and colour judged by eye.
-- The checklist drift correction.
+- Every CANNOT-VERIFY item: a visible pane or hover, Excel, a phone, the owner, production-only steps, colour judged by eye.
+- The checklist drift fix.
 - The page, the closed payload and the landing.
 
 Tools: `resources/gate-tools/README.md`.

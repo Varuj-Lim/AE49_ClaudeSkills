@@ -277,7 +277,7 @@ scanned.
   through `ae49-gate` agents. The land still waits for both, and a BLOCKER/MAJOR fold re-gates the items
   it touches (`ae49-ref-gate-checklist/delegated.md`).
 - The **manual-test gate** — after `ae49-implement` returns **and `ae49-audit` passes**, show the user the change and
-  **stop for their manual test** before any commit. A gate without a checklist is not a gate. **Every rule for
+  **stop for their manual test** before any commit. A gate without a checklist is not a gate. A MAIN-RUN gate (autopilot, or items the owner left to Main) may have its items RUN by `ae49-gate` agents, never its VERDICT (`ae49-ref-gate-checklist/delegated.md`). **Every rule for
   opening, writing, numbering, handing over and closing that gate lives in `ae49-ref-gate-checklist` — INVOKE IT
   before writing, rewriting, renumbering or closing any gate, every time, and run its `validate-gate.cjs` after
   every write of the page** (split out 2026-09-25: the rules were one ~150-line paragraph here, and the first gate
