@@ -1,6 +1,6 @@
 ---
 name: ae49-task-estimate-eta
-description: Estimates how long each piece of work still open in an ae49-workflow project (AE49_Hub, Nuri_Hub, siblings) will take and the clock time (ICT) everything should be finished — from the plan board, the open-items register and the running agents, using MEASURED stage durations (build, audit, fold, Main gate, landing) instead of guesses, honouring the chain order, and reporting one English table plus a Thai summary of the finish window and what could push it later. Use when the owner asks "อีกนานไหม", "เสร็จกี่โมง", "งานทั้งหมดจะเสร็จเมื่อไหร่", "ประเมินเวลา", "ETA", "how long will this take", "when will everything be done", or invokes /ae49-task-estimate-eta.
+description: Estimates how long each piece of work still open in an ae49-workflow project (AE49_Hub, Nuri_Hub, siblings) will take and the clock time (ICT) everything should be finished — from the plan board, the open-items register and the running agents, using MEASURED stage durations (build, audit, fold, Main gate, landing) instead of guesses, honouring the chain order. DEFAULT mode `short`: no table — the finish time, what it excludes, the biggest risk and the ways to finish sooner, in a few Thai lines; mode `full` ("full", "ขอตาราง", "แบบละเอียด") adds the per-item English table. Use when the owner asks "อีกนานไหม", "เสร็จกี่โมง", "งานทั้งหมดจะเสร็จเมื่อไหร่", "ประเมินเวลา", "ETA", "how long will this take", "when will everything be done", or invokes /ae49-task-estimate-eta.
 ---
 
 # Estimate ETA — how long each open item takes, and when it all finishes
@@ -35,7 +35,8 @@ invent progress). It says how it was computed so the owner can judge it.
    which then says so.
 6. **Compute finish clock times** — per chain, start = now; add each item's range in order; the overall window
    is the latest chain's LOW–HIGH. Round to 5 minutes. Past 18:00 ICT say the day is likely to roll over.
-7. **Report** (below), then log one line in the autopilot log if the mode is ON.
+7. **Report** in the chosen MODE (below; `short` unless the owner asked for `full`), then log one line in the autopilot
+   log if the autopilot mode is ON. Steps 1–6 run the same in both modes — `short` changes only what is SHOWN.
 8. **Recalibrate** — when today's measured times (agent `duration_ms` in task notifications, log timestamps)
    differ from the baselines by more than ~50 % for a stage, update the table in this file (and mirror it to the
    skills repo per `~/.claude/CLAUDE.md`) with the date.
@@ -84,7 +85,31 @@ order; `ae49-router` start-now rule). Check, in this order:
 
 Each offer is one Thai line under the risks: what to change, minutes saved, what it costs. None found → say so.
 
-## Report
+## Modes (owner 2026-10-16: *"เพิ่ม mode … รายงานแบบสั้น โดยเอาตารางออกทั้งหมด และให้โหมดนี้เป็นโหมด Default … ส่วนใหญ่อยากรู้แค่ว่าจะเสร็จกี่โมง ทำยังไงถึงจะเร็วขึ้นได้บ้าง"*)
+
+| Mode | How it is asked | What is shown |
+|---|---|---|
+| `short` — **DEFAULT** | `/ae49-task-estimate-eta`, "อีกนานไหม", "เสร็จกี่โมง" | the Short report below — NO table of any kind |
+| `full` | `/ae49-task-estimate-eta full`, "ขอตาราง", "แบบละเอียด", "ทีละงาน" | the Full report below — prose + the per-item table |
+
+The owner's ruling overrides `ae49-ref-report-format` §1b ("three or more items always get a table") FOR THIS SKILL'S
+`short` mode only. The math is identical in both modes, so a `full` asked a minute later shows the same window.
+
+### Short report (default)
+
+Thai, no table, no per-item list, in this order:
+
+1. **One sentence: the finish window** — "งานที่ไม่ต้องรอคุณจะเสร็จราว HH:MM–HH:MM น." (+ "น่าจะข้ามไปพรุ่งนี้" past 18:00),
+   and what it EXCLUDES in the same or the next sentence (owner waits, items with no plan, owner-PC steps).
+2. **One line: the biggest risk** that could move it, in plain words.
+3. **Ways to finish sooner** — the offers from the section above, one bullet each: what to do · minutes saved · cost.
+   None found → one line saying so. This is the part the owner reads most; never drop it.
+4. The 👤 line (what the owner can do now — an answer or a step that would speed things up first) and the 🤖 line.
+
+Six to ten lines in all. A single item that is the bottleneck may be NAMED in a sentence ("ที่จบช้าสุดคือ …"), but
+items are never listed one by one.
+
+### Full report
 
 Format per `ae49-ref-report-format` (Thai prose, English table, `#` column, the 👤 and 🤖 lines last):
 
