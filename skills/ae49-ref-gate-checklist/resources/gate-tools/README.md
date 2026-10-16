@@ -20,8 +20,8 @@ These are used by Main (port 9333) and by `ae49-gate` sub-agents (ports 9334 and
 | `cdp.mjs <cmd> <arg>` | `CDP_PORT=<port> node cdp.mjs …` covers eval / nav / paste / undo / key / type / enter / clickxy / file / shot / grant / grantp / dialog / throttle / throttled-eval. `CDP_URL_MATCH` picks a tab. |
 | `cdp-dialog.mjs` | Accepts a pending beforeunload dialog on every tab of that port. |
 | `stop-port.ps1 -Port <n>` | Kills only the Chrome on that debugging port. Call it as `powershell -NoProfile -ExecutionPolicy Bypass -File stop-port.ps1 -Port <n>` (this machine's policy is Restricted). Never kill Chrome by name. |
-| `emu-admin.cjs` | `const { admin, db, cfg } = require("<tools>/emu-admin.cjs")` — the ONLY way a gate script reaches Firestore / Auth: refuses non-127.0.0.1 hosts, never reads `.env.local`, no Storage. |
-| `emu-sweep.cjs <tag> <cols> [--apply]` | Deletes the gate's own `isTestData` + `testBatch` docs on the emulator; dry run first. Never use a project cleanup script that reads `.env.local` (it hits production). |
+| `emu-admin.cjs` | `const { db, auth, cfg } = require("<tools>/emu-admin.cjs")`, required FIRST — the ONLY way a gate script reaches Firestore / Auth: refuses non-127.0.0.1 hosts or an already-initialised firebase-admin, never reads `.env.local`, Storage pointed at a dead port and not exported. |
+| `emu-sweep.cjs <tag> <cols> [--apply]` | Deletes the gate's own `isTestData` + `testBatch` docs on the emulator, top-level collections only (seed no subcollections, or sweep them yourself through `emu-admin`); dry run first. Never use a project cleanup script that reads `.env.local` (it hits production). |
 | `mint-emu-token.cjs` | Used by `headless-start.sh`. |
 
 ## Rules

@@ -2,11 +2,11 @@
 // Chrome tab can sign in through the app's own impersonation hand-off. No password is ever typed.
 // Uses emu-admin.cjs (refuses non-127.0.0.1 hosts, never reads .env.local). Account: GATE_ACCOUNT_EMAIL or the
 // config's accountEmail. Prints JSON { token, marker }. Run from the project root.
-const { admin, cfg } = require("./emu-admin.cjs");
+const { auth, cfg } = require("./emu-admin.cjs");
 (async () => {
   const email = process.env.GATE_ACCOUNT_EMAIL || cfg.accountEmail;
-  const u = await admin.auth().getUserByEmail(email);
-  const token = await admin.auth().createCustomToken(u.uid, { impersonatedBy: u.uid });
+  const u = await auth.getUserByEmail(email);
+  const token = await auth.createCustomToken(u.uid, { impersonatedBy: u.uid });
   const marker = { targetUid: u.uid, impersonatedBy: u.uid, label: "headless gate (" + email + ")", byLabel: "gate" };
   console.log(JSON.stringify({ token, marker }));
   process.exit(0);

@@ -127,8 +127,8 @@ as a ruling.
    - a build is committed after the **Main-run gate** below instead of the owner's manual test.
    Everything else stands: the audit is never skipped (≤ 3 rounds, then PARK), commits carry an
    explicit pathspec, the plan moves to `done/`, the board is closed, the backup branch is pushed.
-4. **The Main-run gate.** ("Execute" below means Main runs the item itself OR has an `ae49-gate` agent run it on its own port and Main judges the evidence and screenshots — `ae49-ref-gate-checklist/delegated.md`; Main spot-checks at least one item per section itself.) Write the gate section on the page exactly as for the owner (validate it),
-   then execute every item yourself and record the outcome per item in the log:
+4. **The Main-run gate.** ("Execute" below means Main runs the item itself OR has an `ae49-gate` agent run it on its own port and Main judges the evidence and screenshots — `ae49-ref-gate-checklist/delegated.md`; spot-checks and screenshots follow `delegated.md` — copy the agent's screenshots into this run's `shots/` before linking them, since its scratch dir may be wiped.) Write the gate section on the page exactly as for the owner (validate it),
+   then execute every item (as defined above) and record the outcome per item in the log:
    - **logic and data** — read-only scripts against the emulator or production, the way the day's
      smoke runs were done (create TAGGED data through the same route the button uses, read the
      result back, sweep the tags);

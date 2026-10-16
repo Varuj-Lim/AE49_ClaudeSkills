@@ -10,9 +10,9 @@ URL="${1:?usage: headless-start.sh <url under appUrl>}"
 PORT="${CDP_PORT:-9333}"
 T="$(cd "$(dirname "$0")" && pwd)"
 WORK="${GATE_WORK:-${TMP:-/tmp}/ae49-gate}"
-APP=$(node -e 'console.log(require(process.cwd()+"/.claude/gate-tools.json").appUrl)')
-case "$URL" in "$APP"*) ;; *) echo "refuse: $URL is not under $APP"; exit 1;; esac
-KEYS=$(node -e 'const k=require(process.cwd()+"/.claude/gate-tools.json").impersonationKeys;console.log(k.marker+" "+k.token)')
+APP=$(node -e 'console.log(require(require("path").join(process.cwd(),".claude","gate-tools.json")).appUrl)')
+node -e 'process.exit(new URL(process.argv[1]).origin===new URL(process.argv[2]).origin?0:1)' "$URL" "$APP" || { echo "refuse: $URL is not on the origin of $APP"; exit 1; }
+KEYS=$(node -e 'const k=require(require("path").join(process.cwd(),".claude","gate-tools.json")).impersonationKeys;console.log(k.marker+" "+k.token)')
 MK=${KEYS% *}; TK=${KEYS#* }
 # mint BEFORE Chrome starts, so a failed mint never leaves an orphan Chrome on the port (audit GA-5)
 J=$(node "$T/mint-emu-token.cjs") || { echo "mint failed"; exit 1; }
@@ -27,4 +27,4 @@ sleep 12
 # a cold dev server can answer the first hop with chrome-error; navigate once more after sign-in
 CDP_PORT="$PORT" node "$T/cdp.mjs" nav "$URL" > /dev/null
 # signed in = on the app's origin, at the asked path, not on /login (a chrome-error page has path "/" — GA-5)
-CDP_PORT="$PORT" node "$T/cdp.mjs" eval "({port: $PORT, at: location.href, signedIn: location.origin === new URL('$APP').origin && location.pathname === new URL('$URL').pathname && !/login/.test(location.pathname)})"
+CDP_PORT="$PORT" node "$T/cdp.mjs" eval "(()=>{const s=(p)=>p.endsWith('/')?p.slice(0,-1):p; return {port: $PORT, at: location.href, signedIn: location.origin === new URL('$APP').origin && s(location.pathname).startsWith(s(new URL('$URL').pathname)) && !location.pathname.includes('login')};})()"

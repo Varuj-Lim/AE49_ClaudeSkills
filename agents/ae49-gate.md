@@ -32,7 +32,7 @@ Always run from the project root, the folder that holds `.claude/gate-tools.json
 
 ## Data: emulator only, enforced by the tools, not by trust
 
-- Every script you write gets Firestore and Auth through `const { admin, db } = require("<tools>/emu-admin.cjs")`. That module refuses unless the hosts are 127.0.0.1. It never reads `.env.local` and gives no Storage access.
+- Every script you write gets Firestore and Auth through `const { db, auth } = require("<tools>/emu-admin.cjs")` (require it FIRST, before anything else loads firebase-admin). That module refuses unless the hosts are 127.0.0.1. It never reads `.env.local`, points Storage at a dead port and exports no Storage.
 - **NEVER** run a project script that reads `.env.local`, for example `ae49Hub-task-test-data/scripts/cleanup-test-data.cjs`. Those point at PRODUCTION. Never touch Storage. Never copy file URLs into a seed.
 - **Seeds:** use only the sets or records Main names, or your own, tagged `isTestData: true` and `testBatch: <your tag>`. Never Save over a record Main did not name. Never open a record another gate uses.
 - **Sweep:** at the end, run `node <tools>/emu-sweep.cjs <tag> <collections> --apply`, after a dry run.
