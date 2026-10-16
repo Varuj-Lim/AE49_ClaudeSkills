@@ -55,6 +55,7 @@ invent progress). It says how it was computed so the owner can judge it.
 | Main gate — logic / script items | 5 | 10 | |
 | Main gate — screens in the pane | 10 | 25 | |
 | Main gate — headless Chrome (real paste, sign-out, throttling) | 20 | 35 | first set-up in a session +10 |
+| Main gate — delegated to `ae49-gate` agents (parallel, one port each) | 20 | 35 | per section, all at once; +5–10 agent start-up; Main reads evidence 3–5 (2026-10-16) |
 | Landing (commit, close gate, plan → done, backup, worktree cleanup) | 3 | 6 | |
 | Merge onto a moved `main` with a known conflict | 5 | 15 | |
 

@@ -32,6 +32,7 @@ topic files below. `resources/*` paths are unchanged.
 | [waived.md](waived.md) | the owner will not click through an item or a section: waived / Main-verified / waiting owner, and the `[ENV] (Main)` item form |
 | [environment.md](environment.md) | test data for a gate, and which environment (emulator by default) the gate runs on |
 | [closed-format.md](closed-format.md) | landing: the CLOSED payload shape, the closed-line grammar and slot rules (what `close-gate.cjs` writes) |
+| [delegated.md](delegated.md) | handing a gate section to an `ae49-gate` sub-agent: who decides what, ports, running gates at once, starting during the audit; tools in `resources/gate-tools/` |
 
 ## Old name → where it lives now
 

@@ -26,6 +26,9 @@ back. This layer is **project-agnostic**: apply the active project's own `CLAUDE
 - **`ae49-explore`** (sub-agent, Haiku, low) — read-only fan-out SEARCH: where is X, who calls Y,
   which files do Z. Answers with locations, never reviews or edits. Use it instead of Main
   grepping through many files itself.
+- **`ae49-gate`** (sub-agent, Opus, high; owner AQ1 a 2026-10-16) — RUNS one gate section in its own
+  headless Chrome on the port Main names (9334+) and returns per-item evidence; Main keeps the checklist
+  and the VERDICT. Several run at once on disjoint batches (`ae49-ref-gate-checklist/delegated.md`).
 - **`ae49-audit`** runs at **xhigh** (owner 2026-09-30) — it is the step that found every Major
   on 2026-09-25, so it gets the deepest reasoning of the roster.
 
@@ -270,6 +273,9 @@ scanned.
   Main included. Main fixes or re-dispatches BLOCKER/MAJOR findings before opening the user
   gate; MINOR findings are reported at the gate. Only after the audit passes does the
   manual-test gate open.
+  **Exception (owner AQ1 a, 2026-10-16):** a Main-run gate (autopilot) may START while the audit runs,
+  through `ae49-gate` agents. The land still waits for both, and a BLOCKER/MAJOR fold re-gates the items
+  it touches (`ae49-ref-gate-checklist/delegated.md`).
 - The **manual-test gate** — after `ae49-implement` returns **and `ae49-audit` passes**, show the user the change and
   **stop for their manual test** before any commit. A gate without a checklist is not a gate. **Every rule for
   opening, writing, numbering, handing over and closing that gate lives in `ae49-ref-gate-checklist` — INVOKE IT
