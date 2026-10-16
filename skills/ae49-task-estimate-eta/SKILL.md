@@ -40,7 +40,7 @@ invent progress). It says how it was computed so the owner can judge it.
 | Build — UI measuring or shared component | 20 | 40 | CQ7 35 |
 | Build — `ae49-implement-heavy` (engine, file format, data shape) | 30 | 100 | B3 rework 97 · matrix B1 28 · matrix B2 52 (recalibrated 2026-10-15) |
 | Fold after an audit (builder resumed or Main inline) | 3 | 8 | |
-| Audit — SHORT | 4 | 10 | today 4–9 |
+| Audit — SHORT | 4 | 15 | 10-15: 4–9 · 10-16: 3, 7, 11, 14, 15 — a re-audit of a refit or a heavy fold runs long (recalibrated 2026-10-16) |
 | Audit — FULL | 10 | 20 | today 10–19 |
 | Main gate — logic / script items | 5 | 10 | |
 | Main gate — screens in the pane | 10 | 25 | |
