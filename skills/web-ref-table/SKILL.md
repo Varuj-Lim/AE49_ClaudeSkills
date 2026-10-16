@@ -30,6 +30,7 @@ you need, not all of them. A rule changes HERE; the hub files never restate it.
 | [general/action-menu.md](general/action-menu.md) | the ⋮ menu or visible verbs on rows, list cards, view-page headers, modal headers |
 | [calculation/parameter-table.md](calculation/parameter-table.md) | a parameter block, repeated-row table or wide grid; "ทำตารางแบบหน้า Detail Design" (section 1-12) |
 | [calculation/price-list.md](calculation/price-list.md) | ANY table where prices are typed: a price list, a price snapshot, prices per size - always the BOQ matrix (owner 2026-10-09) |
+| [calculation/add-delete-rows.md](calculation/add-delete-rows.md) | ANY input table where the user adds or deletes rows: the row-end Action pair (+ / bin), no separate Add button, the single + of an empty table, insert-below, caps, read-only (owner 2026-10-16) |
 | [schedule/schedule-grid.md](schedule/schedule-grid.md) | a schedule / Gantt / calendar grid: month fold, divider, highlight, bar chip, marking mode (section 1-11); an editable cell also `keyboard.md` |
 
 ## The T-rules (columns.md and keyboard.md)

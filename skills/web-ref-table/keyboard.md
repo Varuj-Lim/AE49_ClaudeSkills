@@ -54,6 +54,7 @@ at the gate: use `scroll-margin-left` on the NON-frozen cells' controls (a conta
 (sticky) cell never scrolls its table sideways — it is always visible by construction. A frozen
 cell is marked by the `sticky` class on the cell itself.
 
+**Row-end Action icons** (`calculation/add-delete-rows.md`, 2026-10-16): the `+` and bin are not arrow or paste stops; Tab reaches them (a native-disabled bin is skipped); a dimmed `+` uses `aria-disabled` so its reason still shows on hover.
 ## Paste from Excel (owner XQ1–XQ7 a, 2026-10-09)
 
 Owner: *"Today when I copy data from excel and paste into our table it will store only 1 cell."*
