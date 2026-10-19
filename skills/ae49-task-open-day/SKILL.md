@@ -78,6 +78,19 @@ Mirror of `ae49-task-close-day`. Everything arrives through git.
    the gate needs seeded data, re-seed on THIS machine (the project's test-data
    skill), and launch the dev/emulator with this machine's launcher.
 
+7b. **Carry the autopilot mode across machines — ASK, never switch on silently**
+   (owner Q4 a, 2026-10-19). The state file `~/.claude/autopilot/<project>/state.json`
+   is machine-local on purpose, so a mode left ON at close stays behind on the other
+   machine. When the manifest says autopilot was ON (e.g. "Autopilot: ON (ask)") and
+   THIS machine's state file is missing or `"on": false`, put ONE question to the owner
+   in this open-day report (`ae49-ref-question-format`): switch on here — with which
+   sub-mode and which scope (the manifest's old scope is often already finished, so
+   offer what is open now) — or stay Off. Switching on is then `ae49-mode-autopilot on …`
+   with the owner's words as the scope. Never copy the old state over: the scope must
+   come from the owner live. Why: on 2026-10-19 the open-day on VA-PC-CONDO read
+   "Autopilot: ON (ask)" in the 10-16 manifest, found no state file, reported Off and
+   said nothing; the owner had to ask "ทำไมปิด" mid-gate.
+
 8. **Update memory + report.** Note "resumed on <machine> <date>" in the
    in-flight file (the commit can ride the next landing). Report the board per
    `ae49-ref-report-format` and name the single next action.
@@ -89,7 +102,8 @@ Mirror of `ae49-task-close-day`. Everything arrives through git.
    The autopilot state is NOT a board row: like every message, the report ends
    with the `🤖 Autopilot mode: On (ask|decide) / Off` line of
    `ae49-ref-report-format` (owner 2026-10-07 — it replaced the open-day row of
-   Q11 a the same day). The CHECK itself stays in `~/.claude/CLAUDE.md`.
+   Q11 a the same day). The CHECK itself stays in `~/.claude/CLAUDE.md`; the
+   cross-machine question is step 7b.
 
 ## Notes
 
