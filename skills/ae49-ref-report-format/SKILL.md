@@ -105,6 +105,12 @@ Which renders as:
   progress. Not on messages without a board. The full breakdown stays `/ae49-task-estimate-eta`.
   Why: the owner wanted "เสร็จกี่โมง" on every status without asking, at ~2–3 % more tokens a day
   instead of the 10–20 % a full ETA per report would cost.
+  **With it, the ⚡ "faster" line (owner 2026-10-20, the same day: *"ช่วยเพิ่มด้วยว่าสามารถทำให้เร็วขึ้นได้
+  ด้วยอะไรในรายงานด้วยนะ"*)** — right under ⏱️: the one or two biggest ways to finish sooner, from
+  `ae49-task-estimate-eta` §"Ways to finish sooner" (an owner step that unblocks a chain, a chain
+  that could run in parallel, a batch that could split), each as `what to do · minutes saved`,
+  e.g. `⚡ เร่งได้: ตอบ Q34–Q41 ตอนนี้ (−30–60 นาที) · ทำ Cloud Shell setup ระหว่าง B1 build (−30–60 นาที)`.
+  Offers only — Main never acts on them without the owner. None found → `⚡ ไม่มีทางเร่งตอนนี้`.
 - **Close with the 👤 "your move" line — REQUIRED, never omitted (user rule, 2026-08-28).**
   The very last line of the message answers the question the reader actually has: *is anything
   waiting on me?* It restates, as concrete actions, every row whose *Waiting on* points at the
