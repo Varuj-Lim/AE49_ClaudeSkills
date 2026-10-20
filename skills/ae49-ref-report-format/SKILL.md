@@ -96,8 +96,10 @@ Which renders as:
   would deploy) — but the table is never *replaced* by that line.
 - **The ⏱️ ETA line — on every message that carries the status board (owner Q42 a,
   2026-10-20).** One line right after the table (and any takeaway), right ABOVE the 👤 line:
-  when the work that does NOT wait on the owner should finish, and what is slowest — e.g.
-  `⏱️ งานที่ไม่รอคุณเสร็จราว 14:30–15:40 น. · ช้าสุดคือ foundation-cloud-run B1`. Computed with
+  ONE finish window for ALL the work that does NOT wait on the owner — a summary, never a list of
+  items or per-item times (owner 2026-10-20: *"แก้เป็นแบบสรุปเลย ว่าจบประมาณกี่โมง ไม่ต้องแยกรายการ"*) — e.g.
+  `⏱️ งานทั้งหมดที่ไม่รอคุณจะจบราว 14:30–15:40 น. (ไม่นับช่วงที่รอคุณ)`, or with the date when it rolls
+  over: `⏱️ … จบราวพรุ่งนี้ (21 ต.ค.) 12:00–16:00 น.`. Computed with
   `ae49-task-estimate-eta`'s baselines and chain rules from the board being written (no
   re-run of its scripts each time — run `open-batches.cjs` only when the set of plans changed),
   from the clock (`date`), rounded to 5 min; "น่าจะข้ามไปพรุ่งนี้" past 18:00 ICT; when every
