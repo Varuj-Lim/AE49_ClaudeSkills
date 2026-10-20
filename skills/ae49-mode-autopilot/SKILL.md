@@ -61,6 +61,12 @@ wording, a design detail, a width-vs-scroll trade of the D118 kind):
   cheaply-reversible one, logs it as `D<n> DECISION` with the alternatives and the undo, and the `off`
   report lists every one for the owner to change. Use it when the owner will be away for the run
   ("ผมจะไปนอน", "ออกไปข้างนอกทั้งบ่าย").
+  **No reports to the owner while in `decide` (owner rule 2026-10-20: *"ระหว่างอยู่ใน Mode Decide ไม่จำเป็นต้อง
+  เขียนรายงานบอกผม เพราะผมอาจจะไม่อยู่ ไว้ผมอยากดูรายงานจะมาบอกเองพรุ่งนี้"*).** Every event still goes into the
+  LOG at once (decisions, landings, folds, gate verdicts), but Main does NOT write status boards, summaries or
+  explanations into chat on agent completions or ticks — a turn that only advanced the work ends with at most one
+  bare line (or nothing beyond the tool calls). The owner asks for the report when back (or says `off`), and THAT
+  message gets the full report from the log. A live message from the owner is still answered normally.
 In BOTH: the gates are Main-run with evidence (the owner never tests); the mechanical readings — a
 measured string width that binds a kind, a count, a wrong path, a canon-mandated default — are
 Main's and logged; the NEVER list holds, so a product-impact fork that is not cheaply undone is PARKED
