@@ -94,6 +94,17 @@ Which renders as:
   👤 line, and no asking later whether the sibling has done it.
 - A one-line takeaway may follow the table when something needs emphasis (e.g. what a push
   would deploy) — but the table is never *replaced* by that line.
+- **The ⏱️ ETA line — on every message that carries the status board (owner Q42 a,
+  2026-10-20).** One line right after the table (and any takeaway), right ABOVE the 👤 line:
+  when the work that does NOT wait on the owner should finish, and what is slowest — e.g.
+  `⏱️ งานที่ไม่รอคุณเสร็จราว 14:30–15:40 น. · ช้าสุดคือ foundation-cloud-run B1`. Computed with
+  `ae49-task-estimate-eta`'s baselines and chain rules from the board being written (no
+  re-run of its scripts each time — run `open-batches.cjs` only when the set of plans changed),
+  from the clock (`date`), rounded to 5 min; "น่าจะข้ามไปพรุ่งนี้" past 18:00 ICT; when every
+  row waits on the owner it says so (`⏱️ ทุกงานรอคุณ — เริ่มนับเมื่อ …`). It is a forecast, never
+  progress. Not on messages without a board. The full breakdown stays `/ae49-task-estimate-eta`.
+  Why: the owner wanted "เสร็จกี่โมง" on every status without asking, at ~2–3 % more tokens a day
+  instead of the 10–20 % a full ETA per report would cost.
 - **Close with the 👤 "your move" line — REQUIRED, never omitted (user rule, 2026-08-28).**
   The very last line of the message answers the question the reader actually has: *is anything
   waiting on me?* It restates, as concrete actions, every row whose *Waiting on* points at the
