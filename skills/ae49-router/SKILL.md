@@ -230,10 +230,12 @@ that is how the hub's own `node_modules` was emptied on 2026-09-25 (the builder 
 the hub's `node_modules` by link). The safe recipe, used four times on 2026-09-30 with the hub's
 `node_modules` intact each time: (1) `Get-ChildItem <worktree> -Recurse -Depth 3 -Force
 -Attributes ReparsePoint` (PowerShell) and read each link's `Target`; (2) delete each link AS A
-LINK — `[System.IO.Directory]::Delete(<link path>)`, never recursive — and leave any link whose
-target is OUTSIDE the worktree for a human to look at; (3) only then `git worktree remove
+LINK — `[System.IO.Directory]::Delete(<link path>)`, never recursive — INCLUDING a link whose
+target is OUTSIDE the worktree (that call removes the link, never its target; a SKIPPED outside link is exactly
+what `git worktree remove --force` then FOLLOWS — 2026-10-20 it emptied the hub's `node_modules/firebase-admin` and
+`rimraf` while the folder count still read 457); if a link cannot be deleted, STOP before step 3; (3) only then `git worktree remove
 --force <path>` + `git worktree prune`; (4) `ls <hub>/node_modules | wc -l` afterwards and
-compare with before. Never `rm -rf`, `Remove-Item -Recurse` or `rmdir /s` a tree you have not
+compare with before, AND list `<hub>/node_modules/firebase-admin` and `rimraf` (non-empty) — the count alone misses an emptied package. Never `rm -rf`, `Remove-Item -Recurse` or `rmdir /s` a tree you have not
 scanned.
 
 ## Gates you (Main) always own — never delegate these
