@@ -113,3 +113,18 @@ Granularity: ONE commit per completed change. NOT after every single file edit. 
 - Never ask the user to type or paste a password, token, key, or other secret into the chat.
 - Instead, ask them to put it in a local project file that git ignores (e.g. `.env.local`), and read it from there.
 - Make sure that file is gitignored first, so the secret never gets committed or pushed.
+
+## 10. Name Code After What the User Sees (owner rule 2026-10-21)
+
+**A name in code says the same thing as the screen it serves.**
+
+- Components, hooks, services, modules, routes, collections, harness suites and plan slugs use the name the
+  app shows — the menu and page titles (e.g. R&D → Foundation Design → **Detail Design** → `DetailDesign…`,
+  never a pre-merge `Footing…` for that page). When a screen is renamed or merged, its code names follow in
+  the same plan (data names through a ruled migration with a dry run first).
+- When talking to the owner, writing a gate item or a report, use the SCREEN name; a code name goes in
+  brackets only when the code must be pointed at.
+- Why: on 2026-10-21 Main called the Detail Design picker "Footing" because its file is `FootingSetOpenModal`
+  (a name from before the page merged into Foundation Design), and the owner could not tell which screen was
+  meant (*"ไม่อยากให้เวลามาอ่านแล้วงงเองหน่ะ"*). Each project's audit carries a check that lists code names that
+  no longer match a screen.
