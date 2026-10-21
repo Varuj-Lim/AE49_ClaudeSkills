@@ -28,6 +28,21 @@ agents, features, gates, tickets — render them as a **markdown table**, one ro
 never a bullet/numbered list. Prose stays for the surrounding explanation; the board itself is
 the table. One or two items may stay inline in a sentence — three or more always get the table.
 
+### When to send a board — four moments only (owner Q84 a, 2026-10-21)
+
+A message with the status board goes to the owner ONLY at:
+1. **Something waits on the owner** — a question, a button to press, a command to run, a gate to test.
+2. **A landing or a plan closed** — work landed on the deploy branch, a plan moved to `done/`, a push done.
+3. **A problem** — a gate item FAILED, an audit found a BLOCKER / MAJOR, a build or a production step failed.
+4. **The owner asked** — `status:`, "รายงานหน่อย", any question about progress.
+
+Everything else — a build finished, an audit passed, a fold sent, a re-audit dispatched, a harness green —
+is written to the log (and the register when it is an item) and gets NO chat message. A quiet stretch of
+20–40 minutes while agents work is expected. Why: on 2026-10-21, after the owner asked where the report had
+gone, Main sent a full board with every agent notification — about ten boards in one morning, most of them
+the same — and the owner asked whether a frequency rule existed (*"การเขียนรายงานของคุณตอนนี้มันถี่มาก"*).
+In autopilot `decide` mode the stricter rule stands: no reports at all until the owner asks.
+
 ### The template (owner ruling 2026-09-16 — copy this shape; five columns, the 2026-08-06 set plus a row number)
 
 ```markdown
