@@ -118,6 +118,8 @@ line of its calculation spec was derived from. Both would have been unrecoverabl
   table (plan boards, build trackers, finding lists rendered as tables) is written
   in English even when the surrounding explanation is in Thai — table cells are
   scanned, not read, and English keeps them compact and consistent.
+  **Exception (owner 2026-10-21):** the autopilot decision report ("ตัดสินใจอะไรไปบ้าง") keeps English
+  column headings but writes every cell's explanation in Thai — see `ae49-mode-autopilot` § `off`.
 
 # One session, one project folder (rule 2026-09-09)
 

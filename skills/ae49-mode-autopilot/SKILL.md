@@ -189,8 +189,16 @@ as a ruling.
 
 ## `off` — the report the owner asked for
 
-Set `on: false` in the state file, stop the heartbeat, then ONE report per `ae49-ref-report-format`
-(Thai prose, English table), built from the LOG, never from memory:
+Set `on: false` in the state file, stop the heartbeat, then ONE report per `ae49-ref-report-format`, built
+from the LOG, never from memory. **The same report is given whenever the owner asks "ตัดสินใจอะไรไปบ้าง"** —
+after `off`, after a `decide` stretch while the mode stays ON, or after switching `ask` → `decide`.
+
+**Its tables are numbered rows, column HEADINGS in English, every cell's EXPLANATION in Thai (owner
+rule 2026-10-21: *"เขียนรายงานรูปแบบตารางเป็นข้อๆในภาษาไทย"* then *"ชื่อหัวข้อเป็น English ได้ แต่คำอธิบาย
+อยากให้เป็นไทยนะ"*).** This is the one exception to `~/.claude/CLAUDE.md`'s "status-board tables stay in
+English": a decision report is read cell by cell, not scanned. Identifiers stay verbatim inside the Thai
+(`D7`, commit shas, file names, UI labels, `OI-n`). Every row carries its log ID (`D<n>`, `OI-n`) so the
+owner can answer "เปลี่ยน D7". The sections:
 
 1. **Decisions taken for you** — the table `# | Decision | Chosen | Alternatives | Undo | Risk`, every
    `D<n>` line, oldest first. This is the section the owner came for; it is never summarised away.
