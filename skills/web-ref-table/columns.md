@@ -236,10 +236,9 @@ THB แล้วยกเลิกมาใช้ ฿ ทั้งระบบ"*
 `kg/฿` (Q134 b), an input box's unit says `฿`, and an exported Excel money column — round-trip (Import) columns
 included — is a NUMBER with the `"฿"#,##0.00` format, the importer reading the number back (Q132 b). The code `THB`
 may survive only inside identifiers and stored field names until the project's rename plan reaches them.
-**`บาท` as a unit goes the same way (owner 2026-10-21):** a unit field / column (`unit: "บาท"`) says `฿`, and a FIGURE
-that states money is written `฿N` wherever it appears — a status line, a tooltip, a validation message, a hint
-(`ประมาณ ฿0.15`, `เพดาน ฿150 ต่อครั้ง`, `1 ถึง ฿{max}`). The Thai WORD stays only where no figure is attached to it
-(`แสดงเป็นพันบาท`, `ดูราคาเต็มเป็นบาท`).
+**`บาท` as a unit in a TABLE goes the same way (owner 2026-10-21):** a unit field / column (`unit: "บาท"`) says `฿`.
+Sentences are left alone (owner: *"คำพูดไม่ต้องแก้ แก้แต่ในตารางพอ"*) — a status line, tooltip, hint or validation
+message may keep `ประมาณ 0.15 บาท`.
 
 ## Rules that keep it honest
 
