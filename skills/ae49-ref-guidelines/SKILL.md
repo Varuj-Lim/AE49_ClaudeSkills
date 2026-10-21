@@ -128,6 +128,9 @@ Granularity: ONE commit per completed change. NOT after every single file edit. 
   shown as `Cost` is `cost…`, not `thb…`; a column headed `Updated by` is `updatedBy…`. A name for a purely
   internal thing with no screen counterpart (a loop index, a cache, a retry counter) stays a plain descriptive
   name. Existing mismatches are converted by the project's rename plan, never left for "later" silently.
+- **A renamed route leaves NO redirect or alias behind (owner 2026-10-21: *"ผมไม่ต้องการ redirect"*).** The old URL
+  stops existing — no `next.config` redirect / rewrite, no middleware hop, no re-export page — because a kept old
+  path is an old name still living in the code. A bookmark to it shows the app's not-found page.
 - When talking to the owner, writing a gate item or a report, use the SCREEN name; a code name goes in
   brackets only when the code must be pointed at.
 - Why: on 2026-10-21 Main called the Detail Design picker "Footing" because its file is `FootingSetOpenModal`
