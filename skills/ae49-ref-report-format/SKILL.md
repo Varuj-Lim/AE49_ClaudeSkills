@@ -43,6 +43,12 @@ gone, Main sent a full board with every agent notification — about ten boards 
 the same — and the owner asked whether a frequency rule existed (*"การเขียนรายงานของคุณตอนนี้มันถี่มาก"*).
 In autopilot `decide` mode the stricter rule stands: no reports at all until the owner asks.
 
+**This rule sets HOW OFTEN, never HOW MUCH (owner 2026-10-21, the same morning: *"อย่าตัดให้สั้นลง กำหนดแค่
+ความถี่พอแล้ว พอสั้นลงผมจะหาไม่เจอ"*).** Every board that IS sent carries every open row — each plan / batch
+in flight AND every row of the open-items register (`ae49-router` status lane), the unpushed commits, the
+items waiting on the owner — never trimmed to "what changed" to save space. The owner looks for an item on
+the board; a row dropped for brevity reads as a row that vanished (it happened with OI-145 the same day).
+
 ### The template (owner ruling 2026-09-16 — copy this shape; five columns, the 2026-08-06 set plus a row number)
 
 ```markdown
