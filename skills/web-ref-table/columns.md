@@ -221,6 +221,16 @@ kind, on the project's own font tier. Why: on 2026-10-21 R&D → Cloud Runs show
 and its arrow alone on line 2; the owner asked for the arrow to sit level with the head ("หัวตารางต้องอยู่
 ระดับเดียวกับ Sort"). A project's facts skill lists any head that still wraps until its audit converts it.
 
+## T9 · Money shows its currency symbol before the number; the head names the thing (owner ruling 2026-10-21, AE49_Hub)
+
+A money value in a table cell is written with the currency symbol in front — `฿1,234.56`, `est. ฿0.15` —
+and the column head names WHAT the amount is (`COST`, `TOTAL`, `PILE COST`), not its unit (`THB`,
+`(THB)`, `บาท` leave the head). Each project names its symbol and money formatter in its facts skill; the
+symbol comes from that one formatter, never typed per cell. The width of a money kind is measured WITH the
+symbol. Files exported to Excel keep numbers as numbers (the symbol, if any, is a number format, never
+text). Why: on 2026-10-21 the owner found R&D → Cloud Runs' `THB` head unclear and asked for `COST` with `฿`
+before the figures, as the rule for every table.
+
 ## Rules that keep it honest
 
 - One scale per project, defined once in shared code, imported everywhere — never re-typed.
