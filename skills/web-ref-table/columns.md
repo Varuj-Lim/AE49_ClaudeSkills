@@ -211,6 +211,16 @@ lines in one cell, every other row one line. The owner, shown a real failing set
   reason a person typed) has no repeated part to split out: it is a long VALUE and follows T3 — one line,
   ellipsis, full text on hover (and wraps on paper).
 
+## T8 · The sort arrow sits on the head's line, never alone on a line (owner ruling 2026-10-21, AE49_Hub)
+
+A sortable head's arrow is always on the same line as the head text — the arrow never wraps to a line of
+its own under the words. When a head + its arrow + the cell padding does not fit the column's kind, the
+column takes the next kind up that holds it (the same content family where one exists), never a "wrap the
+arrow" token. Measure head + arrow (`<SortIcon>` and its text space) + the cell's padding against the
+kind, on the project's own font tier. Why: on 2026-10-21 R&D → Cloud Runs showed `DELETED ON` on line 1
+and its arrow alone on line 2; the owner asked for the arrow to sit level with the head ("หัวตารางต้องอยู่
+ระดับเดียวกับ Sort"). A project's facts skill lists any head that still wraps until its audit converts it.
+
 ## Rules that keep it honest
 
 - One scale per project, defined once in shared code, imported everywhere — never re-typed.
