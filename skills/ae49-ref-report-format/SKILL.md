@@ -111,6 +111,10 @@ Which renders as:
   2. ✅ **Done today** — landed / committed / closed / live since the day began (Thai calendar day); older ones drop off.
   3. ⏸️📋📝📦 **Waiting on something other than the owner** — a token reset, another row's landing (`#N landing`), a plan being written, a parked or registered item to do later.
   4. 👤 **Waiting on the owner** — a question, a button, a command, a push, a Billing read, the owner's gate — LAST, so the ask is the final thing read before the 👤 line.
+  **A register row that no one is moving waits on the OWNER, never on "—" (owner 2026-10-21):** an item Main found
+  and registered (an audit leftover, a gate observation) that is not in the owner's ordered scope is waiting for the
+  owner's go-ahead — its *Waiting On* reads `Your go-ahead (Q<n>)`, it sits in group 4, and the question that asks for
+  the go-ahead is put in the same message. "⏸️ Registered · —" hides that the ball is the owner's.
   Within a group, most urgent first. Why: on 2026-10-21 a twelve-row board mixed the four kinds and the owner could not find what was running, what was done and what was theirs (*"งานที่กำลังทำอยู่ด้านบน … งานที่รอผม…"*; the owner chose this order over Main's done-at-the-bottom proposal).
 - **Put the table at the END of the message**, after the prose that explains it. The reader
   wants the reasoning first and the board as the summary they scroll back to.
