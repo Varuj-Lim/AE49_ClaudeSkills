@@ -115,6 +115,11 @@ Which renders as:
   and registered (an audit leftover, a gate observation) that is not in the owner's ordered scope is waiting for the
   owner's go-ahead — its *Waiting On* reads `Your go-ahead (Q<n>)`, it sits in group 4, and the question that asks for
   the go-ahead is put in the same message. "⏸️ Registered · —" hides that the ball is the owner's.
+  **The `Unpushed on <deploy branch>` row carries its line count (owner 2026-10-21):** its Stage cell reads
+  `📦 N commits · +A / −D lines (code +a / −d)` — from `git diff --shortstat origin/<b>..<b>` for the whole range and
+  the same over the code paths (app, components, lib, functions, worker, rules, indexes, apphosting) — re-run fresh for
+  every board (a fetch first), never carried from an earlier board. It costs one git call and a few tokens; the owner
+  reads it to judge how big the next push is.
   Within a group, most urgent first. Why: on 2026-10-21 a twelve-row board mixed the four kinds and the owner could not find what was running, what was done and what was theirs (*"งานที่กำลังทำอยู่ด้านบน … งานที่รอผม…"*; the owner chose this order over Main's done-at-the-bottom proposal).
 - **Put the table at the END of the message**, after the prose that explains it. The reader
   wants the reasoning first and the board as the summary they scroll back to.
