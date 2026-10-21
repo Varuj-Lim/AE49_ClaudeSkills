@@ -122,6 +122,12 @@ Granularity: ONE commit per completed change. NOT after every single file edit. 
   app shows — the menu and page titles (e.g. R&D → Foundation Design → **Detail Design** → `DetailDesign…`,
   never a pre-merge `Footing…` for that page). When a screen is renamed or merged, its code names follow in
   the same plan (data names through a ruled migration with a dry run first).
+- **EVERY name in code that stands for something the user sees follows the screen — variables, constants,
+  props, state, fields, function and file names too, not only components and modules (owner 2026-10-21:
+  *"ต่อไปนี้ ถ้ามีการตั้งชื่อตัวแปรอะไรก็ตามใน Code ต้องให้ตรงกับหน้าตาที่เกิดขึ้นจริงในหน้า Web site เท่านั้น"*).** A value
+  shown as `Cost` is `cost…`, not `thb…`; a column headed `Updated by` is `updatedBy…`. A name for a purely
+  internal thing with no screen counterpart (a loop index, a cache, a retry counter) stays a plain descriptive
+  name. Existing mismatches are converted by the project's rename plan, never left for "later" silently.
 - When talking to the owner, writing a gate item or a report, use the SCREEN name; a code name goes in
   brackets only when the code must be pointed at.
 - Why: on 2026-10-21 Main called the Detail Design picker "Footing" because its file is `FootingSetOpenModal`

@@ -48,7 +48,7 @@ same breath removed the last module-wide English exemption (the plot-order scree
   that becomes one) is a head and is English; Thai belongs in the cells' prose (the CONTENT
   of a Description column), captions under the table, notes, legends and empty states. The
   only non-English heads allowed are the domain's own NOTATION — a unit or currency sign
-  (`(฿)`, `m²`), a standard's category letter (ข ค ง), a formula symbol (`fc′`) — never
+  (`(฿)` — never `THB`, retired system-wide by owner Q133 b, `web-ref-table` T9 — `m²`), a standard's category letter (ข ค ง), a formula symbol (`fc′`) — never
   a Thai WORD. Written because AE49's parameter tables shipped
   `คำอธิบาย · สัญลักษณ์ · ค่า · หน่วย` under an older per-table order (2026-08-28) that was
   never registered as an exception, a second card copied them a month later, and the

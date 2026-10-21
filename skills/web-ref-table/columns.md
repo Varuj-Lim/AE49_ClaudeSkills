@@ -231,6 +231,13 @@ symbol. Files exported to Excel keep numbers as numbers (the symbol, if any, is 
 text). Why: on 2026-10-21 the owner found R&D → Cloud Runs' `THB` head unclear and asked for `COST` with `฿`
 before the figures, as the rule for every table.
 
+**`THB` is retired system-wide — `฿` is the only currency mark on screen (owner Q133 b, 2026-10-21: *"เราจะไม่ใช้
+THB แล้วยกเลิกมาใช้ ฿ ทั้งระบบ"*).** Not only cells and heads: a legend's `Unit` column says `฿`, a rate says
+`kg/฿` (Q134 b), an input box's unit says `฿`, and an exported Excel money column — round-trip (Import) columns
+included — is a NUMBER with the `"฿"#,##0.00` format, the importer reading the number back (Q132 b). The code `THB`
+may survive only inside identifiers and stored field names until the project's rename plan reaches them; a Thai
+sentence may still say the WORD `บาท`.
+
 ## Rules that keep it honest
 
 - One scale per project, defined once in shared code, imported everywhere — never re-typed.
