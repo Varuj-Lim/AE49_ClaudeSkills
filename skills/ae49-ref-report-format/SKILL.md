@@ -147,6 +147,9 @@ Which renders as:
   - One or two lines, in the conversation's language (the table itself stays English).
   - Concrete verbs the user can act on ("test the 7 gate items, then say ผ่านหมด"), never a
     restatement of a Stage ("gate is open").
+  - **Today only (owner 2026-10-21):** it names only what the owner can do TODAY (the Thai calendar day). A
+    step that cannot happen until a later day — tomorrow's Billing read, a check after a reset — stays as its
+    row on the board and is NOT mentioned in the 👤 line. Nothing for today → "ไม่มีอะไรรอคุณวันนี้".
   - It comes AFTER the table and after any takeaway line — nothing follows it except the
     🤖 autopilot line below.
   - Never dropped on the grounds that the *Waiting on* column already says it: a reader
