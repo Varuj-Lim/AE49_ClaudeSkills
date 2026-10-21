@@ -73,6 +73,9 @@ Main's and logged; the NEVER list holds, so a product-impact fork that is not ch
 in `decide` too (NEVER 8), never chosen. The word is recorded as `"forks": "ask" | "decide"` in the
 state file, shown by `status`, and can be switched mid-run by the owner ("เปลี่ยนเป็น decide") — logged
 as a ruling.
+**"ปิดโหมด Ask" means SWITCH TO `decide`, never `off`** (owner 2026-10-21: *"ความหมายของปิดโหมด Ask ไม่ได้หมายถึงปิด
+Autopilot ให้เปลี่ยนเป็นโหมด ตัดสินใจเอง"*). Only an explicit "ปิด autopilot" / "ปิดโหมด autopilot" / `off` turns the
+mode off. When unsure which the owner meant, keep the mode ON and ask.
 
 1. **Take the scope from the owner's words** — plan slugs / batches / named tasks, e.g.
    `on stories-B1 stories-B2 table-columns-B8` or `on decide stories-B1 stories-B2`. Read those plans;
