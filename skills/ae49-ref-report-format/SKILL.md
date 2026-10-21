@@ -106,7 +106,12 @@ Which renders as:
     the board being written — never copied from an earlier board.
 - **Never invent progress.** A background agent's result is unknown until its notification
   arrives — write "🔍 Audit running", never a predicted verdict or a percentage.
-- **The user's own rows go last** (their gate, their push) so the ask is the final thing read.
+- **Row order — four groups, always in this order (owner ruling 2026-10-21):**
+  1. 🔨🔍🧪🔧 **In progress** — builder, audit, fold, Main-run gate — in chain order (a row before the rows it unblocks).
+  2. ✅ **Done today** — landed / committed / closed / live since the day began (Thai calendar day); older ones drop off.
+  3. ⏸️📋📝📦 **Waiting on something other than the owner** — a token reset, another row's landing (`#N landing`), a plan being written, a parked or registered item to do later.
+  4. 👤 **Waiting on the owner** — a question, a button, a command, a push, a Billing read, the owner's gate — LAST, so the ask is the final thing read before the 👤 line.
+  Within a group, most urgent first. Why: on 2026-10-21 a twelve-row board mixed the four kinds and the owner could not find what was running, what was done and what was theirs (*"งานที่กำลังทำอยู่ด้านบน … งานที่รอผม…"*; the owner chose this order over Main's done-at-the-bottom proposal).
 - **Put the table at the END of the message**, after the prose that explains it. The reader
   wants the reasoning first and the board as the summary they scroll back to.
 - **A cross-session handoff prompt is never a row** (owner rule 2026-09-11,

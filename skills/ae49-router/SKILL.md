@@ -127,7 +127,7 @@ re-read from disk — never report from memory:
 2. Detect live builds: implementers you spawned this session, plus `git worktree list`
    (a lingering feature-branch worktree from another session = build in progress or
    awaiting integration — say which you can't tell, don't guess).
-3. Output ONE table, one row per item, most-active first, FIVE columns: **# | Feature /
+3. Output ONE table, one row per item, in the four-group order of `ae49-ref-report-format` (in progress → done today → waiting on others → waiting on the owner), FIVE columns: **# | Feature /
    plan / task | Stage | Waiting On | Next** (the four of the 2026-08-13 ruling plus the row
    number added 2026-09-16 so the owner can answer "ข้อ 3").
    **NEVER collapse items into one row** (user ruling 2026-08-14): no "Ready ×6", no
