@@ -139,7 +139,10 @@ Which renders as:
   re-run of its scripts each time — run `open-batches.cjs` only when the set of plans changed),
   from the clock (`date`), rounded to 5 min; "น่าจะข้ามไปพรุ่งนี้" past 18:00 ICT; when every
   row waits on the owner it says so (`⏱️ ทุกงานรอคุณ — เริ่มนับเมื่อ …`). It is a forecast, never
-  progress. Not on messages without a board. The full breakdown stays `/ae49-task-estimate-eta`.
+  progress. **Wording and shape (owner 2026-10-22):** the line reads `⏱️ เวลาที่คาดว่างานจะเสร็จ: ราว HH:MM–HH:MM น.`
+  — that phrase, never "ETA" in the text — and gives ONE final finish window for everything that does not wait on
+  the owner; no per-plan or per-batch times inside the sentence either (the owner reads only when it all ends; the
+  breakdown is `/ae49-task-estimate-eta full` on request). What it excludes may follow in a short bracket. Not on messages without a board. The full breakdown stays `/ae49-task-estimate-eta`.
   Why: the owner wanted "เสร็จกี่โมง" on every status without asking, at ~2–3 % more tokens a day
   instead of the 10–20 % a full ETA per report would cost.
   **With it, the ⚡ "faster" line (owner 2026-10-20, the same day: *"ช่วยเพิ่มด้วยว่าสามารถทำให้เร็วขึ้นได้
