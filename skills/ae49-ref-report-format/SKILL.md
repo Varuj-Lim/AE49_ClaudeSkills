@@ -142,7 +142,11 @@ Which renders as:
   progress. **Wording and shape (owner 2026-10-22):** the line reads `⏱️ ETA: ราว HH:MM–HH:MM น.`
   (owner, same day: "ETA" is short and understood — not the long Thai phrase) and gives ONE final finish window for everything that does not wait on
   the owner; no per-plan or per-batch times inside the sentence either (the owner reads only when it all ends; the
-  breakdown is `/ae49-task-estimate-eta full` on request). What it excludes may follow in a short bracket. Not on messages without a board. The full breakdown stays `/ae49-task-estimate-eta`.
+  breakdown is `/ae49-task-estimate-eta full` on request). What it excludes may follow in a short bracket. The full breakdown stays `/ae49-task-estimate-eta`.
+  **Also on the SHORT progress report (owner 2026-10-22: *"รายงานแบบสั้นที่คุณทำอยู่ผมอยากให้เติม ETA กับ เร่งได้ยังไง
+  เหมือนกับท้ายตารางของรายงานเต็ม"*):** any message without a board that tells the owner how work in flight stands —
+  "B2 / OI-154 still running", "audit dispatched", a landing note — carries the same ⏱️ and ⚡ lines right above the
+  👤 line, computed the same way. Only a plain answer to a question with no work in flight goes without them.
   Why: the owner wanted "เสร็จกี่โมง" on every status without asking, at ~2–3 % more tokens a day
   instead of the 10–20 % a full ETA per report would cost.
   **With it, the ⚡ "faster" line (owner 2026-10-20, the same day: *"ช่วยเพิ่มด้วยว่าสามารถทำให้เร็วขึ้นได้
