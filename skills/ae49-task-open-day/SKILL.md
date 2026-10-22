@@ -90,6 +90,9 @@ Mirror of `ae49-task-close-day`. Everything arrives through git.
    come from the owner live. Why: on 2026-10-19 the open-day on VA-PC-CONDO read
    "Autopilot: ON (ask)" in the 10-16 manifest, found no state file, reported Off and
    said nothing; the owner had to ask "ทำไมปิด" mid-gate.
+   **Since 2026-10-22 the close-day switches the mode OFF first** (`ae49-task-close-day`,
+   "First of all"), so a manifest written from then on says `Autopilot: OFF` and this step
+   stays quiet; it still applies to a manifest written before that rule.
 
 8. **Update memory + report.** Note "resumed on <machine> <date>" in the
    in-flight file (the commit can ride the next landing). Report the board per

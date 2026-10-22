@@ -22,6 +22,16 @@ or a Temp folder.
 
 ## Ceremony
 
+**First of all — switch Autopilot OFF and report (owner rule 2026-10-22).** Before step 0, read
+`~/.claude/autopilot/<project-folder-name>/state.json`. `"on": true` → run `ae49-mode-autopilot off`
+(state `on: false`, heartbeat stopped) and give its full `off` report from the log — the decisions,
+landed, parked, owner steps — as its own message, THEN start step 0. No file or `"on": false` → one
+line "Autopilot: already Off" and go on. Never ask whether to switch off: closing the day IS the
+switch-off. Step 6 then records `Autopilot: OFF (switched off at close-day)` in the manifest. Why:
+on 2026-10-22 the open-day found the mode still ON from 2026-10-02 with every scope item long
+landed, and had to ask the owner whether to switch it off (*"เพิ่มกติกาใหม่ทุกครั้งที่ close-day ให้ปิดโหมด
+ก่อนทุกครั้งแล้วรายงาน หลังจากนั้นค่อยเริ่มปิดวัน จะได้ไม่ต้องมาถามแบบนี้อีก"*).
+
 0. **Stop the engines (owner rule 2026-10-06).** Nothing may still be WRITING when the survey
    runs — an agent mid-build makes step 1 lie and step 3 park a half-written tree.
    - `ListAgents` + the background-task list: an agent, a builder, an audit or a Bash task still
