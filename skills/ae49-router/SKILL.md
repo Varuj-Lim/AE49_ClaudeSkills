@@ -114,6 +114,14 @@ question with a "new session" button (or one Thai line where there is no box). T
 **replaces** this one — it is not a parallel session in the same checkout. Main never closes a
 session itself, never offers in the middle of a build / gate / landing, and offers again only at
 the next clean break. The owner may say "เปิดใหม่" at any time and Main prepares the memory at once.
+
+**Long but no break yet → warn the owner so a break can happen (owner 2026-10-22: *"ถ้า Session ยาวแล้ว
+ให้เตือนผมหน่อย ผมจะได้หยุดสั่งงาน ไม่งั้นผมจะสั่งไปเรื่อยๆ จะไม่เจอจุดพัก"*).** A clean break never
+comes while new work keeps arriving. So from the moment the session is long (the second bullet above)
+until it is closed, EVERY message to the owner carries one line right above the 🤖 line:
+`🧹 Session ยาวแล้ว — แนะนำหยุดสั่งงานใหม่ ให้งานที่ค้างจบก่อน แล้วเปิด session ใหม่` (add what is still
+running in a few words, e.g. "รอ B2 audit"). It is a reminder, not a refusal: new work the owner orders
+anyway is still done. When the in-flight work finishes, the line gives way to the offer above.
 Why: on 2026-10-22 the owner closed a session that had stayed open two days because it felt unsafe,
 and asked that Main be the one to suggest the break (*"เพิ่มกติกาให้คุณ แนะนำผมเพื่อเปิด Session ใหม่"*).
 
