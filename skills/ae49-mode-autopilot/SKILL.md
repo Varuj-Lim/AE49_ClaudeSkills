@@ -76,6 +76,9 @@ as a ruling.
 **"ปิดโหมด Ask" means SWITCH TO `decide`, never `off`** (owner 2026-10-21: *"ความหมายของปิดโหมด Ask ไม่ได้หมายถึงปิด
 Autopilot ให้เปลี่ยนเป็นโหมด ตัดสินใจเอง"*). Only an explicit "ปิด autopilot" / "ปิดโหมด autopilot" / `off` turns the
 mode off. When unsure which the owner meant, keep the mode ON and ask.
+**A switch report (`decide` → `ask`, and the `off` report) carries the board's closing lines too** — the ⏱️ ETA line and
+the ⚡ "เร่งได้" line right after the table, exactly as on every status board (`ae49-ref-report-format`), before the 👤
+and 🤖 lines (owner 2026-10-22: the decide → ask report had the decisions and the board but no ⏱️ / ⚡).
 
 1. **Take the scope from the owner's words** — plan slugs / batches / named tasks, e.g.
    `on stories-B1 stories-B2 table-columns-B8` or `on decide stories-B1 stories-B2`. Read those plans;
@@ -212,7 +215,7 @@ owner can answer "เปลี่ยน D7". The sections:
 4. **Owner steps queued** — the one-sitting block(s), with the minutes they need.
 5. **Parked** — what stopped, why, and the exact question the owner must answer.
 6. **Failed / not reached** — with the exact error text.
-7. The 👤 line: what the owner does first this morning.
+7. The ⏱️ ETA and ⚡ "เร่งได้" lines after the board (owner 2026-10-22), then the 👤 line: what the owner does first this morning.
 Commit the log with the next landing's memory commit as usual. If the owner asks to undo a decision,
 the `undo:` column is the recipe; a landed commit is reverted, never rewritten.
 
