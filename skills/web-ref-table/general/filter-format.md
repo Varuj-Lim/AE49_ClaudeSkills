@@ -81,6 +81,9 @@ matching icon. A funnel on a button labelled `Date range` is a lie.
   single-value pills instead). The user ticks which values to see; the pill reads
   `<Label>: All` / `<Label> (N)`. A single-value pick is only for a **genuinely one-value
   choice** — a report period, a chart's top-N — and says why at the call site.
+- **An on/off view of the rows → the project's one toggle pill (`FilterToggle`)** — e.g. `Created by me`
+  (NuriHub plan `home-page` D13, 2026-10-22; AE49 has the same component). It is not a list, so it is not
+  a checklist: one pill, `aria-pressed`, the URL holds `?<key>=1` only while on, and Clear counts and resets it.
 - **Single-value pick → the project's one select component.** Never a raw
   `<select>`, never a `<datalist>`, never a hand-rolled option panel.
 - **Multi-value pick → the project's one multi-select component.** Never
