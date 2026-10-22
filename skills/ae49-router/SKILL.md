@@ -96,6 +96,27 @@ Main-run smoke test with the owner waiving the eye-only items (`ae49-ref-gate-ch
 "Waived and Main-verified items") is the same idea applied to the gate: offer it whenever a
 gate would cost the owner more than a few minutes on a feature they will rarely use.
 
+## Recommend a fresh session at a clean break (owner FS1 a, 2026-10-22)
+
+A long session costs more on every turn (the whole context is re-sent), and every compact drops
+the loaded skill bodies (the 2026-09-23 lesson in `~/.claude/CLAUDE.md`) and blurs old detail.
+The project's state already lives in files — the in-flight memory, `_open-items.md`, the plans,
+the autopilot log, git — so a fresh session that opens the day from them loses nothing. So Main
+**offers** to close this session and open a new one when BOTH hold:
+
+- **A clean break** — no agent running, no gate open, no uncommitted or unlanded work in the tree,
+  nothing half-asked (a question may be pending only if it is in the register).
+- **The session is long** — at least one compact has happened, OR about 5 features landed in this
+  session, OR it has run for more than half a working day.
+
+How: first rewrite the in-flight memory so it is complete, then put the offer as the `wrap_up`
+question with a "new session" button (or one Thai line where there is no box). The NEW session
+**replaces** this one — it is not a parallel session in the same checkout. Main never closes a
+session itself, never offers in the middle of a build / gate / landing, and offers again only at
+the next clean break. The owner may say "เปิดใหม่" at any time and Main prepares the memory at once.
+Why: on 2026-10-22 the owner closed a session that had stayed open two days because it felt unsafe,
+and asked that Main be the one to suggest the break (*"เพิ่มกติกาให้คุณ แนะนำผมเพื่อเปิด Session ใหม่"*).
+
 ## Inline refine (the `refine:` lane)
 
 You (Main) do the refine yourself — do **not** spawn a sub-agent for it. The rewrite
