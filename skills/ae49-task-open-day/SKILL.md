@@ -78,21 +78,23 @@ Mirror of `ae49-task-close-day`. Everything arrives through git.
    the gate needs seeded data, re-seed on THIS machine (the project's test-data
    skill), and launch the dev/emulator with this machine's launcher.
 
-7b. **Carry the autopilot mode across machines — ASK, never switch on silently**
-   (owner Q4 a, 2026-10-19). The state file `~/.claude/autopilot/<project>/state.json`
-   is machine-local on purpose, so a mode left ON at close stays behind on the other
-   machine. When the manifest says autopilot was ON (e.g. "Autopilot: ON (ask)") and
-   THIS machine's state file is missing or `"on": false`, put ONE question to the owner
-   in this open-day report (`ae49-ref-question-format`): switch on here — with which
-   sub-mode and which scope (the manifest's old scope is often already finished, so
-   offer what is open now) — or stay Off. Switching on is then `ae49-mode-autopilot on …`
-   with the owner's words as the scope. Never copy the old state over: the scope must
-   come from the owner live. Why: on 2026-10-19 the open-day on VA-PC-CONDO read
-   "Autopilot: ON (ask)" in the 10-16 manifest, found no state file, reported Off and
-   said nothing; the owner had to ask "ทำไมปิด" mid-gate.
-   **Since 2026-10-22 the close-day switches the mode OFF first** (`ae49-task-close-day`,
-   "First of all"), so a manifest written from then on says `Autopilot: OFF` and this step
-   stays quiet; it still applies to a manifest written before that rule.
+7b. **Ask about autopilot on EVERY open-day — never switch on silently** (owner Q186 a,
+   2026-10-22, widening owner Q4 a of 2026-10-19). Whenever THIS machine's state file
+   `~/.claude/autopilot/<project>/state.json` is missing or `"on": false` — whatever the
+   manifest says — the open-day report carries ONE question (`ae49-ref-question-format`):
+   **(a) switch on `ask` with the scope Main proposes** — the board's rows that Main can move
+   without the owner (built-not-gated, approved-not-built, register rows already approved),
+   listed by row number; **(b) switch on with a scope the owner names**; **(c) stay Off.**
+   Recommend (a) when the proposed scope is non-empty. The owner's answer is the live scope:
+   "a" → `ae49-mode-autopilot on ask <the proposed rows>`; never copy an old state over and
+   never switch on without the answer (the scope must come from the owner live). When the state
+   file is already ON (a same-machine resume), skip the question and run its `tick`.
+   Why: since 2026-10-22 the close-day switches the mode OFF first (`ae49-task-close-day`,
+   "First of all"), so a manifest always says `Autopilot: OFF`; the old rule only asked when a
+   manifest said ON, so it went quiet and the owner had to switch on by hand at 17:30 the same
+   day ("ยังไม่ได้ระบุหรอว่าให้เปิด Autopilot (Ask) ทุกครั้งที่ เปิดวัน"). Before that, on
+   2026-10-19 an open-day read "Autopilot: ON (ask)", found no state file and said nothing; the
+   owner had to ask "ทำไมปิด" mid-gate.
 
 8. **Update memory + report.** Note "resumed on <machine> <date>" in the
    in-flight file (the commit can ride the next landing). Report the board per
