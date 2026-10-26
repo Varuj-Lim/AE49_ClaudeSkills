@@ -33,6 +33,14 @@
      Thai response saying it is live now. **This is the ONLY moment a reply is
      ever written.**
 
+  **A third write — FILING a new ticket — happens only on the owner's order (owner ruling 2026-10-26:
+  *"แก้กติกาหน่อยว่าให้คุณสามารถเขียน Ticket ได้เหมือนกับ /web-task-ticket-to-plan ตอนที่งานเสร็จแล้วสามารถเขียนตอบได้เลย"*).** When the owner tells Main in chat to
+  open a ticket (toward the team, or FOR one named staff member who must act — a check, an answer, a
+  sample file), Main writes and files it ITSELF through the project's filing script (`staff-note.md`),
+  also while `ae49-mode-autopilot` is ON: dry run, the full Thai text in chat, `--apply`, read it back,
+  cite its code. The owner never has to copy text into the app. When the work a ticket asked for is done
+  and pushed, its reply is the normal PUSH write-back above, written by Main without a further ask.
+
   **There is deliberately NO reply at the gate PASS (owner ruling 2026-09-10,
   "ยุบเหลือตอบตอน push").** A "done, waiting for the next deploy" reply used to go
   out at the gate; it is removed because the gap between a PASS and a push is

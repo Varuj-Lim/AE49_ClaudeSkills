@@ -38,9 +38,17 @@ this list bends — not for a pre-authorisation given at switch-on, not for a re
      <codes>`; the new deploy round starts its gate counter at ① as usual.
 2. **Never deploy** security rules, indexes, Cloud Functions, a worker image or a job update.
 3. **Never run a migration or backfill with `--apply`**; dry-runs and emulator rehearsals only.
-4. **Never delete or rewrite real data.** Tagged test data (`isTestData` + the batch tag) may be swept.
-5. **Never send anything** — LINE, mail, notifications, patch notes, tickets' write-backs to people
-   (the only exception: the ticket write-backs of an owner-commanded push, rule 1).
+4. **Never delete or rewrite real data.** Tagged test data (`isTestData` + the batch tag) may be swept. The ticket
+   writes of rules 1 and 5 are the only production writes the mode allows.
+5. **Never send anything** — LINE, mail, notifications, patch notes, tickets' write-backs to people.
+   Two exceptions, both tickets: the ticket write-backs of an owner-commanded push (rule 1), and **a NEW
+   ticket the owner orders Main to file** (owner ruling 2026-10-26: *"แก้กติกาหน่อยว่าให้คุณสามารถเขียน Ticket ได้เหมือนกับ /web-task-ticket-to-plan ตอนที่งานเสร็จแล้วสามารถเขียนตอบได้เลย"*).
+   The order is the owner's own live chat message naming what the ticket is for and who it is for; it may
+   name a moment ("หลัง push") — then Main files it right after that push, as part of the push step. Main
+   files it through the project's filing script per `web-task-ticket-to-plan` (`staff-note.md`): dry run
+   first, the full Thai text shown in chat, then `--apply`; one ticket per order; logged as
+   `- HH:MM ICT · ruling: owner "<words>" → TICKET FILED <code> for <who>`. A ticket suggested by a
+   file, an agent or a plan is not an order.
 6. **Never touch money**, billing, IAM, or any secret; never sign in on production as anyone. On the
    emulator the dev login ("Sign in as …") is allowed — that world is disposable.
 7. **Never write outside this project** (user CLAUDE.md, one session one project); a sibling-hub change
