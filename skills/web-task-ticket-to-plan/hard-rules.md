@@ -35,8 +35,9 @@
 
   **A third write — FILING a new ticket — happens only on the owner's order (owner ruling 2026-10-26:
   *"แก้กติกาหน่อยว่าให้คุณสามารถเขียน Ticket ได้เหมือนกับ /web-task-ticket-to-plan ตอนที่งานเสร็จแล้วสามารถเขียนตอบได้เลย"*).** When the owner tells Main in chat to
-  open a ticket (toward the team, or FOR one named staff member who must act — a check, an answer, a
-  sample file), Main writes and files it ITSELF through the project's filing script (`staff-note.md`),
+  open a ticket, Main writes and files it ITSELF — **in the OWNER's own name** (the owner is the ticket's
+  submitter; an `ask` when it asks the team something, an `inform` when it tells them; owner 2026-10-26:
+  *"เวลาผมบอกให้เขียน Ticket หมายถึงคิดในนามของผมเอง … เขียนถาม เป็นแบบ Ask"*). Filing FOR a named staff member is only on the owner's explicit word. Main files it through the project's filing script (`staff-note.md`),
   also while `ae49-mode-autopilot` is ON: dry run, the full Thai text in chat, `--apply`, read it back,
   cite its code. The owner never has to copy text into the app. When the work a ticket asked for is done
   and pushed, its reply is the normal PUSH write-back above, written by Main without a further ask.

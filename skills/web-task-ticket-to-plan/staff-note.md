@@ -34,9 +34,9 @@ durable record. A real push-to-staff channel with read receipts is the
 3. **File through the project's script** (per the project skill), dry-run first,
    read the doc back, then apply. **Main files it itself when the owner orders it in chat** — also in
    autopilot — and shows the full text before `--apply` (owner ruling 2026-10-26, `hard-rules.md`).
-   A note may be filed **FOR one named staff member** who must act on it (the project's requester /
-   entered-by model: the staff member is the ticket's owner, the owner's Developer account is "entered
-   by") — how "for" is recorded is a project fact. The script attributes the ticket to the owner and
+   **A note is filed in the OWNER's own name** — the owner is its submitter (owner 2026-10-26: *"เวลาผมบอกให้เขียน Ticket หมายถึงคิดในนามของผมเอง … เขียนถาม เป็นแบบ Ask"*).
+   Only when the owner explicitly says it is FOR a named staff member is it filed on that person's behalf
+   (the project's requester / entered-by model) — how "for" is recorded is a project fact. The script attributes the ticket to the owner and
    writes the project's activity-log entry exactly as the in-app form would.
 
 ## Resolution
