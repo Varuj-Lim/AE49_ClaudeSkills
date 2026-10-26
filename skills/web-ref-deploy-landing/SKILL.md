@@ -72,6 +72,26 @@ the deploy, asked while preparing the gate; deploying at that moment is fine and
 de-risks landing day, but say plainly that it is a landing step, not a gate
 prerequisite, whenever the gate is on the emulator.
 
+## 3b. A secret VALUE goes in through the Secret Manager web page — never a hidden CLI prompt (owner 2026-10-26)
+
+Whenever a deploy needs a secret value the owner holds — an SMTP / Gmail App Password for an
+extension, an API key, a `CRON_SECRET` — Main's owner block tells the owner to type or paste it in
+the **Google Cloud console → Security → Secret Manager** page in the browser, never into a CLI
+prompt (`firebase deploy` / `ext:install` / `ext:configure` / `functions:secrets:set` ask with hidden
+input, and the owner cannot see what was pasted). Owner, 2026-10-26: *"ถ้าใส่รหัสให้ใช้วิธีนี้แทน CMD
+เพราะ CMD ผมมองไม่เห็น"* — on CCP_Hub's first extension deploy the hidden prompt took a wrong value and
+every reset mail failed with Gmail `535-5.7.8 Username and Password not accepted`.
+
+- **The link to hand over:** `https://console.cloud.google.com/security/secret-manager/secret/<SECRET_NAME>/versions?project=<project-id>`
+  → **+ New version** → paste the value (no spaces) → **Add new version**. For a secret that does not
+  exist yet: `https://console.cloud.google.com/security/secret-manager?project=<project-id>` →
+  **+ Create secret** with the exact name the deploy expects (e.g. an extension's
+  `ext-<instance-id>-<PARAM>`), then deploy — the CLI finds it and does not prompt.
+- **Then redeploy** whatever reads it (`deploy --only extensions` resolves `versions/latest` to the new
+  number at deploy time); the old version may be disabled or destroyed once the new one is proven.
+- **Prove it end to end** (a test mail, a call) before the owner revokes the old value.
+- Main never reads, types or stores the value itself (no `.txt` hand-off) — the owner's hands only.
+
 ## 4. Commit the plan BEFORE dispatching implementers
 
 Land the plan file on the deploy branch (a local commit — it deploys nothing on
