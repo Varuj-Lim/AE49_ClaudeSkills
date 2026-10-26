@@ -89,12 +89,18 @@ and 🤖 lines (owner 2026-10-22: the decide → ask report had the decisions an
    ON, work the owner orders in their own chat message — a clear command, not a mention or a musing —
    joins the scope at once: append it to `scope` in the state file, log `ruling: owner "<words>" →
    added to scope`, and say so in ONE line of the reply ("เพิ่มเข้า scope แล้ว"). From then on it is
-   treated exactly like the switch-on scope (Main lands it after the Main-run gate). Work already in
-   flight when the mode was switched on joins the same way when the owner asks. Unsure whether a
-   message is a command → ask, never assume. The NEVER list is unchanged: nothing added this way may
-   push, deploy, migrate, delete real data, send, or settle a design. Why: on 2026-10-07 the owner
-   asked whether work ordered after switch-on was in scope — it was not, so a finished, gated build
-   would have waited at the landing step for a "land" the owner did not know was needed.
+   treated exactly like the switch-on scope (Main lands it after the Main-run gate).
+   **Work the owner ordered BEFORE switch-on joins too, automatically (owner 2026-10-26: *"เมื่อไหร่
+   ก็ตามที่ผมสั่งงานใน Autopilot ต้องเพิ่มเข้าไปเลยไม่ต้องรอผมบอก"*).** At switch-on, every piece of work the
+   owner commanded in this session that is still in flight — planned, building, in audit, at its gate,
+   waiting to land — goes into `scope` with the switch-on scope, and the say-back lists it by name.
+   The owner never has to ask for it. Only a mention, a musing or a still-open question stays out.
+   Unsure whether a message is a command → ask, never assume. The NEVER list is unchanged: nothing
+   added this way may push, deploy, migrate, delete real data, send, or settle a design. Why: on
+   2026-10-07 the owner asked whether work ordered after switch-on was in scope — it was not, so a
+   finished, gated build would have waited at the landing step for a "land" the owner did not know was
+   needed. On 2026-10-26 the CSV-removal build (TK0096), ordered minutes before switch-on, was left
+   "out of scope" and its gate handed to the owner, who asked "เข้า Autopilot ไม่ได้ทำให้เองหรอ".
 3. **Budget** (defaults unless the owner says otherwise): **no cap on agents at once** — dispatch
    every actionable track, as the router's start-now rule does (owner ruling 2026-10-07: *"อยากให้ไม่
    จำกัดไปเลยผมจะดูจาก Token เอง"* — the owner watches usage himself; the old default of 2 only
