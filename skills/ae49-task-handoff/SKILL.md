@@ -25,28 +25,44 @@ Redact any sensitive information, such as API keys, passwords, or personally ide
 
 If the user passed arguments, treat them as a description of what the next session will focus on and tailor the doc accordingly.
 
-## Session-close mode (same machine, new session)
+## Session-close mode (same machine, new session) — the FAST swap
 
-When the intent is "close this session and continue in a fresh one" (the user
-says "ปิด session", "close this session", or hands off with no machine switch):
+When the intent is "close this session and continue in a fresh one ON THIS MACHINE" (the user
+says "ปิด session", "เปิด session ใหม่", "close this session", accepts the router's fresh-session
+offer, or hands off with no machine switch), run THIS — never `ae49-task-close-day`. Close-day is
+for switching MACHINES: it parks trees on branches, builds a 🎒 hand-carry list and switches
+Autopilot OFF, all of which only slow a same-machine swap down or break it (owner HQ1 a,
+2026-10-27: *"ปิด session ได้ไวขึ้น … เครื่องเดิม แค่อยากเปิด Session ใหม่"*).
 
-1. **Check for git-synced per-person memory** — a repo `.claude/memory/MEMORY.md`
-   with a driver mapping. Without it, write the handoff doc as above and tell
-   the user to point the new session at the file (nothing loads it by itself).
-2. **With it, the driver's in-flight memory file is the PRIMARY artifact** — the
-   next session auto-reads it at start, while a `docs/handoffs/` doc alone sits
-   unread. Update (or create) the driver's `inflight-<date>.md`: current state,
-   queue, decisions made this session, the single next action. Keep the
-   person's MEMORY.md index line current.
-3. **Write the full handoff doc ONLY when the conversation carries deep context
-   the memory format can't hold** (a long investigation, design reasoning).
-   Link it from the in-flight file so the next session actually finds it.
-4. Commit per the rules above (memory commits: `docs(memory): …`; the branch
-   guard still applies). Durability push: the project's no-deploy backup push,
-   exactly as `ae49-task-close-day` step 7 (rule `web-ref-deploy-landing`
-   §1–§2) — that skill owns the command and the never-push-the-deploy-branch
-   rule, so nothing is restated here. Then tell the user: close away — the next
-   session picks this up by itself.
+0. **Clean break or stop.** No sub-agent running, no gate section open on the board, no build
+   staged but unlanded, no question asked and unanswered that lives only in chat (it must be in the
+   open-items register). If any of these holds, say which and finish it (or register it) first.
+   Uncommitted feature work in the tree is NOT parked: the new session opens the same checkout and
+   finds it there — but name it in the in-flight file.
+1. **Commit everything that is done** (explicit pathspec, never `git add -A`; branch guard above).
+2. **Rewrite the in-flight memory** — the file the project names (NuriHub / AE49_Hub:
+   `.claude/memory/<person>/inflight-now.md`, REWRITTEN whole, never appended; projects without
+   one: `inflight-<date>.md`): live sha + time, unpushed set and any rules/index deploy it needs,
+   the gate counter, what is queued with its plan and approved rulings, the register rows, emulator
+   state, the autopilot log path, the single next action. Keep the MEMORY.md index line current.
+   Without git-synced per-person memory, write the handoff doc as above instead and point the new
+   session at it. Write a full `docs/handoffs/` doc ONLY when deep context does not fit (link it).
+3. **Leave Autopilot exactly as it is.** The state file is machine-local; a new session on this
+   machine reads it at start and, if ON, runs its `tick`. Never switch it off here, never write an
+   off report.
+4. **Backup push** — the project's no-deploy backup push, exactly as `ae49-task-close-day` step 7
+   (that skill owns the command and the never-push-the-deploy-branch rule).
+5. **Open the new session for the user** — `start_session` (`user_asked`, `fresh`, same checkout,
+   `use_worktree: false`) with a brief: "run `/ae49-task-open-day`, then continue <the next action>",
+   plus a background naming the in-flight file, the autopilot log and the house rules. If the app
+   cannot start one, tell the user to open it and type `/ae49-task-open-day`.
+6. **Report in two or three lines** — what was committed / pushed, the link to the new session,
+   anything the user still has to look at (a rollout, a deploy) — then the 🤖 line. The old session
+   can be closed.
+
+Skipped on purpose: park branches, worktree parking, the 🎒 hand-carry list, the engines stop
+(nothing may be running anyway — step 0), the close-day-park log entry (one line is optional), the
+skills-repo sync check, the shutdown question.
 
 For switching MACHINES, use `ae49-task-close-day` instead (work must travel via
 git, with a 🎒 hand-carry list); this mode covers only a same-machine swap.
