@@ -115,7 +115,8 @@ question with a "new session" button (or one Thai line where there is no box). T
 session itself, never offers in the middle of a build / gate / landing, and offers again only at
 the next clean break. The owner may say "เปิดใหม่" at any time and Main prepares the memory at once.
 When the owner accepts, run `ae49-task-handoff` § "Session-close mode" (the FAST same-machine swap —
-commit, rewrite in-flight, keep Autopilot as it is, backup push, open the new session) — never
+commit, rewrite in-flight, keep Autopilot as it is, backup push, report — the USER then opens the
+new session; Main never starts it) — never
 `ae49-task-close-day`, which is for switching machines (owner HQ1 a, 2026-10-27).
 
 **Long but no break yet → warn the owner so a break can happen (owner 2026-10-22: *"ถ้า Session ยาวแล้ว

@@ -52,13 +52,13 @@ Autopilot OFF, all of which only slow a same-machine swap down or break it (owne
    off report.
 4. **Backup push** — the project's no-deploy backup push, exactly as `ae49-task-close-day` step 7
    (that skill owns the command and the never-push-the-deploy-branch rule).
-5. **Open the new session for the user** — `start_session` (`user_asked`, `fresh`, same checkout,
-   `use_worktree: false`) with a brief: "run `/ae49-task-open-day`, then continue <the next action>",
-   plus a background naming the in-flight file, the autopilot log and the house rules. If the app
-   cannot start one, tell the user to open it and type `/ae49-task-open-day`.
-6. **Report in two or three lines** — what was committed / pushed, the link to the new session,
-   anything the user still has to look at (a rollout, a deploy) — then the 🤖 line. The old session
-   can be closed.
+5. **Report in two or three lines and stop** — what was committed / pushed, anything the user still
+   has to look at (a rollout, a deploy), and the one line to type in the NEW session:
+   `/ae49-task-open-day` — then the 🤖 line. **The USER closes this session and opens the new one
+   themselves. Main NEVER starts it** (no `start_session`, no sub-session, no dispatched agent that
+   carries the work on): a session Main starts is linked to this one and runs beside it in the same
+   checkout, which is exactly the parallel writer the swap is meant to avoid (owner 2026-10-27:
+   *"ผมหมายถึงว่า จะปิด Session นี้ แล้วเดียวผมจะเปิดใหม่เอง ไม่ได้ให้คุณมาเปิดเป็น Sub Session"*).
 
 Skipped on purpose: park branches, worktree parking, the 🎒 hand-carry list, the engines stop
 (nothing may be running anyway — step 0), the close-day-park log entry (one line is optional), the
