@@ -1,12 +1,23 @@
 ---
 name: ae49-task-handoff
-description: Compact the current conversation into a handoff document for another agent to pick up. Use when the user wants to hand work off to a fresh session, says "handoff", "hand this off", or "write a handoff", or wants the current session summarized so another agent can continue the work — including closing a session in place ("ปิด session", "close this session and open a new one"), where in projects with git-synced per-person memory the driver's in-flight memory file (auto-read at next session start) is the primary artifact and the doc is written only for deep context.
-argument-hint: "What will the next session be used for?"
+description: Close this session and continue in a fresh one ON THE SAME MACHINE (the DEFAULT mode — commit, rewrite the in-flight memory, keep Autopilot as it is, backup push, short report; the user then opens the new session and types /ae49-task-open-day), or, only when asked with the doc mode, write a handoff document for another agent. Use when the user says "/ae49-task-handoff", "handoff", "ปิด session", "เปิด session ใหม่", "close this session and open a new one", or accepts the router's fresh-session offer; use the doc mode when they say "handoff doc", "เขียนเอกสาร handoff", "write a handoff" for another agent, or pass the argument doc. For switching MACHINES use ae49-task-close-day instead.
+argument-hint: "(empty) = close this session · doc [topic] = write a handoff document"
 ---
 
 # Handoff
 
 > *Adapted from [mattpocock/skills — productivity/handoff](https://github.com/mattpocock/skills/tree/main/skills/productivity/handoff) by Matt Pocock ([MIT License](https://github.com/mattpocock/skills/blob/main/LICENSE)).*
+
+## Which mode — the DEFAULT is closing the session (owner 2026-10-27)
+
+- **No argument, or any wording about closing / switching session → Session-close mode** (the
+  section below). This is what `/ae49-task-handoff` does unless the user says otherwise (owner:
+  *"อยากให้การปิด Session เป็น Default ของ สกิล /ae49-task-handoff … ยกเว้นแต่ว่าเราเปลี่ยน"*).
+- **`doc` argument, or the user asks for a handoff DOCUMENT for another agent → Doc mode** (the
+  next section).
+- **Switching machines → neither: `ae49-task-close-day`.**
+
+## Doc mode — write a handoff document (only when asked)
 
 Write a handoff document summarising the current conversation so a fresh agent can continue the work.
 
@@ -23,9 +34,9 @@ Do not duplicate content already captured in other artifacts (PRDs, plans, ADRs,
 
 Redact any sensitive information, such as API keys, passwords, or personally identifiable information.
 
-If the user passed arguments, treat them as a description of what the next session will focus on and tailor the doc accordingly.
+If the user passed arguments after `doc`, treat them as a description of what the next session will focus on and tailor the doc accordingly.
 
-## Session-close mode (same machine, new session) — the FAST swap
+## Session-close mode (same machine, new session) — the DEFAULT, the FAST swap
 
 When the intent is "close this session and continue in a fresh one ON THIS MACHINE" (the user
 says "ปิด session", "เปิด session ใหม่", "close this session", accepts the router's fresh-session
