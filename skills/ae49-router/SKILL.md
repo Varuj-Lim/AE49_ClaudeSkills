@@ -194,7 +194,8 @@ Board rows this lane adds on top of the shared legend:
 - **`✅ Landed`** — show the newest 2–3 from `done/` so recent work stays visible.
 - **Register rows** — one row per `_open-items.md` entry, `⏸️` + what it waits on (your ruling,
   your hands, data). **A board may say "nothing is open" only when BOTH the plans and the register
-  are empty.**
+  are empty.** Exception (owner Q211 a, 2026-10-27): rows waiting ONLY on an external contributor's
+  next PR go on one footnote line under the table, per `ae49-ref-report-format`.
 
 ## The open-items register — nothing discussed may live only in chat or memory prose
 

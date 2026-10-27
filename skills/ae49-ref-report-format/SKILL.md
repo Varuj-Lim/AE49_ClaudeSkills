@@ -115,6 +115,14 @@ Which renders as:
   and registered (an audit leftover, a gate observation) that is not in the owner's ordered scope is waiting for the
   owner's go-ahead — its *Waiting On* reads `Your go-ahead (Q<n>)`, it sits in group 4, and the question that asks for
   the go-ahead is put in the same message. "⏸️ Registered · —" hides that the ball is the owner's.
+  **Rows that wait ONLY on an external contributor's next PR leave the table for ONE line under it (owner Q211 a,
+  2026-10-27):** a register row whose sole blocker is "<contributor>'s next PR" (nobody here can move it until that PR
+  arrives) is not a table row; right under the table (before ⏱️) one line lists them —
+  `⏸️ รอ PR ของ <contributor>: OI-n · OI-m · …` — so they stay visible without filling the board. The rows stay in the
+  register unchanged; the moment that contributor's PR arrives they go back on the table as ordinary rows. This is the
+  only exception to "every register row is a table row" and to the never-collapse rule. Why: the owner asked for the
+  three DLA rows that could only move with K. TARN's next PR to come off the board (*"เอาเรื่องนี้ออกจากตารางไปก่อนจนกว่า
+  PR จะมาได้ไหม"*), and chose the one-line footnote over hiding them, because hiding is how items vanished on 2026-09-30.
   **The `Unpushed on <deploy branch>` row carries its line count (owner 2026-10-21):** its Stage cell reads
   `📦 N commits · +A / −D lines (code +a / −d)` — from `git diff --shortstat origin/<b>..<b>` for the whole range and
   the same over the code paths (app, components, lib, functions, worker, rules, indexes, apphosting) — re-run fresh for
