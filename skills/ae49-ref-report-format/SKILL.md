@@ -121,7 +121,7 @@ Which renders as:
   `⏸️ รอ PR ของ <contributor>: OI-n · OI-m · …` — so they stay visible without filling the board. The rows stay in the
   register unchanged; the moment that contributor's PR arrives they go back on the table as ordinary rows. This is the
   only exception to "every register row is a table row" and to the never-collapse rule. Why: the owner asked for the
-  three DLA rows that could only move with K. TARN's next PR to come off the board (*"เอาเรื่องนี้ออกจากตารางไปก่อนจนกว่า
+  three rows that could only move with an external contributor's next PR to come off the board (*"เอาเรื่องนี้ออกจากตารางไปก่อนจนกว่า
   PR จะมาได้ไหม"*), and chose the one-line footnote over hiding them, because hiding is how items vanished on 2026-09-30.
   **The `Unpushed on <deploy branch>` row carries its line count (owner 2026-10-21):** its Stage cell reads
   `📦 N commits · +A / −D lines (code +a / −d)` — from `git diff --shortstat origin/<b>..<b>` for the whole range and
