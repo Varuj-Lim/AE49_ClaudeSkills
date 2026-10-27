@@ -8,7 +8,7 @@ lines come out as the wrong style (a plain paragraph silently renders as a
 
 **That component's NAME differs per hub — grep the patch-notes page, never assume.**
 AE49_Hub has `components/ui/StructuredText.tsx` (shared with the draftsman assignment
-guide); **NuriHub has `components/support/PatchNoteBody.tsx`** and no `StructuredText` at
+guide); **NuriHub has `components/support/PatchNoteDetails.tsx`** (named `PatchNoteBody.tsx` until 2026-10-27) and no `StructuredText` at
 all. This line used to name `StructuredText` as if it were universal, which sent a 2026-09-22
 check grepping for a component that does not exist in NuriHub. The grammar below is the same
 in both — NuriHub's is a faithful port, verified line by line that day.
