@@ -98,6 +98,13 @@ line of its calculation spec was derived from. Both would have been unrecoverabl
   home folder and fail. Leave the `cd` off only for the NEXT command of a run the owner is doing right now in
   the same window. Why: the 2026-10-22 backup-sweep command was handed over as `cd …; node …`, and the owner
   asked for that to be the rule ("ผมเองเปิดใหม่ทุกครั้งไม่ได้เปิดคาไว้ จดเรื่องนี้เข้ากติกา").
+  **Addendum 2026-10-28 (owner Q2 c):** a command WRITTEN INTO A FILE — CLAUDE.md, a README, a plan, a skill, a
+  runbook — starts `cd $env:USERPROFILE\Documents\<project>;`, never one machine's literal path, because the
+  user folder differs per machine (home and office have different user-folder names) and PowerShell fills in
+  the right one; a copied line then works everywhere. In CHAT, Main still writes the LIVE machine's absolute
+  path as above. Provenance lines ("copied from `…\Downloads\x`") are not commands and stay as they are. Why: on
+  2026-10-27 every deploy line in one hub's CLAUDE.md carried the home path and failed at the `cd` on the office
+  PC; the owner asked for the fix at user level "จะได้ทำได้ทุก Project".
 - **All times are THAI TIME (rule 2026-08-26, applies in every project).** I work in
   Thailand and speak in Thailand time — Asia/Bangkok, UTC+7, no DST. Interpret every
   time I mention as ICT, and present every time you mention to me in ICT (no "UTC"
