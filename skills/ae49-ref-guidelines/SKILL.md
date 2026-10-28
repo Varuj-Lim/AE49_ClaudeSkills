@@ -133,6 +133,21 @@ Granularity: ONE commit per completed change. NOT after every single file edit. 
   path is an old name still living in the code. A bookmark to it shows the app's not-found page.
 - When talking to the owner, writing a gate item or a report, use the SCREEN name; a code name goes in
   brackets only when the code must be pointed at.
+- **Three layers, three rules (owner 2026-10-28: *"เขียนเพิ่มลงในกติกาข้อ 10 เลย"*).**
+  1. **Code names** always follow the screen (the bullets above).
+  2. **Stored names** (collections, document keys, stored enum values, Storage paths) migrate only when the stored
+     name is WRONG or CONFUSING in meaning — e.g. `productId` holding a variant id — never merely because a screen
+     word changed. A stored name that differs from the screen only in wording stays, and is recorded BY NAME as an
+     exception in the project's code-name audit topic (e.g. NuriHub topic 35 "Kept stored"); the code that mirrors
+     it may keep the stored word.
+  3. **Screen labels** are chosen for the user first. Never bend a label to match a variable or a stored name (a
+     staff-facing "Body") unless the owner rules it for that label; when label and stored name differ, the code
+     follows the label and the stored name is the recorded exception.
+  Common practice: "Ubiquitous Language" (Domain-Driven Design) aligns code with the words users use, while most
+  teams keep stored identifiers stable across label changes, because a data migration costs more risk than the
+  readability it buys. Why: on 2026-10-28 the owner ruled a full stored-name migration (OQ1 c) and a label change
+  to match variables (QB a) in one morning, then asked whether others work this way; Main's answer — code always,
+  data only for meaning, labels user-first — was adopted. Rulings already given stand; this governs new ones.
 - Why: on 2026-10-21 Main called the Detail Design picker "Footing" because its file is `FootingSetOpenModal`
   (a name from before the page merged into Foundation Design), and the owner could not tell which screen was
   meant (*"ไม่อยากให้เวลามาอ่านแล้วงงเองหน่ะ"*). Each project's audit carries a check that lists code names that
