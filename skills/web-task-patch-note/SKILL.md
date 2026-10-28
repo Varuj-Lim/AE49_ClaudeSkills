@@ -109,7 +109,7 @@ Firebase service-account key from `.env.local` — it must exist.
    ```
    node <script> --draft scripts/patch-note-draft.json --commit <hash>
    ```
-   Check the preview's `commitHash` line (labelled `Git No.` or `Commit Hash` by hub) yourself, and read the body
+   Check the preview's `commitHash` line (labelled `Commit Hash` in every hub) yourself, and read the body
    against the rules in the body-format reference before going on. **Do NOT ask
    the owner to approve the draft** (ruling 2026-09-10, mirroring the ticket
    write-back): a second approval of wording the owner will read in the app

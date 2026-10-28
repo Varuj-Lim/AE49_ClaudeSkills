@@ -18,6 +18,7 @@ an audit of the pages that do not follow it yet and a handoff so Nuri changes to
 | Create | `/<list>/add` | Nested under its list. |
 | Read ONE record | `/<list>/[id]/view` | ALWAYS `/view` — also when the page holds actions, a thread or an edit form inline. |
 | Edit ONE record | `/<list>/[id]/edit` | Only when editing is a page of its own. |
+| A screen of ONE record that is neither its read nor its edit page | `/<list>/[id]/<name>` | e.g. `/projects/[id]/part-schedule` (owner Q311 a). Kebab-case name, linked from the record's `/view`. |
 | Bare id | `/<list>/[id]` | **No `page.tsx`.** It 404s. |
 
 - **Nothing redirects** (the hubs' no-redirect ruling): no `next.config` redirect or rewrite, no
@@ -27,6 +28,8 @@ an audit of the pages that do not follow it yet and a handoff so Nuri changes to
   facts say so). A dynamic segment that is NOT a record — a year, a tab slug, a set name — is not a
   record page and this rule does not apply to it.
 - **Words:** `view`, `edit`, `add` — never `detail`, `show`, `details`, `new`, `create`.
+- **`/view` is required only when a read page exists** (owner Q310 a, 2026-10-28). A record that opens straight into its
+  edit page from the list (no read-only page) keeps `/<list>/[id]/edit` alone — no read page is added just to satisfy the rule.
 - **A popup is not a route.** A record shown only in a popup from its list needs no route. Once it
   becomes a page of its own (a thread, a share link, a bell that opens it), it takes `/[id]/view`.
 
