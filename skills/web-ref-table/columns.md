@@ -240,6 +240,31 @@ may survive only inside identifiers and stored field names until the project's r
 Sentences are left alone (owner: *"คำพูดไม่ต้องแก้ แก้แต่ในตารางพอ"*) — a status line, tooltip, hint or validation
 message may keep `ประมาณ 0.15 บาท`.
 
+**Accounting money — every figure carries `฿`, a negative is `(฿1,234.56)` in red (owner MQ1 a / MQ2 a, 2026-10-28,
+CCP_Hub: *"ช่วยเขียนเรื่องนี้ลงกติกา User Skill ด้วยว่าถ้าเป็นเรื่องเงินทางบัญชีให้ทำแบบนี้"*).** An ACCOUNTING figure is one
+in a statement of account — a profit & loss, balance sheet, ledger, VAT or tax-estimate block, a budget against actual.
+There:
+- **Every money figure shows `฿`** — month cells, totals, subtotals, computed rows alike. No "unit: ฿" note above the
+  table instead of the symbol: a statement is not exempt from Q133 b. Percent figures (`%` of sales, a tax rate) are not
+  money and carry no symbol.
+- **A negative is bracketed and red: `(฿1,234.56)`** — the symbol INSIDE the brackets, the accounting convention — never
+  `-฿1,234.56` and never `฿(1,234.56)`. The same form on screen, on paper and in the exported file.
+- Money OUTSIDE a statement (a price, a cost estimate in an operational table) keeps the project's own negative form,
+  named in its facts skill (AE49_Hub: `-฿`, owner Q115).
+
+**The Excel money format — the one rule for every export (owner MQ3 a, 2026-10-28, extending Q132 b):**
+- A money column is a NUMBER cell — never text — whose number format carries the symbol: accounting money
+  **`"฿"#,##0.00;[Red]("฿"#,##0.00)`** (positive `฿1,234.56`, negative red `(฿1,234.56)`, matching the screen); other
+  money **`"฿"#,##0.00`** unless the project's facts name another negative section. `SUM` over the column must work.
+- The format string is defined ONCE in shared code (e.g. `MONEY_XLSX_FORMAT`) beside the screen formatter, never typed
+  per column. A percent column in the same sheet keeps its own symbol-free format.
+- A blank amount stays an EMPTY cell, never `0`. The column is wide enough that Excel shows no `####` for the widest
+  figure WITH the symbol.
+- **Every reader takes the symbol back:** a file importer reads a number cell as its number whatever its format, and a
+  TEXT cell or a pasted value of `฿1,234.56`, `(฿1,234.56)` or `-฿1,234.56` as that number — Excel copies a cell's
+  DISPLAYED text to the clipboard, so a column copied from the app's own download arrives with `฿`. A reader that
+  turns its own app's figures red is a 🔴 finding.
+
 ## Rules that keep it honest
 
 - One scale per project, defined once in shared code, imported everywhere — never re-typed.
