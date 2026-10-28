@@ -14,12 +14,15 @@ description: The ONE cross-hub rule for adding a NEW value to a dropdown (AE49_H
 1. **Where a user may add a value that is not in the list yet, the dropdown offers it in place.** Typing in the
    picker's search box a text that matches no option label exactly (trimmed, case-insensitive) shows ONE extra row:
    `Use "<typed>" as a new value`. Click or Enter commits it. The row disappears as soon as the text matches an option.
-2. **Two flavours, one look** — chosen by where the value lives afterwards:
+2. **Three flavours, one look** — chosen by where the value lives afterwards and what it needs:
    - **Free value** (nothing else needs to know it exists): the typed text is stored on the record; the option list is
      the distinct values already used.
-   - **Catalog value** (it must exist in a shared list first — a settings array, a type record): the same row opens that
-     catalog's create popup pre-filled with the typed text, and on success selects the new entry. The row may say what it
-     creates (`Create "<typed>" as a new type`).
+   - **Catalog value, name only** (it must live in a shared list — e.g. a settings array — but the entry IS just its
+     name): clicking the row writes the entry to the catalog and selects it at once — NO popup (owner 2026-10-28 Q16 a:
+     a popup that only re-confirms the typed text adds a step and catches nothing).
+   - **Catalog value with more fields** (the new entry needs more than its name — e.g. a type with a code prefix and a
+     counter): the same row opens that catalog's create popup pre-filled with the typed text, and on success selects the
+     new entry. The row may say what it creates (`Create "<typed>" as a new type`).
 3. **Not allowed for adding a value:** a separate "+ Add" / "New …" button next to the field, a free-text input with a
    suggestion list or `<datalist>`, an "Other — please specify" second field, or sending the user to a settings page and
    back. (A catalog may still have its own management page; the FORM does not send people there to add one value.)
