@@ -13,7 +13,9 @@ description: The ONE cross-hub rule for adding a NEW value to a dropdown (AE49_H
 
 1. **Where a user may add a value that is not in the list yet, the dropdown offers it in place.** Typing in the
    picker's search box a text that matches no option label exactly (trimmed, case-insensitive) shows ONE extra row:
-   `Use "<typed>" as a new value`. Click or Enter commits it. The row disappears as soon as the text matches an option.
+   `Use "<typed>" as a new value`. Clicking it (or arrowing onto it and pressing Enter) commits it; a plain Enter on
+   the query picks the FIRST matching option, so a near-duplicate is never created by accident (owner 2026-10-28 Q24 a).
+   The row disappears as soon as the text matches an option exactly.
 2. **Three flavours, one look** — chosen by where the value lives afterwards and what it needs:
    - **Free value** (nothing else needs to know it exists): the typed text is stored on the record; the option list is
      the distinct values already used.
