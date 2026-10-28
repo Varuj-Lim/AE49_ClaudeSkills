@@ -57,4 +57,4 @@ an audit of the pages that do not follow it yet and a handoff so Nuri changes to
 | Hub | Facts skill |
 |---|---|
 | AE49_Hub | `ae49Hub-ref-nav-placement` (nav levels, segment names, migration history) |
-| Nuri_Hub | its own `nurihub-ref-nav-placement` (or equivalent) — added by the Nuri handoff |
+| Nuri_Hub | `nurihub-ref-routing` (URL map, record-page table) + `nurihub-ref-nav-placement` (pointer bullet); audit topic `02-routing`; moved by plan `routes-view` 2026-10-28 — read pages `/view`, edit-only forms `/edit`, the public tracking page `/track/[token]/view`; stored bell links migrated by `scripts/dev/migrate-record-links-view.cjs` |
