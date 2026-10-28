@@ -31,7 +31,9 @@ the table. One or two items may stay inline in a sentence — three or more alwa
 ### When to send a board — four moments only (owner Q84 a, 2026-10-21)
 
 A message with the status board goes to the owner ONLY at:
-1. **Something waits on the owner** — a question, a button to press, a command to run, a gate to test.
+1. **Something waits on the owner** — a question, a button to press, a command to run, a gate to test — including a
+   NEW item found mid-run that needs the owner: it is said in the next message, ONCE (owner Q32 a, 2026-10-28;
+   `ae49-router` §"The open-items register"; not in autopilot `decide`).
 2. **A landing or a plan closed** — work landed on the deploy branch, a plan moved to `done/`, a push done.
 3. **A problem** — a gate item FAILED, an audit found a BLOCKER / MAJOR, a build or a production step failed.
 4. **The owner asked** — `status:`, "รายงานหน่อย", any question about progress.
@@ -171,6 +173,9 @@ Which renders as:
   - One or two lines, in the conversation's language (the table itself stays English).
   - Concrete verbs the user can act on ("test the 7 gate items, then say ผ่านหมด"), never a
     restatement of a Stage ("gate is open").
+  - **Never "ไม่มีอะไรรอคุณ" while a row waits on the owner (owner Q32 a, 2026-10-28).** If any row's *Waiting On*
+    is the owner's (an open question, a go-ahead, a command), the 👤 line names it ("รอคุณตอบ Q32") — even when the
+    question was asked in an earlier message and is not repeated in this one.
   - **Today only (owner 2026-10-21):** it names only what the owner can do TODAY (the Thai calendar day). A
     step that cannot happen until a later day — tomorrow's Billing read, a check after a reset — stays as its
     row on the board and is NOT mentioned in the 👤 line. Nothing for today → "ไม่มีอะไรรอคุณวันนี้".

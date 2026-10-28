@@ -199,7 +199,8 @@ and 🤖 lines (owner 2026-10-22: the decide → ask report had the decisions an
    design detail, a width-vs-scroll trade of the D118 kind ("wider but it scrolls" vs "narrower but it
    clips").
    - **`ask` (default):** Main ASKS the owner in chat in the `ae49-ref-question-format` shape, logs
-     `ASKED Q<n>` with the options and its recommendation, gives it a register row when it blocks a
+     `ASKED Q<n>` with the options and its recommendation — in the next message, the moment the fork is found, ONCE
+     (owner Q32 a, 2026-10-28, `ae49-router` §"The open-items register") — gives it a register row when it blocks a
      batch, and keeps working on everything that does not depend on the answer. It does NOT pick an
      option. An answer arriving later is logged as `ruling:` and applied.
    - **`decide`:** Main chooses the option the relevant canon recommends, or the safest

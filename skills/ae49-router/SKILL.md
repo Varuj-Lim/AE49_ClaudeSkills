@@ -217,6 +217,19 @@ cleared". The fix is ONE register file in the project, next to the plans:
   an owner step still owed, a ticket put on hold. Columns: `ID` (OI-n, never reused) · item ·
   since (date) · waiting on (owner ruling / owner's hands / data / external) · source (plan, spec
   or memory line) · next.
+- **Tell the owner in the SAME moment — the register is never the only place (owner Q32 a,
+  2026-10-28; Autopilot `ask` and ordinary attended work, NOT `decide`).** When new work turns up
+  mid-run — a gate observation, an audit leftover or QUESTION, a builder's question, a go-ahead Main
+  needs, a ticket — the very next message to the owner says so: an item that needs a ruling is ASKED
+  there and then in the full `ae49-ref-question-format` shape; an item Main may do inside the scope
+  gets one line ("เจอ X — ทำต่อใน scope"). **Said ONCE:** later messages do not re-ask it — its board
+  row reads `👤 Your answer (Q<n>)` and the 👤 line names it ("รอคุณตอบ Q<n>"). Never a register row
+  whose Next says "ask later" / "ask in the new session", and never a 👤 line saying "ไม่มีอะไรรอคุณ"
+  while any row on the board waits on the owner. In `decide` the old rule stands: log + register
+  only, asked when the owner is back. Why: on 2026-10-28 OI-223 (15:47), OI-224 and OI-225 (at the
+  swap) were only written into the register and reached the owner 30–60 minutes later while the owner
+  sat watching (*"คุณมักไม่มาถามผมทันที มักจะเขียน Register จดไว้เฉยๆ"*), and a 👤 line said nothing
+  was waiting while the table held owner rows.
 - **A row leaves only two ways:** it becomes a plan (the row says "→ plan <slug>" and is deleted
   in the same commit that commits the plan), or the owner drops it (the row is deleted with the
   owner's words in the commit message). Main never deletes a row because it "seems stale".
