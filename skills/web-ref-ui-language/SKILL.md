@@ -33,6 +33,8 @@ same breath removed the last module-wide English exemption (the plot-order scree
   beside it. If a control needs Thai to be understood, the Thai goes in a tooltip or a
   caption NEXT to it, never on it. The same holds for chart axes: the Thai goes in the
   tooltip / footnote, never on the axis label.
+  **One ruled exception:** the typo-guard warning run on a picker's new-value row (` — คล้ายกับ "…" ที่มีอยู่แล้ว`,
+  `web-ref-dropdown` rule 6, owner 2026-10-28 Q25 a) is Thai by ruling — an audit does not flag it.
 - **Caption vs label (ruling 2026-08-21):** the SAME fact renders Thai in a caption
   position (a small annotation under a value — `กรอกโดย …`) and English in a label
   position (a field name among other English labels — `Entered by`). One test: is it a

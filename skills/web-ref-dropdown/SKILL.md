@@ -35,8 +35,9 @@ description: The ONE cross-hub rule for adding a NEW value to a dropdown (AE49_H
    the save validates it like any other option.
 6. **Guard against typos before they are saved (owner 2026-10-28 Q25 a).** When the typed text is CLOSE to an existing
    option — equal after trimming / collapsing spaces / ignoring case, or within 1–2 characters (edit distance) — the
-   picker lifts that option to the top and the new-value row warns in Thai that it looks like it (e.g. `Use "Pylon " as
-   a new value — คล้ายกับ "PYLON" ที่มีอยู่แล้ว`). The row still works; the user decides. One shared component change,
+   picker lifts that option to the top and the new-value row warns in Thai that it looks like it (e.g. `Use "Dlel" as a
+   new value — คล้ายกับ "Dell" ที่มีอยู่แล้ว`; a text equal after trim + case-fold is an EXACT match and shows no
+   new-value row at all). The row still works; the user decides. One shared component change,
    so every dropdown gets it.
 7. **Every catalog that grows this way has a place to fix it (owner 2026-10-28 Q25 a).** A catalog value (rule 2) must be
    renamable and deletable-when-unused by its managers (RD in AE49) from a manage screen or popup; a rename either
