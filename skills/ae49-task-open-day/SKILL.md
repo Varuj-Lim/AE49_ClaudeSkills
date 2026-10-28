@@ -78,23 +78,31 @@ Mirror of `ae49-task-close-day`. Everything arrives through git.
    the gate needs seeded data, re-seed on THIS machine (the project's test-data
    skill), and launch the dev/emulator with this machine's launcher.
 
-7b. **Ask about autopilot on EVERY open-day — never switch on silently** (owner Q186 a,
-   2026-10-22, widening owner Q4 a of 2026-10-19). Whenever THIS machine's state file
-   `~/.claude/autopilot/<project>/state.json` is missing or `"on": false` — whatever the
-   manifest says — the open-day report carries ONE question (`ae49-ref-question-format`):
-   **(a) switch on `ask` with the scope Main proposes** — the board's rows that Main can move
-   without the owner (built-not-gated, approved-not-built, register rows already approved),
-   listed by row number; **(b) switch on with a scope the owner names**; **(c) stay Off.**
-   Recommend (a) when the proposed scope is non-empty. The owner's answer is the live scope:
-   "a" → `ae49-mode-autopilot on ask <the proposed rows>`; never copy an old state over and
-   never switch on without the answer (the scope must come from the owner live). When the state
-   file is already ON (a same-machine resume), skip the question and run its `tick`.
-   Why: since 2026-10-22 the close-day switches the mode OFF first (`ae49-task-close-day`,
-   "First of all"), so a manifest always says `Autopilot: OFF`; the old rule only asked when a
-   manifest said ON, so it went quiet and the owner had to switch on by hand at 17:30 the same
-   day ("ยังไม่ได้ระบุหรอว่าให้เปิด Autopilot (Ask) ทุกครั้งที่ เปิดวัน"). Before that, on
-   2026-10-19 an open-day read "Autopilot: ON (ask)", found no state file and said nothing; the
-   owner had to ask "ทำไมปิด" mid-gate.
+7b. **Switch autopilot ON (`ask`) on EVERY open-day, with EVERY open row in scope — no question
+   first** (owner AQ1 b, 2026-10-28, replacing owner Q186 a of 2026-10-22, which asked first).
+   Whenever THIS machine's state file `~/.claude/autopilot/<project>/state.json` is missing or
+   `"on": false` — whatever the manifest says — Main gathers the board first (step 8's register read
+   and backstop sweep), then runs `ae49-mode-autopilot on ask <scope>` where the scope is **every row
+   of that board**: each plan / batch in flight AND every row of `docs/plans/_open-items.md`, held rows
+   and rows waiting on an owner ruling included. The owner chose ALL rows over Main's narrower
+   proposal ("only the rows Main can move") knowing what it means:
+   - **an undecided row draws a question** (`ae49-ref-question-format`) in the open-day report or the
+     next tick; **a held row** ("wait until X") draws one question — has X happened? — and nothing is
+     done on it until the owner says so;
+   - **the NEVER list still decides what Main may DO with a row** (`ae49-mode-autopilot`): a backup
+     sweep, a migration `--apply`, a sibling handoff, a push, an owner's-hands step stays the owner's —
+     being in scope never makes it Main's;
+   - **`ask` only, never `decide`**; the state file's `rulings` start fresh with this open-day's line —
+     never copy an old state's scope or rulings over;
+   - the open-day report says the mode went ON, lists the scope by row number, and how to narrow it
+     ("ตัด #3") or switch off ("ปิด autopilot"); the 🤖 line then reads `On (ask)`.
+   When the state file is already ON (a same-machine resume), skip the switch-on and run its `tick`.
+   Why: the owner asked for it after answering the same morning question twice in a row
+   (*"อยากให้เมื่อ /ae49-task-open-day ทุกครั้งเข้าโหมด On (Ask) โดยเอางานที่ค้างอื่นทั้งหมดเข้า Scope"*).
+   History: since 2026-10-22 the close-day switches the mode OFF first (`ae49-task-close-day`,
+   "First of all"), so a manifest always says `Autopilot: OFF`; on 2026-10-19 and 2026-10-22 an
+   open-day stayed silent about it and the owner had to switch on by hand ("ทำไมปิด", "ยังไม่ได้ระบุหรอว่า
+   ให้เปิด Autopilot (Ask) ทุกครั้งที่ เปิดวัน"); Q186 a then made it a question, AQ1 b makes it automatic.
 
 8. **Update memory + report.** Note "resumed on <machine> <date>" in the
    in-flight file (the commit can ride the next landing). Report the board per
@@ -108,7 +116,7 @@ Mirror of `ae49-task-close-day`. Everything arrives through git.
    with the `🤖 Autopilot mode: On (ask|decide) / Off` line of
    `ae49-ref-report-format` (owner 2026-10-07 — it replaced the open-day row of
    Q11 a the same day). The CHECK itself stays in `~/.claude/CLAUDE.md`; the
-   cross-machine question is step 7b.
+   automatic switch-on is step 7b.
 
 ## Notes
 
