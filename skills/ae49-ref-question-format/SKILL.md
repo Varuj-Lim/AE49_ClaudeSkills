@@ -87,7 +87,11 @@ option spelled out with its consequence, and a recommendation with the reason. T
 11. **Each option's four facts stand on their OWN lines (owner rule 2026-10-06).** Under every option, ทำอย่างไร / ข้อดี / ข้อเสีย / ต้นทุน are four separate sub-bullets — never one run-on line joined with " · ". The owner reads the options by scanning down the same four slots in each; a run-on line hides which phrase is the cost and which the drawback ("Create new format rule … you have to create new line for ข้อดี ข้อเสีย ต้นทุน separate for each choice"). A fact that genuinely does not apply is written "—", not dropped, so the four slots stay aligned across options.
 12. **Numbering:** `Q<n>` within one grill; a decode's questions keep the spec's IDs (`DQ1` / `Q6`);
     an audit's open question relayed to the owner keeps its audit ID. Never reuse a number in one
-    grill. The log line records the ruling as `ruling: owner Q<n> (a) — <one line>`.
+    grill.
+    **The running counter restarts at Q1 when the owner says so (owner 2026-10-28: *"เริ่มรันเลข Q จาก 1 ใหม่ได้แล้วนะ
+    300 กว่าแล้วเยอะมากแล้ว"*) — no push is needed.** Chat keeps the bare `Q<n>`; durable records (log `ruling:` lines,
+    plan Decisions, the register) write the date before it — `2026-10-28 Q1` — so a reset number never reads as an older
+    ruling of the same number. The log line records the ruling as `ruling: owner Q<n> (a) — <one line>`.
 13. **The board's 👤 line still names the pending question** ("รอคุณ: Q5 a/b") — that line is a
     pointer, never the question itself; the question lives in its own block above.
 
