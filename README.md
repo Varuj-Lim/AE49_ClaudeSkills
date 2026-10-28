@@ -109,6 +109,7 @@ General workflow tools, not code-specific.
 | **[ae49-mode-caveman](./skills/ae49-mode-caveman/SKILL.md)** | Ultra-compressed communication mode. Cuts token usage ~75% by dropping filler while keeping full technical accuracy. |
 | **[ae49-task-management-talk](./skills/ae49-task-management-talk/SKILL.md)** | Rewrite engineer-to-engineer content for leadership and shape it for the target channel (JIRA, Slack, standup, email, meeting talking-points). |
 | **[ae49-task-handoff](./skills/ae49-task-handoff/SKILL.md)** | Compact the current conversation into a handoff document so another agent can pick up the work. |
+| **[ae49-task-session](./skills/ae49-task-session/SKILL.md)** | Session ceremonies: `open` (start the day / a new session), `swap` (same-machine session change), `close` (park work to switch machines). |
 | **[ae49-task-teach](./skills/ae49-task-teach/SKILL.md)** | Teach the user a new skill or concept, using the current directory as a stateful teaching workspace. |
 | **[ae49-task-write-a-skill](./skills/ae49-task-write-a-skill/SKILL.md)** | Create new agent skills with proper structure, progressive disclosure, and bundled resources. |
 | **[ae49-task-audit-memory](./skills/ae49-task-audit-memory/SKILL.md)** | Non-destructive review of the project's auto-memory files: flags stale, duplicate, or misfiled entries plus gaps, and reports keep / update / delete / create suggestions without changing anything until you approve. |

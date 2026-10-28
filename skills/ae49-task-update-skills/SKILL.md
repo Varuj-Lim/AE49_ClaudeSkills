@@ -98,6 +98,6 @@ silently leaving the agents stale.
   running script over itself is unsafe). To update the tool: edit + push, then copy
   `skills/ae49-task-update-skills/` into `~/.claude/skills/` by hand (or re-bootstrap
   from a fresh clone). It shows as `self (bootstrapper, never synced)` in the preview.
-  **Diff it by hand at every open-day** (`ae49-task-open-day` step 2): the 2026-08-24
+  **Diff it by hand at every open-day** (`ae49-task-session` open, step 2): the 2026-08-24
   ruling above sat in the repo for three weeks while one machine's copy still said
   "ask first" — which is exactly the drift the sync cannot see.

@@ -1,11 +1,12 @@
----
-name: ae49-task-open-day
-description: Morning resume ceremony on any machine after ae49-task-close-day parked work on another — fast-forwards main from the project's backup branch, syncs skills, verifies the 🎒 hand-carry list arrived (e.g. an updated .env.local), restores the parked feature tree (uncommitted) from its park/ transport branch, re-opens the manual-test gate, and reports the board. Use when the user says "เปิดวัน", "มาทำต่อ", "ทำต่อจากที่ทำงาน", "ทำต่อจากที่บ้าน", "resume where I left off", "open the day", starts a session right after switching machines, or invokes /ae49-task-open-day.
----
+# open — start the day / a fresh session on this machine
 
-# Open day — resume parked work on this machine
+Formerly `ae49-task-open-day` (moved whole 2026-10-28, step numbers kept). Mirror of [close.md](close.md);
+also what a NEW session runs after a [swap](swap.md). Everything arrives through git.
 
-Mirror of `ae49-task-close-day`. Everything arrives through git.
+**Same-machine fast path (owner 2026-10-28).** When the in-flight memory's last entry is a `swap` (or a
+`close`) written on THIS machine and names no park branch and no 🎒 item, steps 4 and 5 have nothing to do —
+say so in one line and skip them. Steps 1–3 and 6–8 still run: the fetch is cheap and proves nothing moved,
+and an Autopilot left ON by a swap is ticked in 7b.
 
 **Iron rules**
 
@@ -22,7 +23,7 @@ Mirror of `ae49-task-close-day`. Everything arrives through git.
 
    ```
    git fetch origin
-   git status --short                  # expect clean — close-day left it clean
+   git status --short                  # expect clean — close / swap left it clean
    git merge --ff-only origin/main
    git merge --ff-only origin/backup   # backup normally leads main between pushes
    ```
@@ -59,7 +60,7 @@ Mirror of `ae49-task-close-day`. Everything arrives through git.
    ```
    git cherry-pick -n origin/park/<name>
    git restore --staged .
-   git status --short                  # should mirror close-day's survey
+   git status --short                  # should mirror close's survey
    ```
 
    A conflict means main moved underneath the park (something landed after the
@@ -99,7 +100,7 @@ Mirror of `ae49-task-close-day`. Everything arrives through git.
    When the state file is already ON (a same-machine resume), skip the switch-on and run its `tick`.
    Why: the owner asked for it after answering the same morning question twice in a row
    (*"อยากให้เมื่อ /ae49-task-open-day ทุกครั้งเข้าโหมด On (Ask) โดยเอางานที่ค้างอื่นทั้งหมดเข้า Scope"*).
-   History: since 2026-10-22 the close-day switches the mode OFF first (`ae49-task-close-day`,
+   History: since 2026-10-22 the close-day switches the mode OFF first ([close.md](close.md),
    "First of all"), so a manifest always says `Autopilot: OFF`; on 2026-10-19 and 2026-10-22 an
    open-day stayed silent about it and the owner had to switch on by hand ("ทำไมปิด", "ยังไม่ได้ระบุหรอว่า
    ให้เปิด Autopilot (Ask) ทุกครั้งที่ เปิดวัน"); Q186 a then made it a question, AQ1 b makes it automatic.

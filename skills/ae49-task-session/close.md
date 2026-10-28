@@ -1,11 +1,10 @@
----
-name: ae49-task-close-day
-description: End-of-day parking ceremony so every piece of in-flight work travels via git and a session on ANY machine can resume exactly here — parks uncommitted feature trees and queued worktree builds onto transport branches, runs the project's no-deploy backup push, rewrites the in-flight memory to point at branches instead of machine paths, and builds the 🎒 hand-carry list of gitignored machine-local files (e.g. an .env.local whose keys changed) that must travel outside git. Use when the user says "ปิดวัน", "ย้ายเครื่อง", "เอางานกลับบ้าน", "park my work", "close the day", is about to switch machines (office ↔ home), or invokes /ae49-task-close-day. Pairs with ae49-task-open-day on the other side.
----
+# close — end the day: park everything so work travels to another machine
 
-# Close day — park everything so work travels
+Formerly `ae49-task-close-day` (moved whole 2026-10-28, step numbers kept). Runs ONLY when the owner types
+`/ae49-task-session close` or says the day ends / the machine changes — never inferred (SKILL.md). For a
+same-machine session change use [swap.md](swap.md).
 
-After this ceremony the machine can be shut down, and `ae49-task-open-day` on any
+After this ceremony the machine can be shut down, and [open](open.md) on any
 other machine (or this same one) resumes exactly where things stood. Everything
 travels through git; nothing important stays only in a working tree, a worktree,
 or a Temp folder.
@@ -161,7 +160,7 @@ landed, and had to ask the owner whether to switch it off (*"เพิ่มก�
 
 ## Notes
 
-- Staying on the same machine tomorrow? The ceremony is harmless — open-day
-  restores identically wherever it runs.
-- Distinct from `ae49-task-handoff`, which compacts a CONVERSATION into a doc;
-  close-day moves WORK. Use both when the next session also needs deep context.
+- Staying on the same machine and only changing session? Use [swap](swap.md) — faster, keeps Autopilot.
+  If close ran anyway, open restores identically wherever it runs.
+- Distinct from `ae49-task-handoff` (doc), which writes a CONVERSATION into a document;
+  close moves WORK. Use both when the next session also needs deep context.

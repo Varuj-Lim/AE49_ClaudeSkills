@@ -117,7 +117,7 @@ or a password manager's secure note.
 
 ✅ Verify: `Test-Path .env.local` — and the real probe: `npm run build`
 completes. A missing or stale file fails with `auth/invalid-api-key`.
-(`/ae49-task-close-day`'s 🎒 carry list tells you whenever this file changed
+(`/ae49-task-session close`'s 🎒 carry list tells you whenever this file changed
 and must be re-carried.)
 
 ## 7. Firebase CLI (only for rules / functions deploys — not daily dev)
@@ -152,7 +152,7 @@ daily hook is installed here.
 
 - Opening Claude Code in the project fires the five session-init skills.
 - The daily drift check reports "in sync".
-- Saying **"เปิดวัน"** (`/ae49-task-open-day`) completes with a clean board.
+- Saying **"เปิดวัน"** (`/ae49-task-session`, which runs `open` in a new session) completes with a clean board.
 
 From then on, the machine handoff loop is just
-`/ae49-task-close-day` ⇄ `/ae49-task-open-day` (see [WORKFLOW.md](WORKFLOW.md)).
+`/ae49-task-session close` ⇄ `/ae49-task-session` (open); a same-machine session change is `/ae49-task-session swap` (see [WORKFLOW.md](WORKFLOW.md)).

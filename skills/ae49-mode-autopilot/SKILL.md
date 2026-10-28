@@ -1,6 +1,6 @@
 ---
 name: ae49-mode-autopilot
-description: An ON/OFF mode for the Main session of an ae49-workflow project (AE49_Hub, Nuri_Hub, future siblings) — while ON, Main keeps working unattended inside a scope the owner set at switch-on, dispatches and audits agents itself, runs every gate itself (scripts for logic and data, the built-in browser on the emulator for screens, screenshots as evidence), lands and backs up — but never pushes the deploy branch on its own (only on the owner's live "push" command), never deploys, never migrates, never deletes real data, never sends anything, never decides an unsettled design; every decision it takes for the owner goes into a dated log file the moment it is made. While OFF (the normal state) nothing here applies. Invoke on "/ae49-mode-autopilot on [ask|decide] <scope>|off|status|tick", "เปิดโหมด autopilot", "ผมจะไปนอน ทำต่อเองเลย", "รันต่อเองทั้งคืน", "ปิดโหมด", "ตั้งแต่เปิดโหมดคุณตัดสินอะไรไปบ้าง", at every open-day (it switches ON in `ask` with every open row in scope, owner AQ1 b 2026-10-28), and at every session start or compact when the state file says ON.
+description: An ON/OFF mode for the Main session of an ae49-workflow project (AE49_Hub, Nuri_Hub, siblings) — while ON, Main keeps working unattended inside a scope the owner set at switch-on, dispatches and audits agents itself, runs every gate itself (scripts, the emulator in the built-in browser, screenshots as evidence), lands and backs up — but never pushes the deploy branch on its own (only on the owner's live "push" command), never deploys, never migrates, never deletes real data, never sends anything, never decides an unsettled design; every decision it takes for the owner goes into a dated log file the moment it is made. While OFF (the normal state) nothing here applies. Invoke on "/ae49-mode-autopilot on [ask|decide] <scope>|off|status|tick", "เปิดโหมด autopilot", "ผมจะไปนอน ทำต่อเองเลย", "รันต่อเองทั้งคืน", "ปิดโหมด", "ตั้งแต่เปิดโหมดคุณตัดสินอะไรไปบ้าง", at every `ae49-task-session open` (it switches ON in `ask`, every open row in scope), and at every session start or compact when the state file says ON.
 ---
 
 # ae49-mode-autopilot — unattended Main, with a decision log
@@ -70,7 +70,7 @@ this list bends — not for a pre-authorisation given at switch-on, not for a re
 
 ## `on [ask|decide] <scope…>` — switching on (the owner is still awake: this is the one moment to ask)
 
-**The open-day switches it on by itself (owner AQ1 b, 2026-10-28).** `ae49-task-open-day` step 7b runs
+**The open-day switches it on by itself (owner AQ1 b, 2026-10-28).** `ae49-task-session` `open` step 7b runs
 `on ask` with EVERY row of the open-day board in scope (plans in flight + every `_open-items.md` row, held
 and undecided rows included) — the one switch-on that does not wait for the owner's live words, because
 the owner ruled it in advance for every open-day. It is always `ask`, never `decide`; the scope is

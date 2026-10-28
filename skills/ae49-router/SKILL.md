@@ -114,10 +114,11 @@ question with a "new session" button (or one Thai line where there is no box). T
 **replaces** this one — it is not a parallel session in the same checkout. Main never closes a
 session itself, never offers in the middle of a build / gate / landing, and offers again only at
 the next clean break. The owner may say "เปิดใหม่" at any time and Main prepares the memory at once.
-When the owner accepts, run `ae49-task-handoff` § "Session-close mode" (the FAST same-machine swap —
+When the owner accepts, run `ae49-task-session swap` (the FAST same-machine swap —
 commit, rewrite in-flight, keep Autopilot as it is, backup push, report — the USER then opens the
 new session; Main never starts it) — never
-`ae49-task-close-day`, which is for switching machines (owner HQ1 a, 2026-10-27).
+`ae49-task-session close`, which is for switching machines (owner HQ1 a, 2026-10-27; the three
+ceremonies became one skill 2026-10-28).
 
 **Long but no break yet → warn the owner so a break can happen (owner 2026-10-22: *"ถ้า Session ยาวแล้ว
 ให้เตือนผมหน่อย ผมจะได้หยุดสั่งงาน ไม่งั้นผมจะสั่งไปเรื่อยๆ จะไม่เจอจุดพัก"*).** A clean break never
@@ -219,7 +220,7 @@ cleared". The fix is ONE register file in the project, next to the plans:
 - **A row leaves only two ways:** it becomes a plan (the row says "→ plan <slug>" and is deleted
   in the same commit that commits the plan), or the owner drops it (the row is deleted with the
   owner's words in the commit message). Main never deletes a row because it "seems stale".
-- **The status board, the close-day and the open-day render every row.** None of them may say
+- **The status board and the session ceremonies (`ae49-task-session` open / close) render every row.** None of them may say
   "backlog cleared" / "nothing open" while a row exists.
 - Commit the register like a plan (docs commit, explicit pathspec) every time it changes.
 
