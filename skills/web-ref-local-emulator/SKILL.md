@@ -38,6 +38,15 @@ with a private `firebase emulators:exec` run, when ALL of these hold:
 - **Hands off the launchers** — it never runs `dev-emu.cmd` / `stop-emu.cmd` /
   `refresh-emu-data.cmd`, never kills a process on the shared port block, never touches
   `.dev-emulator-data`.
+- **Own temp folder (owner 2026-10-29 Q1 a, CCP_Hub OI-57)** — the run sets `TEMP` and `TMP` to a folder in the
+  agent's own scratchpad, and its config pins every port it opens (the Firestore websocket and the hub included).
+  Every Storage emulator on the machine otherwise shares `%TEMP%\firebase\storage`, and a private suite DELETES that
+  folder when it exits — the owner's running Storage emulator then dies on its next upload (`ENOENT …
+  firebase\storage\blobs\…` → "An unexpected error has occurred"), taking Auth and the hub with it. From Git Bash, put
+  the env lines and the `npx.cmd firebase-tools emulators:exec …` call in a small `.ps1` run with
+  `powershell -NoProfile -ExecutionPolicy Bypass -File` (an env prefix in front of `npx.cmd` breaks on the space in
+  `C:\Program Files`). Proved once on 2026-10-29: a private Firestore + Storage run with its own TEMP exited and the
+  owner's suite kept its PIDs and its `blobs` folder.
 Main still re-runs the probe in the hub, on the owner's suite, before the gate — the private run is
 early evidence, not the gate's. Why: on 2026-10-29 the tickets B2+B3 builder did exactly this to prove
 its new `replies` rule before merge; the owner ruled it fine (Q13 a) because nothing in rule 1's fear —
