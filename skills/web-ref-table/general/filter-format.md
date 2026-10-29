@@ -166,6 +166,24 @@ matching icon. A funnel on a button labelled `Date range` is a lie.
 - A filtered list has **two mandatory empty states**:
   `total === 0 ? "No X yet." : "No X match your search or filters."` One flat
   message for both is how a user concludes the records are gone.
+  - **The no-match state carries a Clear button** (owner 2026-10-29, Q88 a; AE49_Hub plan
+    `table-units-row-and-empty-clear` D5 / D6): under the sentence, a quiet-tier button reading
+    **`Clear search & filters`** that resets the search box AND every filter in ONE press — so, unlike the
+    toolbar's `Clear (N)` (R2, which may leave the search box to its own ×), it never leaves a search in place
+    that would keep the list empty. It is shown on EVERY no-match row, a search-only one included. The sentence
+    already says "your search or filters"; a button that left the search behind would make the user clear it
+    twice.
+  - **"No X yet" has NO button** — there is nothing to clear. Neither does a loading row, a "pick an employee
+    first" row, a tab that simply holds no rows, or a page empty only in the year / period its scope chose
+    (that reads "No X yet", and the scope is not the button's to reset).
+  - **What the button resets:** the search box, every filter, and an open filter panel (R2's "Clear also resets
+    the open panel"). Never a scope that decides what is READ (a year or period scope — a free in-memory reset must
+    not become a network read) and never a tab of a tab strip.
+  - **One shared component renders the row**, one `colSpan` cell (T4: no column moves), and it shows the button
+    only when the caller passes a clear handler — which a caller does ONLY in its no-match branch. The handler is
+    the page's existing `Clear (N)` reset plus the search reset, never a new reset path (a second path is how a
+    filter that lives in the URL ends up cleared on screen but not in the link). The sentence keeps living at the
+    call site; a sentence that ended "— press Clear to see everything" drops that tail, the button replaces it.
 
 ## Rules that keep it honest
 

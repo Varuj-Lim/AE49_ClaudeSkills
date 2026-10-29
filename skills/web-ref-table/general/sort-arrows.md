@@ -50,6 +50,9 @@ Until then the rule lived only by example (a project's list-page template shows 
 - **Only SORT arrows follow this canon.** Fold/expand chevrons, dropdown-trigger
   chevrons, and pagination arrows share the glyphs but not the meaning — they
   keep their own conventions and must never be flipped by this rule.
+- **Where the arrow sits is `web-ref-table/columns.md` T8** (tightened 2026-10-29, owner Q86 c · Q87 a): directly
+  after the head TEXT on its line — never after a unit (units have their own row, `columns.md` T10), never pushed
+  to the cell's other edge, never alone on a line. This file owns the arrow's DIRECTION, T8 its PLACE.
 - The neutral state stays visibly muted (readable as "sortable, not active").
 - A table that sorts on click must SHOW the indicator — silent sort state is a
   defect.

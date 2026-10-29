@@ -1,4 +1,4 @@
-**Scope (was web-ref-table-columns):** The shared table-column canon for every hub web project (AE49_Hub, Nuri_Hub, future siblings) — every table, on screen AND on a printed A4 sheet, lays out with FIXED column widths that never depend on the data (no auto-fit). A column's width comes from its KIND on one shared scale per project, so the same kind of column (checkbox, code, date, status, quantity, money, actions…) is the same width on every page, and exactly one main text column takes the remaining space. A value too long for its column truncates to one line with an ellipsis and shows in full on hover; on paper, where nothing can hover, it wraps inside its fixed column instead. Use whenever adding, changing, reviewing or auditing ANY table in ANY hub project — a list page, a detail page's line items, a table in a modal, a report matrix, a printed sheet — and whenever the user says "the columns jump", "column widths keep changing", "the table looks different on this page", "fix the column width", "the table auto-fits", "ความกว้างคอลัมน์", or "ตารางขยับ". Each project supplies its own width scale and helpers in its facts skill; the RULE lives here and changes here once.
+**Scope (was web-ref-table-columns):** The shared table-column canon for every hub web project (AE49_Hub, Nuri_Hub, future siblings) — every table, on screen AND on a printed A4 sheet, lays out with FIXED column widths that never depend on the data (no auto-fit). A column's width comes from its KIND on one shared scale per project, so the same kind of column (checkbox, code, date, status, quantity, money, actions…) is the same width on every page, and exactly one main text column takes the remaining space. A value too long for its column truncates to one line with an ellipsis and shows in full on hover; on paper, where nothing can hover, it wraps inside its fixed column instead. Use whenever adding, changing, reviewing or auditing ANY table in ANY hub project — a list page, a detail page's line items, a table in a modal, a report matrix, a printed sheet — and whenever the user says "the columns jump", "column widths keep changing", "the table looks different on this page", "fix the column width", "the table auto-fits", "ความกว้างคอลัมน์", or "ตารางขยับ". It also holds the header rules T8–T10 — the sort arrow's place, money's currency symbol, and the UNITS ROW (a unit in its own second header row; a head aligned with its data) — so use it too for "หน่วยใต้หัวตาราง", "units row", "the head is not over its numbers". Each project supplies its own width scale and helpers in its facts skill; the RULE lives here and changes here once.
 
 ## Table columns — shared canon
 
@@ -211,7 +211,7 @@ lines in one cell, every other row one line. The owner, shown a real failing set
   reason a person typed) has no repeated part to split out: it is a long VALUE and follows T3 — one line,
   ellipsis, full text on hover (and wraps on paper).
 
-## T8 · The sort arrow sits on the head's line, never alone on a line (owner ruling 2026-10-21, AE49_Hub)
+## T8 · The sort arrow sits on the head's line, right after the head text, never alone on a line (owner ruling 2026-10-21, AE49_Hub; tightened 2026-10-29)
 
 A sortable head's arrow is always on the same line as the head text — the arrow never wraps to a line of
 its own under the words. When a head + its arrow + the cell padding does not fit the column's kind, the
@@ -220,6 +220,19 @@ arrow" token. Measure head + arrow (`<SortIcon>` and its text space) + the cell'
 kind, on the project's own font tier. Why: on 2026-10-21 R&D → Cloud Runs showed `DELETED ON` on line 1
 and its arrow alone on line 2; the owner asked for the arrow to sit level with the head ("หัวตารางต้องอยู่
 ระดับเดียวกับ Sort"). A project's facts skill lists any head that still wraps until its audit converts it.
+
+**Tightened 2026-10-29 (owner Q86 c · Q87 a, AE49_Hub plan `table-units-row-and-empty-clear` D4).** The arrow
+follows the head TEXT directly — `Label <arrow>` — and nothing else: never after a unit (a unit has its own
+row, T10), never pushed to the cell's other edge (no `justify-between`, no `ml-auto`, no absolute position),
+never alone on a line. On a right-aligned head the arrow therefore ends the line at the right edge, right
+above the figures it sorts. Width-neutral: a kind already includes the arrow and its text space. Why: the
+units leave the head for their own row (T10), so the only thing that ever stood between a name and its
+arrow's line goes with them — and the rule is written down so a new head cannot bring one back. The
+detector is a sortable head whose arrow is followed by anything but the cell's closing tag.
+
+**Two rules carry the id T8.** This one (the arrow's place, here) and the arrow-key / Excel-paste rule in
+`keyboard.md`. Both ids are cited in code and in dated notes and neither is renumbered; a new pointer writes
+`columns.md T8` or `keyboard.md T8` (decided 2026-10-29, plan `table-units-row-and-empty-clear` D7).
 
 ## T9 · Money shows its currency symbol before the number; the head names the thing (owner ruling 2026-10-21, AE49_Hub)
 
@@ -265,6 +278,54 @@ There:
   DISPLAYED text to the clipboard, so a column copied from the app's own download arrives with `฿`. A reader that
   turns its own app's figures red is a 🔴 finding.
 
+## T10 · A unit lives in its own header row under the name; a head sits over its data (owner rulings 2026-10-29, AE49_Hub)
+
+Owner Q86 c: a head and its unit take the alignment of the column's DATA — "always centred" is dropped. Owner Q87 a:
+write the canon first, then convert the whole app through shared components. Until then a unit was a muted second
+line inside the `<th>` or sat in brackets (`Size (in.)`, `t (cm)`, `T (s)`), and the wide calculation grids centred
+their symbol heads over right-aligned numbers — so a reader hunted for the unit under every name, and a name did
+not sit over its figures. The details were settled the same day (Q88–Q94, AE49_Hub plan
+`table-units-row-and-empty-clear`).
+
+**1 · The units row.**
+- A header with at least one unit-carrying column gets a SECOND header row holding only units — one cell per leaf
+  column in column order (a select column included), EMPTY under a column with no unit. The head cell no longer holds
+  a unit: no second line, no brackets.
+- No column carries a unit → NO units row at all, never an empty one. ONE shared component per project renders the
+  row and returns nothing when no unit is present, so "no row" is enforced in a single place, never per page.
+- Look: muted, normal case, normal weight, no letter-spacing (the old unit-line tier). The name row and the units row
+  read as ONE header block — the seam under the header sits under the units row only.
+- It applies in every padding tier and on paper (Q89 a): a printed table keeps the screen's header shape, the head
+  repeats on every page as the same two-row block, and a header that grew a line must not push a table's last row onto
+  a new page — check the print preview.
+- A dimensionless column's cell is EMPTY, not `–` (Q90 a), and a table whose only units are dimensionless gets no units
+  row. A legend popup and a parameter block's own `Unit` COLUMN are DATA, not a header: they keep `–`
+  (`calculation/parameter-table.md` §1).
+- A money-only table gets no units row (Q91 a): the currency symbol stays in the cells (T9); a row of `฿` would bring the
+  retired head unit back.
+- A list with a single unit column gets the row too (Q92 a) — one rule everywhere; the cost is one thin header line.
+- A head that IS a unit or quantity word (`Hz`, `Hours`) is left as it is and starts no units row (Q94 a). A head's
+  second line that is NOT a unit (a count of sets under a grand total) stays in the head.
+
+**2 · Alignment.** A head and its units cell take the alignment of the column's BODY cells: numbers and money right;
+text, codes, dates and status left; a tick box or a centred mark, centre; an input box counts by its text alignment.
+This rule never changes a body cell's alignment. A band / group head spanning several columns stays centred over
+its span (Q93 a) — it names a group, not one column's data. A centred head over right-aligned numbers is a finding;
+the one place a centred head is right is a schedule grid whose day heads sit over centred cells.
+
+**3 · The sticky trap.** A project that pins its header by making each head `<tr>` sticky cannot pin two rows —
+they overlap and the second paints over the first. A table WITH a units row pins the whole `<thead>` instead, and
+its rows take the static (unpinned) look; a table without a units row is untouched.
+
+**4 · Widths (T2).** The units cell sits in the same column at the same padding, so a kind bound by a unit line stays
+bound by it. A kind that was bound by a BRACKETED head (`SIZE (IN.)`) loses its binder: list every such kind, measure
+the new binder (head + arrow, the units cell, the widest real value) on the real page, and LOWER a kind only when
+every table that uses it is in the same batch and the measurement says so — otherwise it stays and its docblock
+names the new binder.
+
+Why: engineers read the units straight across one row instead of hunting under each name, and every name sits over
+its own figures. The sort arrow's place (T8) was tightened in the same ruling.
+
 ## Rules that keep it honest
 
 - One scale per project, defined once in shared code, imported everywhere — never re-typed.
@@ -276,6 +337,11 @@ There:
   project's NAMED residue (print sheets with their own mm colgroups; an allowed-debt list the owner
   ruled, converted when next touched) in its audit topic, or it is a finding. "Exempt" without a
   file name is not a residue.
+- **A units-row detector runs in every project audit** (AE49_Hub plan `table-units-row-and-empty-clear` B0,
+  2026-10-29): a unit inside a head cell (a second-line span or brackets); a head whose alignment differs from its
+  body's; a sort arrow that does not directly follow the head text; and, from `general/filter-format.md` R4, a
+  no-match empty row that is not the shared empty-row component. Each project writes its greps into its audit topic
+  and records the BASELINE hit list there, compared with the footprint of the conversion batches.
 - **Every plan that touches a table page carries ONE edge-stability test item**: make the pick,
   keystroke or load that changes the rows → the column edges stay where they were (the item shape
   lives in `ae49-task-plan-feature`'s template and `ae49-ref-gate-checklist`).
@@ -285,7 +351,7 @@ There:
 | Project | Facts skill | Scale lives in |
 |---|---|---|
 | NuriHub | `nurihub-ref-table/columns.md` — created with the scale (planned 2026-09-11) | the shared table helpers, once built |
-| AE49_Hub | `ae49Hub-ref-table/calculation/parameter-table.md` (the R&D footing grids, where the scale was seeded 2026-09-11) + `ae49Hub-ref-table/columns.md` §Table columns (the list tables — adoption began 2026-09-18 with Overtime + Leave Orders under T5, plan `table-no-shift`, and finished 2026-09-25 with `table-columns-app-wide`: 32 list files on `ListColGroup` + the `COL_PX` scale of 58 kinds; the exempt tables are listed in that skill's Exclude registry. One deliberate divergence from T2: AE49 makes the LAST column flexible when no text column exists — owner ruling 2026-09-16. Plan `table-widths-sweep` (2026-10-01/02) added the PARAMETER BLOCKS — the R&D Description / Symbol / Value / Unit cards on two shared column lists, `PARAM_BLOCK_COLS` and `PARAM_WIDE_COLS` — and a THIRD padding tier, the MID tier (`mid*` kinds at `px-2`, the Foundation Optimizer's input and result tables); a kind never crosses a tier) | `COL_PX` in `lib/constants/tableStyles.ts`, rendered through `TableCard`'s `tableClassName` / `minWidthPx`; the parameter blocks and the mid tier through `ListColGroup` + `listMinPx` directly |
+| AE49_Hub | `ae49Hub-ref-table/calculation/parameter-table.md` (the R&D footing grids, where the scale was seeded 2026-09-11) + `ae49Hub-ref-table/columns.md` §Table columns (the list tables — adoption began 2026-09-18 with Overtime + Leave Orders under T5, plan `table-no-shift`, and finished 2026-09-25 with `table-columns-app-wide`: 32 list files on `ListColGroup` + the `COL_PX` scale of 58 kinds; the exempt tables are listed in that skill's Exclude registry. One deliberate divergence from T2: AE49 makes the LAST column flexible when no text column exists — owner ruling 2026-09-16. Plan `table-widths-sweep` (2026-10-01/02) added the PARAMETER BLOCKS — the R&D Description / Symbol / Value / Unit cards on two shared column lists, `PARAM_BLOCK_COLS` and `PARAM_WIDE_COLS` — and a THIRD padding tier, the MID tier (`mid*` kinds at `px-2`, the Foundation Optimizer's input and result tables); a kind never crosses a tier). The units row (T10), the shared empty-row component and the sticky `<thead>` are in `ae49Hub-ref-table/columns.md` §Units row | `COL_PX` in `lib/constants/tableStyles.ts`, rendered through `TableCard`'s `tableClassName` / `minWidthPx`; the parameter blocks and the mid tier through `ListColGroup` + `listMinPx` directly |
 | future siblings | create with the first table | copy the shape: one scale, one flexible column |
 
 Filter pills have their own width rule in `web-ref-table/general/filter-format.md` R4 — a pill never changes width

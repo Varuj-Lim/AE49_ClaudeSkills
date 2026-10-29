@@ -1,6 +1,6 @@
 ---
 name: web-ref-table
-description: The ONE table canon for every hub project (AE49_Hub, Nuri_Hub, siblings), in three types - GENERAL (record lists, directories, queues), CALCULATION (engineering/parameter tables ported from a spreadsheet) and SCHEDULE (Gantt/calendar grids). Holds fixed column widths by kind (T1-T7, "ตารางขยับ"), search + filter bar + Clear, sort arrows, pagination (cap 50, "โหลดนาน"), bulk verbs, the ⋮ action menu on rows, cards, view-page and modal headers, arrow keys and Excel paste in editable cells, the Detail Design table format ("ทำตารางแบบหน้า Detail Design"), BOQ price lists ("ใส่ราคา"), and schedule grids (month fold, month divider, today/weekend/holiday, signed-in-user highlight, bar chips, cell-marking mode). Use for ANY table, "ลูกศร sort", "เรียงจากน้อยไปมาก", "กดลูกศรแล้วเลื่อนช่อง", "วางข้อมูลจาก Excel", "table format แบบเดิม", list page, filter, sort header, row action ("three dots", kebab), bulk approve, page buttons, Gantt or grid, or when columns jump. Each hub's <hub>-ref-table holds its tokens and paths.
+description: The ONE table canon for every hub project (AE49_Hub, Nuri_Hub, siblings), in three types - GENERAL (record lists, directories, queues), CALCULATION (engineering/parameter tables ported from a spreadsheet) and SCHEDULE (Gantt/calendar grids). Holds fixed column widths by kind (T1-T7, "ตารางขยับ"), the header rules (the sort arrow's place T8, money symbol T9, the units row and head alignment T10 - "หน่วยใต้หัวตาราง"), search + filter bar + Clear (with the Clear button in the no-match empty state), sort arrows, pagination (cap 50, "โหลดนาน"), bulk verbs, the ⋮ action menu on rows, cards, view-page and modal headers, arrow keys and Excel paste in editable cells, the Detail Design table format ("ทำตารางแบบหน้า Detail Design"), BOQ price lists ("ใส่ราคา"), and schedule grids (month fold, month divider, today/weekend/holiday, signed-in-user highlight, bar chips, cell-marking mode). Use for ANY table, "ลูกศร sort", "เรียงจากน้อยไปมาก", "กดลูกศรแล้วเลื่อนช่อง", "วางข้อมูลจาก Excel", "table format แบบเดิม", list page, filter, sort header, row action ("three dots", kebab), bulk approve, page buttons, Gantt or grid, or when columns jump. Each hub's <hub>-ref-table holds its tokens and paths.
 ---
 
 # Table canon - one folder, three table types
@@ -21,9 +21,9 @@ you need, not all of them. A rule changes HERE; the hub files never restate it.
 
 | File | Read it when |
 |---|---|
-| [columns.md](columns.md) | ANY table: widths, "the columns jump", a table that moves, a long cell, the toolbar above a table (T1-T7) |
-| [keyboard.md](keyboard.md) | a table with input boxes, number cells, pickers or tick boxes: arrow keys, paste from Excel (T8, P1-P11) |
-| [general/filter-format.md](general/filter-format.md) | a search box, filter pills, tabs, `Clear`, the row-count caption, an empty state (R1-R4) |
+| [columns.md](columns.md) | ANY table: widths, "the columns jump", a table that moves, a long cell, the toolbar above a table (T1-T7); the header: the sort arrow's place (`columns.md` T8), money's symbol (T9), a unit in the head, the UNITS ROW, a head not over its numbers (T10) |
+| [keyboard.md](keyboard.md) | a table with input boxes, number cells, pickers or tick boxes: arrow keys, paste from Excel (`keyboard.md` T8, P1-P11) |
+| [general/filter-format.md](general/filter-format.md) | a search box, filter pills, tabs, `Clear`, the row-count caption, an empty state and its Clear button (R1-R4) |
 | [general/sort-arrows.md](general/sort-arrows.md) | a sortable header, the direction glyph, which tables sort |
 | [general/list-pagination.md](general/list-pagination.md) | a list that reads a growing collection: cap 50, page buttons, "show all" (section 1-6) |
 | [general/bulk-actions.md](general/bulk-actions.md) | the verbs inside a selection cluster: `Verb (N)`, skip lines, role-absent verbs (B1-B6) |
@@ -44,12 +44,20 @@ you need, not all of them. A rule changes HERE; the hub files never restate it.
 | T5 | Nothing moves the TABLE either - selection cluster at the toolbar's right end | columns.md |
 | T6 | A list page's chrome stays put; only the rows scroll | columns.md |
 | T7 | A long explanation never lives in a cell - a marker in the cell, the note under the table | columns.md |
-| T8 | Arrow keys between editable cells; multi-cell paste from Excel | keyboard.md |
+| T8 (`keyboard.md`) | Arrow keys between editable cells; multi-cell paste from Excel | keyboard.md |
+| T8 (`columns.md`) | The sort arrow sits right after the head text on its line - never after a unit, never pushed to the other edge, never alone on a line | columns.md |
+| T9 | Money shows its currency symbol before the number; the head names the thing; `THB` is retired | columns.md |
+| T10 | A unit lives in its own header row under the name (no unit in the head); a head and its units cell take the alignment of the column's data | columns.md |
+
+**Two rules carry the id T8** (decided 2026-10-29, plan `table-units-row-and-empty-clear` D7): both ids are cited in
+code and in dated notes, so neither is renumbered. A new pointer writes `columns.md T8` (the arrow's place) or
+`keyboard.md T8` (arrow keys / paste); a bare "T8" is ambiguous.
 
 ## Old name -> where it lives now
 
-Pointer form: `web-ref-table` T5 for a T-rule; `web-ref-table/general/filter-format.md` R4 for a
-topic section. A section id (T1-T8, R1-R4, B1-B6, section numbers) never changed.
+Pointer form: `web-ref-table` T5 for a T-rule (`columns.md T8` / `keyboard.md T8` for the doubled id);
+`web-ref-table/general/filter-format.md` R4 for a topic section. A section id (T1-T10, R1-R4, B1-B6, section
+numbers) never changed.
 
 | Old skill | Now |
 |---|---|

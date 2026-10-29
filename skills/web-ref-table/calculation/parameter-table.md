@@ -1,4 +1,4 @@
-**Scope (was web-ref-parameter-table):** The shared ENGINEERING-TABLE format canon for every hub web project (AE49_Hub, NuriHub, future siblings) — the owner's favourite table shape, taken from AE49_Hub's Foundation Design → Detail Design → Design page (owner 2026-10-09, "I love table format in /rd/foundation-design/detail/design, please make those into our table format"). Covers the three shapes a calculation tool needs — the PARAMETER BLOCK (Description · Symbol · Value · Unit, English heads, Thai prose, half-height rows, symbols keep their case), the REPEATED-ROW table (symbol + unit once in the header, unit on its own line) and the WIDE GRID (one record = one row, compact padding tier, fixed per-kind column widths, one named flexible column, identical name column across sibling tables, sideways scroll inside the card with a sticky name column) — plus the shared parts: column prose in ONE section legend popup (Symbol · Description · Unit, band banner rows), tags keyed on the table head, a computed verdict shown as the colored value itself on screen and with a shape mark on paper, numeric cells with no stepper arrows and a red frame on letters, Save that asks the boxes, the printed block that keeps the screen's order plus an "=", and the arrow keys of web-ref-table T8. Use whenever building, editing or reviewing ANY engineering / calculation / parameter / spreadsheet-ported input or result table in a hub — a footing, pile, seismic, BOQ, pricing or optimizer table, or a new calculation tool — and whenever the owner says "ทำตารางแบบหน้า Detail Design", "table format แบบเดิม", "port this Excel sheet", or a parameter table's rows feel tall, its columns move, its dropdown is clipped or its prose crowds the header. NOT for record LIST pages (directories, queues, logs) — those follow the list-page and filter canons.
+**Scope (was web-ref-parameter-table):** The shared ENGINEERING-TABLE format canon for every hub web project (AE49_Hub, NuriHub, future siblings) — the owner's favourite table shape, taken from AE49_Hub's Foundation Design → Detail Design → Design page (owner 2026-10-09, "I love table format in /rd/foundation-design/detail/design, please make those into our table format"). Covers the three shapes a calculation tool needs — the PARAMETER BLOCK (Description · Symbol · Value · Unit, English heads, Thai prose, half-height rows, symbols keep their case), the REPEATED-ROW table (symbol once in the header, its unit in the units row under it - `columns.md` T10) and the WIDE GRID (one record = one row, compact padding tier, fixed per-kind column widths, one named flexible column, identical name column across sibling tables, sideways scroll inside the card with a sticky name column) — plus the shared parts: column prose in ONE section legend popup (Symbol · Description · Unit, band banner rows), tags keyed on the table head, a computed verdict shown as the colored value itself on screen and with a shape mark on paper, numeric cells with no stepper arrows and a red frame on letters, Save that asks the boxes, the printed block that keeps the screen's order plus an "=", and the arrow keys of web-ref-table T8. Use whenever building, editing or reviewing ANY engineering / calculation / parameter / spreadsheet-ported input or result table in a hub — a footing, pile, seismic, BOQ, pricing or optimizer table, or a new calculation tool — and whenever the owner says "ทำตารางแบบหน้า Detail Design", "table format แบบเดิม", "port this Excel sheet", or a parameter table's rows feel tall, its columns move, its dropdown is clipped or its prose crowds the header. NOT for record LIST pages (directories, queues, logs) — those follow the list-page and filter canons.
 
 ## Parameter tables — shared canon (hub web projects)
 
@@ -41,7 +41,9 @@ Pick the shape first; every rule below says which shapes it covers.
   source sheet). The prose is what the eye scans down, the symbol is the anchor matched
   against the workbook, the number is where you type.
 - **Heads are ENGLISH, the description cells THAI** (owner 2026-10-01; `web-ref-ui-language`).
-- **Unit is never blank** — `–` for a dimensionless value.
+- **Unit is never blank** — `–` for a dimensionless value. *This is the block's `Unit` COLUMN, which is data
+  (owner Q90 a, 2026-10-29): the legend popup (§4) keeps `–` too. A units ROW under a header (§5, §6, `columns.md`
+  T10) is the opposite — a dimensionless column's cell there is EMPTY.*
 - **Rendered from ONE field registry**, never a hand-written row list — the form, the
   defaults, the validation and the print block (§9) read the same registry, so they cannot
   drift.
@@ -78,8 +80,9 @@ letter-spacing goes too.
 | R and W | **ONE section legend popup**, opened by the help button at the section's top-right (owner 2026-09-16: *"เอา ? ออก ไปรวมไว้ที่มุม Section"*) — never a `?` on every header |
 | a lone field outside a table | a `?` marker beside its label, hover text only (a native `title`, not a popup — a popup is for paragraphs of rules) |
 
-**Symbol and unit always stay visible** on the header; only the prose moves. They are what
-you need while typing; the prose is read once.
+**Symbol and unit always stay visible** in the header block; only the prose moves — the symbol in
+the head, the unit in the units row under it (§5, `columns.md` T10; a P block's unit is its `Unit`
+column). They are what you need while typing; the prose is read once.
 
 **The legend popup** (`web-ref-popup`, read-only kind):
 - a table of **Symbol · Description · Unit** — symbol FIRST, because a legend is a lookup
@@ -96,10 +99,13 @@ you need while typing; the prose is read once.
 above the table (and under the title block on paper), from ONE constant, ALWAYS rendered —
 never only when a row shows the tag. The legend row points at it and does not restate it.
 
-## 5 · Repeated-row table (R): header once, unit on its own line
+## 5 · Repeated-row table (R): header once, the unit in the units row
 
-The same fields repeat down every row, so symbol and unit sit in the header ONCE — the unit on
-its own line under the symbol, no parentheses. The prose goes to the legend (§4) however few
+The same fields repeat down every row, so symbol and unit sit in the header ONCE — the symbol in
+the head, the unit in a second header row of units only under it (`columns.md` T10: one cell per
+column, empty where there is no unit, the row absent when no column has one), never a second line
+inside the head cell and never in brackets (owner Q86 c · Q87 a, 2026-10-29; until then the unit
+was "on its own line" inside the head). The prose goes to the legend (§4) however few
 columns there are: the reason is the repetition, not the count. A repeated-row table takes its own column list, built from the same kind SCALE as the block it sits beside.
 
 ## 6 · Wide grid (W): one record, one row — width bought honestly
@@ -111,6 +117,10 @@ columns there are: the reason is the repetition, not the count. A repeated-row t
 - **A compact padding tier** — one smaller horizontal padding on body cells, editors AND
   header cells together, scoped to these grids only. Padding, editor width and column width
   are ONE decision: change one, re-measure all three, in the real page with the real font.
+- **Heads sit over their data; units go in the units row** (owner Q86 c, 2026-10-29; `columns.md` T10). A symbol
+  head is right-aligned over right-aligned numbers and left-aligned over text — never centred over figures — and
+  the unit sits in the second header row under the symbols, in this compact tier too. A band head spanning
+  several columns stays centred over its span (Q93 a). No body cell changes alignment.
 - **Fixed column widths from the project's per-kind scale** (`web-ref-table` T1/T2),
   on a `<colgroup>` from the column registry; no call site types a width.
 - **Exactly one column is flexible, and it is the one people READ** (owner 2026-09-16, round 4:
@@ -177,6 +187,11 @@ Numeric cells follow the project's input-token rule (no stepper arrows, red fram
   rides in the strip too.
 - **Never print an abbreviation whose key is not on the same page** — the key sits in the table head
   that repeats on every page.
+- **The units row prints too** (owner Q89 a, 2026-10-29): paper keeps the screen's header shape — the names row
+  with the units row under it, aligned with the data as on screen (`columns.md` T10) — and the table head repeats
+  both rows on every page. A header that grew a line must not push a table's last row onto a new page: check
+  the print preview (A4) of each report. A print colgroup changes only where a bracketed head (`T (s)`) was the
+  column's binder and the bracket has left the head.
 - **A repeated-row sub-table prints inside the block**, not on a sheet of its own; with zero rows it
   prints nothing — never a heading over an empty table.
 - **A print-only column owes no legend row** (the legend explains screen columns). Assert at the gate that the screen minimum width is unchanged.
@@ -194,7 +209,9 @@ Numeric cells follow the project's input-token rule (no stepper arrows, red fram
 
 A sticky header row pins to the VIEWPORT when the table is not inside its own scroll shell,
 sliding under the app header and stacking two tables' heads. Use the header look without the
-sticky classes; a wide grid inside its scrolling card shell may keep its sticky head.
+sticky classes; a wide grid inside its scrolling card shell may keep its sticky head — and with a
+units row the pinned element is the `<thead>`, not each head `<tr>` (two pinned rows overlap; `columns.md`
+T10).
 
 ## 11 · Dropdowns inside a scrolling table open `fixed` (P, R, W)
 
@@ -210,7 +227,8 @@ Every editable table here is wired for arrow-key movement — `web-ref-table` T8
 ## Checklist for a new calculation table
 
 1. Shape chosen (P / R / W) and the columns come from a registry.
-2. Heads English, prose Thai; unit never blank; symbols `normal-case`.
+2. Heads English, prose Thai; symbols `normal-case`; a P block's Unit column never blank, an R / W table's units in the
+   units row (empty where dimensionless), heads aligned with their data (`columns.md` T10).
 3. Fixed layout, per-kind widths, one named flexible column, `min-width` = Σ widths; siblings
    share the name column.
 4. Half-height rows by derived input / picker classes.
