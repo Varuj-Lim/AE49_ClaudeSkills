@@ -1,11 +1,13 @@
 // cdp.mjs — tiny CDP driver for a headless Chrome started by headless-start.sh (ae49-ref-gate-checklist gate-tools).
-// Port: env CDP_PORT (default 9333 = Main; gate agents get 9334, 9335 … from Main's dispatch).
+// Port: env CDP_PORT (default = the project's cdpMainPort in .claude/gate-tools.json, else 9333; gate agents get
+// cdpMainPort + 1 … + 6 from Main's dispatch — delegated.md § Ports).
 // Commands: eval "<js>" · nav <url> · paste "<tsv>" · undo · key <Key> · type "<text>" · enter · clickxy x,y ·
 //           file <absolute path> (first input[type=file]) · shot <png> · grant <origin> · grantp <origin>,<perm>… ·
 //           dialog [dismiss] · throttle <ms> · throttled-eval "<js>"
 // Env CDP_URL_MATCH picks the tab whose URL contains it.
 const [, , cmd, arg] = process.argv;
-const PORT = process.env.CDP_PORT || "9333";
+const cfgPort = (() => { try { const fs = process.getBuiltinModule("node:fs"), path = process.getBuiltinModule("node:path"); return JSON.parse(fs.readFileSync(path.join(process.cwd(), ".claude", "gate-tools.json"), "utf8")).cdpMainPort; } catch { return undefined; } })();
+const PORT = process.env.CDP_PORT || String(cfgPort || 9333);
 const list = await (await fetch(`http://127.0.0.1:${PORT}/json/list`)).json();
 const match = process.env.CDP_URL_MATCH; const page = match ? list.find((t) => t.type === "page" && t.url.includes(match)) : list.find((t) => t.type === "page");
 const ws = new WebSocket(page.webSocketDebuggerUrl);

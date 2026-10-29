@@ -1,6 +1,6 @@
 ---
 name: ae49-gate
-description: Run ONE section of a Main-run gate for an ae49-workflow project in its OWN headless Chrome on the port Main names (9334, 9335 …), against the project's EMULATOR app, and return per-item evidence (steps done, DOM readings, column edges, screenshots, PASS / FAIL / CANNOT-VERIFY per reading). Main writes the checklist and keeps the verdict; this agent only runs it. Several can run at once on disjoint batches. Headless — never edits app code, never commits or pushes, never touches production, never types a password.
+description: Run ONE section of a Main-run gate for an ae49-workflow project in its OWN headless Chrome on the port Main names from the project's range (cdpMainPort + 1 … + 6, e.g. AE49 9334…, AWDC 9634…), against the project's EMULATOR app, and return per-item evidence (steps done, DOM readings, column edges, screenshots, PASS / FAIL / CANNOT-VERIFY per reading). Main writes the checklist and keeps the verdict; this agent only runs it. Several can run at once on disjoint batches. Headless — never edits app code, never commits or pushes, never touches production, never types a password.
 tools: Read, Grep, Glob, Bash, Write
 model: opus
 effort: high
@@ -28,7 +28,7 @@ Always run from the project root, the folder that holds `.claude/gate-tools.json
   - Click with `eval "(el.click(),1)"`, or use `clickxy` for a trusted click.
 - **Screenshots:** `shot <scratch>/shots/<item>.png` for every item whose result the owner would look at.
 - **Hung page:** `CDP_PORT=<port> node <tools>/cdp-dialog.mjs`.
-- **Finish:** `powershell -NoProfile -ExecutionPolicy Bypass -File <tools>/stop-port.ps1 -Port <port>`. If the stop fails, REPORT it. **Never kill Chrome by name** (`taskkill /IM chrome.exe`, `Stop-Process -Name chrome`). That would kill Main's 9333 and the owner's own browser.
+- **Finish:** `powershell -NoProfile -ExecutionPolicy Bypass -File <tools>/stop-port.ps1 -Port <port>`. If the stop fails, REPORT it. **Never kill Chrome by name** (`taskkill /IM chrome.exe`, `Stop-Process -Name chrome`). That would kill Main's Chrome (`cdpMainPort`), other projects' gates and the owner's own browser.
 
 ## Data: emulator only, enforced by the tools, not by trust
 

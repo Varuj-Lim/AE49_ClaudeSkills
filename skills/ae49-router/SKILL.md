@@ -27,7 +27,7 @@ back. This layer is **project-agnostic**: apply the active project's own `CLAUDE
   which files do Z. Answers with locations, never reviews or edits. Use it instead of Main
   grepping through many files itself.
 - **`ae49-gate`** (sub-agent, Opus, high; owner AQ1 a 2026-10-16) — RUNS one gate section in its own
-  headless Chrome on the port Main names (9334+) and returns per-item evidence; Main keeps the checklist
+  headless Chrome on the port Main names from its project's range (`9d34`…`9d39`, `ae49-ref-gate-checklist/delegated.md` § Ports) and returns per-item evidence; Main keeps the checklist
   and the VERDICT. Several run at once on disjoint batches (`ae49-ref-gate-checklist/delegated.md`).
 - **`ae49-audit`** runs at **xhigh** (owner 2026-09-30) — it is the step that found every Major
   on 2026-09-25, so it gets the deepest reasoning of the roster.

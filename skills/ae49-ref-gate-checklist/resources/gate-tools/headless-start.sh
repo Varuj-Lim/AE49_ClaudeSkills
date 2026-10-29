@@ -1,17 +1,21 @@
 #!/usr/bin/env bash
-# headless-start.sh <url> — start a fresh headless Chrome on $CDP_PORT (default 9333), sign it in on the project's
+# headless-start.sh <url> — start a fresh headless Chrome on $CDP_PORT (default: the config's cdpMainPort, else 9333),
+# refusing a port outside cdpMainPort…cdpMainPort+6 or one that already listens (delegated.md § Ports), sign it in on the project's
 # EMULATOR app through the app's impersonation hand-off (mint-emu-token.cjs), then open <url>.
 # Run from the project root (it reads .claude/gate-tools.json). <url> must start with the config's appUrl.
 # Each port gets its own user-data dir under $GATE_WORK (default: $TMP/ae49-gate). GATE_ACCOUNT_EMAIL picks
 # another account than the config's (restart Chrome to switch).
-#   CDP_PORT=9334 bash headless-start.sh http://localhost:3001/rd
+#   CDP_PORT=9334 bash headless-start.sh http://localhost:3001/rd   (AE49: cdpMainPort 9333 → agents 9334…9339)
 # The tab first opens $APP/favicon.ico, not /login: a hub's EMULATOR /login auto-signs-in the Developer driver the
 # moment it renders (CCP_Hub `ccphub-emu-autologin`), which beat the marker and left the tab signed in as the WRONG
 # person while `signedIn` still read true (CCP_Hub OI-55, owner Q15 a, 2026-10-29). The last line also reports
 # `identity` — the Firebase user the tab really holds against the minted uid — and `signedIn` is false on a mismatch.
 set -u
 URL="${1:?usage: headless-start.sh <url under appUrl>}"
-PORT="${CDP_PORT:-9333}"
+MAINPORT=$(node -e 'const c=require(require("path").join(process.cwd(),".claude","gate-tools.json"));console.log(c.cdpMainPort||9333)')
+PORT="${CDP_PORT:-$MAINPORT}"
+if [ "$PORT" -lt "$MAINPORT" ] || [ "$PORT" -gt "$((MAINPORT + 6))" ]; then echo "refuse: port $PORT is outside this project's range $MAINPORT…$((MAINPORT + 6))"; exit 1; fi
+if curl -s -m 2 "http://127.0.0.1:$PORT/json/version" >/dev/null || curl -s -m 2 -g "http://[::1]:$PORT/json/version" >/dev/null; then echo "refuse: port $PORT already has a Chrome — pick another port of $MAINPORT…$((MAINPORT + 6))"; exit 1; fi
 T="$(cd "$(dirname "$0")" && pwd)"
 WORK="${GATE_WORK:-${TMP:-/tmp}/ae49-gate}"
 APP=$(node -e 'console.log(require(require("path").join(process.cwd(),".claude","gate-tools.json")).appUrl)')

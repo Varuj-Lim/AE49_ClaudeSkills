@@ -13,14 +13,19 @@ Delegation covers only **Main-run gates**: autopilot (`ae49-mode-autopilot`, the
   - a `testBatch` tag;
   - the sets it may use;
   - a scratch dir.
-- **Main** reads the evidence and screenshots and decides each item. Main spot-checks **at least one item per section** in its own Chrome on 9333. That is always required until plan `ae49-gate-agent` items 3–5 have passed, and after that whenever a reading looks off.
+- **Main** reads the evidence and screenshots and decides each item. Main spot-checks **at least one item per section** in its own Chrome on its project's Main port (`9d33`, Ports below). That is always required until plan `ae49-gate-agent` items 3–5 have passed, and after that whenever a reading looks off.
 - **Wording:** the landing note says "run by ae49-gate :<port>, verdict Main". The log line keeps `(M Main-verified)`. The closed line's grammar is unchanged (`closed-format.md`).
 - **`ae49-gate`** (`~/.claude/agents/ae49-gate.md`) runs one section in its own headless Chrome and returns per-item evidence: PASS / FAIL / CANNOT-VERIFY. It never decides the gate.
 
 ## When gates may run at once
 - **One server:** everything being gated must be in the hub tree, because the emulator app is one server. Only batches whose changed files are disjoint may be gated at once. A shared strings file (router chain rule 4) is merged into the tree first.
 - **No merge or fold under a running gate.** While a gate agent runs, Main merges no other batch and folds nothing into the hub tree, because :3001 would hot-reload under it. If a merge cannot wait, every item run before it is re-gated.
-- **Ports:** one port per agent (9334, 9335 …). Main keeps 9333. Each agent stops only its own port, with `stop-port.ps1` called through `powershell -NoProfile -ExecutionPolicy Bypass -File`. Nobody ever kills Chrome by name.
+- **Ports — each project has its own range (owner 2026-10-29 AWDC Q14 a).** `d` = the project's thousands digit in
+  the port scheme (AE49 3 · NURI 4 · CCP 5 · AWDC 6): Main uses `9d33`, gate agents `9d34`…`9d39`, one port per
+  agent, never a port of another project's range. The project states it as `cdpMainPort` in `.claude/gate-tools.json`;
+  the tools default to it and `headless-start.sh` refuses a port outside `cdpMainPort`…`cdpMainPort + 6` or one that
+  already listens. Why: on 2026-10-29 15:09 an AE49_Hub gate started Chrome on 9334 while an AWDC_Hub gate already
+  ran there, and its tools drove AWDC's Chrome — both gates' readings were void. Each agent stops only its own port, with `stop-port.ps1` called through `powershell -NoProfile -ExecutionPolicy Bypass -File`. Nobody ever kills Chrome by name.
 - **Data:** each gate uses its own sets and its own `testBatch`. Data goes only through `gate-tools/emu-admin.cjs`, which refuses unless the host is 127.0.0.1, and is swept with `emu-sweep.cjs`. Never use a project script that reads `.env.local`.
 
 ## Gate during audit (Main-run gates only)

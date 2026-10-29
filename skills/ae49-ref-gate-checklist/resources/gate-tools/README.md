@@ -1,13 +1,14 @@
 # gate-tools: headless-Chrome gate tools (ae49-ref-gate-checklist)
 
-These are used by Main (port 9333) and by `ae49-gate` sub-agents (ports 9334 and up) to run a gate's screen items against the project's **emulator** app. They moved here from a session scratchpad on 2026-10-16 (plan `ae49-gate-agent`, owner AQ1 a), because that scratchpad could be wiped.
+These are used by Main (port `9d33`) and by `ae49-gate` sub-agents (ports `9d34`…`9d39`) — `d` is the project's port-scheme thousands digit, set as `cdpMainPort` in the project config (`delegated.md` § Ports) to run a gate's screen items against the project's **emulator** app. They moved here from a session scratchpad on 2026-10-16 (plan `ae49-gate-agent`, owner AQ1 a), because that scratchpad could be wiped.
 
 ## Project config: `<project>/.claude/gate-tools.json` (committed in the project, never here)
 
 ```json
 { "projectId": "<firebase project id>", "appUrl": "http://localhost:<emulator app port>",
   "authEmulator": "127.0.0.1:<auth port>", "firestoreEmulator": "127.0.0.1:<firestore port>",
-  "accountEmail": "<the gate account>", "impersonationKeys": { "marker": "<sessionStorage key>", "token": "<key>" } }
+  "accountEmail": "<the gate account>", "impersonationKeys": { "marker": "<sessionStorage key>", "token": "<key>" },
+  "cdpMainPort": <9d33 — 9333 AE49 · 9433 NURI · 9533 CCP · 9633 AWDC> }
 ```
 
 `emu-admin.cjs` (used by `mint-emu-token.cjs` and `emu-sweep.cjs`) refuses to run unless both hosts are on `127.0.0.1`. `headless-start.sh` refuses a URL outside `appUrl`. Sign-in goes through the app's own impersonation hand-off, so no password is ever typed. `GATE_ACCOUNT_EMAIL` overrides the account for a single run.
@@ -26,4 +27,4 @@ These are used by Main (port 9333) and by `ae49-gate` sub-agents (ports 9334 and
 
 ## Rules
 
-Ports belong to their owner: Main uses 9333, and each agent uses the one port Main named. Two gates never use the same set or record. Each gate tags its seeds with its own `testBatch` and sweeps them afterwards. See `delegated.md`.
+Ports belong to their owner: Main uses `cdpMainPort`, and each agent uses the one port Main named from `cdpMainPort + 1`…`+ 6` — never a port of another project's range. Two gates never use the same set or record. Each gate tags its seeds with its own `testBatch` and sweeps them afterwards. See `delegated.md`.
