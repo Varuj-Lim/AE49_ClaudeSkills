@@ -114,6 +114,13 @@ the autopilot log, git — so a fresh session that opens the day from them loses
   landed, or half a working day") fired at 63 % on 2026-10-29 after five small landings, while a day of large builds
   could reach 90 % before five; the real costs — every turn re-sends the whole context, a compact drops the loaded
   skill bodies (2026-09-23), old detail blurs — track the context, not the feature count.
+  **The window is 1,000,000 tokens — never guess the percentage from how long the chat feels (owner 2026-10-29:
+  *"เขียนลงในกติกาด้วยนะ อย่าพลาดแบบนี้อีก"*).** Main measures against the model's real window (Opus 5.5 here: 1M; a
+  full working day of agent reports is roughly 300–400k ≈ 30–40 %). BEFORE writing any 🧹 line or deferring work for
+  length, Main must have a figure: the owner's latest `/context`, or — when none was shown in the last hour — it ASKS
+  the owner to run `/context` and waits for the number; it never warns, defers a dispatch or steers to a break on its
+  own estimate. Why: on 2026-10-29 ~15:20 ICT Main guessed "~70–75 %", started the 🧹 steering and held back a fold
+  and three builds; the owner's `/context` read 37 % (374.8k / 1m) — the work was delayed for nothing.
 
 How: first rewrite the in-flight memory so it is complete, then put the offer as the `wrap_up`
 question with a "new session" button (or one Thai line where there is no box). The NEW session
