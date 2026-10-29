@@ -130,6 +130,21 @@ anyway is still done. When the in-flight work finishes, the line gives way to th
 Why: on 2026-10-22 the owner closed a session that had stayed open two days because it felt unsafe,
 and asked that Main be the one to suggest the break (*"เพิ่มกติกาให้คุณ แนะนำผมเพื่อเปิด Session ใหม่"*).
 
+**Main STEERS to the nearest break, then says "close now" (owner 2026-10-29: *"เมื่อไหร่ที่คุณมองว่า Session ยาวเกินแล้ว
+ช่วยหาจุดพักที่ใกล้ที่สุด แล้วบอกให้ผม ปิด Session เปิดใหม่ให้เลยนะ ผมจะไม่สั่งงานใหม่ไปให้"*).** The 🧹 line is no longer
+only a reminder. From the moment the session is long:
+- **Main names the nearest break** in the 🧹 line — what is still running and when it should end (e.g. "จุดพักถัดไป: หลัง
+  Pile B2 build + clear-optional B2 build กลับมา ≈ 11:30").
+- **Main starts nothing new** — no new dispatch, no next batch of a chain, no new plan; queued or newly unblocked work goes
+  into the in-flight memory for the next session. In-flight agents are allowed to FINISH (their result is recorded); a
+  result that would open more work (an audit after a build, a fold after an audit) is NOT chased — it is written down as
+  the next session's first action. A gate already running finishes and lands if it passes.
+- **The moment the last running agent is back and recorded**, Main runs `ae49-task-session swap` (commit, in-flight
+  memory, backup push) and tells the owner plainly, in its own line: `🧹 ถึงจุดพักแล้ว — ปิด session นี้ แล้วพิมพ์
+  /ae49-task-session ใน session ใหม่`. Built-but-unaudited worktrees are a clean break (they are named in the memory).
+- The owner has said they will stop ordering new work once warned; a live order that still arrives is done only if it
+  is a few tool calls, otherwise it is written into the memory for the next session and Main says so in one line.
+
 ## Inline refine (the `refine:` lane)
 
 You (Main) do the refine yourself — do **not** spawn a sub-agent for it. The rewrite
