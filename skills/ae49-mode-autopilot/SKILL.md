@@ -131,8 +131,9 @@ and 🤖 lines (owner 2026-10-22: the decide → ask report had the decisions an
 3. **Budget** (defaults unless the owner says otherwise): **no cap on agents at once** — dispatch
    every actionable track, as the router's start-now rule does (owner ruling 2026-10-07: *"อยากให้ไม่
    จำกัดไปเลยผมจะดูจาก Token เอง"* — the owner watches usage himself; the old default of 2 only
-   spread the same tokens over more hours); at most **3** audit rounds per build before the build is
-   parked; no time box unless given.
+   spread the same tokens over more hours); at most **5** audit rounds per build before the build is
+   parked (owner 2026-10-29: *"ขยายกติกา Autopilot ให้ Audit ได้ 5 รอบ"* — raised from 3 after
+   requester B1's round 3 found a new MAJOR in its own rollback text); no time box unless given.
 4. **Write the state file** `~/.claude/autopilot/<project-folder-name>/state.json`:
    `{ "on": true, "forks": "ask" | "decide", "project": "<absolute path>", "since": "<clock, ICT>",
    "scope": [...], "rulings": [...], "budget": {...}, "log": "<path of the decision log>" }` —
@@ -170,7 +171,7 @@ and 🤖 lines (owner 2026-10-22: the decide → ask report had the decisions an
    - a plan for IN-SCOPE work is approved by Main (the design was settled with the owner when the
      scope was set; each approval is logged);
    - a build is committed after the **Main-run gate** below instead of the owner's manual test.
-   Everything else stands: the audit is never skipped (≤ 3 rounds, then PARK), commits carry an
+   Everything else stands: the audit is never skipped (≤ 5 rounds, then PARK), commits carry an
    explicit pathspec, the plan moves to `done/`, the board is closed, the backup branch is pushed.
 4. **The Main-run gate.** ("Execute" below means Main runs the item itself OR has an `ae49-gate` agent run it on its own port and Main judges the evidence and screenshots — `ae49-ref-gate-checklist/delegated.md`; spot-checks and screenshots follow `delegated.md` — copy the agent's screenshots into this run's `shots/` before linking them, since its scratch dir may be wiped.) Write the gate section on the page exactly as for the owner (validate it),
    then execute every item (as defined above) and record the outcome per item in the log:
