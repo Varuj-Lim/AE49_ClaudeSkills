@@ -106,8 +106,14 @@ the autopilot log, git — so a fresh session that opens the day from them loses
 
 - **A clean break** — no agent running, no gate open, no uncommitted or unlanded work in the tree,
   nothing half-asked (a question may be pending only if it is in the register).
-- **The session is long** — at least one compact has happened, OR about 5 features landed in this
-  session, OR it has run for more than half a working day.
+- **The session is long** — measured by its CONTEXT, not by how much work landed (owner 2026-10-29, Main's proposal
+  "เอาตามที่เสนอ"): at about **75 %** of the context window used Main starts the 🧹 line and steers to the nearest break;
+  at about **85 %** it takes no new work at all and swaps at the first break reached; a session that has been compacted
+  at least once also counts as long. Main cannot read the percentage itself — it estimates from the conversation's
+  length, ±10 % — and uses the owner's `/context` figure whenever one is shown. Why: the old proxy ("about 5 features
+  landed, or half a working day") fired at 63 % on 2026-10-29 after five small landings, while a day of large builds
+  could reach 90 % before five; the real costs — every turn re-sends the whole context, a compact drops the loaded
+  skill bodies (2026-09-23), old detail blurs — track the context, not the feature count.
 
 How: first rewrite the in-flight memory so it is complete, then put the offer as the `wrap_up`
 question with a "new session" button (or one Thai line where there is no box). The NEW session
