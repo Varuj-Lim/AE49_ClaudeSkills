@@ -228,7 +228,7 @@ never alone on a line. On a right-aligned head the arrow therefore ends the line
 above the figures it sorts. Width-neutral: a kind already includes the arrow and its text space. Why: the
 units leave the head for their own row (T10), so the only thing that ever stood between a name and its
 arrow's line goes with them — and the rule is written down so a new head cannot bring one back. The
-detector is a sortable head whose arrow is followed by anything but the cell's closing tag.
+detector: a sortable head's arrow must be followed by nothing but the head's own closing tag(s); anything else after it is a finding.
 
 **Two rules carry the id T8.** This one (the arrow's place, here) and the arrow-key / Excel-paste rule in
 `keyboard.md`. Both ids are cited in code and in dated notes and neither is renumbered; a new pointer writes
@@ -302,16 +302,27 @@ not sit over its figures. The details were settled the same day (Q88–Q94, AE49
   row. A legend popup and a parameter block's own `Unit` COLUMN are DATA, not a header: they keep `–`
   (`calculation/parameter-table.md` §1).
 - A money-only table gets no units row (Q91 a): the currency symbol stays in the cells (T9); a row of `฿` would bring the
-  retired head unit back.
+  retired head unit back. A MONEY column inside a table that DOES have a units row gets an EMPTY units cell for the same
+  reason: `฿` stays in the cells (T9), never in the units row.
 - A list with a single unit column gets the row too (Q92 a) — one rule everywhere; the cost is one thin header line.
 - A head that IS a unit or quantity word (`Hz`, `Hours`) is left as it is and starts no units row (Q94 a). A head's
   second line that is NOT a unit (a count of sets under a grand total) stays in the head.
+- **Export and clipboard heads are not screen heads.** A downloaded file or a pasted table has exactly ONE header row, so
+  it keeps `head (unit)` — not a finding (Excel sort / filter / pivots and CSV readers would read a second row as
+  data). A "copy table" of the screen copies ONE header row with `head (unit)`, never the two-row screen header.
+- **A transposed table's row labels keep `label (unit)`.** A label cell at the start of a body row (`Sa (g)`) and a
+  corner cell that labels the first row (`T (s)`) are label / value pairs like a DetailField, not column heads; T10's
+  units row is for COLUMN heads only.
+- **A head that spans rows never spans into the units row.** Every leaf column gets its own units cell (empty when it
+  has none); a `rowSpan` head stops at the head row.
+- **Axis heads — OPEN.** A head whose text is a value (`dp 30 cm`, `fc′ 280 ksc`), whose unit is not the unit of the
+  cells below, is pending owner ruling (AE49 Q103) — B4 must not move an axis head's unit until it is settled.
 
 **2 · Alignment.** A head and its units cell take the alignment of the column's BODY cells: numbers and money right;
 text, codes, dates and status left; a tick box or a centred mark, centre; an input box counts by its text alignment.
 This rule never changes a body cell's alignment. A band / group head spanning several columns stays centred over
-its span (Q93 a) — it names a group, not one column's data. A centred head over right-aligned numbers is a finding;
-the one place a centred head is right is a schedule grid whose day heads sit over centred cells.
+its span (Q93 a) — it names a group, not one column's data. A centred head over right-aligned numbers is a finding.
+Beyond the centred tick-box / mark columns and the band / group heads allowed above, only a schedule grid (exempt as a whole).
 
 **3 · The sticky trap.** A project that pins its header by making each head `<tr>` sticky cannot pin two rows —
 they overlap and the second paints over the first. A table WITH a units row pins the whole `<thead>` instead, and
