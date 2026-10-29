@@ -109,18 +109,22 @@ the autopilot log, git — so a fresh session that opens the day from them loses
 - **The session is long** — measured by its CONTEXT, not by how much work landed (owner 2026-10-29, Main's proposal
   "เอาตามที่เสนอ"): at about **75 %** of the context window used Main starts the 🧹 line and steers to the nearest break;
   at about **85 %** it takes no new work at all and swaps at the first break reached; a session that has been compacted
-  at least once also counts as long. Main cannot read the percentage itself — it estimates from the conversation's
-  length, ±10 % — and uses the owner's `/context` figure whenever one is shown. Why: the old proxy ("about 5 features
+  at least once also counts as long. Main reads the percentage itself with the desktop app's `get_usage` tool (the
+  `context` block — the same figure as `/context`; see below). Why: the old proxy ("about 5 features
   landed, or half a working day") fired at 63 % on 2026-10-29 after five small landings, while a day of large builds
   could reach 90 % before five; the real costs — every turn re-sends the whole context, a compact drops the loaded
   skill bodies (2026-09-23), old detail blurs — track the context, not the feature count.
   **The window is 1,000,000 tokens — never guess the percentage from how long the chat feels (owner 2026-10-29:
   *"เขียนลงในกติกาด้วยนะ อย่าพลาดแบบนี้อีก"*).** Main measures against the model's real window (Opus 5.5 here: 1M; a
   full working day of agent reports is roughly 300–400k ≈ 30–40 %). BEFORE writing any 🧹 line or deferring work for
-  length, Main must have a figure: the owner's latest `/context`, or — when none was shown in the last hour — it ASKS
-  the owner to run `/context` and waits for the number; it never warns, defers a dispatch or steers to a break on its
-  own estimate. Why: on 2026-10-29 ~15:20 ICT Main guessed "~70–75 %", started the 🧹 steering and held back a fold
-  and three builds; the owner's `/context` read 37 % (374.8k / 1m) — the work was delayed for nothing.
+  length, Main must have a figure: it calls `get_usage` (`mcp__ccd_session_mgmt__get_usage`, session "self" — load it
+  with ToolSearch when deferred) and reads `context.percentUsed`; only when the tool is missing or answers
+  "unavailable" does it ASK the owner to run `/context` and wait for the number. It never warns, defers a dispatch or
+  steers to a break on its own estimate. Why: on 2026-10-29 ~15:20 ICT Main guessed "~70–75 %", started the 🧹 steering
+  and held back a fold and three builds; the owner's `/context` read 37 % (374.8k / 1m) — the work was delayed for
+  nothing. The same evening Main asked the owner for `/context`, and the owner asked why Main could not read it itself
+  (*"ผมสงสัยคุณตรวจสอบ /context เองไม่ได้หรอ"*) — `get_usage` gave 42 % against the owner's 41 %; owner "แก้กติกา",
+  2026-10-29.
 
 How: first rewrite the in-flight memory so it is complete, then put the offer as the `wrap_up`
 question with a "new session" button (or one Thai line where there is no box). The NEW session
