@@ -50,7 +50,7 @@ description: The ONE cross-hub rule for adding a NEW value to a dropdown (AE49_H
 
 ## Checking it
 
-Each hub's project audit carries a check for this rule (AE49_Hub: `ae49Hub-task-audit-project` topic `31-dropdowns`):
+Each hub's project audit carries a check for this rule (AE49_Hub: `ae49Hub-task-audit-project` topic `31-dropdowns`; Nuri_Hub: `nurihub-task-audit-project` topic `36-dropdown-add-value`):
 list every place a user can add a value to a pick list and how — the inline row (compliant), a separate button, a
 free-text field with suggestions, a datalist, an "Other" field, or a settings-page detour — and every open list that
 should allow adding but cannot.
@@ -60,4 +60,4 @@ should allow adding but cannot.
 | Hub | Facts skill |
 |---|---|
 | AE49_Hub | `ae49Hub-ref-dropdown` — `components/ui/SelectField.tsx` props `allowNew` (free value) / `onCreateNew` (catalog value), `createNewLabel`, the site list |
-| Nuri_Hub | its own dropdown facts skill (added by a handoff) |
+| Nuri_Hub | `nurihub-ref-select-field` — `components/ui/SelectField.tsx` props `allowNew` (free value) / `onCreateNew` (catalog value), the exact / near test in `lib/utils/optionFilter.ts` (`pickerRows`), the site table; audit topic `36-dropdown-add-value` |
