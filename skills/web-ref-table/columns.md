@@ -315,8 +315,10 @@ not sit over its figures. The details were settled the same day (Q88–Q94, AE49
   units row is for COLUMN heads only.
 - **A head that spans rows never spans into the units row.** Every leaf column gets its own units cell (empty when it
   has none); a `rowSpan` head stops at the head row.
-- **Axis heads — OPEN.** A head whose text is a value (`dp 30 cm`, `fc′ 280 ksc`), whose unit is not the unit of the
-  cells below, is pending owner ruling (AE49 Q103) — B4 must not move an axis head's unit until it is settled.
+- **Axis heads keep their unit on their own line of text (owner AE49 Q103 a, 2026-10-29).** A head whose text is a VALUE
+  (`dp 30`, `fc′ 280` — an axis of a matrix) and whose unit is not the unit of the cells below reads as ONE line,
+  value + unit (`dp 30 cm`, `fc′ 280 ksc`); the units row holds only the CELLS' unit (empty when a section heading
+  already names it, e.g. a matrix titled "(t)"). Putting an axis unit in the units row would read as the cells' unit.
 
 **2 · Alignment.** A head and its units cell take the alignment of the column's BODY cells: numbers and money right;
 text, codes, dates and status left; a tick box or a centred mark, centre; an input box counts by its text alignment.
