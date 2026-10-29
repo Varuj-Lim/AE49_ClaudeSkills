@@ -105,6 +105,21 @@ line of its calculation spec was derived from. Both would have been unrecoverabl
   path as above. Provenance lines ("copied from `…\Downloads\x`") are not commands and stay as they are. Why: on
   2026-10-27 every deploy line in one hub's CLAUDE.md carried the home path and failed at the `cd` on the office
   PC; the owner asked for the fix at user level "จะได้ทำได้ทุก Project".
+- **"กลับบ้าน" → every owner step becomes a CLOUD SHELL block (rule 2026-10-29, applies in every project).**
+  Once the owner says they are going home (or are remote / away from the office PC), they can only chat with the
+  session — they cannot run PowerShell on the machine the session lives on. From that moment EVERY command Main
+  hands them — a `firestore:rules` / indexes / storage / functions deploy, a Cloud Run job or image update, a
+  backfill dry run, any `gcloud` / `firebase-tools` step — is written as a **Cloud Shell (bash) block** that works
+  from any browser, never a PowerShell line for the office PC. How: Main commits, pushes the project's NO-deploy
+  backup branch (never the deploy branch), and the block fetches it in the Cloud Shell clone (`cd ~/<repo> && git
+  fetch -q origin`), prints the sha Main names, checks out exactly the files the step needs from
+  `origin/<backup>`, then runs the command; the owner pastes the output, then says "push" and Main pushes. A
+  project whose Cloud Shell path was never proven gets a harmless test run first (redeploy the unchanged rules).
+  Each block is also pasted as plain lines (the 2026-10-02 rule). This holds until the owner says they are back at
+  the office PC. Why: on 2026-10-29 the AE49 owner went home mid-chain (set-owner rules deploy pending) and asked for
+  this to be the rule everywhere ("ถ้าผมบอกกลับบ้าน ให้คุณส่งคำสั่ง … มาเป็น Cloud … แทนทั้งหมด"); the first project's
+  path was proven the same day (clone in Cloud Shell's home, backup branch → `Deploy complete!`, no login needed).
+
 - **All times are THAI TIME (rule 2026-08-26, applies in every project).** I work in
   Thailand and speak in Thailand time — Asia/Bangkok, UTC+7, no DST. Interpret every
   time I mention as ICT, and present every time you mention to me in ICT (no "UTC"
