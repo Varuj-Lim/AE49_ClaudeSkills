@@ -1,6 +1,6 @@
 ---
 name: web-ref-local-emulator
-description: The shared local-emulator discipline for every hub project (AE49_Hub, Nuri_Hub, and future siblings) that runs a Firebase emulator suite behind one-click .cmd launchers — who presses the launchers (the OWNER, never Claude), probe-before-naming-a-button, the trusted aliveness check, the cross-project port scheme, the look-alike-process safe-kill rule (netstat ports + image name), refresh in both suite states, and the stale-build-cache 404 trap. Use whenever starting, stopping, refreshing, or debugging a project's emulator, before telling the user to press any launcher, or when a launcher/emulator ruling lands — the rule changes HERE once, project skills keep only their own ports and paths.
+description: The shared local-emulator discipline for every hub project (AE49_Hub, Nuri_Hub, and future siblings) that runs a Firebase emulator suite behind one-click .cmd launchers — who presses the launchers (the OWNER, never Claude; a build agent's private self-closing `emulators:exec` on its own ports is the one exception), probe-before-naming-a-button, the trusted aliveness check, the cross-project port scheme, the look-alike-process safe-kill rule (netstat ports + image name), refresh in both suite states, and the stale-build-cache 404 trap. Use whenever starting, stopping, refreshing, or debugging a project's emulator, before telling the user to press any launcher, or when a launcher/emulator ruling lands — the rule changes HERE once, project skills keep only their own ports and paths.
 ---
 
 # Local emulator — shared discipline
@@ -22,6 +22,27 @@ Claude's part is READ-ONLY: probe, `netstat`, read logs, diagnose, then
 NAME the button. Killing a stray PID (per rule 6) or deleting the emulator
 build cache BETWEEN the owner's clicks is fine — starting/stopping/
 refreshing is not.
+
+### 1b. A builder's PRIVATE, self-closing suite is allowed (owner Q13 a, 2026-10-29)
+
+One exception to rule 1: a headless build or audit agent may prove ITS OWN worktree's rules
+with a private `firebase emulators:exec` run, when ALL of these hold:
+- **Own ports** — a block no launcher and no other project uses (inside the project's own
+  thousands digit, on a hundreds layer the launchers never take; CCP_Hub's first one used
+  5220–5226). Never the shared suite ports, never the app ports.
+- **Own project id** — a separate `demo-…` id (e.g. `demo-ccphub-tkport`), so it shares no data
+  with the owner's suite.
+- **Self-closing** — `emulators:exec "<the probe command>"`: the suite starts, runs the one
+  command, and exits with it. Never `emulators:start`, never left running, never in the background
+  past the agent's own run.
+- **Hands off the launchers** — it never runs `dev-emu.cmd` / `stop-emu.cmd` /
+  `refresh-emu-data.cmd`, never kills a process on the shared port block, never touches
+  `.dev-emulator-data`.
+Main still re-runs the probe in the hub, on the owner's suite, before the gate — the private run is
+early evidence, not the gate's. Why: on 2026-10-29 the tickets B2+B3 builder did exactly this to prove
+its new `replies` rule before merge; the owner ruled it fine (Q13 a) because nothing in rule 1's fear —
+a hidden shell holding the owner's ports, a collision on the next click — can happen with it. Cost: about
+1 GB of RAM (Java) per run, so several at once may slow the machine.
 
 ## 2. Probe BEFORE naming a button — every time
 
