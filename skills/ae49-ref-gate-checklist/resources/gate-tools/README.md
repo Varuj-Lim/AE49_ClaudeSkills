@@ -16,7 +16,7 @@ These are used by Main (port 9333) and by `ae49-gate` sub-agents (ports 9334 and
 
 | File | Use |
 |---|---|
-| `headless-start.sh <url>` | `CDP_PORT=<port> GATE_WORK=<dir> bash headless-start.sh <url>` starts Chrome on that port with its own profile, signs in, opens the url, and prints `signedIn`. |
+| `headless-start.sh <url>` | `CDP_PORT=<port> GATE_WORK=<dir> bash headless-start.sh <url>` starts Chrome on that port with its own profile, signs in, opens the url, and prints `identity` (`ok` / `mismatch:<uid>` / `unknown` — the Firebase user the tab really holds vs the minted account) and `signedIn` (false on a mismatch). It opens `favicon.ico` first so a hub's emulator `/login` auto-login cannot sign the tab in as the wrong person (CCP_Hub OI-55, 2026-10-29); on `unknown`, read the app's "signed in as" banner before any step. |
 | `cdp.mjs <cmd> <arg>` | `CDP_PORT=<port> node cdp.mjs …` covers eval / nav / paste / undo / key / type / enter / clickxy / file / shot / grant / grantp / dialog / throttle / throttled-eval. `CDP_URL_MATCH` picks a tab. |
 | `cdp-dialog.mjs` | Accepts a pending beforeunload dialog on every tab of that port. |
 | `stop-port.ps1 -Port <n>` | Kills only the Chrome on that debugging port. Call it as `powershell -NoProfile -ExecutionPolicy Bypass -File stop-port.ps1 -Port <n>` (this machine's policy is Restricted). Never kill Chrome by name. |
