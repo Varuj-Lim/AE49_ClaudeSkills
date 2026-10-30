@@ -19,6 +19,7 @@ description: The Ticket page canon for every hub project (AE49_Hub, Nuri_Hub, CC
 - **The edit form's Status picker stays.** The ⋮ is a shortcut, not a replacement.
 - **The submitter** (not the triager) keeps only their own Cancel, live while the ticket is Open, dimmed with its reason afterwards — unchanged.
 - **Hidden vs dimmed** follows the table action-menu canon: an item the viewer may never use is hidden; an item they may use but not now is dimmed with a Thai reason.
+- **While the ticket page's edit form is open (or saving), EVERY ⋮ item on that page is dimmed** — the triager's Change status, Cancel and Delete, and the submitter's own Cancel — with "กด Save changes หรือ Close ฟอร์มแก้ไขก่อน แล้วค่อยกด <verb>" (saving: the hub's "saving" sentence). A ⋮ action on success closes the form, so a live item would drop the typed edits without a word (AE49 owner Q178 a / Q183 a / Q184 a, 2026-10-30). The list page has no edit form, so its ⋮ is unaffected.
 - Labels are bare English verbs (`web-ref-ui-language`); the confirm body and reasons are Thai.
 
 ## Codes
