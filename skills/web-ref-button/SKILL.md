@@ -6,7 +6,7 @@ description: >-
   form action, popup button, worded decision, text button) renders on a single line, never
   wrapped to two; a crowded row gives way elsewhere (the subtitle wraps, the action group keeps
   its width, the row wraps whole buttons), never inside a button. Use whenever building,
-  styling, placing or reviewing ANY button, pill or clickable action, a page header with
+  styling, placing or reviewing ANY button, pill, tab or clickable action, a page header with
   actions, a button style token, or when the owner says "ปุ่มขึ้น 2 บรรทัด", "ปุ่มตกบรรทัด",
   "button wraps", "label on two lines". Each hub keeps its token file, component and call-site
   list in its own `<hub>-ref-button` facts skill; the rule changes HERE once.
@@ -32,6 +32,8 @@ description: >-
 - A **busy label** (a sizer that reserves the busy word's width) is one line too — the reserve
   holds one line in both states.
 - Never fix a wrapping label by shortening the word or by a fixed width; fix the container.
+- **Tabs count as buttons (owner 2026-10-30, CCP Q58 a).** A page / sub-tab label is one line too, and a tab
+  strip with no room wraps WHOLE tabs onto a second row — never a label.
 
 **Common practice.** Common design systems render button text with `white-space: nowrap` —
 Ant Design's `.ant-btn` and Bootstrap 4's `.btn` both do — because a two-line label reads as two
