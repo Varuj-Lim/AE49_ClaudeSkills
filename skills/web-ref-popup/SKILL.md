@@ -31,6 +31,24 @@ hub keeps its **own token file and reference implementation** (named in that hub
 Text and dividers inside a popup come from the project's text / line / colour
 refs (caption + body rows, hairline dividers, status pills) — never from here.
 
+### The overlay is PORTALED to `<body>` (owner 2026-10-30, CCP_Hub Q62 a)
+
+Every popup's overlay renders through ONE shared component that portals it to `<body>`
+(`createPortal(<div className={POPUP_OVERLAY} …>{card}</div>, document.body)`, client-only the
+SSR-safe way the project's Toast does it) — never inside the page's own tree. Why: an overlay that
+is the LAST child of a page's `flex flex-col space-y-*` root gives the element above it the
+`space-y` margin while the popup is open, so the card behind the dim shrinks or jumps (CCP_Hub
+OI-52: Employees → Directory's table card lost 24 px under "Deactivate employee").
+- Stacking then follows OPEN order (each portal is appended to `<body>` when it mounts): a popup
+  opened over another paints above it. Anything that must stay ABOVE a popup (the page toast) needs
+  its own higher layer — CCP uses toast `z-[55]` over the overlay's `z-50`.
+- React events still bubble along the React tree, so the card's handlers, the overlay's `onClick`
+  (read-only kind only) and `stopPropagation` behave as before; check DOM-level `contains()`
+  outside-click listeners and anything that styled the popup through an ancestor (text colour).
+- The audit greps for any overlay NOT rendered by the shared component
+  (`className=.*(POPUP_OVERLAY|fixed inset-0)` → only the component itself).
+CCP_Hub's reference: `components/ui/PopupOverlay.tsx` (plan `popup-portal`, 9915e32).
+
 ## Card width — pick by content
 
 | Width | `max-w-*` | Use for |
@@ -140,8 +158,9 @@ popup WITH it are both defects — and a mixed component is easy to get half rig
 ## How to apply
 
 ```tsx
+// PopupOverlay = the shared portal component (renders POPUP_OVERLAY into <body>, see above)
 // read-only detail
-<div className={POPUP_OVERLAY} onClick={onClose}>
+<PopupOverlay onClick={onClose}>
   <div className={POPUP_CARD.sm} onClick={(e) => e.stopPropagation()}>
     <div className={POPUP_HEADER}>
       <h3 className={`${POPUP_TITLE} min-w-0`}>{title}</h3>
@@ -150,10 +169,10 @@ popup WITH it are both defects — and a mixed component is easy to get half rig
     {/* caption/body rows */}
     <button onClick={onClose} className={POPUP_CLOSE_FULL}>Close</button>
   </div>
-</div>
+</PopupOverlay>
 
 // confirm / form — NO overlay onClick
-<div className={POPUP_OVERLAY}>
+<PopupOverlay>
   <div className={POPUP_CARD.sm}>
     <h3 className={`${POPUP_TITLE} mb-2`}>Delete item?</h3>
     {error && <div className={`${POPUP_ERROR} mb-3`}>{error}</div>}
@@ -162,7 +181,7 @@ popup WITH it are both defects — and a mixed component is easy to get half rig
       <button onClick={onConfirm} className={`flex-1 ${POPUP_BTN.danger}`}>Delete</button>
     </div>
   </div>
-</div>
+</PopupOverlay>
 ```
 
 ## Don't
@@ -171,7 +190,8 @@ popup WITH it are both defects — and a mixed component is easy to get half rig
   belongs beside the title (owner 2026-09-18); the subtitle goes on its own full-width line
   under the header row, never squeezed into the title column.
 
-- Don't hand-type the overlay, card, title or button strings — import the token;
+- Don't hand-type the overlay, card, title or button strings — import the token; and never render the
+  overlay inside the page — go through the shared portal component (§ "The overlay is PORTALED");
   a hub that has no token file yet creates it (the AE49 file is the model).
 - Don't use the page-card class for a modal (`rounded-xl border`); modals are
   `rounded-2xl shadow-xl`.
