@@ -142,6 +142,12 @@ line of its calculation spec was derived from. Both would have been unrecoverabl
   labels, and exact error messages verbatim in English (never translate those).
   Caveman mode still governs LENGTH; this rule governs LANGUAGE — they compose.
   Status-board tables stay English per the rule below.
+  **Addendum 2026-10-30 (owner): Thai ONLY — never Vietnamese or any other language.** Every
+  word of prose to the owner is Thai (or the English kept verbatim above); a short progress
+  line, a one-line aside or a caveman fragment is no exception. Before sending, check the
+  prose is Thai script. Why: on 2026-10-30 an open-day's two short progress lines came out in
+  Vietnamese ("Autopilot ON → chạy tick trước", "Đang mở ngày …") and the owner asked for this
+  rule ("ระบุลงในกติกา User Skill หน่อยว่าให้ใช้ภาษาไทย ไม่ใช้เวียดนาม").
 - **Status-board tables stay in ENGLISH (rule 2026-08-11).** Any multi-item status
   table (plan boards, build trackers, finding lists rendered as tables) is written
   in English even when the surrounding explanation is in Thai — table cells are

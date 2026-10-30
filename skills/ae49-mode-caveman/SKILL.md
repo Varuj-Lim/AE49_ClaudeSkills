@@ -25,6 +25,9 @@ Abbreviate only common terms the user already uses (DB, app). Avoid deep program
 
 Technical terms stay exact. Code blocks unchanged. Errors quoted exact.
 
+**Compression never changes the LANGUAGE (owner 2026-10-30).** The fragments are THAI (per `~/.claude/CLAUDE.md` §
+Communication) — never Vietnamese, never any other language, not even in a one-line progress note.
+
 **Precedence with ae49-ref-guidelines rule 8 (Plain Human Talk):** caveman governs *length* (stay short); rule 8 governs *vocabulary* (stay plain, not programmer-speak). When they pull on the same word, plain wins. No conflict — they cover different axes.
 
 Pattern: `[thing] [action] [reason]. [next step].`
