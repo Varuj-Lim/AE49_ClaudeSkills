@@ -20,6 +20,22 @@ design: a staff note is an agenda item the owner raises in person; the ticket is
 durable record. A real push-to-staff channel with read receipts is the
 "Announcements module" decision — its own plan, never smuggled in here.
 
+## Every employee sees a team note (owner ruling 2026-10-31)
+
+Owner Q8 a / Q9 a: *"ทุกคนต้องเห็น Ticket ที่ออกให้นาม Developer / RD"*. An open `ask` or `inform` in the
+owner's own name — its Requester is the person who entered it — shows on **every employee's Home** until it
+is closed, in the project's list of team notes, each row opening the ticket. No bell: the rule above stands,
+the Home card is what makes the note visible. It also stays readable in the ticket list for everyone.
+
+- **In scope:** `ask` and `inform` whose Requester equals Entered by, filed by a Developer / RD account.
+- **Out of scope:** a note filed FOR one named person stays on that person's Home only, and a Developer's own
+  bug or suggestion stays a normal ticket. Both stay readable in the list.
+- **Close a note when it is done.** An open note stays on every Home, so a stale one is noise for the whole team.
+- A project whose ticket list hides other people's tickets also opens these notes to every employee there.
+
+Why: on 2026-10-31 the owner asked whether staff could see a note at all. They could read it in Support → Tickets,
+but nothing brought them there, so questions filed for the team could sit unseen while Main waited for an answer.
+
 ## Filing one
 
 1. **Pick the intent** — ask or inform. One decision per ticket; two questions are
@@ -54,6 +70,7 @@ skipped — never "clarified" by Claude inventing the team's answer.
 | Filing script | `scripts/staff-note-ticket.cjs` (dry-run default, `--apply` writes) |
 | Marking | dedicated ticket types `ask` / `inform` — labels Ask / Inform (landed 2026-08-30; a developer may also file them from the in-app create form) |
 | Owner identity | the fixed owner email the script resolves live |
+| Team notes on Home | the Home card and query that show open team notes to every employee |
 | Status vocabulary | the project's ticket statuses |
 
 AE49_Hub: facts skill + script port pending (canon adopted 2026-08-30 from NuriHub's
