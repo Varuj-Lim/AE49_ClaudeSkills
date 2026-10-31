@@ -51,7 +51,7 @@ different things on one page.
 
 Each hub names its BOQ matrix tokens, its reference price page and how a sized band adds or drops
 a row in its own `<hub>-ref-table/calculation/` facts. AE49_Hub: the R&D pricing pages
-(`rd/directory/pricing/pile` and `/footing`, one tab per price category), `FOOTING_BOQ_MATRIX_COLS` / `boqCellClass` / `boqPriceInputClass` /
+(`rd/directory/pricing/[category]`, eight tabs, one per BOQ work category), `FOOTING_BOQ_MATRIX_COLS` / `boqCellClass` / `boqPriceInputClass` /
 `formatBoqMoney` / `BOQ_COLUMNS`.
 
 **Adding / deleting price rows** follows `add-delete-rows.md` (the row-end `+` / bin pair; owner 2026-10-16 — the Pile Prices table was the model).
