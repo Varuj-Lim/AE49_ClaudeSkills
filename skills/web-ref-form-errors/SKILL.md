@@ -24,6 +24,9 @@ A wrong field shows BOTH:
 | Required and EMPTY | Only after Save was refused on this form. A fresh form never opens red | The field is filled |
 | Refused only by the server or a transaction (a clash found at Save) | After that refusal, when the refusal names the field | The field changes |
 
+- **When a wrong value's sentence enters the box (owner 2026-10-31):** on a form, at once, with its frame. On an editable
+  grid, at Save, with the sentence on the cell's hover until then: a grid of hundreds of cells must not move the page
+  while someone types or pastes.
 - A refusal that belongs to no one field (a failed save, a lost connection) stays in the box alone.
 - Save is never disabled to prevent an error: it refuses and explains.
 - An Edit that judges only what changed frames only what it would refuse. An untouched stored value stays plain.
