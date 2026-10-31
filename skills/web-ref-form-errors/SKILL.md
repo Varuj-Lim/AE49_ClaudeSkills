@@ -35,6 +35,7 @@ A wrong field shows BOTH:
 - **The leave popup's Save is not disabled either (owner 2026-10-31):** it refuses with the sentence and the popup stays open with the work kept.
 - **Password pages (owner 2026-10-31):** forgot password, reset password and first-login follow this canon, with no change to auth and no hint whether an email exists.
 - **Converting an existing app (owner 2026-10-31):** the shared check first, then one pilot page the owner tries, then the page groups.
+- A field that went red after being left stays red when it is entered again, until its value is right. A field never left stays plain.
 - A refusal that belongs to no one field (a failed save, a lost connection) stays in the box alone.
 - Save is never disabled to prevent an error: it refuses and explains.
 - An Edit that judges only what changed frames only what it would refuse. An untouched stored value stays plain.
