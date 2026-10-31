@@ -73,5 +73,5 @@ skipped — never "clarified" by Claude inventing the team's answer.
 | Team notes on Home | the Home card and query that show open team notes to every employee |
 | Status vocabulary | the project's ticket statuses |
 
-AE49_Hub: facts skill + script port pending (canon adopted 2026-08-30 from NuriHub's
-convention; port them in an AE49_Hub session and update its facts skill there).
+AE49_Hub: facts in `ae49Hub-task-ticket-to-plan` § Team notes; script `scripts/file-ticket.cjs`
+beside it, dedicated types `ask` / `inform`, Team notes card on Home (plan `team-notes-home`).
