@@ -36,6 +36,7 @@ A wrong field shows BOTH:
 - **Password pages (owner 2026-10-31):** forgot password, reset password and first-login follow this canon, with no change to auth and no hint whether an email exists.
 - **Converting an existing app (owner 2026-10-31):** the shared check first, then one pilot page the owner tries, then the page groups.
 - A field that went red after being left stays red when it is entered again, until its value is right. A field never left stays plain.
+- **The Save click must land the first time (owner 2026-10-31):** a field left because the pointer was pressed shows its frame and sentence when the pointer is released, so the Save row does not move under the click. Leaving by keyboard shows them at once.
 - A refusal that belongs to no one field (a failed save, a lost connection) stays in the box alone.
 - Save is never disabled to prevent an error: it refuses and explains.
 - An Edit that judges only what changed frames only what it would refuse. An untouched stored value stays plain.
