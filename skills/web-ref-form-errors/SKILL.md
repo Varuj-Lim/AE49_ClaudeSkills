@@ -36,6 +36,13 @@ A wrong field shows BOTH:
 - **The leave popup's Save is not disabled either (owner 2026-10-31):** it refuses with the sentence and the popup stays open with the work kept.
 - **Password pages (owner 2026-10-31):** forgot password, reset password and first-login follow this canon, with no change to auth and no hint whether an email exists. The login form stays out.
 - **Converting an existing app (owner 2026-10-31):** the shared check first, then one pilot page the owner tries, then the page groups.
+- **Many required fields are one sentence (owner 2026-10-31):** `ต้องกรอกให้ครบ: Full Name, Nickname, Gender`, never a line per field. The frames say where.
+- **When a sentence leaves (owner 2026-10-31):** a field's sentence leaves at once when the field is right. A failed save stays until the next outcome. An editable grid's box keeps the lifetime its project already ruled.
+- **A rule across fields (owner 2026-10-31):** frame the field the sentence tells the reader to change; frame both when it blames neither.
+- **An Edit that opens holding a value Save would refuse opens red (owner 2026-10-31).** The frame comes from the same check as the refusal.
+- **The leave popup's Save is not disabled either (owner 2026-10-31):** it refuses with the sentence and the popup stays open with the work kept.
+- **Password pages (owner 2026-10-31):** forgot password, reset password and first-login follow this canon, with no change to auth and no hint whether an email exists. The login form stays out.
+- **Converting an existing app (owner 2026-10-31):** the shared check first, then one pilot page the owner tries, then the page groups.
 - A refusal that belongs to no one field (a failed save, a lost connection) stays in the box alone.
 - Save is never disabled to prevent an error: it refuses and explains.
 - An Edit that judges only what changed frames only what it would refuse. An untouched stored value stays plain.
