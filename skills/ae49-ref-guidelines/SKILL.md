@@ -152,3 +152,13 @@ Granularity: ONE commit per completed change. NOT after every single file edit. 
   (a name from before the page merged into Foundation Design), and the owner could not tell which screen was
   meant (*"ไม่อยากให้เวลามาอ่านแล้วงงเองหน่ะ"*). Each project's audit carries a check that lists code names that
   no longer match a screen.
+
+## 11. Show From a Copy, Decide From the Source (owner rule 2026-11-01)
+
+**A screen may show a copy. A decision to write asks the real data.**
+
+- **Showing a list:** a loaded list or a cache is fine. It is fast and cheap, and being slightly old does no harm.
+- **Before a delete, or a save that must not duplicate:** read from the server at the press (Firestore: `getDocsFromServer` / `getDocFromServer`, never plain `getDocs`, which answers from the cache or empty when offline). A read that fails refuses with a sentence and writes nothing.
+- **Work that must never go wrong (money, bookings, running codes, the last seat):** let the database enforce it at the write, with a transaction that reads and writes as one step, a uniqueness guard, or a server-side check. A read before a write still leaves a small gap between the two.
+- **Do not ask the owner which of these to use.** This is settled: pick by the three cases above, and say so only if a case does not fit.
+- Why: on 2026-11-01 the owner ruled this same question for the fifth time in one plan (Q307, Q313, Q314, Q320, Q321), asked how others do it, and on Main's answer said to write it down, *"จะได้ไม่ต้องมาถามผม เพราะยังไงก็เหมาะสมอยู่แล้ว"*.
