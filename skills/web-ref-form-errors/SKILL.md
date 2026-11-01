@@ -24,6 +24,7 @@ A wrong field shows BOTH:
 | Required and EMPTY | Only after Save was refused on this form. A fresh form never opens red | The field is filled |
 | Refused only by the server or a transaction (a clash found at Save) | After that refusal, when the refusal names the field | The field changes |
 
+- **A refused press of the leave popup also paints the page behind it (owner 2026-11-01):** the page's own red frames and its box show once the popup closes. Only a page with a reason of its own paints; a wait for its own write does not.
 - **When a wrong value's sentence enters the box (owner 2026-10-31):** on a form, at once, with its frame. On an editable
   grid, at Save, with the sentence on the cell's hover until then: a grid of hundreds of cells must not move the page
   while someone types or pastes.
