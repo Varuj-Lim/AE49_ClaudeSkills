@@ -155,4 +155,4 @@ daily hook is installed here.
 - Saying **"เปิดวัน"** (`/ae49-task-session`, which runs `open` in a new session) completes with a clean board.
 
 From then on, the machine handoff loop is just
-`/ae49-task-session close` ⇄ `/ae49-task-session` (open); a same-machine session change is `/ae49-task-session swap` (see [WORKFLOW.md](WORKFLOW.md)).
+`/ae49-task-session close` ⇄ `/ae49-task-session` (open); a same-machine session change is `/ae49-task-session swap`.

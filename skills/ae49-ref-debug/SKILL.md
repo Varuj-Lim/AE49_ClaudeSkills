@@ -1,6 +1,6 @@
 ---
 name: ae49-ref-debug
-description: The debugging discipline in two levels. EVERYDAY (this file) is a four-step habit said out loud in the first reply and followed in order before any fix is suggested - make the bug happen again reliably, find exactly where it breaks, try to prove your best guess wrong, keep a trail of every test. HARD (hard.md, Matt Pocock's diagnose loop) is a fast repeatable pass/fail check, reproduce, 3-5 ranked causes, one change at a time, a regression test that locks the fix, then a clean-up and write-up. AUTO-LOAD whenever debugging starts - the user reports a bug, says something is broken / crashing / failing, asks to debug / diagnose / investigate, or pastes an error message or stack trace. Also read hard.md when the user says "diagnose this" or describes an intermittent / on-and-off bug, a slowdown or performance regression, or a bug that came back after a first fix. Trigger on /ae49-ref-debug. For a manager-facing write-up of the fix use ae49-task-management-talk.
+description: The debugging discipline in two levels. EVERYDAY (this file) is a four-step habit said out loud in the first reply and followed in order before any fix is suggested - make the bug happen again reliably, find exactly where it breaks, try to prove your best guess wrong, keep a trail of every test. HARD (hard.md, Matt Pocock's diagnose loop) is a fast repeatable pass/fail check, reproduce, 3-5 ranked causes, one change at a time, a regression test that locks the fix, then a clean-up and write-up. AUTO-LOAD whenever debugging starts - the user reports a bug, says something is broken / crashing / failing, asks to debug / diagnose / investigate, or pastes an error message or stack trace. Also read hard.md when the user says "diagnose this" or describes an intermittent / on-and-off bug, a slowdown or performance regression, or a bug that came back after a first fix. Trigger on /ae49-ref-debug.
 ---
 
 # Debugging — the everyday mantra, and the hard-bug loop
@@ -108,5 +108,4 @@ The four steps above are the everyday level for normal bugs. Switch to [hard.md]
 this file's reminder and ground rules — when the bug needs a proper repeatable test setup, is
 intermittent or on-and-off, is a slowdown / performance problem, came back after a first fix
 attempt, needs a permanent regression test or a written post-mortem, or the user says "diagnose
-this". For turning the fix into a write-up for managers / leadership afterward, use
-`ae49-task-management-talk`.
+this".

@@ -53,37 +53,6 @@ you need, not all of them. A rule changes HERE; the hub files never restate it.
 code and in dated notes, so neither is renumbered. A new pointer writes `columns.md T8` (the arrow's place) or
 `keyboard.md T8` (arrow keys / paste); a bare "T8" is ambiguous.
 
-## Old name -> where it lives now
+## Facts per hub
 
-Pointer form: `web-ref-table` T5 for a T-rule (`columns.md T8` / `keyboard.md T8` for the doubled id);
-`web-ref-table/general/filter-format.md` R4 for a topic section. A section id (T1-T10, R1-R4, B1-B6, section
-numbers) never changed.
-
-| Old skill | Now |
-|---|---|
-| `web-ref-table-columns` | `web-ref-table` T1-T7 -> `columns.md` |
-| `web-ref-table-keyboard` | `web-ref-table` T8 -> `keyboard.md` |
-| `web-ref-sort-arrows` / `-filter-format` / `-list-pagination` / `-bulk-actions` / `-action-menu` | `web-ref-table/general/<same>.md` |
-| `web-ref-parameter-table` | `web-ref-table/calculation/parameter-table.md` |
-| `ae49Hub-ref-sort-arrows` / `-action-menu` | `ae49Hub-ref-table/general/<same>.md` |
-| `ae49Hub-ref-parameter-table` (section 11 -> `keyboard.md`) | `ae49Hub-ref-table/calculation/parameter-table.md` |
-| `ae49Hub-ref-schedule-style` | `ae49Hub-ref-table/schedule/schedule-grid.md` |
-| `ae49Hub-ref-list-page` | by section: Table columns / Fill mode -> `columns.md`; the rest -> `general/list-page.md`, `general/filter-format.md`, `general/list-pagination.md`, `general/bulk-actions.md` |
-| `ae49Hub-ref-table-actions` | bulk -> `general/bulk-actions.md`; English heads -> `SKILL.md`; the rest -> `general/row-actions.md` |
-| Nuri: `nurihub-ref-table-columns`, `-list-page`, `-filter-bar`, `-sort-arrows`, `-bulk-selection`, `-action-menu`, `-table-row-menu`, `-row-menu-layout` | `nurihub-ref-table/` (see the table below) |
-
-## Per-project facts
-
-| Canon file | AE49_Hub (`ae49Hub-ref-table/`) | NuriHub (`nurihub-ref-table/`) |
-|---|---|---|
-| `columns.md` | `columns.md` (`COL_PX`, `ListColGroup`, `TableCard`, Exclude registry) | `columns.md` |
-| `keyboard.md` | `keyboard.md` (`lib/gridArrowNav.ts`, wired-table registry) | not adopted yet |
-| `general/filter-format.md` | `general/filter-format.md` + `general/list-page.md` | `general/filter-format.md`, `general/list-page.md` |
-| `general/sort-arrows.md` | `general/sort-arrows.md` | `general/sort-arrows.md` |
-| `general/list-pagination.md` | `general/list-pagination.md` | no separate file yet |
-| `general/bulk-actions.md` | `general/bulk-actions.md` | `general/bulk-actions.md` |
-| `general/action-menu.md` | `general/action-menu.md` + `general/row-actions.md` | `general/action-menu.md`, `general/row-menu.md`, `general/row-menu-layout.md` |
-| `calculation/parameter-table.md` | `calculation/parameter-table.md` | none yet - write it with the first calculation table |
-| `schedule/schedule-grid.md` | `schedule/schedule-grid.md` | none yet - no schedule grid |
-
-When a hub has no facts file for a topic, create it from the canon file the first time it builds one.
+Each hub's `<hub>-ref-table` skill holds its tokens, paths and registries. When a hub has no facts file for a topic, create it from the canon file the first time it builds one.
