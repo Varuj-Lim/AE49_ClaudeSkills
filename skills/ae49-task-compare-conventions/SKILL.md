@@ -70,7 +70,7 @@ sees the path):
    - **Taste/brand** (typography weights, icon-vs-menu) → recommend (c) and
      say why forcing it buys nothing.
    The user may overrule — record their choice, never re-litigate.
-5. **Ask** — `AskUserQuestion`, options a/b/c with one-line consequences.
+5. **Ask** — in the shape of `ae49-ref-question-format`.
    When an item has separable layers (mechanics vs policy vs presentation),
    offer **layered rulings** — e.g. "A wins mechanics, gates stay
    per-project" — instead of forcing all-or-nothing.

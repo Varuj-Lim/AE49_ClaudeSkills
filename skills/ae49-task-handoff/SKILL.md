@@ -19,7 +19,7 @@ Save it INTO THE PROJECT at `docs/handoffs/<topic>.md` (a path relative to the p
 
 - `<topic>` is a short kebab-case slug naming what the handoff is about — derive it from the user's argument when one is given (e.g. "draftsman-grid-tweaks"), otherwise from the main thread of the conversation. The topic MUST appear in the filename.
 - Check whether the `docs/handoffs/` directory exists FIRST; create it if it doesn't (it is not created automatically — `mkdir -p docs/handoffs` or the platform equivalent).
-- After writing, AUTO-COMMIT it: stage ONLY the handoff file (never `git add -A` — other work may be in progress), commit with a concise message like `docs(handoff): <topic>`, and push the backup branch, never the deploy branch (`web-ref-deploy-landing` §4), so the handoff is durable and reachable from another machine/session. Then tell the user the exact path.
+- After writing, AUTO-COMMIT it: stage ONLY the handoff file (never `git add -A` — other work may be in progress), commit with a concise message like `docs(handoff): <topic>`, and push the backup branch (no backup branch or remote: commit only, and say so), never the deploy branch (`web-ref-deploy-landing` §2), so the handoff is durable and reachable from another machine/session. Then tell the user the exact path.
 - **Branch guard.** Before staging, confirm HEAD is the default branch — `git rev-parse --abbrev-ref HEAD`. If it is any other branch, or the path contains `.claude/worktrees/agent-`, do NOT commit — write the handoff file, tell the user it's saved and the commit is held, and let them land it from the main checkout. Never `git checkout` on someone else's behalf.
 
 Include a "suggested skills" section in the document, which suggests skills that the agent should invoke.

@@ -76,7 +76,7 @@ findings must reflect the code as it is right now.
    future reuse.
 
 5. **Report + pick scope (change nothing).** Format per the **`ae49-ref-report-format`** skill
-   (plain English, emoji, per-finding **IDs** so the user can reference one back). Produce a
+   (plain language, emoji, per-finding **IDs** so the user can reference one back). Produce a
    short, scannable, **prioritized** list; give each finding an ID and these lines:
    - 📄 **What** it is — one plain-language line,
    - 📍 **Where** — a `file:line` reference for each occurrence,
@@ -133,7 +133,7 @@ findings must reflect the code as it is right now.
    the user the plan is written and held. Then stage ONLY `docs/plans/<slug>.md` plus any existing plan whose
    `**After:**` you edited in step 8's wiring — never `git add -A` (`git add <file>` creates the
    folder for you). Commit with a message naming the extraction (follow the repo's commit
-   convention). Then push the backup branch (`web-ref-deploy-landing` §4).
+   convention). Then push the backup branch (no backup branch or remote: commit only, and say so) (`web-ref-deploy-landing` §2).
 
 10. **Mark complete.** Mark this audit run complete in the session task list: call
     **TaskUpdate** to set the audit task's status to `completed`. If you never registered
@@ -142,16 +142,16 @@ findings must reflect the code as it is right now.
 
 11. **Return to plan mode + hand off.** Call **EnterPlanMode** to switch back into plan
     mode. (If EnterPlanMode isn't available, ask the user to Shift+Tab back to plan
-    mode.) Then report the saved plan path and the commit/push status. Do NOT extract the
+    mode.) Then report the saved plan path and the commit and backup status. Do NOT extract the
     code here. ALWAYS close the turn with this exact standard hand-off line (adjust only
-    the push wording if push was skipped/blocked):
+    the backup wording if there was no backup push):
 
-    > ✅ Audit done — extraction plan saved & pushed. Build it anytime with the
+    > ✅ Audit done — extraction plan committed and backed up. Build it anytime with the
     > router's `impl:` lane. Ready for your next `/ae49-task-audit-lib`.
 
 ## Output
 
-- One file: `docs/plans/<slug>.md`, Status `Ready`, committed and pushed — OR nothing if
+- One file: `docs/plans/<slug>.md`, Status `Ready`, committed and backed up — OR nothing if
   the codebase is already DRY (say so).
 - No app-code changes. Session left back in plan mode.
 

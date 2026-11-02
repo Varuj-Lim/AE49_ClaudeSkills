@@ -211,10 +211,9 @@ re-read from disk — never report from memory:
    - **Next** — one short phrase: what happens right after the wait clears
      (e.g. "pass → sweep → commit"). This column replaces the old after-table prose.
 
-**The stage emoji legend lives in `ae49-ref-report-format`, not here** (precedence rule
-2026-08-14): 📝 planning · 📋 plan ready · 🔨 building · 🔍 audit running · 🔧 fixing
+**The stage emoji legend lives in `ae49-ref-report-format`, not here:** 📝 planning · 📋 plan ready · 🔨 building · 🔍 audit running · 🔧 fixing
 findings · 📦 staged / pending · 🧪 the user's manual gate · ✅ landed · 🚀 deployed ·
-⏸️ blocked. This skill previously carried a second, slightly different set (⏳ waiting,
+⏸️ blocked · 👤 waiting on the owner. This skill previously carried a second, slightly different set (⏳ waiting,
 ⛔ on hold, 🗄️ recently landed), which meant two skills defined the same board two ways.
 Read the legend from that skill so every report in every project uses one set.
 

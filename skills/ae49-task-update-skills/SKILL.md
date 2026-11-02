@@ -76,7 +76,7 @@ silently leaving the agents stale.
    report exactly which were deleted. One carve-out: a skill authored in THIS
    conversation that is being mirrored to the repo in the same turn is new work
    in transit, not drift — mirror it, don't delete it.
-4. Report the result plainly (per `ae49-ref-report-format` style: plain English
+4. Report the result plainly (per `ae49-ref-report-format` style: plain language
    + emoji tags, e.g. ➕ added / 🔄 updated / 🗑 deleted local-only). Remind the
    user that updated skills load fresh in the **next** session — the current
    session keeps the copies it already loaded.

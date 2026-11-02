@@ -14,7 +14,7 @@ Stand outside the change and ask whether it should exist at all, then verify it 
 - **Outsider.** Forget who wrote it and why they think it's right. Read the artifact cold.
 - **End-to-end, not diff-local.** The diff is the entry point, not the scope. Follow the call graph through real code paths.
 - **Actionable, concise, with rationale.** Every finding states *what to change*, *why*, and *what evidence* led you there. No filler, no restating the diff back.
-- **Plain English, not jargon.** Write the report so a non-programmer can follow it — explain the *why* and the consequence in everyday words, and swap programmer terms for plain ones (or explain them on first use). Exception: file paths, `file:line` citations, code snippets, and exact error text stay verbatim — never reword those.
+- **Plain language, not jargon.** Write the report so a non-programmer can follow it — explain the *why* and the consequence in everyday words, and swap programmer terms for plain ones (or explain them on first use). Exception: file paths, `file:line` citations, code snippets, and exact error text stay verbatim — never reword those.
 
 ## Workflow
 
@@ -49,7 +49,7 @@ For each claim the change/plan makes, answer:
 
 ### 4. Report
 
-Format the report per the **`ae49-ref-report-format`** skill — the single source for the format: plain English; emoji + per-severity IDs (`B#` / `MJ#` / `MN#` / `N#`) so the user can reference a finding back; the labelled finding lines (🔍 Finding · 💥 Why it matters · 🧾 Evidence · 🔧 Fix); and the emoji verdict (✅ Ship · 🩹 Fix-then-ship · 🔨 Rework · ❌ Reject). Keep every `file:line` citation and code snippet exact.
+Format the report per the **`ae49-ref-report-format`** skill — the single source for the format: plain language; emoji + per-severity IDs (`B#` / `MJ#` / `MN#` / `N#`) so the user can reference a finding back; the labelled finding lines (🔍 Finding · 💥 Why it matters · 🧾 Evidence · 🔧 Fix); and the emoji verdict (✅ Ship · 🩹 Fix-then-ship · 🔨 Rework · ❌ Reject). Keep every `file:line` citation and code snippet exact.
 
 Scrutinize specifics on top of that format:
 
@@ -64,7 +64,7 @@ After the report, ask the user **which finding(s) they want to fix** (they refer
 
 - Write the fix as `docs/plans/<slug>.md` from that skill's `TEMPLATE-FORMAT.md` (its canonical template).
 - Set **Status** `Ready`, stamp **Created** with today's date, and fill **Files to touch** completely (Main's overlap check reads it to detect two builds colliding on the same file).
-- Commit ONLY that plan file (never `git add -A`) and push the backup branch, never the deploy branch (`web-ref-deploy-landing` §4).
+- Commit ONLY that plan file (never `git add -A`) and push the backup branch (no backup branch or remote: commit only, and say so), never the deploy branch (`web-ref-deploy-landing` §2).
 
 The scrutiny already did the design work, so reuse the findings / evidence / fixes as the plan content and skip the grilling step unless a fix decision is still open. Hand off — Main builds it later via the `impl:` lane (an `ae49-implement` agent). Never run the app-code fix inline.
 

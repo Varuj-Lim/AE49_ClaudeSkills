@@ -129,8 +129,8 @@ When at least one `plan` topic has a finding, write the audit as a plan in the
   dropped findings) · `Verification` (re-run this audit on the same scope →
   clean; tsc; check the changed routes).
 - **Commit:** stage ONLY the plan file, message
-  `docs(plans): add audit fix plan (<scope>)`; push the backup branch, never the deploy
-  branch (`web-ref-deploy-landing` §4).
+  `docs(plans): add audit fix plan (<scope>)`; push the backup branch (no backup branch or remote: commit only, and say so), never the
+  deploy branch (`web-ref-deploy-landing` §2).
 
 ## A new rule sweeps the project FIRST (owner ruling 2026-10-06)
 

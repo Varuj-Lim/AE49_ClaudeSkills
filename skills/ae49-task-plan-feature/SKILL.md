@@ -98,8 +98,8 @@ applies if Main writes it inline.
    not run `git add`, `git commit`, `git push`, or any branch command; leave
    `docs/plans/<slug>.md` uncommitted in the working tree and return its path to Main.
 
-   **Main then commits the plan locally and pushes the BACKUP branch, never the deploy
-   branch** (`web-ref-deploy-landing` §4; in the hubs a push to the deploy branch deploys). Builders
+   **Main then commits the plan locally and pushes the BACKUP branch (no backup branch or remote: commit only, and say so), never
+   the deploy branch** (`web-ref-deploy-landing` §4; in the hubs a push to the deploy branch deploys). Builders
    start from the local default branch (their Step 0), so a local commit is what they need.
    Stage ONLY the plan file(s) this run wrote or changed (`docs/plans/<slug>.md`, plus any
    existing plan whose `**After:**` was edited on the urgent path) — never `git add -A`.
@@ -120,7 +120,7 @@ applies if Main writes it inline.
 ## Output
 
 - `docs/plans/<slug>.md`, Status `Ready`, `**After:**` wired, left uncommitted by
-  ae49-plan; committed to `main` and **pushed** by Main.
+  ae49-plan; committed on the default branch and backed up by Main, never pushed to the deploy branch.
 - A report to Main: plan path, file footprint, `After:` edges, Open questions.
 
 ## Notes

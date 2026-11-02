@@ -190,7 +190,7 @@ loaded on demand — see [AUDIT-PATTERN.md](AUDIT-PATTERN.md).
 If the new skill **produces a report for the user** (a review, audit, findings list, summary,
 or status output), do NOT invent or copy a format. Point its **Report** / **Output** section at
 the shared **[`ae49-ref-report-format`](../ae49-ref-report-format/SKILL.md)** skill — the single
-source for plain English, emoji tagging, per-finding **IDs** (so the user can reference a finding
+source for plain language, emoji tagging, per-finding **IDs** (so the user can reference a finding
 back), the labelled finding lines, and the emoji verdict. Add only the skill's own specifics on
 top (its severity / tier labels and its field names). Keep the format in one place so it can't
 drift across skills.
@@ -199,7 +199,7 @@ drift across skills.
 
 After drafting, verify:
 
-- [ ] `node ~/.claude/skills/ae49-task-write-a-skill/scripts/validate-skills.cjs` exits 0 (an unquoted `: ` in a description silently loses its trigger words)
+- [ ] `node ~/.claude/skills/ae49-task-write-a-skill/scripts/validate-skills.cjs <skills folder>` exits 0, naming the project's `.claude/skills` for a project skill (no folder = user skills; an unquoted `: ` in a description silently loses its trigger words)
 - [ ] Description includes triggers ("Use when...")
 - [ ] Name has the `<scope>-<type>-<name>` form (ref/task segment)
 - [ ] SKILL.md under 150 lines
