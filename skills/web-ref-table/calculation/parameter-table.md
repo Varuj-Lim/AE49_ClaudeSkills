@@ -84,6 +84,9 @@ letter-spacing goes too.
 the head, the unit in the units row under it (§5, `columns.md` T10; a P block's unit is its `Unit`
 column). They are what you need while typing; the prose is read once.
 
+A computed CELL also has its own `?` for how that value came out: `web-ref-calc-report`. It sits over the cell's corner, so the width rules
+here still hold.
+
 **The legend popup** (`web-ref-popup`, read-only kind):
 - a table of **Symbol · Description · Unit** — symbol FIRST, because a legend is a lookup
   keyed by the symbol you are staring at (deliberately not §1's order);
