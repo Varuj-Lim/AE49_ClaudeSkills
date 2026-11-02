@@ -63,8 +63,8 @@ names the five session-init skills.
 ## 4. Hooks (machine-local — the sync does NOT install these)
 
 ```powershell
-New-Item -ItemType Directory -Force "$env:USERPROFILE.claudehooks" | Out-Null
-Copy-Item "<clone>hooks*" "$env:USERPROFILE.claudehooks\" -Force
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude\hooks" | Out-Null
+Copy-Item "<clone>\hooks\*" "$env:USERPROFILE\.claude\hooks\" -Force
 ```
 
 Merge into `~/.claude/settings.json` (create the file if missing):

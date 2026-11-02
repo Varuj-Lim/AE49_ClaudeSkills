@@ -51,6 +51,6 @@ mode is always the safe reading.
 
 ## Interplay
 
-- Caveman, report-format, and Thai-explanation rules all apply unchanged.
+- Report-format and Thai-explanation rules apply unchanged.
 - Works alongside `ae49-router`: routing simply pauses — a lane prefix is an
   OFF trigger, everything else is conversation.

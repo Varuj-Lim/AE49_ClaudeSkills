@@ -28,8 +28,8 @@ and an Autopilot left ON by a swap is ticked in 7b.
    git merge --ff-only origin/backup   # backup normally leads main between pushes
    ```
 
-   A dirty file is expected when it is dev-server churn (`web-ref-deploy-landing` §7: leave it while the
-   emulator runs, never commit it) or work the in-flight memory names. Any other dirty file, or an ff
+   A dirty file is expected when it is dev-server churn (the files `web-ref-deploy-landing` §7 means: never
+   commit them; while the emulator runs it rewrites them, so leave them) or work the in-flight memory names. Any other dirty file, or an ff
    failure, means something unexpected happened: stop and resolve with the user before touching anything.
 
 2. **Skills sync.** If this machine's daily drift hook reported changes, act on

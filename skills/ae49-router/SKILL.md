@@ -120,7 +120,7 @@ stay when the in-flight memory names it: an uncommitted tree, or a built but una
 
 **At the first clean break of a long session**, Main runs `ae49-task-session swap` and says in its own line:
 `🧹 ถึงจุดพักแล้ว — ปิด session นี้ แล้วพิมพ์ /ae49-task-session ใน session ใหม่`. The owner closes this session and opens the
-new one; Main never starts it. The owner may say "เปิดใหม่" at any time and Main swaps at once. `ae49-task-session close` is
+new one; Main never starts it. The owner may say "เปิดใหม่" at any time: Main swaps at once if this is a clean break, otherwise it says what is still running and swaps when that ends. `ae49-task-session close` is
 only for switching machines.
 
 ## Inline refine (the `refine:` lane)

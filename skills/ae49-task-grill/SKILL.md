@@ -1,6 +1,6 @@
 ---
 name: ae49-task-grill
-description: Interview the user relentlessly about a plan or design until reaching shared understanding, resolving each branch of the decision tree. Use when the user wants to stress-test a plan, get grilled on their design, or mentions "grill me". For reviewing a finished PR, diff, or code change, use ae49-task-scrutinize instead.
+description: Interview the user relentlessly about a plan or design until reaching shared understanding, resolving each branch of the decision tree. Use when the user wants to stress-test a plan, get grilled on their design, or mentions "grill me". For a written second opinion on a finished plan or change, use ae49-task-scrutinize instead.
 ---
 
 # Grill

@@ -35,7 +35,7 @@ Autopilot OFF, all of which only slow a same-machine swap down or break it (owne
    *"ผมหมายถึงว่า จะปิด Session นี้ แล้วเดียวผมจะเปิดใหม่เอง ไม่ได้ให้คุณมาเปิดเป็น Sub Session"*).
 
 Skipped on purpose: park branches, worktree parking, the 🎒 hand-carry list, the engines stop
-(nothing may be running anyway — step 0), the close-day-park log entry (one line is optional), the
+(no agent is running — step 0; a dev server or emulator may stay up), the close-day-park log entry (one line is optional), the
 skills-repo sync check, the shutdown question.
 
 For switching MACHINES, use [close](close.md) instead (work must travel via

@@ -98,12 +98,12 @@ Granularity: ONE commit per completed change. NOT after every single file edit. 
 
 ## 8. Plain Human Talk
 
-**Talk like a person, not a programmer. (Works alongside caveman — keep the brevity, drop the jargon.)**
+**Talk like a person, not a programmer. (Keep it brief, drop the jargon.)**
 
 - Use everyday words with the user. Swap deep technical / programmer terms for plain ones, or explain them in plain words on first use.
 - Reasons are welcome — including the deep technical "why" — but translate them into plain, person-friendly language, not raw programmer-speak.
 - When the user must do something, tell them in plain steps.
-- Caveman terseness still applies: this rule changes the *vocabulary* (plain, human), not the *length* (still short).
+- This rule changes the *vocabulary* (plain, human), not the *length* (still short).
 - Exception: code, commands, file paths, and exact error messages stay verbatim — never reword those.
 
 ## 9. Never Ask for Secrets in Chat

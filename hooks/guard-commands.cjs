@@ -1,38 +1,125 @@
-// PreToolUse hook for Bash and PowerShell: asks the owner before a command that deploys, writes real data
-// or destroys work. It asks, never blocks, so an owner-ordered push still goes through with one click.
-const DEPLOY_BRANCHES = "main|master";
-const NON_DEPLOY_REPOS = /AE49_ClaudeSkills/i;
+// PreToolUse hook for Bash and PowerShell: asks the owner before a command that deploys, writes real data or
+// destroys work. It asks, never blocks, so an owner-ordered push still goes through with one click. It is a net
+// for slips, not a security boundary: a script that pushes from inside is not seen.
+const path = require("path");
 
-// Text inside quotes and heredocs is data (a commit message, a grep pattern), so it must not trigger.
-function withoutQuotedText(command) {
+const DEPLOY_BRANCH = /^(refs\/heads\/)?(main|master)$/;
+const NON_DEPLOY_REPO = /AE49_ClaudeSkills/i;
+const SHELLS = new Set(["bash", "sh", "zsh", "powershell", "pwsh", "cmd"]);
+
+function withoutHereDocs(command) {
   return command
-    .replace(/@'[\s\S]*?\n'@/g, " ")
-    .replace(/@"[\s\S]*?\n"@/g, " ")
-    .replace(/<<-?\s*['"]?(\w+)['"]?[\s\S]*?\n\s*\1\b/g, " ")
-    .replace(/"(?:[^"\\\n]|\\.)*"/g, '""')
-    .replace(/'[^'\n]*'/g, "''");
+    .replace(/@'[\s\S]*?\n'@/g, "''")
+    .replace(/@"[\s\S]*?\n"@/g, "''")
+    .replace(/<<-?\s*['"]?(\w+)['"]?[^\n]*\n[\s\S]*?\n\s*\1\b/g, " ");
 }
 
-function isDeployPush(command) {
-  const push = /\bgit\b[^;&|\n]*?\spush\b([^;&|\n]*)/g;
-  let match;
-  while ((match = push.exec(command))) {
-    const args = match[1].trim().split(/\s+/).filter((a) => a && !a.startsWith("-"));
-    if (args.length < 2) return true; // a bare push sends the current branch
-    if (args.slice(1).some((ref) => new RegExp(`^(\\+?)(HEAD|[^:]+:)?(refs/heads/)?(${DEPLOY_BRANCHES})$`).test(ref) || ref === "HEAD" || ref.startsWith("+"))) return true;
+// Splits into commands, each a list of words, honouring quotes. Quoted text stays one word, so a commit message
+// cannot read as a command. Returns null on an unclosed quote.
+function parse(command, backslashEscapes) {
+  const commands = [[]];
+  let word = null;
+  let quote = null;
+  const endWord = () => {
+    if (word !== null) commands[commands.length - 1].push(word);
+    word = null;
+  };
+  for (let i = 0; i < command.length; i++) {
+    const c = command[i];
+    if (quote) {
+      if (c === "\\" && quote === '"' && backslashEscapes && '"\\$`'.includes(command[i + 1] ?? " ")) word += command[++i];
+      else if (c === "`" && quote === '"' && !backslashEscapes && command[i + 1] === '"') word += command[++i];
+      else if (c === quote) quote = null;
+      else word += c;
+    } else if (c === '"' || c === "'") {
+      quote = c;
+      word = word ?? "";
+    } else if (c === ";" || c === "\n" || c === "|" || (c === "&" && (command[i + 1] === "&" || word !== null))) {
+      if (word !== null && c === "&" && /[<>]$/.test(word)) { word += c; continue; } // 2>&1
+      endWord();
+      if (command[i + 1] === c) i++;
+      commands.push([]);
+    } else if (/\s/.test(c)) {
+      endWord();
+    } else {
+      word = (word ?? "") + c;
+    }
   }
-  return false;
+  if (quote) return null;
+  endWord();
+  return commands.filter((words) => words.length);
 }
 
-function reasonFor(raw, cwd) {
-  const command = withoutQuotedText(raw);
-  const inNonDeployRepo = NON_DEPLOY_REPOS.test(raw) || NON_DEPLOY_REPOS.test(cwd || "");
-  if (/\bgit\b[^;&|\n]*\spush\b[^;&|\n]*\s(--force\b|-f\b|--force-with-lease\b)/.test(command)) return "force push: this overwrites history on the remote";
-  if (!inNonDeployRepo && isDeployPush(command)) return "push to the deploy branch: in the hubs this deploys";
-  if (/\bfirebase(-tools)?(\.cmd)?\b[^;&|\n]*\sdeploy\b/.test(command)) return "firebase deploy: this changes production";
-  if (/\bgcloud\b[^;&|\n]*\s(deploy|update|delete)\b/.test(command)) return "gcloud change: this changes production";
-  if (/(^|\s)--apply\b/.test(command)) return "--apply: this script writes for real; the dry run does not";
-  if (/\bgit\b[^;&|\n]*\sreset\s+--hard\b/.test(command)) return "git reset --hard: this discards uncommitted work";
+const baseName = (word) => path.win32.basename(word).toLowerCase().replace(/\.(exe|cmd|ps1)$/, "");
+
+function pushReason(args, repo) {
+  if (args.some((a) => /^(--force|--force-with-lease|--force-if-includes|-[a-z]*f[a-z]*)(=|$)/.test(a) || a.startsWith("+"))) {
+    return "force push: this overwrites history on the remote";
+  }
+  if (NON_DEPLOY_REPO.test(repo)) return null;
+  const positional = args.filter((a) => !a.startsWith("-") && !/^\d?>/.test(a) && !/^\d?>>/.test(a));
+  const refs = positional.slice(1);
+  const onDeploy = "push to the deploy branch: in the hubs this deploys";
+  if (refs.length === 0) return onDeploy; // a bare push sends the current branch
+  for (const ref of refs) {
+    const target = ref.includes(":") ? ref.slice(ref.indexOf(":") + 1) : ref;
+    if (ref === "HEAD" || ref === "@" || /[$%`(]/.test(ref) || DEPLOY_BRANCH.test(target)) return onDeploy;
+  }
+  return null;
+}
+
+function gitReason(words, cwd) {
+  let repo = cwd;
+  let i = 1;
+  while (i < words.length && words[i].startsWith("-")) {
+    if (words[i] === "-C") repo = words[i + 1] ?? repo;
+    i += words[i] === "-C" || words[i] === "-c" ? 2 : 1;
+  }
+  const args = words.slice(i + 1);
+  if (words[i] === "push") return pushReason(args, repo);
+  if (words[i] === "reset" && args.includes("--hard")) return "git reset --hard: this discards uncommitted work";
+  return null;
+}
+
+function commandReason(words, cwd, backslashEscapes) {
+  while (words.length && (words[0] === "&" || /^\w+=/.test(words[0]) || words[0] === "time")) words = words.slice(1);
+  if (!words.length) return null;
+  const program = baseName(words[0]);
+
+  if (SHELLS.has(program)) {
+    const flag = words.findIndex((w) => /^(-c|-lc|-command|\/c)$/i.test(w));
+    if (flag >= 0 && words[flag + 1]) return reasonFor(words.slice(flag + 1).join(" "), cwd, backslashEscapes);
+    return null;
+  }
+  if (program === "git") return gitReason(words, cwd);
+
+  const names = words.map(baseName);
+  if (names.includes("firebase") || names.includes("firebase-tools")) {
+    if (words.includes("deploy") || words.some((w) => /:delete$/.test(w))) return "firebase deploy or delete: this changes production";
+  }
+  if (program === "gcloud" && words.some((w) => ["deploy", "update", "delete", "execute", "create"].includes(w))) {
+    return "gcloud change: this changes production";
+  }
+  if (words.includes("--apply") || (["node", "npx", "npm", "tsx"].includes(program) && words.includes("--commit"))) {
+    return "this script writes for real; the dry run does not";
+  }
+  return null;
+}
+
+function reasonFor(raw, startCwd, backslashEscapes) {
+  const commands = parse(withoutHereDocs(raw), backslashEscapes);
+  if (!commands) {
+    return /\bpush\b|\bdeploy\b|--apply|--commit|reset\s+--hard/.test(raw) ? "could not read this command's quotes, and it may deploy or write" : null;
+  }
+  let cwd = startCwd;
+  for (const words of commands) {
+    if (/^(cd|set-location|sl|chdir)$/i.test(words[0]) && words[1]) {
+      cwd = words[words.length - 1];
+      continue;
+    }
+    const reason = commandReason(words, cwd, backslashEscapes);
+    if (reason) return reason;
+  }
   return null;
 }
 
@@ -42,7 +129,7 @@ process.stdin.on("end", () => {
   let reason = null;
   try {
     const event = JSON.parse(input);
-    reason = reasonFor(String(event.tool_input?.command ?? ""), event.cwd);
+    reason = reasonFor(String(event.tool_input?.command ?? ""), String(event.cwd ?? ""), event.tool_name !== "PowerShell");
   } catch {
     process.exit(0);
   }

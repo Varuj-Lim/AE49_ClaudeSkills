@@ -1,13 +1,13 @@
 # Notice
 
-Parts of this repository are adapted from third-party work. Each adapted file names its source at the top.
+Parts of this repository are adapted from third-party work, listed below.
 
 ## Skills For Real Engineers, by Matt Pocock
 
 Source: https://github.com/mattpocock/skills
 
 Adapted in `ae49-task-grill`, `ae49-task-handoff`, `ae49-task-improve-codebase-architecture`, `ae49-task-write-a-skill`,
-`ae49-mode-caveman` and `ae49-ref-debug/hard.md`.
+`ae49-mode-caveman` and `ae49-ref-debug/hard.md` with its helper script, including those skills' topic files.
 
 ```text
 MIT License
@@ -33,7 +33,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## Acknowledgement
+## Acknowledgements
+
+`ae49-ref-guidelines` draws partly on [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding.
 
 The ideas behind `ae49-task-scrutinize` and the everyday part of `ae49-ref-debug` came from
 [thananon/9arm-skills](https://github.com/thananon/9arm-skills). That repository states no license, so both files were

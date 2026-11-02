@@ -28,7 +28,8 @@ No fix is suggested before step 1 is met. If you catch yourself suggesting one w
 Aim for a check of a few seconds that answers pass or fail, written down so it can be re-run: a failing test, a script, a
 command, a replay of real data. Hold still whatever moves by itself, such as the clock, random values, the network and files.
 
-- **Happens only sometimes:** raise its rate first, with a loop, parallel runs, load or added delay.
+- **Happens only sometimes:** raise its rate first, with a loop, parallel runs, load or added delay. About half the time is
+  debuggable; 1 time in 100 is not yet.
 - **Cannot be triggered:** stop and say so. Ask for access, saved evidence (network log, error log) or leave to add
   temporary logging. Do not guess a fix.
 
