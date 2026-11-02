@@ -191,10 +191,10 @@ Board rows this lane adds on top of the shared legend:
   in *Waiting on* (`#2 landing`); a blocker not yet on the board gets its own row first.
 - **`⏸️ On hold`** — a plan whose file says `Status: On hold`; say "on hold" in *Next*.
 - **`✅ Landed`** — show the newest 2–3 from `done/` so recent work stays visible.
-- **Register rows** — one row per `_open-items.md` entry, `⏸️` + what it waits on (your ruling,
-  your hands, data). **A board may say "nothing is open" only when BOTH the plans and the register
-  are empty.** Exception (owner Q211 a, 2026-10-27): rows waiting ONLY on an external contributor's
-  next PR go on one footnote line under the table, per `ae49-ref-report-format`.
+- **Register rows** — one row per `_open-items.md` entry that someone here can move, `⏸️` + what it waits on
+  (your ruling, your hands, data); a row only an external contributor's next PR can move goes on one footnote line
+  under the table (owner Q211 a, 2026-10-27), per `ae49-ref-report-format`. **A board may say "nothing is open"
+  only when BOTH the plans and the register are empty.**
 
 ## The open-items register — nothing discussed may live only in chat or memory prose
 
@@ -319,11 +319,10 @@ scanned.
   files' canons, back in minutes — for the small low-risk changes Main built inline. Main
   names the depth in the dispatch ("short audit"); the auditor never trusts the author,
   Main included. Main fixes or re-dispatches BLOCKER/MAJOR findings before opening the user
-  gate; MINOR findings are reported at the gate. Only after the audit passes does the
-  manual-test gate open.
-  **Exception (owner AQ1 a, 2026-10-16):** a Main-run gate (autopilot) may START while the audit runs,
-  through `ae49-gate` agents. The land still waits for both, and a BLOCKER/MAJOR fold re-gates the items
-  it touches (`ae49-ref-gate-checklist/delegated.md`).
+  gate; MINOR findings are reported at the gate. **The owner is shown a gate only after the audit
+  passes, and nothing lands before both pass** (owner AQ1 a, 2026-10-16): a Main-run gate (autopilot) may
+  therefore have its items run through `ae49-gate` agents while the audit runs, since the owner sees
+  nothing yet. A BLOCKER/MAJOR fold re-gates the items it touches (`ae49-ref-gate-checklist/delegated.md`).
 - The **manual-test gate** — after `ae49-implement` returns **and `ae49-audit` passes**, show the user the change and
   **stop for their manual test** before any commit. A gate without a checklist is not a gate. A MAIN-RUN gate (autopilot, or items the owner left to Main) may have its items RUN by `ae49-gate` agents, never its VERDICT (`ae49-ref-gate-checklist/delegated.md`). **Every rule for
   opening, writing, numbering, handing over and closing that gate lives in `ae49-ref-gate-checklist` — INVOKE IT

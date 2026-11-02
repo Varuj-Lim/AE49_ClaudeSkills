@@ -23,8 +23,9 @@ skill is the single source; those three point here.
   no file edits, no git, no scripts, no launcher presses (user CLAUDE.md rule
   2026-09-09). The deliverable is the prompt; the sibling's session does the edit,
   its own build/lint gates, its own audit + manual gate, and its own commit.
-- User-level skills are the one exception — they travel through the skills repo
-  (`skills-edit-mirrors-to-repo`), not through a handoff.
+- User-level skills are `~/.claude` files, which this session writes itself — they travel
+  through the skills repo, mirrored in the same turn (user CLAUDE.md "Skills repo sync"),
+  not through a handoff.
 
 ## The seven parts — every prompt, in this order
 

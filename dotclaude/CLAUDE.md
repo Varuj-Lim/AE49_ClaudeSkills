@@ -136,37 +136,39 @@ line of its calculation spec was derived from. Both would have been unrecoverabl
   not just complex explanations. Keep code, file paths, commands, identifiers, UI
   labels, and exact error messages verbatim in English (never translate those).
   **ตอบสั้น ตรงประเด็น ใช้คำธรรมดา** (owner Q343 a, 2026-11-02, replaces `ae49-mode-caveman` at session start; reports, questions and checklists stay in full sentences).
-  Status-board tables stay English per the rule below.
+  Table cells follow the table-language rule below.
   **Addendum 2026-10-30 (owner): Thai ONLY — never Vietnamese or any other language.** Every
   word of prose to the owner is Thai (or the English kept verbatim above); a short progress
   line, a one-line aside or a caveman fragment is no exception. Before sending, check the
   prose is Thai script. Why: on 2026-10-30 an open-day's two short progress lines came out in
   Vietnamese ("Autopilot ON → chạy tick trước", "Đang mở ngày …") and the owner asked for this
   rule ("ระบุลงในกติกา User Skill หน่อยว่าให้ใช้ภาษาไทย ไม่ใช้เวียดนาม").
-- **Status-board tables stay in ENGLISH (rule 2026-08-11).** Any multi-item status
-  table (plan boards, build trackers, finding lists rendered as tables) is written
-  in English even when the surrounding explanation is in Thai — table cells are
-  scanned, not read, and English keeps them compact and consistent.
-  **Exception (owner 2026-10-21):** the autopilot decision report ("ตัดสินใจอะไรไปบ้าง") keeps English
-  column headings but writes every cell's explanation in Thai — see `ae49-mode-autopilot` § `off`.
+- **Table language: column heads are English; cells are English in a table that is scanned and
+  Thai in a table that is read cell by cell** (rule 2026-08-11 "status-board tables stay in ENGLISH";
+  owner 2026-10-21). A multi-item status table (plan boards, build trackers, finding lists rendered
+  as tables) is scanned, not read, so it is written in English even when the surrounding explanation
+  is in Thai — English keeps it compact and consistent. The autopilot decision report
+  ("ตัดสินใจอะไรไปบ้าง") is read cell by cell, so its column headings stay English and every
+  cell's explanation is Thai — see `ae49-mode-autopilot` § `off`.
 
 # One session, one project folder (rule 2026-09-09)
 
 A session WRITES only inside the project it was opened in — the working
-directory's repo, plus this machine's own `~/.claude` user files. READING any
+directory's repo, plus this machine's own `~/.claude` user files (the skills clone
+that mirrors them counts as part of them). READING any
 other repo on the machine is fine (compare, diff, copy a reference); writing
 there is not — no file edits, no `git` commands, no scripts run against it, not
 even a one-line port "while I am here". Two sessions writing one checkout is how,
 on 2026-09-08, a sibling session's commit swept another session's staged files
 along and a launcher was rewritten underneath a batch that was still running.
 
-**This rule is about PROJECT repos. The skills repo is the one exception (added
+**This rule is about PROJECT repos; the skills repo is part of `~/.claude` (added
 2026-09-22).** The AE49_ClaudeSkills clone is not a project — it is the sync target
 for the very `~/.claude` files this session is already allowed to write, and "Skills
 repo sync" above REQUIRES the mirror, the commit and the push in the SAME turn. So
 whenever a session touches `~/.claude/skills/`, `~/.claude/agents/` or this file, it
 edits, commits and pushes in that clone as well, and that is NOT a cross-project
-write. Nothing else is excepted: a sibling hub's checkout is still off limits, and
+write. A sibling hub's checkout is outside the rule and still off limits, and
 the handoff prompt below is still the deliverable for it. Written because on
 2026-09-22 a session stopped to reason the two rules against each other before a
 one-line doc fix — the answer belongs in the rule, not re-derived every time.

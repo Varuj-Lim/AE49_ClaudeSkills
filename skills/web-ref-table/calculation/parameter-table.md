@@ -204,9 +204,8 @@ Numeric cells follow the project's input-token rule (no stepper arrows, red fram
   wrapped name overlaps the first row.
 - If one half of a two-table grid leaves paper, keep its measures and mark them dormant; re-measure
   before trusting them again.
-- Smaller print text, where ruled, is a NAMED tier of the project's print tokens — never a raw size at the call site.
-- Smaller print text is NOT a tool, with one recorded exception per sheet that needs the
-  owner's own ruling, measured before and after.
+- Smaller print text is NOT a tool. A sheet gets it only by the owner's own ruling for that sheet, recorded and
+  measured before and after, and it is a NAMED tier of the project's print tokens — never a raw size at the call site.
 
 ## 10 · Headers are not sticky in a plain card (P, R)
 

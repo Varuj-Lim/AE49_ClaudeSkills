@@ -1,6 +1,6 @@
 ---
 name: ae49-task-update-skills
-description: Sync the user-level skills in ~/.claude/skills from the AE49_ClaudeSkills GitHub repo (github.com/Varuj-Lim/AE49_ClaudeSkills) — dry-run preview first, then apply. The repo is the AUTHORITY - any local difference (an edited copy OR a skill existing only locally) is presumed wrong and is corrected to match the repo, unless the user says in chat that a local change is intentional. Use when the user wants to update, sync, refresh, or pull their user skills / AE49 skills from GitHub, or invokes /ae49-task-update-skills.
+description: Sync the user-level skills in ~/.claude/skills from the AE49_ClaudeSkills GitHub repo (github.com/Varuj-Lim/AE49_ClaudeSkills) — dry-run preview first, then apply. The repo is the AUTHORITY - any local difference (an edited copy OR a skill existing only locally) is presumed wrong and is corrected to match the repo, unless that change is going up to the repo now (the user says in chat it is intentional, or it was authored in this conversation and is mirrored in the same turn). Use when the user wants to update, sync, refresh, or pull their user skills / AE49 skills from GitHub, or invokes /ae49-task-update-skills.
 ---
 
 # Update user skills from GitHub
@@ -16,10 +16,10 @@ Pulls three things from `https://github.com/Varuj-Lim/AE49_ClaudeSkills`:
 One-way: **GitHub → local**. The repo is the **AUTHORITY** (user ruling
 2026-08-24): any local state that differs from it — an edited copy, or a whole
 skill that exists only on this machine — is **presumed wrong** (stale, drifted,
-or retired upstream) and is corrected to match the repo. The ONLY exception is
-a local change the user says **in chat** is intentional; that change gets
-pushed UP first (via the machine's clone), never preserved by skipping the
-sync.
+or retired upstream) and is corrected to match the repo, unless it is going UP to
+the repo in this sitting: the user says **in chat** it is intentional (it gets
+pushed up first, via the machine's clone, never preserved by skipping the
+sync), or it was authored in this conversation and is mirrored in the same turn.
 
 The `agents/` sync matters as much as the skills: `ae49-plan` and `ae49-implement` are
 the headless workers Main spawns to do the actual planning and building. Before they were
@@ -73,9 +73,9 @@ silently leaving the agents stale.
    line shows. Re-run the preview to prove it is quiet. The script itself never
    deletes a local-only skill — so after apply, **delete each `local-only`
    folder** the user did not claim (`Remove-Item -Recurse -Force <folder>`), and
-   report exactly which were deleted. One carve-out: a skill authored in THIS
-   conversation that is being mirrored to the repo in the same turn is new work
-   in transit, not drift — mirror it, don't delete it.
+   report exactly which were deleted. A skill authored in THIS conversation
+   that is being mirrored to the repo in the same turn is going up (see the top):
+   new work in transit, not drift — mirror it, don't delete it.
 4. Report the result plainly (per `ae49-ref-report-format` style: plain language
    + emoji tags, e.g. ➕ added / 🔄 updated / 🗑 deleted local-only). Remind the
    user that updated skills load fresh in the **next** session — the current
@@ -93,7 +93,7 @@ silently leaving the agents stale.
 - Needs `git` and network access; the repo is public, no auth required.
 - To push local skill edits **up** to GitHub, work in a clone of the repo and
   commit there — this skill deliberately doesn't push.
-- **The tool syncs everything except itself.** `ae49-task-update-skills` lives in the
+- **The tool syncs everything except itself** (and never applies `CLAUDE.md`, step 2). `ae49-task-update-skills` lives in the
   repo for backup + first-time bootstrap, but the sync **skips it** (mirroring the
   running script over itself is unsafe). To update the tool: edit + push, then copy
   `skills/ae49-task-update-skills/` into `~/.claude/skills/` by hand (or re-bootstrap

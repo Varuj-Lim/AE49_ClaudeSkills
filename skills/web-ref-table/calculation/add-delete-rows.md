@@ -10,7 +10,7 @@ Owner, AE49_Hub, 2026-10-16, on the Pile Prices table: *"ผมชอบ ตา�
    - **The bin** deletes that row. Ask before deleting only when the row holds data that cannot be recovered or that something else depends on. A blank row can go silently.
 
    The head `Action` is visible text, not screen-reader only. In the legend popup it is the last row.
-2. **No separate "Add row" button.** It goes away, whether it sat under the table, in the toolbar or as a pill. A table with no rows shows ONE row instead: a caption across every column but Action, saying what is missing and "กด + ท้ายแถวนี้…", and in the Action cell a single `+` that adds the first row.
+2. **No separate "Add row" button for a blank row** (see rule 10 for an add that needs choices). It goes away, whether it sat under the table, in the toolbar or as a pill. A table with no rows shows ONE row instead: a caption across every column but Action, saying what is missing and "กด + ท้ายแถวนี้…", and in the Action cell a single `+` that adds the first row.
 3. **Insert under the clicked row, even in a sorted view.** The new row appears right under the row that was clicked in the order on screen, not at the end of the data. If the clicked row has vanished meanwhile, insert at the top. A `null` "after" adds at the end.
 4. **Paste from Excel still grows the table at the end** (`keyboard.md` P-rules). The add door takes `null`. A paste at the last row overwrites that row first, then grows the table.
 5. **Caps and refusals keep their reasons on hover.**
@@ -30,7 +30,7 @@ Owner, AE49_Hub, 2026-10-16, on the Pile Prices table: *"ผมชอบ ตา�
    - The aria labels name the row, e.g. "เพิ่มจุดรับแรงใหม่ใต้ จุดที่ 3" / "ลบแถว จุดที่ 3". The first-row `+` aria drops the "Add — " prefix.
    - Thai wording lives in the labels file, never in the component, unless the project records an exception.
 9. **Keyboard:** the icons are not arrow-key or paste stops. Tab reaches them; a native-disabled bin is skipped (`keyboard.md`).
-10. **Exceptions:** an add that is really a picker stays a button that opens its popup, for example AE49's "Add Footing", which chooses a pile spec and a design first. Record each exception in the project's facts file.
+10. **An add that needs choices first opens its popup.** `+` adds a blank row; an add that is really a picker is not a blank row, so it stays a button that opens its popup, for example AE49's "Add Footing", which chooses a pile spec and a design first. Record each such add in the project's facts file.
 
 ## Why
 - One way to add and delete across every input table, placed where the eye already is: the row.

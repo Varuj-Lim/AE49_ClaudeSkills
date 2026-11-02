@@ -25,7 +25,8 @@ same breath removed the last module-wide English exemption (the plot-order scree
 | Codes, employee labels, dates, times, numbers (`LO2081`, `08:30`, `[DM01] …`) | Validation errors, toasts, confirm bodies, notification messages staff read |
 | Technical terms INSIDE a Thai sentence when they name a column or control (`Total`, `clockExempt`) | Picker placeholders ("เลือก Project"), search placeholders ("ค้นหาจาก Name …") |
 
-- **No vocabulary exceptions for controls (owner ruling 2026-08-20, second that day):**
+- **A control's NAME is English; an explanatory sentence, on or beside the control, is Thai
+  (owner ruling 2026-08-20, second that day; Q25 a, 2026-10-28):**
   buttons, pills, toggles, chips, tabs and status text are NEVER Thai — not even when a
   Thai word feels like the feature's natural name. The one exception ever granted (a
   ทำจริง/จองไว้ toggle) was reversed the day it shipped: the control became
@@ -33,8 +34,9 @@ same breath removed the last module-wide English exemption (the plot-order scree
   beside it. If a control needs Thai to be understood, the Thai goes in a tooltip or a
   caption NEXT to it, never on it. The same holds for chart axes: the Thai goes in the
   tooltip / footnote, never on the axis label.
-  **One ruled exception:** the typo-guard warning run on a picker's new-value row (` — คล้ายกับ "…" ที่มีอยู่แล้ว`,
-  `web-ref-dropdown` rule 6, owner 2026-10-28 Q25 a) is Thai by ruling — an audit does not flag it.
+  A sentence is not a name, so the same rule covers the typo-guard warning run on a picker's new-value row
+  (` — คล้ายกับ "…" ที่มีอยู่แล้ว`, `web-ref-dropdown` rule 6): it explains, it names nothing, so it is Thai —
+  an audit does not flag it.
 - **Caption vs label (ruling 2026-08-21):** the SAME fact renders Thai in a caption
   position (a small annotation under a value — `กรอกโดย …`) and English in a label
   position (a field name among other English labels — `Entered by`). One test: is it a

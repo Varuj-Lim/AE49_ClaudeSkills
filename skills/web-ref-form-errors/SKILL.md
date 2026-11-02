@@ -14,7 +14,7 @@ summary says WHAT is wrong, the highlight says WHERE, and either alone makes the
 A wrong field shows BOTH:
 
 1. **A red frame on the field**, from the project's one shared token, never a hand-typed border.
-2. **The sentence in the one box directly above the Save row**, in Thai per `web-ref-ui-language`.
+2. **The sentence in the one box directly above the Save row**, in Thai per `web-ref-ui-language`. A row that saves itself (its own Save button inside a bigger form or popup) has its box directly under that row instead.
 
 ## When the frame shows
 

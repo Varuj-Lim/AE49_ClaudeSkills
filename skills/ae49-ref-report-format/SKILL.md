@@ -15,7 +15,7 @@ Write so a non-programmer can follow it — explain the *why* and the consequenc
 words; swap programmer terms for plain ones (or explain them on first use). **Exception:** file
 paths, `file:line` citations, code snippets, and exact error text stay verbatim — never reword.
 
-**Caveman mode NEVER applies to a report (user rule, 2026-08-04).** Even when the session runs
+**Caveman mode NEVER applies to a report (user rule, 2026-08-04; a "keep" case of `ae49-mode-caveman` § Auto-Clarity).** Even when the session runs
 in caveman/compressed mode, every report to the user — audits, reviews, findings, status —
 is written in full, complete sentences: each finding says what the thing is, why it is safe or
 unsafe, and what happens if it is removed/fixed versus left alone. Comprehension beats token
@@ -118,12 +118,13 @@ Which renders as:
   and registered (an audit leftover, a gate observation) that is not in the owner's ordered scope is waiting for the
   owner's go-ahead — its *Waiting On* reads `Your go-ahead (Q<n>)`, it sits in group 4, and the question that asks for
   the go-ahead is put in the same message. "⏸️ Registered · —" hides that the ball is the owner's.
-  **Rows that wait ONLY on an external contributor's next PR leave the table for ONE line under it (owner Q211 a,
-  2026-10-27):** a register row whose sole blocker is "<contributor>'s next PR" (nobody here can move it until that PR
-  arrives) is not a table row; right under the table (before ⏱️) one line lists them —
-  `⏸️ รอ PR ของ <contributor>: OI-n · OI-m · …` — so they stay visible without filling the board. The rows stay in the
-  register unchanged; the moment that contributor's PR arrives they go back on the table as ordinary rows. This is the
-  only exception to "every register row is a table row" and to the never-collapse rule. Why: the owner asked for the
+  **A register row is a table row when someone here can move it; a row only an outside contributor's next PR can move
+  sits on ONE line under the table (owner Q211 a, 2026-10-27):** a register row whose sole blocker is "<contributor>'s
+  next PR" (nobody here can move it until that PR arrives) is not a table row; right under the table (before ⏱️) one
+  line lists them — `⏸️ รอ PR ของ <contributor>: OI-n · OI-m · …` — so they stay visible without filling the board. The
+  rows stay in the register unchanged; the moment that contributor's PR arrives they go back on the table as ordinary
+  rows. The never-collapse rule (`ae49-router` § status board) is read the same way: a row nobody here can move is not
+  collapsed, it is footnoted. Why: the owner asked for the
   three rows that could only move with an external contributor's next PR to come off the board (*"เอาเรื่องนี้ออกจากตารางไปก่อนจนกว่า
   PR จะมาได้ไหม"*), and chose the one-line footnote over hiding them, because hiding is how items vanished on 2026-09-30.
   **The `Unpushed on <deploy branch>` row carries its line count (owner 2026-10-21):** its Stage cell reads

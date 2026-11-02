@@ -1,6 +1,6 @@
 ---
 name: ae49-ref-question-format
-description: The ONE format for every question Main puts to the owner — a grill question, a design fork, a ruling request, an audit QUESTION relayed for a decision, a "which option" during a gate, a "did you mean X" check. Owner rule 2026-10-01 ("วิธีการถามคำถามของคุณที่ส่งมาให้ผมตอบนั้นแย่ ไม่มี Format … ไม่ใช่การเขียนแบบสั้นๆ แล้วไม่อธิบายอะไรเลย ผมอ่านแล้วไม่เข้าใจ") — a question is never a terse fragment; it carries the context the owner needs to picture the situation, labelled options each with how / pros / cons / cost / whose hands (a consequence lives inside its option's ข้อเสีย — no separate "what goes wrong" block, owner 2026-10-01), a recommendation with its reason, and how to answer. Use whenever you are about to ask the owner anything that needs a decision — trigger even when the question feels small or obvious, and even in caveman mode (questions are an auto-clarity exception).
+description: The ONE format for every question Main puts to the owner — a grill question, a design fork, a ruling request, an audit QUESTION relayed for a decision, a "which option" during a gate, a "did you mean X" check. Owner rule 2026-10-01 ("วิธีการถามคำถามของคุณที่ส่งมาให้ผมตอบนั้นแย่ ไม่มี Format … ไม่ใช่การเขียนแบบสั้นๆ แล้วไม่อธิบายอะไรเลย ผมอ่านแล้วไม่เข้าใจ") — a question is never a terse fragment; it carries the context the owner needs to picture the situation, labelled options each with how / pros / cons / cost / whose hands (a consequence lives inside its option's ข้อเสีย — no separate "what goes wrong" block, owner 2026-10-01), a recommendation with its reason, and how to answer. Use whenever you are about to ask the owner anything that needs a decision — trigger even when the question feels small or obvious, and even in caveman mode (questions are an Auto-Clarity case).
 ---
 
 # Question format — how Main asks the owner anything
@@ -45,7 +45,7 @@ option spelled out with its consequence, and a recommendation with the reason. T
 1. **Every question to the owner uses this shape — no exceptions for "small" questions.** A
    one-line "a/b/c?" is exactly what the owner refused. If the question is genuinely tiny
    ("ชื่อ a หรือ b"), the sections shrink to one sentence each; they never disappear.
-2. **Caveman mode is OFF inside a question** (added to `ae49-mode-caveman`'s auto-clarity list
+2. **Caveman mode is OFF inside a question** (a "decide" case of `ae49-mode-caveman` § Auto-Clarity,
    2026-10-01). Full Thai sentences; English only for identifiers, labels, codes, file paths and
    technical terms; no programmer shorthand; no abbreviations the owner has not used himself.
 3. **Ask every ready question in ONE message — up to 10 (owner rule 2026-10-07, replaces "one
@@ -114,6 +114,6 @@ option spelled out with its consequence, and a recommendation with the reason. T
   10 per message — rule 3; recommendation each).
 - `ae49-ref-report-format` owns reports and the board; a question embedded in a report (an audit
   QUESTION the owner must rule on) uses THIS shape inside the report.
-- `ae49-mode-caveman` lists "questions to the owner" as an auto-clarity exception.
+- `ae49-mode-caveman` § Auto-Clarity keeps "questions to the owner" in full sentences (a "decide" case).
 - `ae49-mode-autopilot` forks that are PARKED for the owner are written into the log and the
   register as prose, and ASKED in chat in this shape when the owner is reachable.

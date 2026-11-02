@@ -20,10 +20,11 @@ never hidden, and never made invisible, because of WHAT is ticked — a status, 
 zero. The cluster's own visibility is not this rule's business (see "How it composes").
 
 **B2 · Each verb counts its own eligible rows — `Verb (N)`.** N = the ticked rows THIS verb can act
-on for THIS viewer, asked with the same per-row gate the row's own button asks. One exception: a
-verb whose eligibility IS the predicate that renders the row's checkbox (every tickable row
-qualifies — the usual `Delete selected`) may keep a `Verb selected` label: its N is the
-`N selected` beside it, by construction.
+on for THIS viewer, asked with the same per-row gate the row's own button asks. A verb shows its
+own count unless that count always equals the `N selected` beside it: a verb whose eligibility IS
+the predicate that renders the row's checkbox (every tickable row qualifies — the usual
+`Delete selected`) may keep a `Verb selected` label, since its N is the `N selected` beside it,
+by construction.
 
 **B3 · Pressing it acts on those N only; the rest are skipped.** ONE derived list per verb drives
 its label, its confirm's number, its progress total and its loop, so the number shown is always the

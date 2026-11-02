@@ -133,7 +133,7 @@ landed, and had to ask the owner whether to switch it off (*"เพิ่มก�
     computer"). The report may say once, plainly, that the machine CAN be shut down; it never
     offers it as a choice to answer.
 
-    **Exception — the owner's emulator, once the owner has said to shut down (owner rule
+    **The one bend in `web-ref-local-emulator` rule 1 — the owner's emulator, once the owner has said to shut down (owner rule
     2026-10-07: "once I told you to close computer I allow you to close emulator by using
     stop-emu.cmd, don't ask me … sometime I already away from keyboard").** An emulator suite or
     emulator dev server the OWNER started is normally theirs to close (step 0). But when the owner's
