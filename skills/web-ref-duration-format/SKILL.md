@@ -1,6 +1,6 @@
 ---
 name: web-ref-duration-format
-description: The ONE way a duration (a span of time — hours worked, minutes late, payable overtime, a booked block, leave hours) is written on screen and on paper in every hub project (AE49_Hub, Nuri_Hub, siblings). Two families that never mix — MINUTE-PRECISE durations read `1h 4m` / `42m` / `2h`, HALF-HOUR-GRID quantities read `3.5h` / `4h` — plus the header rule (a column is named for the quantity, `Late` / `Total Hours`, never for the unit like `Late (min)`) and the Thai-prose rule (`สาย 64 นาที` in a sentence, `1h 4m` in a cell). Use whenever adding, formatting, relabelling or reviewing ANY duration, hours figure, minutes figure, lateness figure, or time-span column, tooltip, print cell or log line — also when the user only says "show the hours", "add a minutes column", "how long", "late by", "format the time worked", or a duration that looks different. Each project keeps its helper names and owner-ruled exceptions in its own facts file (§5); the rule changes HERE once.
+description: "Canon (web-ref-*) for writing a duration: MINUTE-PRECISE reads 1h 4m / 42m / 2h, HALF-HOUR-GRID reads 3.5h / 4h, never mixed; a column is named for the quantity (Late, Total Hours), never the unit (Late (min)); Thai prose says สาย 64 นาที, cells say 1h 4m. Use for any hours, minutes, lateness or time-span figure; how long, late by."
 ---
 
 # Duration format — shared canon

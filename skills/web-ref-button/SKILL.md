@@ -1,15 +1,6 @@
 ---
 name: web-ref-button
-description: >-
-  The ONE cross-hub button rule set for every hub project (AE49_Hub, Nuri_Hub, CCP_Hub, future
-  siblings) — today its rule is ONE LINE ONLY: every button label (pill, page-header action,
-  form action, popup button, worded decision, text button) renders on a single line, never
-  wrapped to two; a crowded row gives way elsewhere (the subtitle wraps, the action group keeps
-  its width, the row wraps whole buttons), never inside a button. Use whenever building,
-  styling, placing or reviewing ANY button, pill, tab or clickable action, a page header with
-  actions, a button style token, or when the owner says "ปุ่มขึ้น 2 บรรทัด", "ปุ่มตกบรรทัด",
-  "button wraps", "label on two lines". Each hub keeps its token file, component and call-site
-  list in its own `<hub>-ref-button` facts skill; the rule changes HERE once.
+description: "Canon (web-ref-*) cross-hub button rule: every button label renders on ONE line, never wrapped; a crowded row gives way elsewhere (subtitle wraps, action group keeps its width, whole buttons wrap), never inside a button. Use for any button, pill or header action; ปุ่มขึ้น 2 บรรทัด, ปุ่มตกบรรทัด. Each hub's <hub>-ref-button holds tokens."
 ---
 
 # web-ref-button — the cross-hub button canon

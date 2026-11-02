@@ -6,15 +6,12 @@ user's request — invoke these five skills via the Skill tool, in order:
 1. `ae49-task-grill` — interview me to reach shared understanding before any work
 2. `ae49-ref-guidelines` — load the coding-workflow guidelines
 3. `ae49-ref-report-format` — the ONE format for every report back to me: findings,
-   reviews, audits, status boards. Added 2026-08-14 because it was not in this list,
-   so a whole session of audit relays and status tables was improvised instead —
-   findings with no IDs to refer back to, and ad-hoc columns instead of the board.
+   reviews, audits, status boards (added 2026-08-14).
 4. `ae49-router` — act as thin Main: refine on request, delegate heavy plan/implement
    work to the `ae49-plan`/`ae49-implement` sub-agents, keep every human gate in Main
 5. `ae49-ref-question-format` — the ONE shape for every question I am asked: context,
    options a/b/c with cost, a recommendation with its reason, how to
-   answer. Added 2026-10-01 because a grill's questions had shrunk to caveman one-liners
-   ("ไม่ใช่การเขียนแบบสั้นๆ แล้วไม่อธิบายอะไรเลย ผมอ่านแล้วไม่เข้าใจ").
+   answer (added 2026-10-01).
 
 Apply all five for the rest of the session.
 
@@ -25,21 +22,15 @@ else, and keep its NEVER list (no push of the deploy branch, no deploys, no migr
 real-data deletes, nothing sent, no unsettled design decided). No file, or `"on": false`,
 means the normal attended workflow. The same check runs again right after any compact.
 
-**A COMPACT is not a session start, and that is exactly why it hurts (rule 2026-09-23).**
-When the conversation is compacted, these five leave context with it: the summary survives,
-the skill BODIES do not, and nothing re-invokes them because no new session began. The
-session therefore keeps a perfect memory of WHAT it was doing and silently loses the rules
-for HOW. **Re-invoke all five immediately after any compact — before the next gate, report,
-landing or push.** A summary can carry a decision; it cannot carry a procedure it never
-mentioned.
-
-Written because on 2026-09-23, in the first gate after a compact, Main handed the checklist
-over as a chat message with 10 items. The gate rules (now `ae49-ref-gate-checklist`, split out of
-`ae49-router` on 2026-09-25 for this reason) say a gate is written into the project's
-clickable `docs/gate-checklist.js` page and handed over as a link, and that a section holds
-5–7 items and must never reach 10 — the owner had already said so twice. Neither rule was in
-context to be followed, and the owner spotted it before Main did (*เป็นเพราะ Compact Session
-แน่เลย*).
+**A COMPACT is not a session start (rule 2026-09-23).** When the conversation is compacted, the summary survives but the
+skill BODIES do not come back whole: Claude Code re-injects invoked skills only up to 5,000 tokens each and 25,000 in total,
+and these skills are larger than that (the router and autopilot skills are each over 5,000 tokens, report format is about
+at it, and the set together is about at 25,000), so a body returns cut or not at all. Nothing re-invokes them either,
+because no new session began. The session therefore keeps a perfect memory of WHAT it was doing and silently loses the
+rules for HOW. **Re-invoke all five immediately after any compact — before the next gate, report, landing or push.** A
+summary can carry a decision; it cannot carry a procedure it never mentioned. A SessionStart hook
+(`~/.claude/hooks/after-compact-note.cjs`, matcher `compact`) prints a reminder after every compact; it only reminds, the
+re-invoking is still Main's. The story behind this rule: `~/.claude/history-claude-md.md`.
 
 # Skills repo sync (rule 2026-08-13)
 
@@ -69,10 +60,6 @@ Where it goes: source art next to the assets it feeds (e.g. `docs/assets/<featur
 a decoded workbook or dataset under the spec folder that documents it (e.g.
 `docs/specs/<slug>/source/`). Verify the copy is byte-identical before saying it's kept.
 
-This was written because on 2026-08-28 I asked whether I could clear the drop-off
-folder, and two things lived ONLY there: source SVG art (otherwise present only in a
-throwaway build worktree, not the repo) and the multi-megabyte workbook that every
-line of its calculation spec was derived from. Both would have been unrecoverable.
 
 # Communication
 
@@ -82,24 +69,19 @@ line of its calculation spec was derived from. Both would have been unrecoverabl
   PowerShell syntax (`$env:X = "y"; cmd`, no `&&`), and every npm shim is called by its `.cmd` name —
   `npx.cmd firebase-tools …`, `npm.cmd run …` — because the machine's execution policy refuses `npx.ps1`
   ("running scripts is disabled on this system"). `node …` is fine as is. Main's own Bash tool calls are
-  unaffected. Written because on 2026-10-02 the pre-push block was handed over as `bash` blocks with
-  plain `npx`, failed on the first line, and the owner had to ask twice ("มันรันไม่ได้ ต้องเป็น npx.cmd").
+  unaffected.
   **Addendum 2026-10-02 13:4x (owner):** paste every owner-facing command as PLAIN TEXT on its own line as well as
-  in the code block — twice today the owner could not see the fenced block ("คำสั่งอยู่ไหนละ … ให้ผมพิมพ์ว่าอะไร")
-  and had to ask three times; a bare line survives whatever the client does with fences.
+  in the code block — a bare line survives whatever the client does with fences.
   **Addendum 2026-10-22 (owner):** an owner-facing command STARTS with `cd <the project's absolute path>;`
   (e.g. `cd <project path>; node scripts\dev\x.cjs --apply`) — the owner opens a FRESH
   PowerShell window for each command and never keeps one open, so a bare relative command would run in the
   home folder and fail. Leave the `cd` off only for the NEXT command of a run the owner is doing right now in
-  the same window. Why: the 2026-10-22 backup-sweep command was handed over as `cd …; node …`, and the owner
-  asked for that to be the rule ("ผมเองเปิดใหม่ทุกครั้งไม่ได้เปิดคาไว้ จดเรื่องนี้เข้ากติกา").
+  the same window.
   **Addendum 2026-10-28 (owner Q2 c):** a command WRITTEN INTO A FILE — CLAUDE.md, a README, a plan, a skill, a
   runbook — starts `cd $env:USERPROFILE\Documents\<project>;`, never one machine's literal path, because the
   user folder differs per machine (home and office have different user-folder names) and PowerShell fills in
   the right one; a copied line then works everywhere. In CHAT, Main still writes the LIVE machine's absolute
-  path as above. Provenance lines ("copied from `…\Downloads\x`") are not commands and stay as they are. Why: on
-  2026-10-27 every deploy line in one hub's CLAUDE.md carried the home path and failed at the `cd` on the office
-  PC; the owner asked for the fix at user level "จะได้ทำได้ทุก Project".
+  path as above. Provenance lines ("copied from `…\Downloads\x`") are not commands and stay as they are.
 - **"กลับบ้าน" → every owner step becomes a CLOUD SHELL block (rule 2026-10-29, applies in every project).**
   Once the owner says they are going home (or are remote / away from the office PC), they can only chat with the
   session — they cannot run PowerShell on the machine the session lives on. From that moment EVERY command Main
@@ -111,9 +93,7 @@ line of its calculation spec was derived from. Both would have been unrecoverabl
   `origin/<backup>`, then runs the command; the owner pastes the output, then says "push" and Main pushes. A
   project whose Cloud Shell path was never proven gets a harmless test run first (redeploy the unchanged rules).
   Each block is also pasted as plain lines (the 2026-10-02 rule). This holds until the owner says they are back at
-  the office PC. Why: on 2026-10-29 the AE49 owner went home mid-chain (set-owner rules deploy pending) and asked for
-  this to be the rule everywhere ("ถ้าผมบอกกลับบ้าน ให้คุณส่งคำสั่ง … มาเป็น Cloud … แทนทั้งหมด"); the first project's
-  path was proven the same day (clone in Cloud Shell's home, backup branch → `Deploy complete!`, no login needed).
+  the office PC.
 
 - **All times are THAI TIME (rule 2026-08-26, applies in every project).** I work in
   Thailand and speak in Thailand time — Asia/Bangkok, UTC+7, no DST. Interpret every
@@ -127,9 +107,6 @@ line of its calculation spec was derived from. Both would have been unrecoverabl
   applies in every project).** Before you put a time into anything — memory notes, chat,
   plans, patch notes — run `date` (Bash) or `Get-Date` (PowerShell) and use THAT value in ICT.
   Never add up "how long things took" and never carry a stamp forward from an earlier note.
-  Why: on 2026-09-18 Main wrote "02:20" while the owner's screen showed 14:20 — every stamp
-  since noon had been an estimate stacked on an estimate, ~10 h adrift, and the whole day's
-  memory had to be corrected ("ทำไมคุณจดเวลาเป็นเวลาต่างประเทศ ที่นี้ที่ไทยนะ").
 - **Talk to me in THAI — everything, every turn (rule 2026-08-27, supersedes the
   2026-08-11 complex-explanation-only rule).** Default conversation language is Thai
   for ALL replies — answers, questions, confirmations, status updates, proposals —
@@ -140,9 +117,7 @@ line of its calculation spec was derived from. Both would have been unrecoverabl
   **Addendum 2026-10-30 (owner): Thai ONLY — never Vietnamese or any other language.** Every
   word of prose to the owner is Thai (or the English kept verbatim above); a short progress
   line, a one-line aside or a caveman fragment is no exception. Before sending, check the
-  prose is Thai script. Why: on 2026-10-30 an open-day's two short progress lines came out in
-  Vietnamese ("Autopilot ON → chạy tick trước", "Đang mở ngày …") and the owner asked for this
-  rule ("ระบุลงในกติกา User Skill หน่อยว่าให้ใช้ภาษาไทย ไม่ใช้เวียดนาม").
+  prose is Thai script.
 - **Table language: column heads are English; cells are English in a table that is scanned and
   Thai in a table that is read cell by cell** (rule 2026-08-11 "status-board tables stay in ENGLISH";
   owner 2026-10-21). A multi-item status table (plan boards, build trackers, finding lists rendered
@@ -158,9 +133,7 @@ directory's repo, plus this machine's own `~/.claude` user files (the skills clo
 that mirrors them counts as part of them). READING any
 other repo on the machine is fine (compare, diff, copy a reference); writing
 there is not — no file edits, no `git` commands, no scripts run against it, not
-even a one-line port "while I am here". Two sessions writing one checkout is how,
-on 2026-09-08, a sibling session's commit swept another session's staged files
-along and a launcher was rewritten underneath a batch that was still running.
+even a one-line port "while I am here". Two sessions writing one checkout sweep each other's staged files and rewrite files under a running batch.
 
 **This rule is about PROJECT repos; the skills repo is part of `~/.claude` (added
 2026-09-22).** The AE49_ClaudeSkills clone is not a project — it is the sync target
@@ -169,9 +142,7 @@ repo sync" above REQUIRES the mirror, the commit and the push in the SAME turn. 
 whenever a session touches `~/.claude/skills/`, `~/.claude/agents/` or this file, it
 edits, commits and pushes in that clone as well, and that is NOT a cross-project
 write. A sibling hub's checkout stays off limits, and
-the handoff prompt below is still the deliverable for it. Written because on
-2026-09-22 a session stopped to reason the two rules against each other before a
-one-line doc fix — the answer belongs in the rule, not re-derived every time.
+the handoff prompt below is still the deliverable for it. The answer lives in the rule, not re-derived each time (2026-09-22).
 
 When the OTHER project needs the change, the deliverable is a **handoff
 prompt**: a paste-ready block I hand to that project's own session — what to
@@ -194,12 +165,6 @@ silently, never bury the concern in a later report, and never let it go because
 the request was phrased as a command. Routine requests that are plainly fine get
 no lecture — just the work.
 
-Why: on 2026-09-10 the owner asked to remove every dropdown arrow app-wide and
-Main started doing it with only a one-line "trade-off" note, when the honest
-professional answer was "unconventional — a form picker that looks like a text
-box needs an indicator; hide the arrow only in the dense grid". The owner wants
-that answer first, every time.
-
 # Effort: no reminders for Main (owner ruling 2026-10-02, withdraws the 2026-09-30 rule)
 
 The owner sets Main's effort level in the app and does NOT want Main to suggest changing it —
@@ -209,6 +174,4 @@ with the work, never opens a request with an effort reminder, never mentions `xh
 the agent definitions (`ae49-audit` xhigh, `ae49-implement-heavy` xhigh, `ae49-implement` high,
 `ae49-implement-docs` high, `ae49-explore` low) — that part the owner keeps.
 
-Written because on 2026-10-02 a morning of reminders moved the session xhigh → high → max in two
-hours and the owner found the replies worse at the lower level; the ladder that used to live here
-(design = xhigh/max, everything else = high, high the floor) is withdrawn for Main.
+The incident stories behind the rules above: `~/.claude/history-claude-md.md` (in the skills repo: `dotclaude/history.md`).

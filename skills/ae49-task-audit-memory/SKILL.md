@@ -1,6 +1,6 @@
 ---
 name: ae49-task-audit-memory
-description: Review this project's memory - the machine-local auto-memory folder AND, when the repo carries one, the git-synced `.claude/memory/` (router, `shared/`, the driver's folder; see ae49-task-setup-git-memory) - and report suggested keep / update / delete / create changes WITHOUT modifying anything until the user approves. Use when the user asks to audit, review, check, or clean up the project's memory.
+description: "Review this project's memory (the machine-local auto-memory and, when present, the git-synced .claude/memory/) and report keep / update / delete / create suggestions WITHOUT modifying anything until the user approves. Use when the user asks to audit, review, check or clean up the project's memory."
 ---
 
 # Audit Memory

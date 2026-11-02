@@ -1,6 +1,6 @@
 ---
 name: web-ref-form-errors
-description: The ONE canon for showing a wrong value in a form in every hub project (AE49_Hub, Nuri_Hub, CCP_Hub, AWDC_Hub, future siblings) - a field that is wrong gets a RED FRAME, and the box above the Save row says what is wrong; the two always go together. A wrong value goes red at once, a required field left empty goes red when Save is refused, and the frame clears as soon as the field is right. Use whenever building, editing or reviewing a form, a validation, a setError, a required field, an editable grid or a Save refusal, and on "กรอบแดง", "ช่องไหนผิด", "make this field red", "show an error", "validate the form". Each hub keeps only its token paths, components and consumer list in its own <hub>-ref-form-errors facts skill; the rule changes HERE once.
+description: "Canon (web-ref-*) for a wrong form value: the field gets a RED FRAME and the box above the Save row says what is wrong, always both. A wrong value goes red at once, a required empty field when Save is refused, and the frame clears when the field is right. Use for any form, validation, setError or editable grid; กรอบแดง, ช่องไหนผิด."
 ---
 
 # Form errors: the red frame and the box

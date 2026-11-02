@@ -1,6 +1,6 @@
 ---
 name: web-ref-routes
-description: The ONE route-shape canon for every hub project (AE49_Hub, Nuri_Hub, future siblings) — a page that shows ONE record lives at `/<list>/[id]/view`, its edit page at `/<list>/[id]/edit`, its create page at `/<list>/add`, all nested under the list that owns them; the bare `/<list>/[id]` has NO page (it 404s, never a redirect); a renamed route moves every link that points at it in the same change, and links STORED in data (bell / notification `link`, LINE, mail) by a ruled migration script with a dry run. Use whenever creating, naming, moving or reviewing a route, a record / detail page, a link builder (`href`, `router.push`, a notification `link`), or when the owner says "route", "URL", "path", "/view", "หน้า detail", "เปิดเป็นหน้า", "ลิงก์ใน bell", "ลิงก์เสีย". Each hub keeps its nav levels, path segments and migration history in its own `<hub>-ref-nav-placement` facts skill; the record-page rule changes HERE once.
+description: "Canon (web-ref-*) route shape: a record page is /<list>/[id]/view, edit /<list>/[id]/edit, create /<list>/add, nested under its list; bare /<list>/[id] has NO page (404, never a redirect); a renamed route moves every link in the same change, links stored in data (bell, LINE, mail) by a ruled migration with a dry run. Use for any route, URL or link."
 ---
 
 # web-ref-routes — the record-page route shape

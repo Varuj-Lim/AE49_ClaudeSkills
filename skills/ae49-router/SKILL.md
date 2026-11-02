@@ -1,6 +1,6 @@
 ---
 name: ae49-router
-description: Makes the Main session act as a thin router and refiner for ae49-workflow projects — it classifies each request, refines rough prompts on demand, delegates heavy plan and implement work to the ae49-plan and ae49-implement sub-agents (parallel across chains, sequential within a chain), and keeps every human gate in Main. Loaded at session start via ~/.claude/CLAUDE.md. Recognises the refine, plan, impl, status, and self routing prefixes and requests like who should do this or show the plan board.
+description: "Thin-router Main for ae49-workflow projects: classifies each request, refines rough prompts on demand, delegates heavy plan and implement work to the ae49-plan and ae49-implement sub-agents (parallel across chains, sequential within one), keeps every human gate in Main. Prefixes refine, plan, impl, status, self; show the plan board."
 ---
 
 # ae49-router — Main as thin orchestrator
@@ -29,14 +29,11 @@ back. This layer is **project-agnostic**: apply the active project's own `CLAUDE
 - **`ae49-gate`** (sub-agent, Opus, high; owner AQ1 a 2026-10-16) — RUNS one gate section in its own
   headless Chrome on the port Main names from its project's range (`9d34`…`9d39`, `ae49-ref-gate-checklist/delegated.md` § Ports) and returns per-item evidence; Main keeps the checklist
   and the VERDICT. Several run at once on disjoint batches (`ae49-ref-gate-checklist/delegated.md`).
-- **`ae49-audit`** runs at **xhigh** (owner 2026-09-30) — it is the step that found every Major
-  on 2026-09-25, so it gets the deepest reasoning of the roster.
+- **`ae49-audit`** runs at **xhigh** (owner 2026-09-30), the deepest reasoning of the roster.
 
 **When each one is used — ceremony scaled to risk (owner 2026-09-25: "เอาทั้ง (ก)–(ง)").**
 Every hand-off starts a cold agent that re-reads the plan and the code, so a hand-off is
-paid in minutes and tokens; on 2026-09-25 a ~150-line change cost ~25 agent-minutes through
-plan → build → audit → fix against ~12 inline, and the audit was the part that paid (two
-defects that would have shipped). So the size of the change decides WHO builds, the risk
+paid in minutes and tokens. So the size of the change decides WHO builds, the risk
 decides how DEEP the audit goes, and the audit itself is never skipped:
 
 - **`ae49-plan`** — only for a feature with a data model, a migration, several batches or a
@@ -86,8 +83,7 @@ the owner as "ทำไม่ได้" when the truth is "ยังไม่ไ
 for the same resource, ask the owner to pick the priority — never pick silently.
 
 **Owner-only steps are batched into one sitting (owner 2026-09-25).** Waiting on a human is
-where a task's wall-clock goes (≈50 of the ~75 minutes of the 2026-09-25 link-cap landing were
-the owner's Cloud Shell turn and the waits around it). When a track needs the owner's hands —
+where a task's wall-clock goes. When a track needs the owner's hands —
 Cloud Shell, the Firebase console, a deploy, a sign-in — Main prepares the WHOLE block first
 (every command in order, the exact output to expect, the sha `git log` must print), groups
 such steps across every track that is pending together so the owner sits down once, says how
@@ -157,8 +153,8 @@ re-read from disk — never report from memory:
    (a lingering feature-branch worktree from another session = build in progress or
    awaiting integration — say which you can't tell, don't guess).
 3. Output ONE table, one row per item, in the four-group order of `ae49-ref-report-format` (in progress → done today → waiting on others → waiting on the owner), FIVE columns: **# | Feature /
-   plan / task | Stage | Waiting On | Next** (the four of the 2026-08-13 ruling plus the row
-   number added 2026-09-16 so the owner can answer "ข้อ 3").
+   plan / task | Stage | Waiting On | Next** (rulings 2026-08-13 and 2026-09-16; the row
+   number lets the owner answer "ข้อ 3").
    **NEVER collapse items into one row** (user ruling 2026-08-14): no "Ready ×6", no
    "plan A + plan B" merged rows — every plan and tracked item gets its OWN row even
    when many share a state or share one gate.
@@ -176,8 +172,7 @@ re-read from disk — never report from memory:
 
 **The stage emoji legend lives in `ae49-ref-report-format`, not here:** 📝 planning · 📋 plan ready · 🔨 building · 🔍 audit running · 🔧 fixing
 findings · 📦 staged / pending · 🧪 the user's manual gate · ✅ landed · 🚀 deployed ·
-⏸️ blocked · 👤 waiting on the owner. This skill previously carried a second, slightly different set (⏳ waiting,
-⛔ on hold, 🗄️ recently landed), which meant two skills defined the same board two ways.
+⏸️ blocked · 👤 waiting on the owner.
 Read the legend from that skill so every report in every project uses one set.
 
 **Every board ends with the 👤 "your move" line** — the required closing line defined in
@@ -198,12 +193,9 @@ Board rows this lane adds on top of the shared legend:
 
 ## The open-items register — nothing discussed may live only in chat or memory prose
 
-**Owner ruling 2026-09-30** (*"ทำไมงานพวกนี้ถึงไม่เจอตอนคุณรายงานสถานะ … ผมไม่อยากให้เกิดขึ้นอีก"*):
-the seismic tool (decoded 2026-09-18, Q1–Q14 awaiting the owner), T0202 Q18 and several deferred
-follow-ups vanished for 12+ days because the board read only `docs/plans/*.md` while those items
-lived as prose inside a ~2,900-line in-flight memory file, and a close-day then wrote "backlog
-cleared". The fix is ONE register file in the project, next to the plans:
-`docs/plans/_open-items.md` (git-synced, travels with the repo).
+**Owner ruling 2026-09-30:** the board must never miss an item that lives only as prose in the
+in-flight memory, and a close-day must never write "backlog cleared" while one is open. So the project keeps
+ONE register file next to the plans: `docs/plans/_open-items.md` (git-synced, travels with the repo).
 
 - **Write a row the moment an item exists and is not a plan in that same turn:** a question put
   to the owner and not yet answered, a ruling given only in part, a decode/spec with open
@@ -220,10 +212,7 @@ cleared". The fix is ONE register file in the project, next to the plans:
   row reads `👤 Your answer (Q<n>)` and the 👤 line names it ("รอคุณตอบ Q<n>"). Never a register row
   whose Next says "ask later" / "ask in the new session", and never a 👤 line saying "ไม่มีอะไรรอคุณ"
   while any row on the board waits on the owner. In `decide` the old rule stands: log + register
-  only, asked when the owner is back. Why: on 2026-10-28 OI-223 (15:47), OI-224 and OI-225 (at the
-  swap) were only written into the register and reached the owner 30–60 minutes later while the owner
-  sat watching (*"คุณมักไม่มาถามผมทันที มักจะเขียน Register จดไว้เฉยๆ"*), and a 👤 line said nothing
-  was waiting while the table held owner rows.
+  only, asked when the owner is back.
 - **A row leaves only two ways:** it becomes a plan (the row says "→ plan <slug>" and is deleted
   in the same commit that commits the plan), or the owner drops it (the row is deleted with the
   owner's words in the commit message). Main never deletes a row because it "seems stale".
@@ -259,23 +248,18 @@ Collisions are prevented at **planning** time, not just by isolation:
      `layout.tsx`, a hook, an engine or calculation module, `firestore.rules`, a data shape or a
      migration. Two edits in different places of such a file can merge cleanly and still break each
      other, and no conflict marker would show it. When unsure, keep the chain.
-   Why: on 2026-10-16 the Options-table rebuild waited 35–80 min behind `rd-row-actions` B1 only
-   because both added words to `lib/rd/foundation/labels.ts`, in disjoint sections.
 
 Chaining decides the *order*; the worktree isolates the *parallel* runs.
 
 **Removing a builder's worktree — scan for junctions FIRST (owner "จดเลย" 2026-09-30).** On
 Windows every worktree that has run `npm run build` holds two **junctions** under
 `.next/node_modules/` (Next.js writes `firebase-admin-<hash>` and `rimraf-<hash>` links pointing
-into a `node_modules` folder). A recursive delete that FOLLOWS a junction deletes its TARGET —
-that is how the hub's own `node_modules` was emptied on 2026-09-25 (the builder had been given
-the hub's `node_modules` by link). The safe recipe, used four times on 2026-09-30 with the hub's
-`node_modules` intact each time: (1) `Get-ChildItem <worktree> -Recurse -Depth 3 -Force
+into a `node_modules` folder). A recursive delete that FOLLOWS a junction deletes its TARGET (the hub's own
+`node_modules` was emptied this way when a builder had been given it by link). The safe recipe: (1) `Get-ChildItem <worktree> -Recurse -Depth 3 -Force
 -Attributes ReparsePoint` (PowerShell) and read each link's `Target`; (2) delete each link AS A
 LINK — `[System.IO.Directory]::Delete(<link path>)`, never recursive — INCLUDING a link whose
 target is OUTSIDE the worktree (that call removes the link, never its target; a SKIPPED outside link is exactly
-what `git worktree remove --force` then FOLLOWS — 2026-10-20 it emptied the hub's `node_modules/firebase-admin` and
-`rimraf` while the folder count still read 457); if a link cannot be deleted, STOP before step 3; (3) only then `git worktree remove
+what `git worktree remove --force` then FOLLOWS and empties); if a link cannot be deleted, STOP before step 3; (3) only then `git worktree remove
 --force <path>` + `git worktree prune`; (4) `ls <hub>/node_modules | wc -l` afterwards and
 compare with before, AND list `<hub>/node_modules/firebase-admin` and `rimraf` (non-empty) — the count alone misses an emptied package. Never `rm -rf`, `Remove-Item -Recurse` or `rmdir /s` a tree you have not
 scanned.
@@ -300,14 +284,12 @@ scanned.
     owner ONLY about the extra items, each in the `ae49-ref-question-format` shape, and the plan
     is approved when those are answered (the owner need not read the whole plan). Doubt counts
     as "beyond": when Main is unsure whether an item was covered, it asks.
-  Why the split, not "every grilled plan is approved": on 2026-10-06 the plan `rd-project-first`,
-  written after a one-question grill, carried a decision nobody asked about (first Save stops
-  asking for the project), a bug the planner found, and two new questions — a blanket
-  auto-approval would have put all of them into the build unseen. The audit and the gate still
+  Not every grilled plan is auto-approved: a plan can carry a decision nobody asked about, a bug the
+  planner found or new questions, and a blanket approval would put them into the build unseen. The audit and the gate still
   run on every auto-approved build.
 - **The plan is frozen per dispatch (L3, 2026-11-02):** a dispatch names the plan's commit sha, and builder and auditor work from
   that version. A decision made after it goes into the plan for the next round; the audit reports it as NEW SCOPE, never as a
-  BLOCKER against a build that could not have known it (CCP_Hub 2026-10-31: four such first-round BLOCKERs in a day). NEW SCOPE still has to
+  BLOCKER against a build that could not have known it. NEW SCOPE still has to
   be built, or be written down as a plan or register row, before the plan closes.
 - The **audit gate** (adopted 2026-08-01, owner mandate — EVERY build, Main's inline builds
   included): after the build is finished and BEFORE the user sees anything, spawn the headless
@@ -327,8 +309,7 @@ scanned.
   **stop for their manual test** before any commit. A gate without a checklist is not a gate. A MAIN-RUN gate (autopilot, or items the owner left to Main) may have its items RUN by `ae49-gate` agents, never its VERDICT (`ae49-ref-gate-checklist/delegated.md`). **Every rule for
   opening, writing, numbering, handing over and closing that gate lives in `ae49-ref-gate-checklist` — INVOKE IT
   before writing, rewriting, renumbering or closing any gate, every time, and run its `validate-gate.cjs` after
-  every write of the page** (split out 2026-09-25: the rules were one ~150-line paragraph here, and the first gate
-  after a compact broke eight of them). In short, so this file is never silent on it: 5–7 Thai items per feature
+  every write of the page**. In short, so this file is never silent on it: 5–7 Thai items per feature
   section, circled numerals per deploy round, the clickable page with three tags on every item, the closed
   payload at landing, the emulator by default.
 - **Git landing.** No sub-agent commits, pushes, or touches the default branch. You

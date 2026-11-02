@@ -1,6 +1,6 @@
 ---
 name: ae49-ref-guidelines
-description: Behavioral guidelines for code work — classify question vs command, reach >=95% understanding, surface suggestions before coding, check shared/lib code first, keep changes simple and surgical, define verifiable success criteria, commit per logical change. Use when starting any non-trivial coding task (writing, editing, fixing, or refactoring), or when the user invokes /ae49-ref-guidelines.
+description: "Behavioral guidelines for code work: classify question vs command, reach 95% understanding, surface suggestions before coding, check shared/lib code first, keep changes simple and surgical, verifiable success criteria, commit per logical change. Use when starting any non-trivial coding task (write, edit, fix, refactor) or on /ae49-ref-guidelines."
 license: MIT
 ---
 

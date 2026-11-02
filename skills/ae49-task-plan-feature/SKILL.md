@@ -1,12 +1,6 @@
 ---
 name: ae49-task-plan-feature
-description: >
-  Plan a new feature for the current repo by stress-testing the design with a
-  grilling interview, then saving the result as docs/plans/<feature>.md from a
-  bundled plan template. Creates the docs/plans/ folder if it does not exist. Use
-  when the user wants to plan or design a new feature, invokes /ae49-task-plan-feature,
-  or when the ae49-plan agent needs the canonical docs/plans/ plan format. Main runs
-  the grill; the ae49-plan agent writes the file.
+description: "Plan a new feature by stress-testing the design in a grilling interview, then save docs/plans/<feature>.md from the bundled plan template (creates docs/plans/ if missing). Main runs the grill; the ae49-plan agent writes the file and takes the canonical plan format from here. Use to plan or design a feature, or on /ae49-task-plan-feature."
 ---
 
 # Plan a feature

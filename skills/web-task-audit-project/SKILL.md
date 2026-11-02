@@ -1,20 +1,6 @@
 ---
 name: web-task-audit-project
-description: >-
-  Canon PROCESS for a hub project's whole-codebase pattern audit — works in any
-  project (AE49_Hub, Nuri_Hub, future siblings). The project supplies the FACTS
-  in its own `<proj>-task-audit-project` skill: a numbered topic table with
-  keywords, a `topics/NN-*.md` rule+detector file per topic, and a phase
-  grouping; this skill supplies everything else: scope/menu parsing, the PHASED
-  execution rule (any scope over 6 topics runs one phase per context with a disk
-  checkpoint after each phase, so a long audit cannot die of token exhaustion —
-  origin 2026-09-04, a 29-topic sweep ran out mid-audit), resume-from-marker,
-  router-mode fan-out (one read-only sub-agent per phase), the report format
-  (ae49-ref-report-format) and the docs/plans fix-plan output for the impl lane.
-  Use when the user asks to audit the project, audit patterns, check
-  consistency, or "sweep the app" in ANY repo; the project facts skill triggers
-  this canon instead of restating it. Audits edit no app code and re-scan
-  current code each run — never report from memory.
+description: "Canon PROCESS for a hub's whole-codebase pattern audit: scope/menu parsing, PHASED execution (a scope over 6 topics runs one phase per context with a disk checkpoint), resume, router fan-out, report per ae49-ref-report-format, docs/plans output. Topics come from the project's <proj>-task-audit-project. Use to audit patterns. No app code edited."
 ---
 
 # Project Pattern Audit — canon process

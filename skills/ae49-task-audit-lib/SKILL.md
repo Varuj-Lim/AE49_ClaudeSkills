@@ -1,6 +1,6 @@
 ---
 name: ae49-task-audit-lib
-description: Audit the codebase for logic written inline that is duplicated across files or reusable enough to belong in shared code (a helper, a module, or a shared component), then save the approved extractions as a docs/plans/<slug>.md plan an implement session can later build. Re-scans the current code each run, reports a prioritized list with file locations and a proposed shared home, and changes NO app code itself. Use when the user wants to find duplicate / copy-pasted code, DRY up the codebase, check for reuse opportunities, or asks "what could move into the shared layer".
+description: "Audit the code for inline logic duplicated across files or reusable enough for shared code; saves approved extractions as docs/plans/<slug>.md and changes NO app code. Re-scans each run, prioritized list with locations and a proposed shared home. Use for duplicate or copy-pasted code, DRY up, what could move into the shared layer."
 ---
 
 # Audit Lib (shared-code / reuse audit → plan)

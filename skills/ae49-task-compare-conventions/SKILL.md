@@ -1,17 +1,6 @@
 ---
 name: ae49-task-compare-conventions
-description: >-
-  Compare two convention sets (two projects' skills/patterns/launchers, two
-  implementations of the same concept) and walk every conflict to an owner
-  ruling, one item at a time, using the five-part item format that worked in
-  the 2026-08-27 AE49-vs-Nuri session. Use when the user wants two things made
-  consistent, asks "เปรียบเทียบ / เทียบกับอีกโปรเจกต์ / ให้มัน consistent กัน",
-  asks which of two conflicting rules should win, or after a comparison scan
-  produced a list of opposite rulings that now need decisions. Covers the whole
-  arc: fan-out scan → findings with IDs → per-item ruling walk (a/b/c options
-  incl. deliberate divergence) → recording rulings and spawning the alignment
-  work. Trigger even when the user only says "ไล่เคาะทีละข้อ", "grill C1-C8",
-  or quotes a finding ID from a comparison report.
+description: "Compare two convention sets (two projects' skills, patterns, launchers, or two implementations of one concept) and walk every conflict to an owner ruling, one item at a time, in the five-part item format of the 2026-08-27 AE49-vs-Nuri session. Use on เปรียบเทียบ, เทียบกับอีกโปรเจกต์, ให้มัน consistent กัน, ไล่เคาะทีละข้อ, grill C1-C8."
 ---
 
 # Compare conventions → owner rulings

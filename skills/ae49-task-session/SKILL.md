@@ -1,16 +1,15 @@
 ---
 name: ae49-task-session
-description: "The session ceremonies of an ae49-workflow project (AE49_Hub, Nuri_Hub, siblings) — `open` starts the day or a fresh session (ff main from backup, skills sync, 🎒 check, restore a parked tree, re-open the gate, Autopilot ON in ask, the board); `swap` closes THIS session on the SAME machine (commit, rewrite in-flight memory, Autopilot as is, backup push; the user opens the new one); `close` ends the day before switching MACHINES (Autopilot OFF + report, stop engines, park trees on transport branches, 🎒 carry list, backup push). No argument: a NEW session runs open, a used one runs swap; close runs only when typed. Use on /ae49-task-session, \"เปิดวัน\", \"มาทำต่อ\", \"เปิด session ใหม่\", \"ปิด session\", \"ปิดวัน\", \"ย้ายเครื่อง\", \"open/close the day\", or when the router reaches a clean break in a long session. A handoff DOCUMENT is ae49-task-handoff."
+description: "Session ceremonies of an ae49-workflow project: open starts the day or a fresh session, swap closes THIS session on the SAME machine, close ends the day before switching MACHINES. No argument: NEW session runs open, used one swap; close only when typed. Use on เปิดวัน, มาทำต่อ, ปิด session, ปิดวัน, ย้ายเครื่อง. Handoff DOCUMENT: ae49-task-handoff."
 argument-hint: "(empty) = open in a new session / swap in a used one · open · swap · close"
 ---
 
 # ae49-task-session — open · swap · close
 
-**Owner ruling 2026-10-28** (merging `ae49-task-open-day`, `ae49-task-close-day` and the
-session-close mode of `ae49-task-handoff`): *"ถ้าเป็นการเริ่ม Session ใหม่ จะเป็น open ถ้า ผมพิมเฉยๆ ตอนที่
-session มีข้อมูลมาแล้ว เป็น swap แล้วถ้าผมต้องการปิดวันจริงๆ ผมจะเขียนว่า /ae49-task-session close"* — and
-*"ไม่ต้องถามยืนยัน คุณลุยเลยได้"*. The three were one subject (they pointed at each other both ways and ran
-as pairs); one name with three verbs is easier to reach for. The doc mode stays in `ae49-task-handoff`.
+**Owner ruling 2026-10-28** (merging `ae49-task-open-day`, `ae49-task-close-day` and the session-close mode of
+`ae49-task-handoff`): a NEW session runs `open`; a bare command in a session that already holds data runs `swap`; ending
+the day for real is typed `/ae49-task-session close`; no confirmation question. The doc mode stays in `ae49-task-handoff`.
+The owner's words and the old-name map: [history.md](history.md).
 
 ## Which one runs — decided, never asked
 
@@ -54,11 +53,3 @@ as pairs); one name with three verbs is easier to reach for. The doc mode stays 
 - `park/*` and worktree-agent branches are TRANSPORT ONLY — never merged, never a PR; the landing of their
   feature deletes them (`git push origin --delete park/<name>`), never open.
 
-## Old name → where it lives now
-
-| Old | Now |
-|---|---|
-| `ae49-task-open-day` (whole, steps 1–8 incl. 7b) | `open.md`, same step numbers |
-| `ae49-task-close-day` (whole, "First of all" + steps 0–10) | `close.md`, same step numbers |
-| `ae49-task-handoff` § "Session-close mode" (steps 0–5) | `swap.md`, same step numbers |
-| `ae49-task-handoff` § "Doc mode" | stays in `ae49-task-handoff` (now its only mode) |

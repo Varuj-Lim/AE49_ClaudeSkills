@@ -1,6 +1,6 @@
 ---
 name: ae49-task-update-skills
-description: Sync the user-level skills in ~/.claude/skills from the AE49_ClaudeSkills GitHub repo (github.com/Varuj-Lim/AE49_ClaudeSkills) — dry-run preview first, then apply. The repo is the AUTHORITY - any local difference (an edited copy OR a skill existing only locally) is presumed wrong and is corrected to match the repo, unless that change is going up to the repo now (the user says in chat it is intentional, or it was authored in this conversation and is mirrored in the same turn). Use when the user wants to update, sync, refresh, or pull their user skills / AE49 skills from GitHub, or invokes /ae49-task-update-skills.
+description: "Sync ~/.claude/skills from the AE49_ClaudeSkills GitHub repo: dry-run preview first, then apply. The repo is the AUTHORITY: any local difference is presumed wrong and corrected to match it, unless the change is going up now (user says it is intentional, or authored this conversation and mirrored the same turn). Use to update or pull user skills."
 ---
 
 # Update user skills from GitHub

@@ -1,20 +1,6 @@
 ---
 name: web-task-patch-note
-description: >-
-  The shared patch-note / release-note publishing workflow for every hub
-  project (AE49_Hub, Nuri_Hub, and future siblings): gather the git changelog
-  since the last note, draft a plain-language staff-facing change list in the
-  structured body grammar, pick the version bump, dry-run, and publish to
-  Firestore — notifying all active users. A note is published ONLY when the owner
-  asks for one, never automatically at a push (owner ruling 2026-09-22); one note
-  may cover several pushes. Publishing needs NO separate approval of the wording
-  (owner ruling 2026-09-10). Use
-  whenever the user wants to write, draft, publish, or release a patch note /
-  release note / changelog entry in ANY hub project, alongside that project's
-  own patch-note skill, which supplies the facts: script path, author email,
-  version casing, notification reach, in-app-form policy, and deploy-rule
-  pointer. The PROCESS lives here and changes here once; project skills never
-  restate it. Publishing a note never deploys code.
+description: "Canon workflow for publishing a patch note / release note in any hub: gather the git changelog since the last note, draft a plain staff-facing change list, pick the version bump, dry-run, publish to Firestore. Only when the owner asks, never at a push; no separate wording approval; never deploys. Use alongside the project's own patch-note skill."
 ---
 
 # Publish a patch note — shared workflow

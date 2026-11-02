@@ -1,6 +1,6 @@
 ---
 name: web-task-ticket-to-plan
-description: The shared ticket-to-plan doorway for every hub project (AE49_Hub, Nuri_Hub, siblings) - read the support tickets, let the owner pick, clarify until the intent is settled, then hand off into the NORMAL plan flow - plus the ticket-queue ORDER (priority tier first, missing = normal, oldest first within a tier, Priority after Status) in queue-order.md and the owner-to-team STAFF NOTE (an ask / inform ticket, notifies nobody) in staff-note.md. Use for "ticket to plan", "read the tickets", "ดู ticket", "what did staff request/report", any ticket listing, any priority or ordering ruling, "เปิด ticket บอก user", "จดไว้ถามทีม", "เขียน ticket แจ้งทีม", or when a session surfaces a policy question staff must weigh in on. The two-step write-back (plan APPROVAL = in_progress only; PUSH = resolved + the ONE Thai reply; none at the gate PASS) is in hard-rules.md; tickets are cited by HUMAN CODE (TK0007). The project's own ticket skill supplies the facts.
+description: "Canon ticket-to-plan doorway for hubs: read the support tickets, owner picks, clarify until settled, hand off into the NORMAL plan flow; queue ORDER in queue-order.md; owner-to-team STAFF NOTE in staff-note.md; two-step write-back in hard-rules.md. Use on ticket to plan, read the tickets, ดู ticket, จดไว้ถามทีม, เขียน ticket แจ้งทีม."
 ---
 
 # Ticket → Plan — shared doorway workflow

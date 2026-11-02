@@ -1,6 +1,6 @@
 ---
 name: web-ref-dropdown
-description: "The ONE cross-hub rule for adding a NEW value to a dropdown (AE49_Hub, Nuri_Hub, future siblings) — wherever a user may add an option not in the list yet, the dropdown itself offers it: a typed text matching no option shows one row `Use \"<typed>\" as a new value` (Enter or click), never a separate \"+ Add\" button beside the field, a free-text input with suggestions, a `<datalist>`, or a trip to another page; a value that must live in a shared catalog opens that catalog's create popup from the same row and selects the new entry on success. Closed lists stay strict — status, people, records, fixed vocabularies never offer the row. Use whenever building, reviewing or auditing a dropdown / select / picker / combobox / type-ahead where users might add an option, or when the owner says \"Use … as new value\", \"เพิ่มข้อมูลใน dropdown\", \"เพิ่มตัวเลือก\", \"add a new option\". Each hub keeps its component names, props and site list in its own `<hub>-ref-dropdown` facts skill; this rule changes HERE once."
+description: "Canon (web-ref-*) for adding a NEW value in a dropdown: the dropdown itself offers one row Use \"<typed>\" as a new value, never a separate + Add button, datalist or other page; shared-catalog values open the catalog's create popup from that row. Closed lists (status, people, records) stay strict. Use for any dropdown or combobox; เพิ่มตัวเลือก."
 ---
 
 # web-ref-dropdown — adding a new value from the dropdown itself

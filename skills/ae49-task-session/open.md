@@ -1,6 +1,6 @@
 # open — start the day / a fresh session on this machine
 
-Formerly `ae49-task-open-day` (moved whole 2026-10-28, step numbers kept). Mirror of [close.md](close.md);
+Mirror of [close.md](close.md);
 also what a NEW session runs after a [swap](swap.md). Everything arrives through git.
 
 **Same-machine fast path (owner 2026-10-28).** When the in-flight memory's last entry is a `swap` (or a
@@ -35,8 +35,7 @@ and an Autopilot left ON by a swap is ticked in 7b.
 2. **Skills sync.** If this machine's daily drift hook reported changes, act on
    its report; if the machine has no hook, run the `ae49-task-update-skills`
    preview. Then APPLY per that skill's Workflow — **the repo wins, no asking**
-   (owner ruling 2026-08-24, reaffirmed 2026-09-15 when Main wrongly asked
-   "may I apply?" on a repo-newer skill): look which side is newer yourself,
+   (owner ruling 2026-08-24, reaffirmed 2026-09-15): look which side is newer yourself,
    copy repo-newer items down from the machine's clone, never apply the
    `UPDATE CLAUDE.md` scrub line, and say what changed. Also diff the `self`
    skill (`ae49-task-update-skills`) against the clone — it never syncs itself,
@@ -75,8 +74,7 @@ and an Autopilot left ON by a swap is ticked in 7b.
    gate-checklist items file from the plan + memory and hand over the file://
    link per the gate rules. **Condense first: every section of an inherited board
    must sit inside the 5–7 budget of `ae49-ref-gate-checklist` (never 10) — a parked board is
-   not exempt; a 16-item section handed over as-is earned the owner's 2026-09-15
-   reminder.** Emulator and seeded test data are machine-local — if
+   not exempt.** Emulator and seeded test data are machine-local — if
    the gate needs seeded data, re-seed on THIS machine (the project's test-data
    skill), and launch the dev/emulator with this machine's launcher.
 
@@ -99,12 +97,7 @@ and an Autopilot left ON by a swap is ticked in 7b.
    - the open-day report says the mode went ON, lists the scope by row number, and how to narrow it
      ("ตัด #3") or switch off ("ปิด autopilot"); the 🤖 line then reads `On (ask)`.
    When the state file is already ON (a same-machine resume), skip the switch-on and run its `tick`.
-   Why: the owner asked for it after answering the same morning question twice in a row
-   (*"อยากให้เมื่อ /ae49-task-open-day ทุกครั้งเข้าโหมด On (Ask) โดยเอางานที่ค้างอื่นทั้งหมดเข้า Scope"*).
-   History: since 2026-10-22 the close-day switches the mode OFF first ([close.md](close.md),
-   "First of all"), so a manifest always says `Autopilot: OFF`; on 2026-10-19 and 2026-10-22 an
-   open-day stayed silent about it and the owner had to switch on by hand ("ทำไมปิด", "ยังไม่ได้ระบุหรอว่า
-   ให้เปิด Autopilot (Ask) ทุกครั้งที่ เปิดวัน"); Q186 a then made it a question, AQ1 b makes it automatic.
+   A manifest written by `close` always says `Autopilot: OFF` (close switches it off first), so this step never trusts the manifest.
 
 8. **Update memory + report.** Note "resumed on <machine> <date>" in the
    in-flight file (the commit can ride the next landing). Report the board per
@@ -116,8 +109,7 @@ and an Autopilot left ON by a swap is ticked in 7b.
    register holds rows is wrong.
    The autopilot state is NOT a board row: like every message, the report ends
    with the `🤖 Autopilot mode: On (ask|decide) / Off` line of
-   `ae49-ref-report-format` (owner 2026-10-07 — it replaced the open-day row of
-   Q11 a the same day). The CHECK itself stays in `~/.claude/CLAUDE.md`; the
+   `ae49-ref-report-format` (owner 2026-10-07). The CHECK itself stays in `~/.claude/CLAUDE.md`; the
    automatic switch-on is step 7b.
 
 ## Notes

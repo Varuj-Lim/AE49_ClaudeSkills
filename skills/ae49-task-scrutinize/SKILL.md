@@ -1,6 +1,6 @@
 ---
 name: ae49-task-scrutinize
-description: "Questions whether a plan, design or change should exist at all and whether a smaller way reaches the same goal, then follows the real code path to test what it claims. Use on /ae49-task-scrutinize or when the owner asks for a second opinion, a sanity check, or \"is this the right approach\". A bug hunt over a diff is code-review; a finished build against its plan is the ae49-audit agent; a live design interview is ae49-task-grill."
+description: "Questions whether a plan, design or change should exist and whether a smaller way reaches the same goal, then follows the real code path to test its claims. Use on /ae49-task-scrutinize, second opinion, sanity check, is this the right approach. Not for a diff bug hunt (code-review), build vs plan (ae49-audit) or design interview (grill)."
 ---
 
 # Scrutinize

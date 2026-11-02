@@ -1,26 +1,14 @@
 ---
 name: ae49-ref-gate-checklist
-description: >-
-  The ONE rulebook for the owner's manual-test GATE in every ae49-workflow project (AE49_Hub,
-  Nuri_Hub, siblings) - when a gate opens, the checklist format (Thai, full sentences, 5-7
-  parent items per feature section, at most 5 sub-steps each), every item's three tags
-  [EMU] (account) {Nav -> Page} and quoted values, circled gate numbers per deploy round, the
-  clickable docs/gate-checklist page (ticks keyed by content, a fix during a gate = a NEW
-  section, only open sections on the board), the CLOSED line and "No open gate" payload at
-  landing (or when that line looks different between projects), waived / Main-verified items, template adoption and the emulator-by-default rule -
-  plus the scripts that CHECK and CLOSE the page (validate-gate.cjs, close-gate.cjs). Invoke
-  BEFORE writing, rewriting, renumbering or closing ANY gate, every time, and whenever the
-  owner says a gate "ไม่ตรงกติกา", "ข้อเยอะไป", "ไม่เห็น Gate", or asks for a test checklist.
-  Split out of ae49-router 2026-09-25; topic files hold the rest.
+description: "The ONE rulebook for the owner's manual-test gate in every ae49-workflow project: when a gate opens, checklist format (Thai, 5-7 items per section, at most 5 sub-steps), tags, the clickable docs/gate-checklist page, CLOSED line, validate-gate.cjs, close-gate.cjs. Invoke BEFORE writing or closing ANY gate; ไม่ตรงกติกา, ข้อเยอะไป, ไม่เห็น Gate."
 ---
 
 # Gate checklist — the owner's manual-test gate
 
-Split into topic files 2026-10-09 (plan `skills-merge-sweep` M1, owner MQ1 b) and merged with
-`web-ref-gate-closed-format`. THIS file keeps the working core — invoke it before every gate, run
+THIS file keeps the working core — invoke it before every gate, run
 `validate-gate.cjs`, the item format with its three tags, the 5–7 budget — so one read still gives the
-rules a compact erases; the long sections moved WHOLE (headings and owner quotes unchanged) into the
-topic files below. `resources/*` paths are unchanged.
+rules a compact erases; the long sections live in the
+topic files below. Why the rules are shaped as they are, and the old section names: [history.md](history.md).
 
 ## Read X when Y
 
@@ -34,25 +22,8 @@ topic files below. `resources/*` paths are unchanged.
 | [closed-format.md](closed-format.md) | landing: the CLOSED payload shape, the closed-line grammar and slot rules (what `close-gate.cjs` writes) |
 | [delegated.md](delegated.md) | handing a gate section to an `ae49-gate` sub-agent: who decides what, ports, running gates at once, starting during the audit; tools in `resources/gate-tools/` |
 
-## Old name → where it lives now
-
-| Old skill / section | Now |
-|---|---|
-| `web-ref-gate-closed-format` (whole) | `ae49-ref-gate-checklist/closed-format.md` |
-| "Gate numbers — circled, per deploy round" | `gate-numbers.md` |
-| "The clickable page…" · "When a section is on the board…" · "Template adoption" | `page.md` |
-| "Waived and Main-verified items (owner 2026-09-25)" | `waived.md` |
-| "Test data" · "Environment — the emulator by default" | `environment.md` |
-
-**Scope (old description of this skill, 2026-09-25):** The ONE rulebook for the owner's manual-test GATE in every ae49-workflow project (AE49_Hub, Nuri_Hub, future siblings) — when a gate opens, the checklist format (Thai, full sentences, 5–7 parent items per feature section, at most 5 sub-steps each), circled gate numbers per deploy round, the clickable docs/gate-checklist page (ticks keyed by content, a fix during a gate as a NEW section, only open sections on the board), every item's three tags [EMU] (account) {Nav -> Page} and quoted values, the CLOSED payload at landing, template adoption and the emulator-by-default rule — plus the scripts that CHECK and CLOSE the page (validate-gate.cjs, close-gate.cjs). Invoke BEFORE writing, rewriting, renumbering or closing ANY gate, every time, and whenever the owner says a gate "ไม่ตรงกติกา", "ข้อเยอะไป", "ไม่เห็น Gate", or asks for a test checklist. Split out of ae49-router 2026-09-25.
-
-**Split out of `ae49-router` on 2026-09-25** (owner, on Main's review of the router: *"ทำทุกข้อไปเลย"*).
-For weeks these rules were ONE ~150-line paragraph inside the router. On 2026-09-23 the first gate
-after a context compact broke eight of them — handed over in chat instead of on the page, 10 items
-instead of 5–7, no section heading, no `[EMU] (account) {Nav -> Page}` tags, placeholder accounts,
-unquoted values — because the router's body had left context with the compact and nothing had
-reloaded it. Two fixes, both here: the rules are a skill of their own that Main invokes before
-every gate, and the checkable half of them is a SCRIPT, which a compact cannot erase.
+**Why a skill plus scripts:** the router's body leaves context with a compact, so these rules are a skill Main invokes
+before every gate, and the checkable half of them is a SCRIPT, which a compact cannot erase.
 
 ## Use the scripts — they hold what a machine can check
 
@@ -82,21 +53,15 @@ sentence ("Open X → do Y → you should see Z"); never compressed fragments, n
 prose-run summary of items. **Checklist format:** each item on its own line as
 `N. [ ] <sentence>` with ONE check per item, **numbered 1..N WITHIN each feature section —
 the count restarts at 1 under every section header** (owner 2026-09-18: a count running across
-sections moved every later item's number whenever a landed section was dropped, so "ข้อ 11"
-pointed at a different item after each board rewrite — *"ลำดับข้อจะขยับทำให้ผม Reference หาคุณ
-ลำบาก และ สับสนได้ง่าย"*). An item is referenced by its section's circled numeral plus its
+sections moved every later item's number whenever a landed section was dropped). An item is referenced by its section's circled numeral plus its
 number — "⑫ ข้อ 5", never a bare number — and the checklist page numbers it the same way;
 when a list must exceed ~8 items it groups under short bold section headers.
 **Checklist budget (user rule 2026-08-13): aim for 5–7 items; only a genuinely
 complex gate may exceed that, and it should never reach 10. The budget is PER
 FEATURE — a combined gate of several features is one section per feature, each
-section inside the budget (owner reminder 2026-09-08, after Main opened a 44-item
-combined list by pasting every plan checklist plus every audit drift line; the
-drift lines are merged INTO the 7, never appended). Second reminder 2026-09-15,
-after a 16-item section inherited from a close-day board — "ผมตรวจไม่ไหว … แต่ละเรื่องต้องมี
-ไม่เกิน 7 ข้อ": a section over 7 is CONDENSED before it is handed over, whoever wrote it
-and whenever; the owner asked for this to live HERE, in the skill read every session,
-not in memory.** Condense by merging
+section inside the budget (owner 2026-09-08; the drift lines are merged INTO the 7, never
+appended). A section over 7 is CONDENSED before it is handed over, whoever wrote it
+and whenever (owner 2026-09-15; the rule lives HERE, not in memory).** Condense by merging
 related checks into one item and covering only the core flow plus the risky edges —
 the audit already verified the rest; a gate checklist is the user's smoke test, not a
 re-audit. When a plan's Testing checklist is longer, Main condenses it at the gate.

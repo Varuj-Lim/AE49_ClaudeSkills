@@ -1,13 +1,13 @@
 ---
 name: ae49-ref-report-format
-description: The one shared format for any findings / review / audit / status report the model writes for the user — plain language, emoji-tagged severity tiers, a per-finding ID so the user can reference one back, concise labelled finding lines, and an emoji verdict. Use whenever producing a review, scrutiny, audit, findings list, or status report to the user, or when another skill says "format the report per ae49-ref-report-format". The report skills (ae49-task-scrutinize, ae49-task-audit-lib, ae49Hub-task-audit-project) point here instead of each redefining the format. Trigger this even when the request only says "review this", "audit that", "what's wrong with", or "give me findings" — using this one format (never an ad-hoc per-skill layout) is required for every report.
+description: "The one format for any findings, review, audit or status report: plain language, emoji-tagged severity tiers, a per-finding ID the user can refer back to, concise labelled lines, an emoji verdict. Use for every review, audit, findings list or status board, and when a skill says format per ae49-ref-report-format. Never an ad-hoc layout."
 ---
 
 # Report format
 
 The single source for how we format a findings / review / audit / status **report to the
 user**, so every report reads the same, scans fast, and is easy to reference. Other report
-skills point here instead of redefining the format.
+skills point here instead of redefining the format. Why the rules are shaped as they are: [history.md](history.md).
 
 ## 1. Plain language
 
@@ -40,16 +40,13 @@ A message with the status board goes to the owner ONLY at:
 
 Everything else — a build finished, an audit passed, a fold sent, a re-audit dispatched, a harness green —
 is written to the log (and the register when it is an item) and gets NO chat message. A quiet stretch of
-20–40 minutes while agents work is expected. Why: on 2026-10-21, after the owner asked where the report had
-gone, Main sent a full board with every agent notification — about ten boards in one morning, most of them
-the same — and the owner asked whether a frequency rule existed (*"การเขียนรายงานของคุณตอนนี้มันถี่มาก"*).
+20–40 minutes while agents work is expected.
 In autopilot `decide` mode the stricter rule stands: no reports at all until the owner asks.
 
-**This rule sets HOW OFTEN, never HOW MUCH (owner 2026-10-21, the same morning: *"อย่าตัดให้สั้นลง กำหนดแค่
-ความถี่พอแล้ว พอสั้นลงผมจะหาไม่เจอ"*).** Every board that IS sent carries every open row — each plan / batch
+**This rule sets HOW OFTEN, never HOW MUCH (owner 2026-10-21).** Every board that IS sent carries every open row — each plan / batch
 in flight AND every row of the open-items register (`ae49-router` status lane), the unpushed commits, the
 items waiting on the owner — never trimmed to "what changed" to save space. The owner looks for an item on
-the board; a row dropped for brevity reads as a row that vanished (it happened with OI-145 the same day).
+the board; a row dropped for brevity reads as a row that vanished.
 
 ### The template (owner ruling 2026-09-16 — copy this shape; five columns, the 2026-08-06 set plus a row number)
 
@@ -124,15 +121,13 @@ Which renders as:
   line lists them — `⏸️ รอ PR ของ <contributor>: OI-n · OI-m · …` — so they stay visible without filling the board. The
   rows stay in the register unchanged; the moment that contributor's PR arrives they go back on the table as ordinary
   rows. The never-collapse rule (`ae49-router` § status board) is read the same way: a row waiting only on a contributor's next PR is not
-  collapsed, it is footnoted. Why: the owner asked for the
-  three rows that could only move with an external contributor's next PR to come off the board (*"เอาเรื่องนี้ออกจากตารางไปก่อนจนกว่า
-  PR จะมาได้ไหม"*), and chose the one-line footnote over hiding them, because hiding is how items vanished on 2026-09-30.
+  collapsed, it is footnoted. Hiding such rows is how items vanish, hence the footnote.
   **The `Unpushed on <deploy branch>` row carries its line count (owner 2026-10-21):** its Stage cell reads
   `📦 N commits · +A / −D lines (code +a / −d)` — from `git diff --shortstat origin/<b>..<b>` for the whole range and
   the same over the code paths (app, components, lib, functions, worker, rules, indexes, apphosting) — re-run fresh for
   every board (a fetch first), never carried from an earlier board. It costs one git call and a few tokens; the owner
   reads it to judge how big the next push is.
-  Within a group, most urgent first. Why: on 2026-10-21 a twelve-row board mixed the four kinds and the owner could not find what was running, what was done and what was theirs (*"งานที่กำลังทำอยู่ด้านบน … งานที่รอผม…"*; the owner chose this order over Main's done-at-the-bottom proposal).
+  Within a group, most urgent first. The order lets the owner see at a glance what is running, what is done and what is theirs.
 - **Put the table at the END of the message**, after the prose that explains it. The reader
   wants the reasoning first and the board as the summary they scroll back to.
 - **A cross-session handoff prompt is never a row** (owner rule 2026-09-11,
@@ -144,7 +139,7 @@ Which renders as:
 - **The ⏱️ ETA line — on every message that carries the status board (owner Q42 a,
   2026-10-20).** One line right after the table (and any takeaway), right ABOVE the 👤 line:
   ONE finish window for ALL the work that does NOT wait on the owner — a summary, never a list of
-  items or per-item times (owner 2026-10-20: *"แก้เป็นแบบสรุปเลย ว่าจบประมาณกี่โมง ไม่ต้องแยกรายการ"*) — e.g.
+  items or per-item times (owner 2026-10-20) — e.g.
   `⏱️ งานทั้งหมดที่ไม่รอคุณจะจบราว 14:30–15:40 น. (ไม่นับช่วงที่รอคุณ)`, or with the date when it rolls
   over: `⏱️ … จบราวพรุ่งนี้ (21 ต.ค.) 12:00–16:00 น.`. Computed with
   `ae49-task-estimate-eta`'s baselines and chain rules from the board being written (no
@@ -155,14 +150,10 @@ Which renders as:
   (owner, same day: "ETA" is short and understood — not the long Thai phrase) and gives ONE final finish window for everything that does not wait on
   the owner; no per-plan or per-batch times inside the sentence either (the owner reads only when it all ends; the
   breakdown is `/ae49-task-estimate-eta full` on request). What it excludes may follow in a short bracket. The full breakdown stays `/ae49-task-estimate-eta`.
-  **Also on the SHORT progress report (owner 2026-10-22: *"รายงานแบบสั้นที่คุณทำอยู่ผมอยากให้เติม ETA กับ เร่งได้ยังไง
-  เหมือนกับท้ายตารางของรายงานเต็ม"*):** any message without a board that tells the owner how work in flight stands —
+  **Also on the SHORT progress report (owner 2026-10-22):** any message without a board that tells the owner how work in flight stands —
   "B2 / OI-154 still running", "audit dispatched", a landing note — carries the same ⏱️ and ⚡ lines right above the
   👤 line, computed the same way. Only a plain answer to a question with no work in flight goes without them.
-  Why: the owner wanted "เสร็จกี่โมง" on every status without asking, at ~2–3 % more tokens a day
-  instead of the 10–20 % a full ETA per report would cost.
-  **With it, the ⚡ "faster" line (owner 2026-10-20, the same day: *"ช่วยเพิ่มด้วยว่าสามารถทำให้เร็วขึ้นได้
-  ด้วยอะไรในรายงานด้วยนะ"*)** — right under ⏱️: the one or two biggest ways to finish sooner, from
+  **With it, the ⚡ "faster" line (owner 2026-10-20)** — right under ⏱️: the one or two biggest ways to finish sooner, from
   `ae49-task-estimate-eta` §"Ways to finish sooner" (an owner step that unblocks a chain, a chain
   that could run in parallel, a batch that could split), each as `what to do · minutes saved`,
   e.g. `⚡ เร่งได้: ตอบ Q34–Q41 ตอนนี้ (−30–60 นาที) · ทำ Cloud Shell setup ระหว่าง B1 build (−30–60 นาที)`.
@@ -199,9 +190,7 @@ Which renders as:
   from `~/.claude/autopilot/<project-folder>/state.json` (no file = Off):
   `🤖 Autopilot mode: On (ask)` · `🤖 Autopilot mode: On (decide)` · `🤖 Autopilot mode: Off`.
   It is a status line, never a board row — the Autopilot state is NOT a table row on any
-  board, the open-day board included (this line replaced the open-day row of owner Q11 a the
-  same day). Why: the owner had to ask "did you go into autopilot?"; a fixed last line answers
-  that at a glance without putting a no-action row on the board they scan for their own moves.
+  board, the open-day board included. It is not a row, so the board the owner scans for their own moves holds only actions.
   It follows the 👤 line because the ask is still the last thing to READ; the 🤖 line is only
   glanced at.
 

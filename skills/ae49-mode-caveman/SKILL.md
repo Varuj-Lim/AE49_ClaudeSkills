@@ -1,10 +1,6 @@
 ---
 name: ae49-mode-caveman
-description: >
-  Ultra-compressed communication mode. Cuts token usage ~75% by dropping
-  filler, articles, and pleasantries while keeping full technical accuracy.
-  Use when user says "caveman mode", "talk like caveman", "use caveman",
-  "less tokens", "be brief", or invokes /ae49-mode-caveman. An ON/OFF mode (kind `mode`): stays active every turn until "stop caveman" / "normal mode".
+description: "Ultra-compressed communication mode, cuts tokens ~75% by dropping filler, articles and pleasantries, full technical accuracy kept. ON/OFF mode, stays active every turn. Use on caveman mode, talk like caveman, use caveman, less tokens, be brief, /ae49-mode-caveman; off with stop caveman or normal mode."
 ---
 
 # Caveman

@@ -1,6 +1,6 @@
 ---
 name: ae49-task-handoff
-description: "Write a handoff DOCUMENT summarising the current conversation so a fresh agent can continue the work — saved into the project at docs/handoffs/<topic>.md, auto-committed under a branch guard, with a suggested-skills section and secrets redacted. Use when the user says \"/ae49-task-handoff\", \"handoff doc\", \"เขียนเอกสาร handoff\", \"write a handoff\" for another agent. Closing or swapping a session is NOT this skill: same machine → ae49-task-session swap; switching machines → ae49-task-session close."
+description: "Write a handoff DOCUMENT of the current conversation for a fresh agent, saved at docs/handoffs/<topic>.md, auto-committed under a branch guard, secrets redacted. Use on /ae49-task-handoff, handoff doc, เขียนเอกสาร handoff. NOT for closing a session: same machine is ae49-task-session swap, switching machines is ae49-task-session close."
 argument-hint: "[topic] = what the next agent will focus on"
 ---
 

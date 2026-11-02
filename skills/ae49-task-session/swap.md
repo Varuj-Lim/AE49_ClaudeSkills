@@ -1,6 +1,6 @@
 # swap — close this session, continue in a fresh one on the SAME machine
 
-Formerly `ae49-task-handoff` § "Session-close mode" (moved whole 2026-10-28, step numbers kept). Runs on
+Runs on
 `/ae49-task-session swap`, or on a bare `/ae49-task-session` typed in a session that already holds work.
 
 When the intent is "close this session and continue in a fresh one ON THIS MACHINE" (the user
@@ -8,7 +8,7 @@ says "ปิด session", "เปิด session ใหม่", "close this sessi
 in a long session, or hands off with no machine switch), run THIS — never [close](close.md). Close is
 for switching MACHINES: it parks trees on branches, builds a 🎒 hand-carry list and switches
 Autopilot OFF, all of which only slow a same-machine swap down or break it (owner HQ1 a,
-2026-10-27: *"ปิด session ได้ไวขึ้น … เครื่องเดิม แค่อยากเปิด Session ใหม่"*).
+2026-10-27).
 
 0. **Clean break or stop** (`ae49-router` § Session length). No sub-agent running, no gate section open on the board, no
    question asked and unanswered that lives only in chat (it must be in the open-items register). If any of these holds, say
@@ -31,8 +31,7 @@ Autopilot OFF, all of which only slow a same-machine swap down or break it (owne
    `/ae49-task-session` (bare — in the new, empty session it runs [open](open.md)) — then the 🤖 line. **The USER closes this session and opens the new one
    themselves. Main NEVER starts it** (no `start_session`, no sub-session, no dispatched agent that
    carries the work on): a session Main starts is linked to this one and runs beside it in the same
-   checkout, which is exactly the parallel writer the swap is meant to avoid (owner 2026-10-27:
-   *"ผมหมายถึงว่า จะปิด Session นี้ แล้วเดียวผมจะเปิดใหม่เอง ไม่ได้ให้คุณมาเปิดเป็น Sub Session"*).
+   checkout, which is exactly the parallel writer the swap is meant to avoid (owner 2026-10-27).
 
 Skipped on purpose: park branches, worktree parking, the 🎒 hand-carry list, the engines stop
 (no agent is running — step 0; a dev server or emulator may stay up), the close-day-park log entry (one line is optional), the

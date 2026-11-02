@@ -1,6 +1,6 @@
 ---
 name: web-ref-migration-backups
-description: The shared data-migration safety ladder for every hub project (AE49_Hub, NuriHub, future siblings) — rehearse on the emulator, dry-run, copy every doc a production write will touch into a `<collection>_backup_<stamp>` collection with a --restore path, verify after, and SWEEP the backups once the work is verified (owner's one-word confirm, roughly a week later). Use whenever writing or reviewing a script that mutates real Firestore data, before running any such script with --apply, when the owner asks why data backups exist or whether they can be deleted, or when backup collections/files have piled up. Written for Claude's own recall, not as team documentation.
+description: "Canon (web-ref-*) migration safety ladder for hubs: rehearse on the emulator, dry-run, copy every doc a write touches into <collection>_backup_<stamp> with a --restore path, verify, SWEEP backups once verified (owner's one-word confirm, about a week later). Use before any script that mutates real Firestore with --apply, or when backups pile up."
 ---
 
 # Data-migration safety ladder — shared canon

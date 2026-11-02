@@ -1,6 +1,6 @@
 ---
 name: web-ref-calc-report
-description: "The rule for a detailed calculation report in any hub: every computed value shows its equation, the same equation with the real values put in, and the result with its unit, as separate parts an engineer can check by hand; a computed value in a table has an ƒx at the cell's top right opening a short how-it-was-calculated popup. Use when building, porting or reviewing a calculation report, a design sheet, an Excel calculation ported to the web, or a page that shows computed engineering values, and on \"รายการคำนวณ\", \"สมการ\", \"แทนค่า\", \"ค่ามาจากไหน\", \"เครื่องหมายในช่อง\", \"วิธีคำนวณของช่องนี้\", \"show the working\"."
+description: "Canon (web-ref-*) for a calculation report in any hub: every computed value shows its equation, the same equation with real values put in, and the result with unit, as separate parts checkable by hand; a computed table value has an ƒx at the cell's top right opening a how-calculated popup. Use for design sheets; สมการ, แทนค่า."
 ---
 
 # Calculation reports show their working

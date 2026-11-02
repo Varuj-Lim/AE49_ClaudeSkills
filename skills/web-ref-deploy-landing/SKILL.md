@@ -1,6 +1,6 @@
 ---
 name: web-ref-deploy-landing
-description: The shared landing-and-deploy discipline for every hub project (AE49_Hub, Nuri_Hub, future siblings) whose default branch auto-deploys to Firebase App Hosting — push==deploy, the non-deploying backup branch, deploying security rules SEPARATELY and BEFORE the manual-test gate, committing a plan before dispatching implementers, one commit per feature with an explicit pathspec, the tiny-fix fast path, dev-server files that rewrite themselves, and the rollback recipe. Use when landing, committing, pushing, deploying, or rolling back in such a project, and whenever a deploy/landing ruling arrives — the rule changes HERE once, project CLAUDE.md files keep only their own branch names, ports and project ids.
+description: "Canon (web-ref-*) landing and deploy discipline for hubs whose default branch auto-deploys to Firebase App Hosting: push==deploy, non-deploying backup branch, rules deployed SEPARATELY and BEFORE the manual-test gate, one commit per feature with explicit pathspec, tiny-fix fast path, rollback. Use to land, commit, push, deploy or roll back."
 ---
 
 # Landing and deploying — shared discipline

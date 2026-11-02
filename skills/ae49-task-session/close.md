@@ -1,6 +1,6 @@
 # close — end the day: park everything so work travels to another machine
 
-Formerly `ae49-task-close-day` (moved whole 2026-10-28, step numbers kept). Runs ONLY when the owner types
+Runs ONLY when the owner types
 `/ae49-task-session close` or says the day ends / the machine changes — never inferred (SKILL.md). For a
 same-machine session change use [swap.md](swap.md).
 
@@ -26,10 +26,7 @@ or a Temp folder.
 (state `on: false`, heartbeat stopped) and give its full `off` report from the log — the decisions,
 landed, parked, owner steps — as its own message, THEN start step 0. No file or `"on": false` → one
 line "Autopilot: already Off" and go on. Never ask whether to switch off: closing the day IS the
-switch-off. Step 6 then records `Autopilot: OFF (switched off at close-day)` in the manifest. Why:
-on 2026-10-22 the open-day found the mode still ON from 2026-10-02 with every scope item long
-landed, and had to ask the owner whether to switch it off (*"เพิ่มกติกาใหม่ทุกครั้งที่ close-day ให้ปิดโหมด
-ก่อนทุกครั้งแล้วรายงาน หลังจากนั้นค่อยเริ่มปิดวัน จะได้ไม่ต้องมาถามแบบนี้อีก"*).
+switch-off. Step 6 then records `Autopilot: OFF (switched off at close-day)` in the manifest.
 
 0. **Stop the engines (owner rule 2026-10-06).** Nothing may still be WRITING when the survey
    runs — an agent mid-build makes step 1 lie and step 3 park a half-written tree.
@@ -94,9 +91,7 @@ landed, and had to ask the owner whether to switch it off (*"เพิ่มก�
    "deferred" / "Owner steps" lines); anything open with no plan and no register
    row gets a row now, committed with the register. The memory's queue then LISTS
    the register rows by ID. **"Backlog cleared" / "nothing parked" may be written
-   only when the register is EMPTY** — the 2026-09-30 close-day wrote it while the
-   seismic tool, T0202 Q18 and four deferrals were open, and they stayed invisible
-   for 12 days.
+   only when the register is EMPTY**.
 
 7. **Backup push.** Run the project's no-deploy backup push, e.g.
    `git push origin main:backup`. This carries the memory commit plus every
@@ -113,8 +108,7 @@ landed, and had to ask the owner whether to switch it off (*"เพิ่มก�
    out loud when the list is empty, so the user never has to guess. If a gate
    was open, warn that emulator/seeded test data is machine-local and must be
    re-seeded on the other side. **A parked gate board travels AS-IS, so condense it
-   BEFORE parking: every section inside the 5–7 budget of `ae49-ref-gate-checklist` (never 10) —
-   the 16-item section parked on 2026-09-11 earned the owner's reminder.** End with: Main can be closed and the machine
+   BEFORE parking: every section inside the 5–7 budget of `ae49-ref-gate-checklist` (never 10).** End with: Main can be closed and the machine
    shut down (close a running emulator with Ctrl+C, never the window X) — then step 10.
 
 10. **Shut down the computer — DEFAULT: DON'T (owner rule 2026-10-06).** The ceremony ends with
@@ -127,15 +121,14 @@ landed, and had to ask the owner whether to switch it off (*"เพิ่มก�
     quiet).
 
     **It is NOT asked (owner rule 2026-10-07, replacing the 2026-10-06 "ask every close-day"
-    rule: *"ปกติไม่ต้องถามผมสิ ต้องเป็นแบบไม่ปิดเป็น Default เลยถ้าผมไม่ได้บอกอะไร"*).** The report
+    rule).** The report
     ends WITHOUT a shutdown question and the machine stays on. Main shuts down only when the
     owner's own message in that sitting asks for it ("ปิดวันและปิดเครื่อง", "close day and close
     computer"). The report may say once, plainly, that the machine CAN be shut down; it never
     offers it as a choice to answer.
 
     **The one bend in `web-ref-local-emulator` rule 1 — the owner's emulator, once the owner has said to shut down (owner rule
-    2026-10-07: "once I told you to close computer I allow you to close emulator by using
-    stop-emu.cmd, don't ask me … sometime I already away from keyboard").** An emulator suite or
+    2026-10-07; the owner is often away from the keyboard).** An emulator suite or
     emulator dev server the OWNER started is normally theirs to close (step 0). But when the owner's
     live message in this sitting says to shut the machine down, Main closes it ITSELF instead of
     asking: run the project's safe-stop launcher (AE49: `.claude\stop-emu.cmd`, which EXPORTS the

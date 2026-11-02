@@ -1,18 +1,13 @@
 ---
 name: ae49-ref-question-format
-description: The ONE format for every question Main puts to the owner — a grill question, a design fork, a ruling request, an audit QUESTION relayed for a decision, a "which option" during a gate, a "did you mean X" check. Owner rule 2026-10-01 ("วิธีการถามคำถามของคุณที่ส่งมาให้ผมตอบนั้นแย่ ไม่มี Format … ไม่ใช่การเขียนแบบสั้นๆ แล้วไม่อธิบายอะไรเลย ผมอ่านแล้วไม่เข้าใจ") — a question is never a terse fragment; it carries the context the owner needs to picture the situation, labelled options each with how / pros / cons / cost / whose hands (a consequence lives inside its option's ข้อเสีย — no separate "what goes wrong" block, owner 2026-10-01), a recommendation with its reason, and how to answer. Use whenever you are about to ask the owner anything that needs a decision — trigger even when the question feels small or obvious, and even in caveman mode (questions are an Auto-Clarity case).
+description: "The ONE format for every question Main puts to the owner: grill question, design fork, ruling request, relayed audit QUESTION, which-option at a gate. Context, labelled options (how, pros, cons, cost, whose hands), a recommendation with its reason, how to answer. Use before ANY decision question, even a small one, even in caveman mode."
 ---
 
 # Question format — how Main asks the owner anything
 
-**Why this exists (owner ruling 2026-10-01).** During the notification-settings grill Main asked
-"Q3 — มีหัวข้อที่ปิดไม่ได้ไหม? (ก) … (ข) … (ค) …" in three compressed lines. The owner answered
-"Q3 ถามว่าอะไรขอละเอียดหน่อย", then, after a second question in the same style: *"วิธีการถามคำถามของคุณ
-ที่ส่งมาให้ผมตอบนั้นแย่ ไม่มี Format … ไม่ใช่การเขียนแบบสั้นๆ แล้วไม่อธิบายอะไรเลย ผมอ่านแล้วไม่เข้าใจ"*. The cause
-was caveman mode leaking into questions: a question compressed to fragments saves tokens and costs
-the owner a round trip (and the trust that the question was thought through). The version the owner
-DID understand had: what the thing is in plain words, concrete examples of what goes wrong, each
-option spelled out with its consequence, and a recommendation with the reason. That is the format.
+**Why (owner ruling 2026-10-01).** A question compressed to fragments (caveman mode leaking into it) saves tokens and costs
+the owner a round trip. The version the owner DID understand had: what the thing is in plain words, each option
+spelled out with its consequence, and a recommendation with the reason. That is the format. The story: [history.md](history.md).
 
 ## The format — copy this shape
 
@@ -50,9 +45,7 @@ option spelled out with its consequence, and a recommendation with the reason. T
    technical terms; no programmer shorthand; no abbreviations the owner has not used himself.
 3. **Ask every ready question in ONE message — up to 10 (owner rule 2026-10-07, replaces "one
    question per message").** When several questions are waiting, send them together instead of one
-   per turn: *"if you have many question you can ask all of them within one time not have to step by
-   step asking limit 10 question in one time"* — on 2026-10-07 the owner asked for OQ4–OQ8 to be
-   sent at once after three one-by-one rounds, then answered seven ETABS questions in one reply.
+   per turn.
    - **Cap: 10 per message.** More than 10 → send the 10 that unblock the most work first, say how
      many follow, and send the rest in the next message.
    - **Every item keeps the full shape** (rules 1, 4–11): its own `## ❓` heading, context, options
@@ -67,7 +60,7 @@ option spelled out with its consequence, and a recommendation with the reason. T
 4. **Context before options.** The owner cannot see the code or the previous ten tool calls;
    the "เรื่องอะไร" block must let them picture the screen or the data. Name the page, the button,
    the record (quoted values per `ae49-ref-gate-checklist`), the number that matters.
-5. **No separate "what goes wrong" section (owner 2026-10-01: "ตัดหัวข้อว่า ถ้าเลือกผิดจะเกิดอะไรขึ้น").**
+5. **No separate "what goes wrong" section (owner 2026-10-01).**
    A consequence that matters belongs inside the option it belongs to, as that option's ข้อเสีย,
    in one concrete phrase — never as a block of its own above the options.
 6. **Every option says who does what and what it costs** — files, a deploy, the owner's hands,
@@ -84,12 +77,11 @@ option spelled out with its consequence, and a recommendation with the reason. T
 10. **When the owner says "ไม่เข้าใจ" / "ขอละเอียดหน่อย"**, do not repeat the same text longer:
    add a worked example from the app (a real record, a real screen) and restate each option as
    "ถ้าเลือก (a) คุณจะเห็น … / ต้องทำ …".
-11. **Each option's four facts stand on their OWN lines (owner rule 2026-10-06).** Under every option, ทำอย่างไร / ข้อดี / ข้อเสีย / ต้นทุน are four separate sub-bullets — never one run-on line joined with " · ". The owner reads the options by scanning down the same four slots in each; a run-on line hides which phrase is the cost and which the drawback ("Create new format rule … you have to create new line for ข้อดี ข้อเสีย ต้นทุน separate for each choice"). A fact that genuinely does not apply is written "—", not dropped, so the four slots stay aligned across options.
+11. **Each option's four facts stand on their OWN lines (owner rule 2026-10-06).** Under every option, ทำอย่างไร / ข้อดี / ข้อเสีย / ต้นทุน are four separate sub-bullets — never one run-on line joined with " · ". The owner reads the options by scanning down the same four slots in each; a run-on line hides which phrase is the cost and which the drawback. A fact that genuinely does not apply is written "—", not dropped, so the four slots stay aligned across options.
 12. **Numbering:** `Q<n>` within one grill; a decode's questions keep the spec's IDs (`DQ1` / `Q6`);
     an audit's open question relayed to the owner keeps its audit ID. Never reuse a number in one
     grill.
-    **The running counter restarts at Q1 when the owner says so (owner 2026-10-28: *"เริ่มรันเลข Q จาก 1 ใหม่ได้แล้วนะ
-    300 กว่าแล้วเยอะมากแล้ว"*) — no push is needed.** Chat keeps the bare `Q<n>`; durable records (log `ruling:` lines,
+    **The running counter restarts at Q1 when the owner says so (owner 2026-10-28) — no push is needed.** Chat keeps the bare `Q<n>`; durable records (log `ruling:` lines,
     plan Decisions, the register) write the date before it — `2026-10-28 Q1` — so a reset number never reads as an older
     ruling of the same number. The log line records the ruling as `ruling: owner Q<n> (a) — <one line>`.
 13. **The board's 👤 line still names the pending question** ("รอคุณ: Q5 a/b") — that line is a

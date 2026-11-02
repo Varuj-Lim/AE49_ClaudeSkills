@@ -1,6 +1,6 @@
 ---
 name: web-ref-local-emulator
-description: The shared local-emulator discipline for every hub project (AE49_Hub, Nuri_Hub, and future siblings) that runs a Firebase emulator suite behind one-click .cmd launchers — who presses the launchers (the OWNER, never Claude — bar the stop launcher once the owner's live message has ordered the machine shut down; a build agent's private self-closing `emulators:exec` on its own ports and `demo-` id is not the owner's suite, so rule 1 does not touch it), probe-before-naming-a-button, the trusted aliveness check, the cross-project port scheme, the look-alike-process safe-kill rule (netstat ports + image name), refresh in both suite states, and the stale-build-cache 404 trap. Use whenever starting, stopping, refreshing, or debugging a project's emulator, before telling the user to press any launcher, or when a launcher/emulator ruling lands — the rule changes HERE once, project skills keep only their own ports and paths.
+description: "Canon (web-ref-*) emulator discipline for hubs with one-click .cmd launchers: the OWNER presses launchers, never Claude (bar stop on a live shutdown order); probe before naming a button; aliveness check; port scheme; look-alike safe-kill; refresh; stale-cache 404. Use to start, stop, refresh or debug an emulator, or before naming any launcher."
 ---
 
 # Local emulator — shared discipline

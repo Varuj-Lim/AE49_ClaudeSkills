@@ -1,6 +1,6 @@
 ---
 name: web-ref-record-codes
-description: The record-code canon for every hub project (AE49_Hub, Nuri_Hub, CCP_Hub, AWDC_Hub, future siblings) — a running code (TK0040, ITK…, LO…, OT…, PR…, DMO…, any counter-issued code) is issued once and NEVER reused, not even after its record is deleted; counters only go up, gaps are normal and are not "fixed". Real records are canceled / rejected rather than deleted when the screen offers it; Delete is for test or mistaken records. Use whenever building or reviewing a counter, a create flow that mints a code, a delete action, a migration that touches codes, or when the owner asks why a number was skipped ("ทำไมเลขข้าม", "ลบแล้วเลขหาย", "ให้ใช้เลขเดิม"). Each hub keeps only its counter paths in its own facts skills; the rule changes HERE once.
+description: "Canon (web-ref-*) for running record codes (TK0040, ITK, LO, OT, PR, DMO, any counter): issued once, NEVER reused even after deletion; counters only go up, gaps are normal, not fixed. Real records are canceled or rejected; Delete is for test or mistaken ones. Use for any counter, code-minting create flow, delete action; ทำไมเลขข้าม, ลบแล้วเลขหาย."
 ---
 
 # Record codes — never reused
