@@ -195,11 +195,24 @@ back), the labelled finding lines, and the emoji verdict. Add only the skill's o
 top (its severity / tier labels and its field names). Keep the format in one place so it can't
 drift across skills.
 
+## A better rule before an exception (owner 2026-11-02)
+
+When a case does not fit a rule, first rewrite the rule so it covers the case. Add an exception only when no clear single rule exists.
+
+**The test:** write one sentence that gives the same behaviour for the rule and the case. If it reads clearly, it replaces them. For example, "Main never verifies a screen, except under Autopilot" became "a screen item Main looked at counts as passed and is counted apart".
+
+- **A second exception to one rule** means the rule is wrong: rewrite it, do not add a third.
+- **An exception stays** only when it has a reason a rule cannot hold: a safety fence with a named bend, or a true one-off. It says why, and it sits inside the rule it bends. A rule's text never claims "no exceptions" or "only one" while others exist.
+- **A list of facts is not an exception:** a per-page registry of tokens or widths is data.
+- **An owner's ruling keeps its effect.** A rewrite may reword it. Changing what it does goes back to the owner.
+- **A new ruling that collides with a rule** changes that rule's text, instead of adding a line beside it.
+
 ## Review Checklist
 
 After drafting, verify:
 
 - [ ] `node ~/.claude/skills/ae49-task-write-a-skill/scripts/validate-skills.cjs <skills folder>` exits 0, naming the project's `.claude/skills` for a project skill (no folder = user skills; an unquoted `: ` in a description silently loses its trigger words)
+- [ ] Every exception passed the test in "A better rule before an exception"
 - [ ] Description includes triggers ("Use when...")
 - [ ] Name has the `<scope>-<type>-<name>` form (ref/task segment)
 - [ ] SKILL.md under 150 lines
