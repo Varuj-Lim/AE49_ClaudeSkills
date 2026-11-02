@@ -56,3 +56,7 @@ code and in dated notes, so neither is renumbered. A new pointer writes `columns
 ## Facts per hub
 
 Each hub's `<hub>-ref-table` skill holds its tokens, paths and registries. When a hub has no facts file for a topic, create it from the canon file the first time it builds one.
+
+## New and touched lists
+
+A list page that is new or touched uses the hub's list-page frame (`<hub>-ref-table` names it); no sweep of untouched pages.

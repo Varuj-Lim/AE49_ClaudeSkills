@@ -63,3 +63,7 @@ A wrong field shows BOTH:
 
 The required star (`<hub>-ref-required-mark`) says what must be filled before anything goes wrong; `web-ref-table`
 covers keys and paste in a grid.
+
+## New and touched work
+
+A form that is new or touched reports a failed save through the hub's one call and box (`<hub>-ref-form-errors` names them); no sweep of untouched forms.
