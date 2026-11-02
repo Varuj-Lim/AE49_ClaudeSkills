@@ -65,7 +65,7 @@ CCP_Hub's reference: `components/ui/PopupOverlay.tsx` (plan `popup-portal`, 9915
 | `primary` (slate) | 1 Primary | save, import, a safe confirm; **every decision verb** (Approve / Consent / Mark …) |
 | `secondary` (outlined) | 2 Secondary | Cancel / Keep |
 | `danger` (red) | 3 Destructive | delete — **red means data is destroyed**, so never on a decision or a "cancel the request" |
-| `warning` (orange) | the hub's orange (`web-ref-button`) | irreversible but deletes nothing: roll back / force — the confirm-side partner of the orange decision icon |
+| `warning` (orange) | the hub's orange (`web-ref-button`) | a caution that destroys no data, per the hub's ladder: roll back / force — the confirm-side partner of the orange decision icon |
 | `approve` (green) | not a rung | the confirm behind a bulk Approve — a decision verb keeps its colour from row to dialog |
 
 Prefix `flex-1` when two buttons share a row. A read-only popup uses
@@ -149,10 +149,10 @@ never bubbles out. **Esc closes a popup exactly where a click outside does**, wi
 
 The shared overlay component gives every popup these, so a call site adds nothing:
 
-- `role="dialog"` and `aria-modal`, and a name from the popup's title.
+- `role="dialog"` and `aria-modal`. The dialog's name comes from the overlay when it can read one from the popup's title, with no call-site work required.
 - Focus moves into the card on open and returns to the opener on close.
-- Tab stays inside the TOP popup; a popup underneath traps nothing.
-- The toast's × and fixed-position pickers sit outside the card and stay reachable, by mouse and by Tab.
+- Tab cycles the TOP popup plus what it owns, including its fixed-position pickers; a popup underneath traps nothing.
+- The toast's × sits outside the popup and stays reachable, by mouse at least.
 
 The audit question for every popup: *which kind is it, and is its overlay wired
 the way that kind demands?* A read-only popup without click-outside and a form

@@ -1,6 +1,6 @@
 ---
 name: web-ref-button
-description: "Canon (web-ref-*) button ladder: rungs by meaning, red only where data is destroyed, orange for irreversible without deleting, quiet text for view helpers, navigation as a link, bare label, one width, ONE line. Use for any button, pill or header action; ปุ่มแดง, ปุ่มส้ม, ปุ่มขึ้น 2 บรรทัด, ปุ่มตกบรรทัด, add a button, button wraps."
+description: "Canon (web-ref-*) button ladder: rungs by meaning, red only where data is destroyed, orange a caution that destroys no data, quiet text for view helpers, navigation as a link, bare label, one width, ONE line. Use for any button, pill or header action; ปุ่มแดง, ปุ่มส้ม, ปุ่มขึ้น 2 บรรทัด, ปุ่มตกบรรทัด, add a button, button wraps."
 ---
 
 # web-ref-button — the cross-hub button canon
@@ -19,8 +19,8 @@ Each hub keeps its ladder's tokens, components and named tones in `<hub>-ref-but
 | Quiet | bare text, no fill, no border | changes only what is on this screen: Clear filters, Select all, Clear, Expand all, Collapse all |
 
 - **Red means the click destroys stored data,** on every rung. Two named bends stay, each a closed set a hub lists and nothing else borrows: the decision set's own colors, and sign-out text as a caution against a misclick.
-- **Orange means irreversible, and it deletes nothing:** void, roll back, force. A reversible switch is never orange. Each hub names its orange in its own ladder, as a rung or as a named tone.
-- **Navigation is a link,** never a pill: pill shapes are for doing something, not for looking at something.
+- **Orange is a caution color that destroys no data.** Each hub names its own set in its ladder, as a rung or as a named tone.
+- **A quiet helper that goes elsewhere is a link,** such as a page section's `View all (N)`. A page's or popup's own action may be a pill, even when it opens another page: `Add <Noun>`, a popup's View, a View / Edit pill.
 - **A label is the word alone:** `Open`, `Save as`, never `Open…`. `…` appears only while busy: `Saving…`.
 - **A busy label keeps one width:** both words share one grid cell, so nothing beside the button moves while it works. No width is typed.
 - **The raw-constant dimming trap:** where a hub's button tokens carry no disabled style and its `Button` component adds it, moving a hand-typed button onto a bare token silently drops the dimming. Use the component, or add the disabled class at the call site.

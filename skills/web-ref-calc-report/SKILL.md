@@ -26,7 +26,7 @@ detailed calculation item writes its equation and its substitution separately.
 
 Equation and substitution each stand on their own line or column, never merged into one string or left in a label.
 
-**In a table:** each group keeps its own column, and the symbol sits on its own line under the label. On a wide screen the equation takes its own column and substitutions stay on one line. A4 portrait paper has no room for that: substitutions wrap, and the equation sits under the label.
+**In a table:** a table holding per-group values gives each group its own column, and the symbol sits on its own line under the label. On a wide screen the equation takes its own column and a substitution stays on one line when it fits. A4 portrait paper has no room for that: substitutions wrap, and the equation sits under the label.
 
 - **Input or looked-up value:** name the source instead of an equation: `จาก Project Globals`, `ตาราง 1.4-1 (SD 2.0 ของ code ที่ใช้)`.
 - **Branch:** show the branch that ran and why: `เนื่องจาก ρ < ρmin จึงใช้ ρmin`.

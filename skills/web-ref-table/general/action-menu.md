@@ -51,7 +51,7 @@ three circles) from the project's icon registry; `title="More actions"` and
 | positioning | `position: fixed`, coordinates from `getBoundingClientRect()` on the trigger | a table wrapper is `overflow-hidden` for its rounded corners; an `absolute` menu inside a `<td>` is clipped and no z-index saves it |
 | anchor | 4px below the trigger, right-aligned: `left = rect.right − MENU_W` where `MENU_W` is the SAME constant as the menu's width class | a width changed without its offset drifts off its anchor |
 | flip | measure the rendered menu in `useLayoutEffect`; if it would cross `innerHeight − 8`, place it above the trigger | the last row's menu used to clip below the viewport; before paint, so the flip is never seen |
-| close | `mousedown` outside (document) · `scroll` in the capture phase · after EVERY item click (close before invoking the callback) · on route change | a fixed menu whose anchor scrolled away is an orphan |
+| close | `mousedown` outside (document) · `scroll` in the capture phase · after EVERY item click (close before invoking the callback) · on route change · Esc, which closes the open menu only and goes no further | a fixed menu whose anchor scrolled away is an orphan; a popup under the menu must stay open (`web-ref-popup`) |
 | stacking | inline z-index above the sticky table head AND above the popup overlay | a modal-header ⋮ must clear its own card |
 | state | inside the shared `<ActionMenu>` component, per trigger — never a shared `openMenuId` | the first menu closes on the mousedown that opens the second |
 
@@ -129,7 +129,7 @@ Approve Reject"*). The small header pill remains only for clusters with no decis
 - Don't keep a lone Edit / Delete icon beside a ⋮ "because it is only one" — one item is a menu.
 - Don't colour a menu item that is not a delete; don't put Delete anywhere but last.
 - Don't hide a temporarily blocked action, and don't list a never-permitted one.
-- Don't add Escape handling or an enter/exit animation without a ruling.
+- Don't add an enter/exit animation without a ruling.
 
 ## Row ↔ view parity (owner ruling 2026-09-17)
 
