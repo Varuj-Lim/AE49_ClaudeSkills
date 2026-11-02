@@ -84,7 +84,7 @@ letter-spacing goes too.
 the head, the unit in the units row under it (§5, `columns.md` T10; a P block's unit is its `Unit`
 column). They are what you need while typing; the prose is read once.
 
-A computed CELL also has its own `?` for how that value came out: `web-ref-calc-report`. It sits over the cell's corner, so the width rules
+A computed CELL also has its own `ƒx` for how that value came out: `web-ref-calc-report`. It sits over the cell's corner, so the width rules
 here still hold.
 
 **The legend popup** (`web-ref-popup`, read-only kind):
@@ -247,3 +247,16 @@ Every editable table here is wired for arrow-key movement — `web-ref-table` T8
 |---|---|---|
 | AE49_Hub | `ae49Hub-ref-table/calculation/parameter-table.md` (tokens, components, the measured `COL_PX` widths, every dated ruling; canon §8 (AE49 §10) numeric cells → `ae49Hub-ref-form-errors/number-inputs.md` §Numeric inputs: no stepper arrows, red frame on letters) | `/rd/foundation-design/detail/design` — `DetailDesignGlobalsForm.tsx` (P + R), `DetailDesignTables.tsx` / `FootingInputRow.tsx` (W), `DetailDesignLegendPopup.tsx` (§4), `DetailDesignGlobalsPrintBlock.tsx` (§9) |
 | NuriHub | not adopted yet — its first calculation table writes its facts skill from this canon | — |
+
+## Comparison colour (owner 2026-11-02)
+
+A calculation table whose numbers are read to compare one option against another has a colour scale on every comparable cell, not only on
+some of its tables.
+
+- **Good is green, bad is red, always:** a cost reads cheap green to dear red; a capacity reads strong green to weak red. Yellow is the middle.
+- **One ramp for the app:** the project's existing colour function, pastel, so the dark number stays readable. No hand-typed colours.
+- **Compare like with like:** the range covers values that are fairly compared, and the table's caption says what that is. It is computed over
+  all the table's values, never the filtered rows or the page, so a colour does not change with a filter. All equal reads green.
+- **Off the scale:** blank, excluded and unpriced cells keep their own state colour; so do verdicts, statuses and identifiers.
+- **Colour never carries the meaning alone:** the number stays, and a typed value's own marker stays on top.
+- **Red on a scale means the worst of this set, not a failure.** A failed check keeps its own verdict styling.
