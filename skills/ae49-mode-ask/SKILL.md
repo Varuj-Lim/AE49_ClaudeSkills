@@ -1,6 +1,6 @@
 ---
 name: ae49-mode-ask
-description: On/off consult mode — while ON, Claude ONLY answers, explains, and recommends; it may read the codebase freely but changes NOTHING (no file edits, no state-changing commands, no commits, no sub-agent dispatch, no plan files), and treats even command-shaped messages as discussion. Use ONLY when the user explicitly turns it on — says "ask mode", "โหมดถาม", "ถามเฉยๆ", "แค่ถามนะ", "consult mode", or invokes /ae49-mode-ask. Stays on every turn until the user turns it off ("ask mode off", "normal mode") or gives an explicit go ("ทำเลย", "go ahead", "ลงมือ", or a router lane prefix like impl:), which ends the mode and routes that work normally.
+description: On/off consult mode — while ON, Claude ONLY answers, explains, and recommends; it may read the codebase freely but changes NOTHING (no file edits, no state-changing commands, no commits, no sub-agent dispatch, no plan files), and treats even command-shaped messages as discussion. Use ONLY when the user explicitly turns it on — says "ask mode", "ถามเฉยๆ", "แค่ถามนะ", "consult mode", or invokes /ae49-mode-ask. Stays on every turn until the user turns it off ("ask mode off", "normal mode") or gives an explicit go ("ทำเลย", "go ahead", "ลงมือ", or a router lane prefix like impl:), which ends the mode and routes that work normally.
 ---
 
 # Ask mode

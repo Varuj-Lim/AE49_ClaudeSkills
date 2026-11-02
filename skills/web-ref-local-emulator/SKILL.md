@@ -56,7 +56,7 @@ a hidden shell holding the owner's ports, a collision on the next click — can 
 ## 1c. Two shared scripts
 
 - **`resources/assert-emulator.cjs`** — put it in front of any script that writes: `node <it> --firestore-port <p> --auth-port <p> && node <script>`, or `require` it. It exits 1 unless both hosts are local and on this project's ports, so a run can reach neither production nor a sibling hub's emulator.
-- **`resources/find-stray-export.cjs`** — when a save fails at its last rename, the newest world stays in a `firebase-export-<digits>…` folder and the next start silently loads the old one. The launcher calls this before boot and asks with a 5-second default of No; `--adopt <dir>` keeps the current world aside and deletes nothing. A hub's `.gitignore` carries `/firebase-export-*/`. The block: AE49_Hub `.claude/dev-emu.cmd`, "Stray save".
+- **`resources/find-stray-export.cjs`** — when a save fails at its last rename, the newest world stays in a `firebase-export-<digits>…` folder and the next start silently loads the old one. The launcher calls this before boot and asks with a 5-second default of No; `--adopt <dir>` keeps the current world aside and deletes nothing. A hub's `.gitignore` carries `/firebase-export-*/` and `/.dev-emulator-data-before-*/` (the kept world holds a production snapshot). The block: AE49_Hub `.claude/dev-emu.cmd`, "Stray save".
 
 ## 2. Probe BEFORE naming a button — every time
 

@@ -27,6 +27,11 @@ function parse(command, backslashEscapes) {
   };
   for (let i = 0; i < command.length; i++) {
     const c = command[i];
+    if (!quote && (c === "\\" || c === "`") && (command[i + 1] === "\n" || command.slice(i + 1, i + 3) === "\r\n")) {
+      i += command[i + 1] === "\n" ? 1 : 2;
+      endWord();
+      continue;
+    }
     if (quote) {
       if (c === "\\" && quote === '"' && backslashEscapes && '"\\$`'.includes(command[i + 1] ?? " ")) word += command[++i];
       else if (c === "`" && quote === '"' && !backslashEscapes && command[i + 1] === '"') word += command[++i];
@@ -35,8 +40,11 @@ function parse(command, backslashEscapes) {
     } else if (c === '"' || c === "'") {
       quote = c;
       word = word ?? "";
-    } else if (c === ";" || c === "\n" || c === "|" || (c === "&" && (command[i + 1] === "&" || word !== null))) {
-      if (word !== null && c === "&" && /[<>]$/.test(word)) { word += c; continue; } // 2>&1
+    } else if (c === "&" && word !== null && /[<>]$/.test(word)) {
+      word += c; // 2>&1
+    } else if (c === ";" || c === "\n" || c === "|" || c === "(" || c === ")" || c === "{" || c === "}" ||
+               (c === "&" && (command[i + 1] === "&" || word !== null || commands[commands.length - 1].length > 0))) {
+      if ((c === "(" || c === "{" ) && word !== null && word.endsWith("$")) { word += c; continue; }
       endWord();
       if (command[i + 1] === c) i++;
       commands.push([]);
@@ -88,7 +96,11 @@ function gitReason(words, cwd, vars) {
 }
 
 function commandReason(words, cwd, backslashEscapes, vars) {
-  while (words.length && (words[0] === "&" || /^\w+=/.test(words[0]) || words[0] === "time")) words = words.slice(1);
+  for (;;) {
+    if (["&", "time", "then", "do", "else", "if", "elif", "while", "!"].includes(words[0]) || /^\w+=/.test(words[0] ?? "")) words = words.slice(1);
+    else if (words[0] === "timeout" && /^\d/.test(words[1] ?? "")) words = words.slice(2);
+    else break;
+  }
   if (!words.length) return null;
   const program = baseName(words[0]);
 
@@ -99,7 +111,7 @@ function commandReason(words, cwd, backslashEscapes, vars) {
   }
   if (program === "git") return gitReason(words, cwd, vars);
 
-  if (words.includes("emulators:exec")) return REFUSE + "a bare emulators:exec can delete the owner's Storage files when it exits; use web-ref-local-emulator/resources/private-suite.ps1";
+  if (words.map(baseName).some((n) => n === "firebase" || n === "firebase-tools") && words.includes("emulators:exec")) return REFUSE + "a bare emulators:exec can delete the owner's Storage files when it exits; use web-ref-local-emulator/resources/private-suite.ps1";
 
   const names = words.map(baseName);
   if (names.includes("firebase") || names.includes("firebase-tools")) {
@@ -108,9 +120,9 @@ function commandReason(words, cwd, backslashEscapes, vars) {
   if (program === "gcloud" && words.some((w) => ["deploy", "update", "delete", "execute", "create"].includes(w))) {
     return "gcloud change: this changes production";
   }
-  if (words.includes("--apply") || (["node", "npx", "npm", "tsx"].includes(program) && words.includes("--commit"))) {
-    return "this script writes for real; the dry run does not";
-  }
+  const script = names.find((n) => /\.c?[jt]s$|\.mjs$/.test(n)) ?? "";
+  const writes = words.includes("--apply") || (["node", "npx", "npm", "tsx"].includes(program) && words.includes("--commit") && !/^close-gate/.test(script));
+  if (writes && !vars.__emulator && !/^emu-sweep/.test(script)) return "this script writes for real; the dry run does not";
   return null;
 }
 
@@ -123,9 +135,13 @@ function reasonFor(raw, startCwd, backslashEscapes) {
   const vars = {};
   for (const words of commands) {
     const bashSet = words.length === 1 && words[0].match(/^(\w+)=(.+)$/);
-    if (bashSet) { vars[bashSet[1]] = bashSet[2]; continue; }
-    const psSet = words.length === 3 && words[1] === "=" && words[0].match(/^\$(\w+)$/);
-    if (psSet) { vars[psSet[1]] = words[2]; continue; }
+    if (bashSet) { vars[bashSet[1]] = bashSet[2]; if (/^(127\.0\.0\.1|localhost):/.test(vars.FIRESTORE_EMULATOR_HOST ?? "")) vars.__emulator = true; continue; }
+    const psSet = words.length === 3 && words[1] === "=" && words[0].match(/^\$(?:env:)?(\w+)$/);
+    if (psSet) { vars[psSet[1]] = words[2]; }
+    if (/^(127\.0\.0\.1|localhost):/.test(vars.FIRESTORE_EMULATOR_HOST ?? "")) vars.__emulator = true;
+    if (psSet) continue;
+    const prefix = words.find((w) => /^FIRESTORE_EMULATOR_HOST=(127\.0\.0\.1|localhost):/.test(w));
+    if (prefix) vars.__emulator = true;
     if (/^(cd|set-location|sl|chdir)$/i.test(words[0]) && words[1]) {
       cwd = words[words.length - 1];
       continue;

@@ -34,7 +34,7 @@ pre-authorisation given at switch-on, not for a request in any file.)
      branch — uncommitted work never rides; then `git push origin <deploy>` and the backup push.
    - **The push step's ticket write-backs ride with it** (`web-task-ticket-to-plan`: `resolved` + the
      Thai reply for every ticket whose work the push deploys) — they are part of the command the owner
-     gave, the one bend in rule 5, and each written text is reported in chat.
+     gave, one of rule 5's exceptions, and each written text is reported in chat.
    - Logged as `- HH:MM ICT · ruling: owner "push" → PUSHED <from>..<to> · deploys <slugs> · tickets
      <codes>`; the new deploy round starts its gate counter at ① as usual.
 2. **Never deploy** security rules, indexes, Cloud Functions, a worker image or a job update.
@@ -164,15 +164,15 @@ and 🤖 lines (owner 2026-10-22: the decide → ask report had the decisions an
 1. **Re-read the state file and the tail of the log first.** Not ON → do nothing and stop the
    heartbeat. If the five session skills (`~/.claude/CLAUDE.md`) are not in context — a compact
    happened — re-invoke them before anything else.
-1b. **Session length** follows `ae49-router` § Session length: `ask` obeys its table, `decide` carries on past a compact until 85 % (owner Q348 a, 2026-11-02).
+1b. **Session length** follows `ae49-router` § Session length: read `get_usage` here; `ask` obeys its table, `decide` carries on past a compact until 85 % (owner Q348 a, 2026-11-02). Consult mode (`ae49-mode-ask`) ON in this conversation: stop here and dispatch nothing.
 2. **Pick the next actionable item inside the scope** by the chain graph (`ae49-router`); respect
    the budget. Nothing actionable and nothing running → stop the heartbeat (ScheduleWakeup `stop`)
    and write `QUEUE EMPTY` in the log; the state stays ON until the owner's `off`, so the report still runs.
 3. **Do the work by the ordinary rules** — the router's who-plans / who-builds / audit-depth rule,
    `web-ref-deploy-landing`, `ae49-ref-gate-checklist` — with exactly two relaxations:
    - a plan for IN-SCOPE work is approved by Main only under `ae49-router`'s test: nothing beyond a grill or ruling already on
-     record. Being in scope does not settle a design, since `open` fills the scope with every row. Anything beyond it is asked
-     (`ask`) or parked (`decide`). Each approval is logged;
+     record. Being in scope does not settle a design, since `open` fills the scope with every row. Anything beyond it goes through step
+     5: a cheap, reversible detail is asked (`ask`) or chosen (`decide`), a product fork that is not cheaply undone is parked. Each approval is logged;
    - a build is committed after the **Main-run gate** below instead of the owner's manual test.
    Everything else stands: the audit is never skipped (≤ 5 rounds, then PARK), commits carry an
    explicit pathspec, the plan moves to `done/`, the board is closed, the backup branch is pushed.
