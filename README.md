@@ -45,9 +45,9 @@ For a single project instead of globally, copy into `<your-repo>/.claude/skills/
 
 To auto-load skills every session, put a `CLAUDE.md` at `~/.claude/CLAUDE.md` (or a repo root). One is provided:
 
-- [`dotclaude/CLAUDE.md`](./dotclaude/CLAUDE.md) — **the full setup, and the one `/ae49-task-update-skills` syncs.** Loads four skills: `ae49-task-grill`, `ae49-ref-guidelines`, `ae49-mode-caveman`, and `ae49-router`. Use this if you want the router workflow (Main delegates to the `ae49-plan` / `ae49-implement` agents). For a minimal setup without the router, trim it to just `ae49-mode-caveman` + `ae49-ref-guidelines`.
+- [`dotclaude/CLAUDE.md`](./dotclaude/CLAUDE.md) — **the full setup, and the one `/ae49-task-update-skills` syncs.** Loads six skills: `ae49-task-grill`, `ae49-ref-guidelines`, `ae49-mode-caveman`, `ae49-ref-report-format`, `ae49-router` and `ae49-ref-question-format`. Use this if you want the router workflow (Main delegates to the `ae49-plan` / `ae49-implement` agents). For a minimal setup without the router, trim it to just `ae49-mode-caveman` + `ae49-ref-guidelines`.
 
-Adapt or omit as you like — but note the sync overwrites `~/.claude/CLAUDE.md` from `dotclaude/`, so put local edits there if you want them to survive.
+Adapt or omit as you like — but note the repo copy is scrubbed, so the sync reports `~/.claude/CLAUDE.md` as different and it is never applied; edit both by hand.
 
 ## Why These Skills Exist
 

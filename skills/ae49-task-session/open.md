@@ -73,7 +73,7 @@ and an Autopilot left ON by a swap is ticked in 7b.
 7. **Re-open the gate** if one was open at close: rewrite the project's
    gate-checklist items file from the plan + memory and hand over the file://
    link per the gate rules. **Condense first: every section of an inherited board
-   must sit inside the 5–7 budget of `ae49-router` (never 10) — a parked board is
+   must sit inside the 5–7 budget of `ae49-ref-gate-checklist` (never 10) — a parked board is
    not exempt; a 16-item section handed over as-is earned the owner's 2026-09-15
    reminder.** Emulator and seeded test data are machine-local — if
    the gate needs seeded data, re-seed on THIS machine (the project's test-data

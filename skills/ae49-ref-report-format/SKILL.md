@@ -1,6 +1,6 @@
 ---
 name: ae49-ref-report-format
-description: The one shared format for any findings / review / audit / status report the model writes for the user — plain English, emoji-tagged severity tiers, a per-finding ID so the user can reference one back, concise labelled finding lines, and an emoji verdict. Use whenever producing a review, scrutiny, audit, findings list, or status report to the user, or when another skill says "format the report per ae49-ref-report-format". The report skills (ae49-task-scrutinize, ae49-task-audit-lib, ae49Hub-task-audit-project) point here instead of each redefining the format. Trigger this even when the request only says "review this", "audit that", "what's wrong with", or "give me findings" — using this one format (never an ad-hoc per-skill layout) is required for every report.
+description: The one shared format for any findings / review / audit / status report the model writes for the user — plain language, emoji-tagged severity tiers, a per-finding ID so the user can reference one back, concise labelled finding lines, and an emoji verdict. Use whenever producing a review, scrutiny, audit, findings list, or status report to the user, or when another skill says "format the report per ae49-ref-report-format". The report skills (ae49-task-scrutinize, ae49-task-audit-lib, ae49Hub-task-audit-project) point here instead of each redefining the format. Trigger this even when the request only says "review this", "audit that", "what's wrong with", or "give me findings" — using this one format (never an ad-hoc per-skill layout) is required for every report.
 ---
 
 # Report format
@@ -9,7 +9,7 @@ The single source for how we format a findings / review / audit / status **repor
 user**, so every report reads the same, scans fast, and is easy to reference. Other report
 skills point here instead of redefining the format.
 
-## 1. Plain English
+## 1. Plain language
 
 Write so a non-programmer can follow it — explain the *why* and the consequence in everyday
 words; swap programmer terms for plain ones (or explain them on first use). **Exception:** file
@@ -59,7 +59,7 @@ the board; a row dropped for brevity reads as a row that vanished (it happened w
 | 1 | plot-order-se-compose | 🚀 Live — `fb96ec0a`, V6.0 published | — | — |
 | 2 | rd-footing-help-legend-and-widths | 🧪 Gate ⑫ | Your check of items 3–7 | land → plan → done/ |
 | 3 | thai-sweep-plot-and-strays | 🔨 Building | Builder | audit → gate → land |
-| 4 | action-menu-hybrid B1 | ⏳ Queued | #3 landing | dispatch |
+| 4 | action-menu-hybrid B1 | ⏸️ Queued | #3 landing | dispatch |
 | 5 | Unpushed on `main` | 📦 2 commits (on backup) | Your "push" | one push deploys both |
 ```
 
@@ -70,7 +70,7 @@ Which renders as:
 | 1 | plot-order-se-compose | 🚀 Live — `fb96ec0a`, V6.0 published | — | — |
 | 2 | rd-footing-help-legend-and-widths | 🧪 Gate ⑫ | Your check of items 3–7 | land → plan → done/ |
 | 3 | thai-sweep-plot-and-strays | 🔨 Building | Builder | audit → gate → land |
-| 4 | action-menu-hybrid B1 | ⏳ Queued | #3 landing | dispatch |
+| 4 | action-menu-hybrid B1 | ⏸️ Queued | #3 landing | dispatch |
 | 5 | Unpushed on `main` | 📦 2 commits (on backup) | Your "push" | one push deploys both |
 
 ### What each column is for
@@ -86,7 +86,8 @@ Which renders as:
 ### Stage emoji legend — same emoji, same meaning, every run
 
 📝 planning · 📋 plan ready · 🔨 building · 🔍 audit running · 🔧 fixing findings ·
-📦 staged / pending · 🧪 the user's manual gate · ✅ landed · 🚀 deployed · ⏸️ blocked
+📦 staged / pending · 🧪 the user's manual gate · ✅ landed · 🚀 deployed · ⏸️ blocked ·
+👤 waiting on the owner
 
 ### Rules that keep the board honest
 
@@ -247,7 +248,7 @@ Close with one line. When there's a ship decision, tag it:
 
 - ✅ **Ship** · 🩹 **Fix-then-ship** · 🔨 **Rework** · ❌ **Reject**
 
-— with the single biggest reason, in plain English. A report without a ship decision (e.g. a
+— with the single biggest reason, in plain language. A report without a ship decision (e.g. a
 reuse or pattern audit) ends with a one-line bottom-line summary instead.
 
 ## For skill authors

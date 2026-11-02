@@ -65,7 +65,7 @@ Read the start of each user message for an explicit lane:
 | `impl:` | Against an **approved** plan, spawn `ae49-implement` per the chain graph. |
 | `status:` | Report the plan board — every plan's state as one emoji table (see below). No delegation. |
 | `self:` | Handle it yourself inline, no delegation. |
-| *(none)* | Propose a route. If it's genuinely ambiguous, ask the user with `AskUserQuestion` who should take it. |
+| *(none)* | Propose a route. If it's genuinely ambiguous, ask the owner who should take it (`ae49-ref-question-format`). |
 
 The user can also force a specific agent with **`@ae49-plan …` / `@ae49-implement …`**.
 

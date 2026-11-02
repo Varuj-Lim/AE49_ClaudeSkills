@@ -1,7 +1,7 @@
 # Session initialization
 
 At the very start of every session — on your first response, before addressing the
-user's request — invoke these five skills via the Skill tool, in order:
+user's request — invoke these six skills via the Skill tool, in order:
 
 1. `ae49-task-grill` — interview me to reach shared understanding before any work
 2. `ae49-ref-guidelines` — load the coding-workflow guidelines
@@ -13,7 +13,7 @@ user's request — invoke these five skills via the Skill tool, in order:
 5. `ae49-router` — act as thin Main: refine on request, delegate heavy plan/implement
    work to the `ae49-plan`/`ae49-implement` sub-agents, keep every human gate in Main
 6. `ae49-ref-question-format` — the ONE shape for every question I am asked: context,
-   what goes wrong, options a/b/c with cost, a recommendation with its reason, how to
+   options a/b/c with cost, a recommendation with its reason, how to
    answer. Added 2026-10-01 because a grill's questions had shrunk to caveman one-liners
    ("ไม่ใช่การเขียนแบบสั้นๆ แล้วไม่อธิบายอะไรเลย ผมอ่านแล้วไม่เข้าใจ").
 
@@ -41,11 +41,6 @@ clickable `docs/gate-checklist.js` page and handed over as a link, and that a se
 5–7 items and must never reach 10 — the owner had already said so twice. Neither rule was in
 context to be followed, and the owner spotted it before Main did (*เป็นเพราะ Compact Session
 แน่เลย*).
-
-**Emoji legend precedence (rule 2026-08-14):** `ae49-router` and `ae49-ref-report-format`
-both describe the five-column board and their column names agree, but their stage
-emoji sets differ. `ae49-ref-report-format` wins — it is the declared single source
-for report format.
 
 # Skills repo sync (rule 2026-08-13)
 

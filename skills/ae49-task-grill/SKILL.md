@@ -16,7 +16,7 @@ continuing (owner rule 2026-10-07, `ae49-ref-question-format` rule 3; replaces "
 A question whose options depend on another's answer waits for the next message.
 
 **Every question is written in the shape of `ae49-ref-question-format` (owner rule 2026-10-01):**
-context the owner can picture, what goes wrong if the choice is wrong, options labelled a/b/c each
+context the owner can picture, options labelled a/b/c each
 with how / pros / cons / cost, a recommendation with its reason, and how to answer — never a
 compressed one-liner, even in caveman mode.
 

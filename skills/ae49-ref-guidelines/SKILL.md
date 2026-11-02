@@ -19,7 +19,7 @@ Behavioral guidelines to reduce common LLM coding mistakes — partially adapted
 - **Command** ("remove X", "add Y", "fix Z") AND confidence >= 95% →
   Execute immediately. No need to ask first.
 - **Command** AND confidence < 95% (ambiguous scope, missing details, meaningful trade-offs) →
-  Ask ONE focused clarifying question before writing any code.
+  Ask before writing any code, in the shape of `ae49-ref-question-format`.
 
 ## 2. Think Before Coding
 
