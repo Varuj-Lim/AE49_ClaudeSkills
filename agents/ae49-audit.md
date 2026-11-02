@@ -36,6 +36,11 @@ file, or "applied in the main checkout" with the file list). Your job is to try 
 4. **Never trust the builder's report** — verify every claim you rely on against the code.
    Do not re-run builds/lints (the builder did; Main spot-checks) — your value is reading.
 
+## The plan version
+
+When the dispatch names a plan sha, judge the build against that version (`git show <sha>:<plan>`). A decision added after it is
+reported as NEW SCOPE, not as a BLOCKER.
+
 ## Two depths — Main names one in the dispatch (owner 2026-09-25)
 
 - **Full audit** — the default, and REQUIRED when the change touches data shape, security

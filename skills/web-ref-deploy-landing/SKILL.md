@@ -72,6 +72,11 @@ the deploy, asked while preparing the gate; deploying at that moment is fine and
 de-risks landing day, but say plainly that it is a landing step, not a gate
 prerequisite, whenever the gate is on the emulator.
 
+**Deploy lines.** Chat: `cd <live path>; npx.cmd firebase-tools deploy --only <what> --project <id> --account <owner's account>`. In
+files, the `cd` is `cd $env:USERPROFILE\Documents\<project>;`. Always `--account`, never `login:use`: a PC whose default account
+is another project's gets 403 `serviceusage`. First-time secrets, the mail extension and cross-service rules:
+[first-deploys.md](first-deploys.md).
+
 ## 3b. A secret VALUE goes in through the Secret Manager web page — never a hidden CLI prompt (owner 2026-10-26)
 
 Whenever a deploy needs a secret value the owner holds — an SMTP / Gmail App Password for an
@@ -107,6 +112,10 @@ copying its files over the working tree **overwrites hand-edits made since**, so
 check for those before copying, and re-apply them after.
 
 ## 5. One commit per feature, explicit pathspec
+
+**Land with `resources/land.cjs --message-file <file> [--plan <plan>] -- <paths>`.** It stops when a named path has no change,
+commits only those paths whatever else is staged, and lists what went in; read that list. Run `archive-plan.cjs` first, since it
+refuses before moving anything.
 
 Stage the exact paths that belong to the feature. **Never `git add .` / `-A`** —
 these repos routinely carry a second feature's uncommitted work, a checklist

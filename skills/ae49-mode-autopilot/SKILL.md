@@ -183,12 +183,12 @@ and 🤖 lines (owner 2026-10-22: the decide → ask report had the decisions an
      result back, sweep the tags);
    - **screens** — the built-in browser on the emulator: the dev login as the named account, the
      click path in the item, `read_page` for text, a screenshot saved under `shots/` for anything the
-     owner would have looked at; the item is **Main-verified** (counts as passed, screenshot linked);
+     owner would have looked at; the item is **Main-viewed** (counts as passed and is counted apart, `close-gate.cjs --viewed E`, owner Q350 a; screenshot linked; the report names these items for the owner to open);
    - **owner-only** — Cloud Shell, the Firebase console, LINE on a phone, production-only steps —
      mark **WAITING-OWNER**, queue the complete block for the morning (one sitting, per the router's
      owner-steps rule); such a feature lands only if its items that CAN be checked all passed and
      the plan says the owner-only part is separate (a rules deploy before a push, for instance).
-   Closed line: `gate P/N` counts Main-verified as passed; nothing is waived by Main — an item it
+   Closed line: `gate P/N (E Main-viewed)` counts both Main-verified and Main-viewed as passed; nothing is waived by Main — an item it
    cannot verify is WAITING-OWNER and named in the report.
    **Two tiers (owner 2026-09-25, "(ก)"):** the board section keeps the owner's 5–7-item budget —
    that page is what the owner reads in the morning and may re-click. On top of it Main runs an
@@ -222,7 +222,7 @@ and 🤖 lines (owner 2026-10-22: the decide → ask report had the decisions an
 6. **Log immediately, never later.** One line per event, appended as it happens:
    ```
    - HH:MM ICT · D<n> DECISION · <what> · chosen: <x> · alternatives: <y | z> · why: <one line> · undo: <sha / file / step> · risk: low|medium|high
-   - HH:MM ICT · LANDED · <slug> · commit <sha> · gate P/N (M Main-verified) · backup pushed
+   - HH:MM ICT · LANDED · <slug> · commit <sha> · gate P/N (E Main-viewed) · backup pushed
    - HH:MM ICT · PARKED · <slug / item> · why · what the owner must rule
    - HH:MM ICT · WAITING-OWNER · <step> · block ready at <where>
    - HH:MM ICT · FAILED · <what> · <error, exact> · left as: <state>

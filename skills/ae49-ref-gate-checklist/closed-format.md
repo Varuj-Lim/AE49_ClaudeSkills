@@ -22,7 +22,7 @@ window.GATE_CHECKLIST = {
 
 ```
 <slug> landed <YYYY-MM-DD> (gate <P>/<N>[ dev + <M>/<M> prod][ (<not passed>)]; commit <sha>[; deployed <scope>])
-<not passed> ::= <W> waived | <O> waiting owner | <W> waived, <O> waiting owner
+<not passed> ::= any of <W> waived, <O> waiting owner, <E> Main-viewed, in that order, comma-separated
 ```
 
 Slot rules, in order, `; `-separated inside the parentheses:

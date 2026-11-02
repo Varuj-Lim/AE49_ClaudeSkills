@@ -49,7 +49,8 @@ this machine's AE49_ClaudeSkills clone in the SAME turn — as targeted edits
 (repo copies are scrubbed; never copy real personal/infra values wholesale into
 the public repo) — then commit and push. Reason: the repo is the sync source of
 truth; an unmirrored local edit shows up as UPDATE in the daily drift check, and
-an apply would ERASE it. The clone's location on each machine lives in that
+an apply would ERASE it. **Pushing this repo needs no question and no "push" from me (owner 2026-11-02): it deploys nothing;
+force pushes still ask.** The clone's location on each machine lives in that
 machine's local memory.
 
 # Files I hand you are DISPOSABLE (rule 2026-08-28)

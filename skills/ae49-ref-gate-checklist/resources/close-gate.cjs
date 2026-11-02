@@ -4,7 +4,7 @@
 //
 // Usage:
 //   node close-gate.cjs <docs/gate-checklist.js> --slug <slug> --score <P/N> --commit <sha>[,<sha>…]
-//                       [--waived <W>] [--waiting <O>] [--prod <M/M>] [--deployed <web|web+rules|web+functions>] [--date YYYY-MM-DD]
+//                       [--section <heading>] [--viewed <E>] [--waived <W>] [--waiting <O>] [--prod <M/M>] [--deployed <web|web+rules|web+functions>] [--date YYYY-MM-DD]
 //
 // The feature and title of the gate being closed are KEPT (the canon: "keep the last gate's
 // title"). --date defaults to today in Thai time (ICT, UTC+7). Commits: one → "commit <sha>",
@@ -14,6 +14,9 @@
 // 2026-09-25): O items the owner was asked to report on and has not answered at landing —
 // neither passed nor waived; passed + waived + waiting must equal the total, e.g.
 // --score 32/34 --waiting 2 → "gate 32/34 (2 waiting owner)", both → "(2 waived, 2 waiting owner)".
+// --viewed E (owner Q350 a, 2026-11-02): E of the passed items are screens Main looked at for the owner, so nobody else has
+// seen them; they count as passed and show as "(E Main-viewed)". --section: with several sections open the page stays open, this
+// section leaves it, and the closed line is printed for the landing note. With several open and no --section it refuses.
 // Writes nothing if an argument is missing or the result fails validation.
 "use strict";
 const fs = require("fs");
@@ -45,6 +48,10 @@ const waiting = waitingArg === undefined ? 0 : Number(waitingArg);
   if (waived + waiting === 0 && passed !== total) die(`--score ${score}: passed and total differ, so name the rest with --waived W and/or --waiting O (${total - passed} unaccounted for)`);
   if (passed + waived + waiting !== total) die(`--score ${score} --waived ${waived} --waiting ${waiting}: passed + waived + waiting must equal the total`);
 }
+const viewedArg = arg("viewed");
+if (viewedArg !== undefined && !/^\d+$/.test(viewedArg)) die("--viewed takes a whole number of items");
+const viewed = viewedArg === undefined ? 0 : Number(viewedArg);
+if (viewed > Number(score.split("/")[0])) die("--viewed is more than the passed items");
 const deployed = arg("deployed");
 if (deployed && !/^[a-z+]+$/.test(deployed)) die("--deployed takes a plain scope like web or web+rules");
 
@@ -62,11 +69,38 @@ if (!cur.title) die("the current file has no title to keep");
 const commitSlot = shas.length === 1 ? `commit ${shas[0]}`
   : shas.length <= 4 ? `commits ${shas.join("/")}`
   : `commits ${shas[0]}…${shas[shas.length - 1]} (${shas.length})`;
-const notPassed = [waived ? `${waived} waived` : null, waiting ? `${waiting} waiting owner` : null].filter(Boolean).join(", ");
+const notPassed = [waived ? `${waived} waived` : null, waiting ? `${waiting} waiting owner` : null, viewed ? `${viewed} Main-viewed` : null].filter(Boolean).join(", ");
 const gateSlot = (prod ? `gate ${score} dev + ${prod} prod` : `gate ${score}`) + (notPassed ? ` (${notPassed})` : "");
 const closed = `${slug} landed ${date} (${gateSlot}; ${commitSlot}${deployed ? `; deployed ${deployed}` : ""})`;
 
 const q = (s) => JSON.stringify(s);
+const items = Array.isArray(cur.items) ? cur.items : [];
+const isHeading = (item) => typeof item === "string" && item.startsWith("## ");
+const headings = items.filter(isHeading);
+const sectionArg = arg("section");
+if (headings.length > 1 && !sectionArg) die("several sections are open, so name the one that landed with --section:\n  " + headings.join("\n  "));
+if (sectionArg) {
+  const start = items.findIndex((item) => isHeading(item) && item.slice(3).includes(sectionArg));
+  if (start < 0) die("no open section matches: " + sectionArg);
+  let end = start + 1;
+  while (end < items.length && !isHeading(items[end])) end++;
+  const remaining = [...items.slice(0, start), ...items.slice(end)];
+  if (remaining.length) {
+    const open = { ...cur, items: remaining };
+    const openText = "window.GATE_CHECKLIST = " + JSON.stringify(open, null, 2) + ";\n";
+    const openTmp = file + ".closing";
+    fs.writeFileSync(openTmp, openText, "utf8");
+    try {
+      execFileSync(process.execPath, [path.join(__dirname, "validate-gate.cjs"), openTmp], { stdio: "inherit" });
+    } catch {
+      fs.unlinkSync(openTmp);
+      die("the page without that section failed validation — nothing written");
+    }
+    fs.renameSync(openTmp, file);
+    console.log("section removed, page stays open. For the landing note: " + closed);
+    process.exit(0);
+  }
+}
 const out = [
   "window.GATE_CHECKLIST = {",
   `  feature: ${q(cur.feature || slug)},`,

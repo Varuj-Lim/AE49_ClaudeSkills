@@ -14,8 +14,11 @@ cover. Three outcomes exist, and all three are RECORDED, never silently counted 
   creates TAGGED test data, drives the real system the way the button would (the same API route
   or the same service call, never a shortcut that skips the code under test), verifies the result
   with a read-only script, and reports the evidence. Such an item counts as PASSED; the landing
-  note says Main verified it and how. Main never verifies an item that needs the owner's eyes
-  (a rendering, a wording, a click path) — those are waived or tested, not "verified".
+  note says Main verified it and how. Attended, Main never verifies an item that needs the owner's eyes (a rendering, a
+  wording, a click path): those are waived or tested.
+- **Main-viewed** (owner Q350 a, 2026-11-02) — under Autopilot, where Main runs the gate, a screen item Main looked at counts as
+  passed and is counted apart, so a score never hides that no person saw it: `gate 7/7 (2 Main-viewed)`
+  (`close-gate.cjs --viewed 2`). The report names those items for the owner to open.
 - **Waiting owner** (owner 2026-09-25) — the owner passes the section but leaves an item they
   were asked to REPORT (a line count at 1366, a measurement, a screenshot) unanswered, and the
   landing goes ahead. The item is neither passed nor waived: the closed line reads
