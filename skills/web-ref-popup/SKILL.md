@@ -1,6 +1,6 @@
 ---
 name: web-ref-popup
-description: "Canon (web-ref-*) for every hub popup, modal, dialog: POPUP_* tokens; actions by KIND (View / Edit top-right on read-only, Cancel + confirm bottom row on confirm or form); read-only also closes on click-outside, confirm or form only by its button; no Escape, no animation. Use for any popup or picker; close when I click outside, a confirm dialog."
+description: "Canon (web-ref-*) for every hub popup, modal, dialog: POPUP_* tokens; actions by KIND; read-only closes on click-outside and Esc, confirm or form only by its button; focus stays inside; a confirm that cannot proceed shows Cancel and why. Use for any popup or picker; กด Esc แล้วปิด, close when I click outside, a confirm dialog, focus trap."
 ---
 
 # Popups — shared canon
@@ -22,7 +22,7 @@ hub keeps its **own token file and reference implementation** (named in that hub
 | `POPUP_TITLE` · `POPUP_SUBTITLE` | The `<h3>` title (`text-lg font-bold`) and its one-line description. Deliberately NOT a text-scale tier. |
 | `POPUP_HEADER` + `POPUP_HEADER_ACTIONS` | Header row: title left, action cluster pinned top-right. |
 | `POPUP_ACTIONS_ROW` | Bottom button row (`flex gap-3`). |
-| `POPUP_BTN.primary / .secondary / .danger / .warning / .approve / .approveBlocked` | The button tones — the POPUP rendering of the project's button ladder (full-width, `py-2`), composed from the ladder's tone map so a colour lives in ONE file. |
+| `POPUP_BTN.primary / .secondary / .danger / .warning / .approve` | The button tones — the POPUP rendering of the project's button ladder (full-width, `py-2`), composed from the ladder's tone map so a colour lives in ONE file. |
 | `POPUP_CLOSE_FULL` | Full-width single Close (read-only footer). |
 | `POPUP_PILL` (+ `_DANGER`) | Small pill for a header action (View eye link, Edit dates) — **only in a header that holds NO decision pills.** Beside worded decision pills the header link (View) is the project's md primary pill with a 16px glyph, because a cluster is ONE size throughout (owner 2026-09-18, AE49 gate ⑱: a small View beside Approve / Reject read as a different kind of control). |
 | `POPUP_CLOSE_ICON` | Square X icon-button (top-right corner variant). |
@@ -65,29 +65,27 @@ CCP_Hub's reference: `components/ui/PopupOverlay.tsx` (plan `popup-portal`, 9915
 | `primary` (slate) | 1 Primary | save, import, a safe confirm; **every decision verb** (Approve / Consent / Mark …) |
 | `secondary` (outlined) | 2 Secondary | Cancel / Keep |
 | `danger` (red) | 3 Destructive | delete — **red means data is destroyed**, so never on a decision or a "cancel the request" |
-| `warning` (orange) | not a rung | roll back / force — the confirm-side partner of the orange decision icon |
+| `warning` (orange) | the hub's orange (`web-ref-button`) | irreversible but deletes nothing: roll back / force — the confirm-side partner of the orange decision icon |
 | `approve` (green) | not a rung | the confirm behind a bulk Approve — a decision verb keeps its colour from row to dialog |
-| `approveBlocked` | not a rung | the same confirm rendered inert while the page's precondition fails |
 
 Prefix `flex-1` when two buttons share a row. A read-only popup uses
 `POPUP_CLOSE_FULL` alone instead of a Cancel/confirm pair.
+
+**A confirm that cannot proceed shows Cancel and the reason in Thai, with no confirm button.** A faded confirm ignores the mouse and says nothing, and the user cannot fix the reason from the popup; this matches `web-ref-form-errors`. A button dimmed while its own action runs is a different thing and stays.
 
 ## Where the actions go
 
 - **Read-only detail popup** — View / Edit ride in the top-right header
   (`POPUP_HEADER` → `POPUP_HEADER_ACTIONS`); a full-width **Close** at the bottom.
 - **The header cluster sits ON THE TITLE LINE, top-right — never on a row of its own**
-  (owner ruling 2026-09-18, AE49 gate ④, the CP9901 print popup: *"ปุ่มทั้งหมด อยู่มุมบนขวาสุด
-  ระดับเดียวกับชื่อ"*). Every header action — decision pills, View / Edit pills, the ⋮, the
+  (owner ruling 2026-09-18). Every header action — decision pills, View / Edit pills, the ⋮, the
   X — is a child of `POPUP_HEADER_ACTIONS` inside `POPUP_HEADER`, beside the `<h3>` and
   aligned to its top edge (`items-start`). The title line holds ONLY the `<h3>` (`min-w-0`)
   and the cluster: the SUBTITLE is a full-width line UNDER the header row, never inside the
-  title column — squeezed beside a wide cluster it wraps word-by-word (owner, same day, on
-  the PA9901 popup: *"ไม่ต้องย่อคำอธิบาย เพราะปุ่มมันอยู่ระดับเดียวกับ Title"*). Trim a subtitle only of
+  title column — squeezed beside a wide cluster it wraps word-by-word. Trim a subtitle only of
   parts the body already shows (a requester name beside a Requester field). A status pill or
   a kind chip is not a button — it sits below the header, never on the title line. The title
-  is never truncated, clipped or overlapped by the cluster (owner, same day: *"บรรทัดชื่อต้องไม่โดน
-  บังด้วยปุ่ม หรือ Tag"*): a card whose content width cannot hold the longest realistic title
+  is never truncated, clipped or overlapped by the cluster: a card whose content width cannot hold the longest realistic title
   plus the widest cluster goes one card width up (`sm` → `md` → `lg` → `wide`), and a
   cluster that still does not fit is too big for a header — move the secondary verbs into
   the ⋮ (`web-ref-table/general/action-menu.md`).
@@ -131,14 +129,12 @@ stands alone.
 - **The tone follows the action, not the mood**: only Delete / Remove / Discard is red;
   a cancel confirm is slate even though it ends the request; ONE tone per verb family
   (no amber cancels beside slate ones).
-- Found 2026-09-16 (AE49, gate ⑧): a ⋮ "Cancel request" opened "Withdraw proposal" with a
-  red "Withdraw" button — wrong verb AND wrong tone; the owner's words: *"เราไม่ควรใช้คำว่า
-  Withdraw นะ มันไม่ตรงกับปุ่ม ปุ่มบอก Cancel"*. Each hub's audit topic checks every confirm
+- Each hub's audit topic checks every confirm
   against its opener (AE49: topic 33 detector PU6).
 
 ## Close conventions — the rule follows the KIND (owner rulings 2026-08, 2026-09-15)
 
-| Kind | Closes by button | Closes on click-outside | Why |
+| Kind | Closes by button | Closes on click-outside and Esc | Why |
 |---|---|---|---|
 | **Read-only** detail (no inputs) | Close / X | **YES — required** | nothing can be lost; the reader expects to click away |
 | **Confirm** (Cancel + decision) | Cancel or the decision | **NEVER** | an accidental click must not decide anything |
@@ -147,9 +143,16 @@ stands alone.
 
 Wiring: `onClick={onClose}` on the overlay (conditional for mixed), and
 `onClick={(e) => e.stopPropagation()}` on the card — always, so a click inside
-never bubbles out. **No Escape-key handling** anywhere and **no enter/exit
-animation** — only the `transition` on hover for pills. Don't add either without
-a ruling.
+never bubbles out. **Esc closes a popup exactly where a click outside does**, wired from the same condition; form and confirm kinds ignore it. Esc acts on the top layer only: a picker open inside a popup closes itself, stops the key, and leaves the popup open. **No enter/exit animation** — only the `transition` on hover for pills.
+
+## Focus and the dialog role
+
+The shared overlay component gives every popup these, so a call site adds nothing:
+
+- `role="dialog"` and `aria-modal`, and a name from the popup's title.
+- Focus moves into the card on open and returns to the opener on close.
+- Tab stays inside the TOP popup; a popup underneath traps nothing.
+- The toast's × and fixed-position pickers sit outside the card and stay reachable, by mouse and by Tab.
 
 The audit question for every popup: *which kind is it, and is its overlay wired
 the way that kind demands?* A read-only popup without click-outside and a form
@@ -159,7 +162,7 @@ popup WITH it are both defects — and a mixed component is easy to get half rig
 
 ```tsx
 // PopupOverlay = the shared portal component (renders POPUP_OVERLAY into <body>, see above)
-// read-only detail
+// read-only detail: click outside and Esc both call onClose
 <PopupOverlay onClick={onClose}>
   <div className={POPUP_CARD.sm} onClick={(e) => e.stopPropagation()}>
     <div className={POPUP_HEADER}>
@@ -171,7 +174,7 @@ popup WITH it are both defects — and a mixed component is easy to get half rig
   </div>
 </PopupOverlay>
 
-// confirm / form — NO overlay onClick
+// confirm / form — NO overlay onClick, Esc ignored
 <PopupOverlay>
   <div className={POPUP_CARD.sm}>
     <h3 className={`${POPUP_TITLE} mb-2`}>Delete item?</h3>
@@ -196,12 +199,12 @@ popup WITH it are both defects — and a mixed component is easy to get half rig
 - Don't use the page-card class for a modal (`rounded-xl border`); modals are
   `rounded-2xl shadow-xl`.
 - Don't invent a width or colour inline — reuse a variant, or add a NAMED one.
-- Don't add click-outside to a confirm or form; don't forget it on a read-only
-  one; don't add Escape or a slide/fade animation.
+- Don't add click-outside or Esc to a confirm or form; don't forget them on a read-only
+  one; don't add a slide/fade animation; don't show a faded confirm.
 - An inline popover anchored under a field (a date-range calendar) is a
   different family — not governed by these tokens.
 - **Don't put a default-presentation picker inside a SCROLLING card (owner ruling
-  2026-10-01, AE49 gate ⑧: "การมี Dropdown หรืออะไรก็ตาม ต้องล้นออกจาก popup ได้").** A
+  2026-10-01): a dropdown must be able to overflow the popup.** A
   `max-h-* overflow-y-auto` box — a card variant that scrolls itself (AE49's `POPUP_CARD.lg`)
   or the one scrolling child of a card that does not (AE49's `POPUP_SCROLL_BODY` /
   `POPUP_LIST_BODY` inside `wideScroll`) — clips every `position: absolute` child at its
@@ -220,7 +223,7 @@ popup WITH it are both defects — and a mixed component is easy to get half rig
 
 This ref's rules are checkable: each hub's project audit carries (or adds) a
 popup topic that classifies every overlay file by kind and checks the overlay
-wiring, tokens, and the Escape/animation ban. AE49's 2026-09-15 sweep is the
+wiring, Esc, focus, tokens, and the animation ban. AE49's 2026-09-15 sweep is the
 first run of that check.
 
 ## Per-project facts live elsewhere

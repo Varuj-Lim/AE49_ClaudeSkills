@@ -1,14 +1,9 @@
 ---
 name: web-ref-routes
-description: "Canon (web-ref-*) route shape: record page /<list>/[id]/view, edit /<list>/[id]/edit, create /<list>/add; bare /<list>/[id] has NO page (404, never a redirect); a renamed route moves every link, links stored in data (bell, LINE, mail) by a ruled migration. Use for any route, URL, path or link; ลิงก์เสีย, หน้า detail, ลิงก์ใน bell, เปิดเป็นหน้า."
+description: "Canon (web-ref-*) route shape: record page /<list>/[id]/view, edit /<list>/[id]/edit, create /<list>/add; bare /<list>/[id] has NO page, never a redirect; a Thai not-found page; a renamed route moves every link, stored ones by a ruled migration. Use for any route, URL, path or link; ลิงก์เสีย, หน้า detail, ลิงก์ใน bell, เปิดเป็นหน้า, 404."
 ---
 
 # web-ref-routes — the record-page route shape
-
-**Owner ruling 2026-10-28 (AE49_Hub, Q303 b):** while porting Nuri's ticket page, which lives at
-`/support/tickets/<id>`, the owner chose `/support/tickets/<id>/view` and asked for the rule to be a
-user skill for every hub — *"เขียนกติกาการเขียน route ลงใน User skill ด้วยนะว่าต้องมี /view"* — with
-an audit of the pages that do not follow it yet and a handoff so Nuri changes too.
 
 ## The rule
 
@@ -19,11 +14,12 @@ an audit of the pages that do not follow it yet and a handoff so Nuri changes to
 | Read ONE record | `/<list>/[id]/view` | ALWAYS `/view` — also when the page holds actions, a thread or an edit form inline. |
 | Edit ONE record | `/<list>/[id]/edit` | Only when editing is a page of its own. |
 | A screen of ONE record that is neither its read nor its edit page | `/<list>/[id]/<name>` | e.g. `/projects/[id]/part-schedule` (owner Q311 a). Kebab-case name, linked from the record's `/view`. |
-| Bare id | `/<list>/[id]` | **No `page.tsx`.** It 404s. |
+| Bare id | `/<list>/[id]` | **No `page.tsx`.** It opens the not-found page. |
 
 - **Nothing redirects** (the hubs' no-redirect ruling): no `next.config` redirect or rewrite, no
   middleware hop, no `page.tsx` that only calls `redirect()`. The sole exception each hub keeps is its
   app root `/` → `/login`.
+- **Every hub has a Thai not-found page** (`app/not-found.tsx`): one Thai sentence that the link no longer works and a link home. An old link lands there, never on the framework's English 404, and never on a redirect.
 - **`[id]` is the record's id** (the Firestore document id, or the hub's stable code when the hub's
   facts say so). A dynamic segment that is NOT a record — a year, a tab slug, a set name — is not a
   record page and this rule does not apply to it.
@@ -43,6 +39,7 @@ an audit of the pages that do not follow it yet and a handoff so Nuri changes to
    Move them with a ruled migration script per `web-ref-migration-backups` (emulator rehearsal → dry run
    → backup → the OWNER's `--apply` → verify 0), run right after the push that ships the new route.
 3. **Bells written from now on** point at `/view` directly.
+4. **Sent links** — a plan that renames a route states whether links to it were sent outside the app (mail, LINE, copied). No migration reaches those, so they will open the not-found page, and the plan says so.
 
 ## Checking it
 

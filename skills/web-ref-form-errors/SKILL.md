@@ -1,13 +1,22 @@
 ---
 name: web-ref-form-errors
-description: "Canon (web-ref-*) for a wrong form value: the field gets a RED FRAME and the box above the Save row says what is wrong, always both. A wrong value goes red at once, an empty required field on refused Save; the frame clears when right. Use for any form, validation, setError or editable grid; กรอบแดง, ช่องไหนผิด, make this field red, show an error."
+description: "Canon (web-ref-*) for form fields and wrong values: one input and label token, required mark, noValidate, no steppers; a wrong field gets a RED FRAME and the box above Save says why, always both. Use for any form, input, validation, setError or editable grid; กรอบแดง, ช่องไหนผิด, ช่องบังคับ, make this field red, show an error."
 ---
 
-# Form errors: the red frame and the box
+# Form fields and errors: the field, the red frame, the box
 
-**Owner ruling 2026-10-31** (CCP_Hub Q30 a, Q31 a): *"ค่าไหนที่ไม่ถูกควรให้ขึ้นกรอบแดงไว้เลย แล้วก็ต้องกติกากลางระดับ User นะ"*.
-It replaces the older rule "Save-time validation does NOT turn fields red". Common practice agrees: a
-summary says WHAT is wrong, the highlight says WHERE, and either alone makes the reader hunt.
+Each hub keeps its facts (token files, components, consumers) in its own `<hub>-ref-form-errors`; a rule changes here, once. A summary says
+WHAT is wrong, the highlight says WHERE, and either alone makes the reader hunt. Save-time refusals turn fields red too.
+
+## The field
+
+- **One input token.** Every box derives from the hub's one input class, never a hand-typed copy; a copy silently opts out of the next ruling.
+- **One label token,** the same way.
+- **The red frame is a function** on the input token: it swaps the border and focus colors rather than appending, because two border utilities resolve by stylesheet order. It keeps the box's size and stays red while focused.
+- **A required field shows the hub's shared required mark** after its label, never a typed `*`: mark a field when leaving it empty blocks Save, not an optional field or a control holding a valid default.
+- **Every `<form>` carries `noValidate`.** No browser bubble and no `required` attribute; every check runs in the app and speaks through the box.
+- **No stepper arrows** on a number box, removed once at the token.
+- **A custom control** (picker, date button) takes the same frame on its trigger and, since it cannot carry `required`, a check in the submit handler.
 
 ## The rule
 
@@ -41,9 +50,7 @@ A wrong field shows BOTH:
 - A refusal that belongs to no one field (a failed save, a lost connection) stays in the box alone.
 - Save is never disabled to prevent an error: it refuses and explains.
 - An Edit that judges only what changed frames only what it would refuse. An untouched stored value stays plain.
-- A picker, date button or any custom control takes the same frame on its trigger.
 - An editable grid frames the cell. The box names the row, and the cell may repeat the sentence on hover.
-- The frame keeps the box's size and stays red while focused.
 
 ## Don't
 

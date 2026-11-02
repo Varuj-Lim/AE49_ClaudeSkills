@@ -174,4 +174,4 @@ with the work, never opens a request with an effort reminder, never mentions `xh
 the agent definitions (`ae49-audit` xhigh, `ae49-implement-heavy` xhigh, `ae49-implement` high,
 `ae49-implement-docs` high, `ae49-explore` low) — that part the owner keeps.
 
-The incident stories behind the rules above: `~/.claude/history-claude-md.md` (in the skills repo: `dotclaude/history.md`).
+The incident stories behind the rules above: `dotclaude/history.md` in the skills repo.

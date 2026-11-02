@@ -5,8 +5,8 @@ description: "Canon (web-ref-*) for a calculation report: every computed value s
 
 # Calculation reports show their working
 
-A calculation report exists so an engineer can check and sign it. A result with no working asks them to trust the program. Owner,
-2026-11-02: every detailed calculation item writes its equation and its substitution separately.
+A calculation report exists so an engineer can check and sign it. A result with no working asks them to trust the program, so every
+detailed calculation item writes its equation and its substitution separately.
 
 ## What counts
 
@@ -25,6 +25,8 @@ A calculation report exists so an engineer can check and sign it. A result with 
 | The result and its unit | `= 51.7 ซม.` |
 
 Equation and substitution each stand on their own line or column, never merged into one string or left in a label.
+
+**In a table:** each group keeps its own column, and the symbol sits on its own line under the label. On a wide screen the equation takes its own column and substitutions stay on one line. A4 portrait paper has no room for that: substitutions wrap, and the equation sits under the label.
 
 - **Input or looked-up value:** name the source instead of an equation: `จาก Project Globals`, `ตาราง 1.4-1 (SD 2.0 ของ code ที่ใช้)`.
 - **Branch:** show the branch that ran and why: `เนื่องจาก ρ < ρmin จึงใช้ ρmin`.
@@ -55,7 +57,7 @@ Every computed cell of a table has `ƒx` at the cell's **top right**, not `?`, s
   returns the working with its result, or the report builds it from the engine's own intermediate values.
 - **Rounding is visible.** Display values to enough digits that a calculator reproduces the result. When the engine rounds at a
   step, as ported workbooks do, the substitution shows that rounded value. When display rounding alone would change the last digit,
-  say so once in the report's notes.
+  say so once in the report's notes. Where float noise puts a shown value one unit from a calculator, the result stays and the popup says why.
 - **Text in the label file** of the module; symbols, units and numbers stay as engineers write them. Words are Thai
   (`web-ref-ui-language`).
 - **Screen and paper are one component.** Length is accepted: a report may run to more pages so the working stays visible.

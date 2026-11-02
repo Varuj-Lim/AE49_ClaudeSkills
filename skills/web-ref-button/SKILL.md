@@ -1,9 +1,29 @@
 ---
 name: web-ref-button
-description: "Canon (web-ref-*) button rule: every button label renders on ONE line, never wrapped; a crowded row gives way elsewhere (subtitle wraps, action group keeps its width, whole buttons wrap), never inside a button. Use for any button, pill or header action; ปุ่มขึ้น 2 บรรทัด, ปุ่มตกบรรทัด, button wraps, label on two lines. Tokens: <hub>-ref-button."
+description: "Canon (web-ref-*) button ladder: rungs by meaning, red only where data is destroyed, orange for irreversible without deleting, quiet text for view helpers, navigation as a link, bare label, one width, ONE line. Use for any button, pill or header action; ปุ่มแดง, ปุ่มส้ม, ปุ่มขึ้น 2 บรรทัด, ปุ่มตกบรรทัด, add a button, button wraps."
 ---
 
 # web-ref-button — the cross-hub button canon
+
+Each hub keeps its ladder's tokens, components and named tones in `<hub>-ref-button`; a rule changes here, once.
+
+## The ladder: a button's look says what the click means
+
+| Rung | Look | Means |
+|---|---|---|
+| Primary | filled pill | the ONE main action on a screen: `Add <Noun>`, Save, a confirm |
+| Secondary | outlined pill | Cancel, Print, Export, Close |
+| Destructive | filled red pill | the click destroys stored data |
+| Icon action | gray-until-hover icon | a table row's action |
+| Decision | icon colored at rest | Approve, Reject, Cancel request, Roll back |
+| Quiet | bare text, no fill, no border | changes only what is on this screen: Clear filters, Select all, Clear, Expand all, Collapse all |
+
+- **Red means the click destroys stored data,** on every rung. Two named bends stay, each a closed set a hub lists and nothing else borrows: the decision set's own colors, and sign-out text as a caution against a misclick.
+- **Orange means irreversible, and it deletes nothing:** void, roll back, force. A reversible switch is never orange. Each hub names its orange in its own ladder, as a rung or as a named tone.
+- **Navigation is a link,** never a pill: pill shapes are for doing something, not for looking at something.
+- **A label is the word alone:** `Open`, `Save as`, never `Open…`. `…` appears only while busy: `Saving…`.
+- **A busy label keeps one width:** both words share one grid cell, so nothing beside the button moves while it works. No width is typed.
+- **The raw-constant dimming trap:** where a hub's button tokens carry no disabled style and its `Button` component adds it, moving a hand-typed button onto a bare token silently drops the dimming. Use the component, or add the disabled class at the call site.
 
 ## Rule 1 — a button label is ONE line, never two (owner 2026-10-30)
 
@@ -29,11 +49,6 @@ description: "Canon (web-ref-*) button rule: every button label renders on ONE l
 **Common practice.** Common design systems render button text with `white-space: nowrap` —
 Ant Design's `.ant-btn` and Bootstrap 4's `.btn` both do — because a two-line label reads as two
 controls and makes buttons in one row different heights.
-
-**Why (owner 2026-10-30).** On CCP_Hub's Finance → Profit & Loss page the header's long Thai
-subtitle squeezed the action group, so "Download Excel" and "Add Fiscal Year" each broke onto two
-lines; the owner ruled every button one line, at user level, so no hub repeats it (*"ผมไม่ชอบให้ปุ่ม
-มันขึ้นเป็น 2 บรรทัด ทุกปุ่มต้องเป็น บรรทัดเดียวเท่านั้น … เขียนลง User Skill ด้วยจะได้ไม่พลาด"*).
 
 **Each hub's facts** — the token file, the `Button` component, the page-header component, the
 hand-typed call sites — live in its own `<hub>-ref-button` skill (CCP: `ccphub-ref-button`

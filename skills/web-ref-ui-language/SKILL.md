@@ -1,6 +1,6 @@
 ---
 name: web-ref-ui-language
-description: "Canon (web-ref-*) for UI language: EXPLANATIONS ARE THAI, IDENTIFIERS ARE ENGLISH, US spelling. Sentences staff read (hints, empty states, confirm BODIES, errors, toasts) are plain Thai; what names something (headings, labels, buttons, status, dialog TITLES) stays English. Use for any UI string; ทำไมไม่เป็นไทย, add an error message, translate this."
+description: "Canon (web-ref-*) for UI language: EXPLANATIONS ARE THAI, IDENTIFIERS ARE ENGLISH, US spelling. Sentences staff read (hints, empty states, confirm BODIES, errors, toasts) are plain Thai; names (headings, labels, buttons) stay English; a title follows its subject. Use for any UI string; ทำไมไม่เป็นไทย, add an error message, translate this."
 ---
 
 # UI language — shared canon (Thai explainers · English identifiers)
@@ -19,7 +19,7 @@ same breath removed the last module-wide English exemption (the plot-order scree
 | Stays ENGLISH | Becomes THAI |
 |---|---|
 | Headings & section titles (`Attendance Record`, `MONTH BY MONTH`) | Page / section intro sentences under them |
-| Dialog TITLES (`Reject leave request`, `Cancel order`) | Dialog BODIES — what happens, what cannot be undone, who is told |
+| Dialog TITLES that name an English subject (`Reject leave request`, `Cancel order`) | Dialog BODIES — what happens, what cannot be undone, who is told |
 | Labels & column names (`Days worked`, `Avg in`, `Required`, `Total`) | Field `hint` lines, tile captions, table notes, footnotes, legends |
 | Button / pill / tab / toggle / status text (`Submit Order`, `Pending`, `Export Excel`) | Empty-state sentences ("ยังไม่มี … เพราะ …") |
 | Codes, employee labels, dates, times, numbers (`LO2081`, `08:30`, `[DM01] …`) | Validation errors, toasts, confirm bodies, notification messages staff read |
@@ -41,11 +41,13 @@ same breath removed the last module-wide English exemption (the plot-order scree
   position (a small annotation under a value — `กรอกโดย …`) and English in a label
   position (a field name among other English labels — `Entered by`). One test: is it a
   sentence-y annotation (Thai) or a field name (English)?
-- **A dialog is two languages by design:** the title is a heading (English), the body is
+- **A title names its subject in the subject's language.** A calculation popup's subject is the calculated item, whose name is
+  Thai, so its title is that Thai name (`ความลึกประสิทธิผล`). Every other dialog's subject is a control or record named in English, so its title is English.
+- **A dialog is two languages by design:** the title is a heading, the body is
   an explainer (Thai). Every confirm in every hub reads this way; a body left English
   "because the module is English" is a finding — module-wide English exemptions are gone.
 - **Column heads are English in EVERY table — screen, popup, print sheet, export header
-  (owner ruling 2026-10-01, AE49 OI-15: *"หัวคอลัมน์ทุกตารางเป็นอังกฤษ ข้อความอธิบายเป็นไทย"*).**
+  (owner ruling 2026-10-01).**
   A column head is an IDENTIFIER — people point at it ("the Value column") — so it follows
   the identifier rule whatever the rest of the table's language. The test is POSITIONAL,
   not semantic: text that renders in a `<th>` (or a column-definition `label` / `header`
@@ -71,8 +73,7 @@ string a page shows verbatim, functions / LINE / mail text) is exactly one of:
    route boundary grants no exemption.
 2. **Actor-limited → ENGLISH is deliberate** — the language follows THE ACTOR (ruling
    2026-08-25), and the class is NARROW: API routes, logs and dev tooling only a
-   developer ever reads. On 2026-09-08 the owner ruled that RD-only *screens* are
-   translated like everything else ("แปลไปเลยจะได้เหมือนกันทั้งระบบ"), so "only RD sees
+   developer ever reads. RD-only *screens* are translated like everything else, so "only RD sees
    this page" is no longer a reason to keep a UI string English.
 3. **Machine text → ENGLISH** — error codes, log / audit lines, `"Row N:"` prefixes and
    English column names inside an otherwise-Thai import error, technical identifiers.
