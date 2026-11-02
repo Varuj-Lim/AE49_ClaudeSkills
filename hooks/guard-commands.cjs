@@ -69,11 +69,16 @@ function pushReason(args, repo) {
   return null;
 }
 
-function gitReason(words, cwd) {
+// A repo path often sits in a variable set earlier in the same command, so "git -C $C push" must read as that path.
+function expand(word, vars) {
+  return word.replace(/\$\{?(\w+)\}?/g, (whole, name) => vars[name] ?? whole);
+}
+
+function gitReason(words, cwd, vars) {
   let repo = cwd;
   let i = 1;
   while (i < words.length && words[i].startsWith("-")) {
-    if (words[i] === "-C") repo = words[i + 1] ?? repo;
+    if (words[i] === "-C") repo = expand(words[i + 1] ?? repo, vars);
     i += words[i] === "-C" || words[i] === "-c" ? 2 : 1;
   }
   const args = words.slice(i + 1);
@@ -82,7 +87,7 @@ function gitReason(words, cwd) {
   return null;
 }
 
-function commandReason(words, cwd, backslashEscapes) {
+function commandReason(words, cwd, backslashEscapes, vars) {
   while (words.length && (words[0] === "&" || /^\w+=/.test(words[0]) || words[0] === "time")) words = words.slice(1);
   if (!words.length) return null;
   const program = baseName(words[0]);
@@ -92,7 +97,7 @@ function commandReason(words, cwd, backslashEscapes) {
     if (flag >= 0 && words[flag + 1]) return reasonFor(words.slice(flag + 1).join(" "), cwd, backslashEscapes);
     return null;
   }
-  if (program === "git") return gitReason(words, cwd);
+  if (program === "git") return gitReason(words, cwd, vars);
 
   if (words.includes("emulators:exec")) return REFUSE + "a bare emulators:exec can delete the owner's Storage files when it exits; use web-ref-local-emulator/resources/private-suite.ps1";
 
@@ -115,12 +120,17 @@ function reasonFor(raw, startCwd, backslashEscapes) {
     return /\bpush\b|\bdeploy\b|--apply|--commit|reset\s+--hard/.test(raw) ? "could not read this command's quotes, and it may deploy or write" : null;
   }
   let cwd = startCwd;
+  const vars = {};
   for (const words of commands) {
+    const bashSet = words.length === 1 && words[0].match(/^(\w+)=(.+)$/);
+    if (bashSet) { vars[bashSet[1]] = bashSet[2]; continue; }
+    const psSet = words.length === 3 && words[1] === "=" && words[0].match(/^\$(\w+)$/);
+    if (psSet) { vars[psSet[1]] = words[2]; continue; }
     if (/^(cd|set-location|sl|chdir)$/i.test(words[0]) && words[1]) {
       cwd = words[words.length - 1];
       continue;
     }
-    const reason = commandReason(words, cwd, backslashEscapes);
+    const reason = commandReason(words, cwd, backslashEscapes, vars);
     if (reason) return reason;
   }
   return null;
