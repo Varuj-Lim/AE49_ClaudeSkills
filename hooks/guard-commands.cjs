@@ -1,10 +1,8 @@
 // PreToolUse hook for Bash and PowerShell: asks the owner before a command that deploys, writes real data or
-// destroys work. It asks rather than blocks, so an owner-ordered push still goes through with one click; only a bare emulators:exec is refused, since a safe form exists. It is a net
+// destroys work. It asks rather than blocks; a push to the deploy branch does not ask (owner 2026-11-02 Q393 b), a force push does; only a bare emulators:exec is refused, since a safe form exists. It is a net
 // for slips, not a security boundary: a script that pushes from inside is not seen.
 const path = require("path");
 
-const DEPLOY_BRANCH = /^(refs\/heads\/)?(main|master)$/;
-const NON_DEPLOY_REPO = /AE49_ClaudeSkills/i;
 const REFUSE = "refuse: ";
 const SHELLS = new Set(["bash", "sh", "zsh", "powershell", "pwsh", "cmd"]);
 
@@ -61,36 +59,23 @@ function parse(command, backslashEscapes) {
 
 const baseName = (word) => path.win32.basename(word).toLowerCase().replace(/\.(exe|cmd|ps1)$/, "");
 
-function pushReason(args, repo) {
+function pushReason(args) {
   if (args.some((a) => /^(--force|--force-with-lease|--force-if-includes|-[a-z]*f[a-z]*)(=|$)/.test(a) || a.startsWith("+"))) {
     return "force push: this overwrites history on the remote";
-  }
-  if (NON_DEPLOY_REPO.test(repo)) return null;
-  const positional = args.filter((a) => !a.startsWith("-") && !/^\d?>/.test(a) && !/^\d?>>/.test(a));
-  const refs = positional.slice(1);
-  const onDeploy = "push to the deploy branch: in the hubs this deploys";
-  if (refs.length === 0) return onDeploy; // a bare push sends the current branch
-  for (const ref of refs) {
-    const target = ref.includes(":") ? ref.slice(ref.indexOf(":") + 1) : ref;
-    if (ref === "HEAD" || ref === "@" || /[$%`(]/.test(ref) || DEPLOY_BRANCH.test(target)) return onDeploy;
   }
   return null;
 }
 
-// A repo path often sits in a variable set earlier in the same command, so "git -C $C push" must read as that path.
+// A word may name a variable set earlier in the same command.
 function expand(word, vars) {
   return word.replace(/\$\{?(\w+)\}?/g, (whole, name) => vars[name] ?? whole);
 }
 
-function gitReason(words, cwd, vars) {
-  let repo = cwd;
+function gitReason(words) {
   let i = 1;
-  while (i < words.length && words[i].startsWith("-")) {
-    if (words[i] === "-C") repo = expand(words[i + 1] ?? repo, vars);
-    i += words[i] === "-C" || words[i] === "-c" ? 2 : 1;
-  }
+  while (i < words.length && words[i].startsWith("-")) i += words[i] === "-C" || words[i] === "-c" ? 2 : 1;
   const args = words.slice(i + 1);
-  if (words[i] === "push") return pushReason(args, repo);
+  if (words[i] === "push") return pushReason(args);
   if (words[i] === "reset" && args.includes("--hard")) return "git reset --hard: this discards uncommitted work";
   return null;
 }
@@ -109,7 +94,7 @@ function commandReason(words, cwd, backslashEscapes, vars) {
     if (flag >= 0 && words[flag + 1]) return reasonFor(words.slice(flag + 1).join(" "), cwd, backslashEscapes);
     return null;
   }
-  if (program === "git") return gitReason(words, cwd, vars);
+  if (program === "git") return gitReason(words);
 
   if (words.map(baseName).some((n) => n === "firebase" || n === "firebase-tools") && words.includes("emulators:exec")) return REFUSE + "a bare emulators:exec can delete the owner's Storage files when it exits; use web-ref-local-emulator/resources/private-suite.ps1";
 

@@ -99,7 +99,7 @@ Merge into `~/.claude/settings.json` (create the file if missing):
 }
 ```
 
-- `guard-commands.cjs` asks before a push to the deploy branch, a force push, a deploy, `--apply` or `reset --hard`.
+- `guard-commands.cjs` asks before a force push, a deploy, `--apply` or `reset --hard`.
 - `after-compact-note.cjs` says what a compact dropped.
 - `daily-skills-check.ps1` reports drift from this repo once a day.
 
