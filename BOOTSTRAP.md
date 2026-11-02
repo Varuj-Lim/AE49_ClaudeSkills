@@ -60,11 +60,11 @@ overwrites them. Resolve per the skill's warning gate before `-Apply`.
 `local-only` and the bootstrapper's `self` line). `~/.claude/CLAUDE.md` now
 names the six session-init skills.
 
-## 4. Daily drift-check hook (machine-local — the sync does NOT install this)
+## 4. Hooks (machine-local — the sync does NOT install these)
 
 ```powershell
-New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude\hooks" | Out-Null
-Copy-Item "<clone>\hooks\daily-skills-check.ps1" "$env:USERPROFILE\.claude\hooks\" -Force
+New-Item -ItemType Directory -Force "$env:USERPROFILE.claudehooks" | Out-Null
+Copy-Item "<clone>hooks*" "$env:USERPROFILE.claudehooks\" -Force
 ```
 
 Merge into `~/.claude/settings.json` (create the file if missing):
@@ -72,8 +72,19 @@ Merge into `~/.claude/settings.json` (create the file if missing):
 ```json
 {
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [{ "type": "command", "command": "node \"$HOME/.claude/hooks/guard-commands.cjs\"", "timeout": 10 }]
+      }
+    ],
     "SessionStart": [
       {
+        "matcher": "compact",
+        "hooks": [{ "type": "command", "command": "node \"$HOME/.claude/hooks/after-compact-note.cjs\"", "timeout": 10 }]
+      },
+      {
+        "matcher": "startup",
         "hooks": [
           {
             "type": "command",
@@ -88,8 +99,12 @@ Merge into `~/.claude/settings.json` (create the file if missing):
 }
 ```
 
-✅ Verify: both files exist, and the first Claude session of the day opens with
-the drift-check line. (`skills-check-last-run.txt` appears after the first run.)
+- `guard-commands.cjs` asks before a push to the deploy branch, a force push, a deploy, `--apply` or `reset --hard`.
+- `after-compact-note.cjs` says what a compact dropped.
+- `daily-skills-check.ps1` reports drift from this repo once a day.
+
+✅ Verify: the files exist, and the first Claude session of the day opens with the
+drift-check line. (`skills-check-last-run.txt` appears after the first run.)
 
 ## 5. Clone the project repo
 
