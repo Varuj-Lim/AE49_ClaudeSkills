@@ -1,10 +1,11 @@
 // PreToolUse hook for Bash and PowerShell: asks the owner before a command that deploys, writes real data or
-// destroys work. It asks, never blocks, so an owner-ordered push still goes through with one click. It is a net
+// destroys work. It asks rather than blocks, so an owner-ordered push still goes through with one click; only a bare emulators:exec is refused, since a safe form exists. It is a net
 // for slips, not a security boundary: a script that pushes from inside is not seen.
 const path = require("path");
 
 const DEPLOY_BRANCH = /^(refs\/heads\/)?(main|master)$/;
 const NON_DEPLOY_REPO = /AE49_ClaudeSkills/i;
+const REFUSE = "refuse: ";
 const SHELLS = new Set(["bash", "sh", "zsh", "powershell", "pwsh", "cmd"]);
 
 function withoutHereDocs(command) {
@@ -93,6 +94,8 @@ function commandReason(words, cwd, backslashEscapes) {
   }
   if (program === "git") return gitReason(words, cwd);
 
+  if (words.includes("emulators:exec")) return REFUSE + "a bare emulators:exec can delete the owner's Storage files when it exits; use web-ref-local-emulator/resources/private-suite.ps1";
+
   const names = words.map(baseName);
   if (names.includes("firebase") || names.includes("firebase-tools")) {
     if (words.includes("deploy") || words.some((w) => /:delete$/.test(w))) return "firebase deploy or delete: this changes production";
@@ -134,6 +137,7 @@ process.stdin.on("end", () => {
     process.exit(0);
   }
   if (reason) {
-    console.log(JSON.stringify({ hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: "ask", permissionDecisionReason: reason } }));
+    const refused = reason.startsWith(REFUSE);
+    console.log(JSON.stringify({ hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: refused ? "deny" : "ask", permissionDecisionReason: refused ? reason.slice(REFUSE.length) : reason } }));
   }
 });

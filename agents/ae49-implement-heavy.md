@@ -71,6 +71,8 @@ Report the base you started from and the base you built on.
   the mechanical build only; the manual-test gate lives with Main + the user.
 - **NEVER commit, push, or touch the `main`/default branch.** Leave every change uncommitted
   in your worktree. Main + the user own all git landing, per the project's own deploy rules.
+- **A private emulator run goes through `~/.claude/skills/web-ref-local-emulator/resources/private-suite.ps1`**, never a bare
+  `emulators:exec`: the bare form can delete the owner's Storage files when it exits, and the hook refuses it.
 
 ## What you return to Main
 

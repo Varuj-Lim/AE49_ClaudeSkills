@@ -42,16 +42,21 @@ with a private `firebase emulators:exec` run, when ALL of these hold:
   agent's own scratchpad, and its config pins every port it opens (the Firestore websocket and the hub included).
   Every Storage emulator on the machine otherwise shares `%TEMP%\firebase\storage`, and a private suite DELETES that
   folder when it exits — the owner's running Storage emulator then dies on its next upload (`ENOENT …
-  firebase\storage\blobs\…` → "An unexpected error has occurred"), taking Auth and the hub with it. From Git Bash, put
-  the env lines and the `npx.cmd firebase-tools emulators:exec …` call in a small `.ps1` run with
-  `powershell -NoProfile -ExecutionPolicy Bypass -File` (an env prefix in front of `npx.cmd` breaks on the space in
-  `C:\Program Files`). Proved once on 2026-10-29: a private Firestore + Storage run with its own TEMP exited and the
+  firebase\storage\blobs\…` → "An unexpected error has occurred"), taking Auth and the hub with it. **Run it only through
+  `resources/private-suite.ps1`** (`-Only firestore,auth -Project demo-x -Config <firebase.json> -Run "<command>"`): it sets the
+  temp folder, refuses a project id that is not `demo-*` or a config with a shared-port gap, and removes the folder after. The
+  guard hook refuses a bare `emulators:exec` (owner Q340 a, 2026-11-02). Proved on 2026-10-29 and again 2026-11-02: a private Firestore + Storage run with its own TEMP exited and the
   owner's suite kept its PIDs and its `blobs` folder.
 Main still re-runs the probe in the hub, on the owner's suite, before the gate — the private run is
 early evidence, not the gate's. Why: on 2026-10-29 the tickets B2+B3 builder did exactly this to prove
 its new `replies` rule before merge; the owner ruled it fine (Q13 a) because nothing in rule 1's fear —
 a hidden shell holding the owner's ports, a collision on the next click — can happen with it. Cost: about
 1 GB of RAM (Java) per run, so several at once may slow the machine.
+
+## 1c. Two shared scripts
+
+- **`resources/assert-emulator.cjs`** — put it in front of any script that writes: `node <it> --firestore-port <p> --auth-port <p> && node <script>`, or `require` it. It exits 1 unless both hosts are local and on this project's ports, so a run can reach neither production nor a sibling hub's emulator.
+- **`resources/find-stray-export.cjs`** — when a save fails at its last rename, the newest world stays in a `firebase-export-<digits>…` folder and the next start silently loads the old one. The launcher calls this before boot and asks with a 5-second default of No; `--adopt <dir>` keeps the current world aside and deletes nothing. A hub's `.gitignore` carries `/firebase-export-*/`. The block: AE49_Hub `.claude/dev-emu.cmd`, "Stray save".
 
 ## 2. Probe BEFORE naming a button — every time
 
