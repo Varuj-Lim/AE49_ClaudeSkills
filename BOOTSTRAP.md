@@ -58,7 +58,7 @@ overwrites them. Resolve per the skill's warning gate before `-Apply`.
 
 ✅ Verify: re-run the preview → no `ADD`/`UPDATE` lines remain (only
 `local-only` and the bootstrapper's `self` line). `~/.claude/CLAUDE.md` now
-names the six session-init skills.
+names the five session-init skills.
 
 ## 4. Hooks (machine-local — the sync does NOT install these)
 
@@ -165,7 +165,7 @@ daily hook is installed here.
 
 ## 10. Done when
 
-- Opening Claude Code in the project fires the six session-init skills.
+- Opening Claude Code in the project fires the five session-init skills.
 - The daily drift check reports "in sync".
 - Saying **"เปิดวัน"** (`/ae49-task-session`, which runs `open` in a new session) completes with a clean board.
 

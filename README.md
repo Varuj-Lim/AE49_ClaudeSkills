@@ -43,10 +43,10 @@ For a single project instead of globally, copy into `<your-repo>/.claude/skills/
 
 To auto-load skills every session, put a `CLAUDE.md` at `~/.claude/CLAUDE.md` (or a repo root). One is provided:
 
-- [`dotclaude/CLAUDE.md`](./dotclaude/CLAUDE.md) — **the full setup, scrubbed; `/ae49-task-update-skills` reports differences.** Loads six skills: `ae49-task-grill`, `ae49-ref-guidelines`, `ae49-mode-caveman`, `ae49-ref-report-format`, `ae49-router` and `ae49-ref-question-format`. Use this if you want the router workflow (Main delegates to the `ae49-plan` / `ae49-implement` agents). For a minimal setup without the router, trim it to just `ae49-mode-caveman` + `ae49-ref-guidelines`.
+- [`dotclaude/CLAUDE.md`](./dotclaude/CLAUDE.md) — **the full setup, scrubbed; `/ae49-task-update-skills` reports differences.** Loads five skills: `ae49-task-grill`, `ae49-ref-guidelines`, `ae49-ref-report-format`, `ae49-router` and `ae49-ref-question-format`. Use this if you want the router workflow (Main delegates to the `ae49-plan` / `ae49-implement` agents). For a minimal setup without the router, trim it to just `ae49-mode-caveman` + `ae49-ref-guidelines`.
 
 Adapt or omit as you like — but note the repo copy is scrubbed: the script's `-Apply` would overwrite `~/.claude/CLAUDE.md` with it, so the update workflow copies skills and agents only; edit both by hand.
 
 ## Credits
 
-These skills are adapted from Matt Pocock's [Skills For Real Engineers](https://github.com/mattpocock/skills) (`caveman`, `grill`, `improve-codebase-architecture`, `handoff`, `write-a-skill`, and the `diagnose` debugging loop), retuned for AE49 and extended with AE49 originals: `ae49-task-scrutinize`, `ae49-ref-guidelines`, `ae49-ref-debug`, `ae49-ref-report-format`, and `ae49-task-plan-feature`. Huge thanks to Matt for the original work.
+These skills are adapted from Matt Pocock's [Skills For Real Engineers](https://github.com/mattpocock/skills) (`caveman`, `grill`, `improve-codebase-architecture`, `handoff`, `write-a-skill`, and the `diagnose` debugging loop), retuned for AE49 and extended with AE49's own skills. See [NOTICE.md](NOTICE.md) for license text and sources. Huge thanks to Matt for the original work.

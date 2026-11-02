@@ -1,0 +1,40 @@
+# Notice
+
+Parts of this repository are adapted from third-party work. Each adapted file names its source at the top.
+
+## Skills For Real Engineers, by Matt Pocock
+
+Source: https://github.com/mattpocock/skills
+
+Adapted in `ae49-task-grill`, `ae49-task-handoff`, `ae49-task-improve-codebase-architecture`, `ae49-task-write-a-skill`,
+`ae49-mode-caveman` and `ae49-ref-debug/hard.md`.
+
+```text
+MIT License
+
+Copyright (c) 2026 Matt Pocock
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+## Acknowledgement
+
+The ideas behind `ae49-task-scrutinize` and the everyday part of `ae49-ref-debug` came from
+[thananon/9arm-skills](https://github.com/thananon/9arm-skills). That repository states no license, so both files were
+rewritten in this project's own words on 2026-11-02 and the source's text is not kept here.

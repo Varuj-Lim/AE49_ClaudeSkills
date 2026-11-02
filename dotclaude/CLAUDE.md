@@ -1,25 +1,24 @@
 # Session initialization
 
 At the very start of every session — on your first response, before addressing the
-user's request — invoke these six skills via the Skill tool, in order:
+user's request — invoke these five skills via the Skill tool, in order:
 
 1. `ae49-task-grill` — interview me to reach shared understanding before any work
 2. `ae49-ref-guidelines` — load the coding-workflow guidelines
-3. `ae49-mode-caveman` — ultra-compressed communication mode (an ON/OFF `mode` skill, on by default here)
-4. `ae49-ref-report-format` — the ONE format for every report back to me: findings,
+3. `ae49-ref-report-format` — the ONE format for every report back to me: findings,
    reviews, audits, status boards. Added 2026-08-14 because it was not in this list,
    so a whole session of audit relays and status tables was improvised instead —
    findings with no IDs to refer back to, and ad-hoc columns instead of the board.
-5. `ae49-router` — act as thin Main: refine on request, delegate heavy plan/implement
+4. `ae49-router` — act as thin Main: refine on request, delegate heavy plan/implement
    work to the `ae49-plan`/`ae49-implement` sub-agents, keep every human gate in Main
-6. `ae49-ref-question-format` — the ONE shape for every question I am asked: context,
+5. `ae49-ref-question-format` — the ONE shape for every question I am asked: context,
    options a/b/c with cost, a recommendation with its reason, how to
    answer. Added 2026-10-01 because a grill's questions had shrunk to caveman one-liners
    ("ไม่ใช่การเขียนแบบสั้นๆ แล้วไม่อธิบายอะไรเลย ผมอ่านแล้วไม่เข้าใจ").
 
-Apply all six for the rest of the session.
+Apply all five for the rest of the session.
 
-**Seventh, the autopilot check (rule 2026-09-25):** right after the six, read
+**Sixth, the autopilot check (rule 2026-09-25):** right after the five, read
 `~/.claude/autopilot/<project-folder-name>/state.json`. If it says `"on": true`, this
 session is in `ae49-mode-autopilot` — invoke that skill's `tick` before touching anything
 else, and keep its NEVER list (no push of the deploy branch, no deploys, no migrations, no
@@ -27,10 +26,10 @@ real-data deletes, nothing sent, no unsettled design decided). No file, or `"on"
 means the normal attended workflow. The same check runs again right after any compact.
 
 **A COMPACT is not a session start, and that is exactly why it hurts (rule 2026-09-23).**
-When the conversation is compacted, these six leave context with it: the summary survives,
+When the conversation is compacted, these five leave context with it: the summary survives,
 the skill BODIES do not, and nothing re-invokes them because no new session began. The
 session therefore keeps a perfect memory of WHAT it was doing and silently loses the rules
-for HOW. **Re-invoke all six immediately after any compact — before the next gate, report,
+for HOW. **Re-invoke all five immediately after any compact — before the next gate, report,
 landing or push.** A summary can carry a decision; it cannot carry a procedure it never
 mentioned.
 
@@ -135,7 +134,7 @@ line of its calculation spec was derived from. Both would have been unrecoverabl
   for ALL replies — answers, questions, confirmations, status updates, proposals —
   not just complex explanations. Keep code, file paths, commands, identifiers, UI
   labels, and exact error messages verbatim in English (never translate those).
-  Caveman mode still governs LENGTH; this rule governs LANGUAGE — they compose.
+  **ตอบสั้น ตรงประเด็น ใช้คำธรรมดา** (owner Q343 a, 2026-11-02, replaces `ae49-mode-caveman` at session start; reports, questions and checklists stay in full sentences).
   Status-board tables stay English per the rule below.
   **Addendum 2026-10-30 (owner): Thai ONLY — never Vietnamese or any other language.** Every
   word of prose to the owner is Thai (or the English kept verbatim above); a short progress

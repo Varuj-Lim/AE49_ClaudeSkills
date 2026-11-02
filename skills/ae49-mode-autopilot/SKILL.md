@@ -161,7 +161,7 @@ and 🤖 lines (owner 2026-10-22: the decide → ask report had the decisions an
 ## `tick` — one unattended step (every wakeup, every agent completion)
 
 1. **Re-read the state file and the tail of the log first.** Not ON → do nothing and stop the
-   heartbeat. If the six session skills (`~/.claude/CLAUDE.md`) are not in context — a compact
+   heartbeat. If the five session skills (`~/.claude/CLAUDE.md`) are not in context — a compact
    happened — re-invoke them before anything else.
 2. **Pick the next actionable item inside the scope** by the chain graph (`ae49-router`); respect
    the budget. Nothing actionable and nothing running → stop the heartbeat (ScheduleWakeup `stop`)

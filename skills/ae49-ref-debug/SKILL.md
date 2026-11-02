@@ -1,111 +1,54 @@
 ---
 name: ae49-ref-debug
-description: The debugging discipline in two levels. EVERYDAY (this file) is a four-step habit said out loud in the first reply and followed in order before any fix is suggested - make the bug happen again reliably, find exactly where it breaks, try to prove your best guess wrong, keep a trail of every test. HARD (hard.md, Matt Pocock's diagnose loop) is a fast repeatable pass/fail check, reproduce, 3-5 ranked causes, one change at a time, a regression test that locks the fix, then a clean-up and write-up. AUTO-LOAD whenever debugging starts - the user reports a bug, says something is broken / crashing / failing, asks to debug / diagnose / investigate, or pastes an error message or stack trace. Also read hard.md when the user says "diagnose this" or describes an intermittent / on-and-off bug, a slowdown or performance regression, or a bug that came back after a first fix. Trigger on /ae49-ref-debug.
+description: "Debugging discipline in two levels. This file is the everyday order to follow before suggesting any fix; hard.md is a fuller loop with a pass/fail check, ranked causes and a regression test. Use whenever debugging starts: a bug report, something broken, crashing or failing, a request to debug or investigate, a pasted error or stack trace. Read hard.md for an on-and-off bug, a slowdown, a bug that came back after a fix, or \"diagnose this\". Trigger on /ae49-ref-debug."
 ---
 
-# Debugging — the everyday mantra, and the hard-bug loop
-
-Merged 2026-10-09 (plan `skills-merge-sweep` M3, owner SQ1 a): `ae49-ref-debug-soft` and
-`ae49-task-debug-hard` were one subject that pointed at each other and were loaded together, so they
-are one folder. The everyday mantra stays in THIS file (it must fire on every bug report); the hard
-loop is `hard.md`. Nothing was reworded.
-
-## Read X when Y
+# Debugging
 
 | File | Read it when |
 |---|---|
-| this file (below) | ANY debugging start — a bug report, "broken / crashing / failing", an error message or stack trace: say the reminder out loud, follow the four steps |
-| [hard.md](hard.md) | the bug is hard or on-and-off, a slowdown, came back after a first fix, or the user says "diagnose this": the six-step diagnose loop, pass/fail check first |
-| [scripts/hitl-loop.template.sh](scripts/hitl-loop.template.sh) | a human has to click through the repro — `hard.md` step 1, way 10 |
+| this file | any debugging start |
+| [hard.md](hard.md) | the bug comes and goes, is a slowdown, came back after a fix, needs a regression test or write-up, or the owner says "diagnose this". This file's order still applies |
+| [scripts/hitl-loop.template.sh](scripts/hitl-loop.template.sh) | a person must click through the repro (`hard.md` step 1, way 10) |
 
-## Old name → where it lives now
+## Say this once, in your first reply
 
-| Old skill | Now |
-|---|---|
-| `ae49-ref-debug-soft` | this file (`SKILL.md`), whole, from "Debug Mantra" down |
-| `ae49-task-debug-hard` (+ `scripts/hitl-loop.template.sh`) | `hard.md` (+ the same script path) |
+Unless the owner asks you to skip it, open with these four lines. Follow the order either way.
 
-**Scope (was ae49-ref-debug-soft):** A simple 4-step habit for debugging — first make the bug happen again reliably, then find exactly where it breaks, then try to prove your best guess wrong before trusting it, then keep track of every test you've run so you don't repeat yourself. Say this discipline's short reminder out loud at the start of any debugging session, then follow the four steps in order before suggesting a fix. This is the everyday, lightweight version for normal bugs. Trigger on /ae49-ref-debug-soft and automatically whenever debugging starts — the user reports a bug, says something is broken/crashing/failing, asks you to debug/diagnose/investigate, or pastes an error message or stack trace. For tougher or on-and-off bugs that need a proper repeatable test setup, performance slowdowns, permanent regression tests, or a written post-mortem, switch to ae49-task-debug-hard instead.
+> **ลำดับการไล่บั๊ก:**
+> 1. ทำให้เกิดซ้ำได้ตามสั่งก่อน
+> 2. หาจุดที่พังให้เจอ
+> 3. ลองพิสูจน์ว่าสาเหตุที่เดาไว้ผิด
+> 4. จดทุกการทดสอบและผลของมัน
 
-## Debug Mantra (Debugging Reminder)
+No fix is suggested before step 1 is met. If you catch yourself suggesting one without a reliable repro, go back.
 
-> *Adapted from [thananon/9arm-skills](https://github.com/thananon/9arm-skills) — original skill `debug-mantra`. Credit: [@thananon](https://github.com/thananon).*
+## 1. Get a reliable repro
 
-Four simple habits for any debugging session. Say the reminder out loud, then follow the steps in order.
+Aim for a check of a few seconds that answers pass or fail, written down so it can be re-run: a failing test, a script, a
+command, a replay of real data. Hold still whatever moves by itself, such as the clock, random values, the network and files.
 
-## Say this out loud — first thing in your first reply
+- **Happens only sometimes:** raise its rate first, with a loop, parallel runs, load or added delay.
+- **Cannot be triggered:** stop and say so. Ask for access, saved evidence (network log, error log) or leave to add
+  temporary logging. Do not guess a fix.
 
-> **Reminder:**
-> 1. **Can we make it happen again?** Reliably, on demand.
-> 2. **Find exactly where it breaks.** Step through it with a debugger first; if that's not possible, trace the code by hand and list everything that could be changing the outcome; only then add temporary log/print statements.
-> 3. **Try to prove your best guess wrong.** What test would disprove it?
-> 4. **Keep a trail.** Write down every test you run and what it told you.
+## 2. Locate the break
 
-Then start working.
+Use the first of these that works:
 
----
+1. **Debugger.** Pause at the failing spot before changing any setting.
+2. **Read the path.** Trace it from start to end and list what can change the result: settings, environment variables,
+   switches, the branch taken, the input's shape, timing, build options. Change them one at a time.
+3. **Temporary logs.** Print the actual values where you suspect the fault, each with one unique tag such as `[DBG-a4f2]`, so
+   one search removes them all afterward.
 
-## 1. Make it happen again, reliably
+## 3. Attack your own guess
 
-Before anything else, get a way to trigger the bug on demand.
-
-- **You can trigger it every time** → write down the exact steps, inputs, and setup as something re-runnable: a failing test, a small script, a command, a replay of real data.
-- **It only happens sometimes** → not debuggable yet. Make it happen more often first — run the trigger in a loop, run many copies at once, add load, narrow the timing window, add small delays. If it fails about half the time, you can debug it; if it only fails 1 time in 100, you can't yet.
-- **You can't make it happen at all** → stop. Say so plainly. Ask for access to wherever it happens, saved evidence (browser network log, error log, crash file), or permission to add temporary logging. Do **not** start guessing at causes yet.
-
-Aim for a quick (1–5 second) check that reliably tells you pass or fail. Freeze anything that changes on its own — the clock, random numbers, the network, files on disk.
-
-## 2. Find exactly where it breaks
-
-Once you can trigger it, find *where* the code goes wrong and *what's stopping it from going wrong*. Try these in order — only move to the next one if the current one doesn't work.
-
-1. **Use a debugger.** If you can, attach one and step through to the exact spot it fails. One well-placed pause beats ten scattered log lines. Do this **before** changing any settings.
-2. **Read the code path by hand, and list everything that could affect the outcome.** If a debugger isn't available (or can't reach the bug), trace the code from start to finish and list everything that might be changing the result:
-   - settings, environment variables, feature switches
-   - which branch of an if/else gets taken, what shape the input is
-   - timing, multiple things happening at once, build settings
-   Each one of these is something you can try changing, one at a time, to see if it affects the bug.
-3. **Add temporary log/print statements.** If nothing outside the code can move the failure, go inside: add print or log statements at the spot you suspect, and print out what the relevant values actually are. Mark every one with a unique tag (e.g. `[DBG-a4f2]`) so you can find and delete them all with one search later. Let what you see show you where reality differs from what you expected.
-
-## 3. Try to prove your best guess wrong
-
-Once you have a candidate cause, question it **before** you trust it.
-
-- Does it actually explain everything about the bug, start to finish? Walk through it step by step.
-- What's the simplest way to **prove** it's right? What's the simplest way to **prove** it's wrong?
-- Try the "prove it wrong" test first. If the guess survives that, it's probably real. If it fails, you just avoided wasting time on a wrong lead.
-- Come up with 3–5 possible causes, ranked by likelihood — not just one. Fixating on the first idea that comes to mind is a common trap.
+List 3-5 possible causes by likelihood, so the first idea does not win by default. For the leading one, check that it explains
+the whole bug, then run the test that could prove it wrong before any test that could prove it right.
 
 ## 4. Keep a trail
 
-Keep a running list of every test you try during this session: what you changed, what happened, and what it told you (ruled in or ruled out).
-
-- Whenever a new guess comes up, check it against everything on that list — not just the most recent test.
-- If any earlier test contradicts the new guess, the guess is wrong or incomplete — fix it or drop it.
-- When unsure what to try next, design the ONE test whose result would settle things for certain, and run that — instead of running lots of similar, inconclusive tests.
-- Add to the list after every test. It's your memory for the rest of the session.
-
----
-
-## Ground rules
-
-- Say the reminder **once** per debugging session, in your first reply. Don't repeat it partway through.
-- Say it **word for word**. Don't shorten it, reword it, or skip any line.
-- If the user says "skip the reminder" → skip saying it out loud, but still quietly follow the four steps.
-- Follow the four steps **in this order**:
-  - Don't suggest a fix before step 1 is done (you can trigger the bug reliably).
-  - Don't start testing guesses before step 2 has narrowed down where it breaks.
-  - Don't commit to a guess before step 3 has tried to disprove it.
-  - Don't call a guess confirmed until step 4 checks it against everything you've seen so far.
-- If you notice yourself suggesting a fix without being able to reliably trigger the bug, stop and go back to step 1.
-- This discipline is something **you** follow through the session — not advice to just tell the user about.
-
----
-
-## When to escalate → `hard.md`
-
-The four steps above are the everyday level for normal bugs. Switch to [hard.md](hard.md) — and keep
-this file's reminder and ground rules — when the bug needs a proper repeatable test setup, is
-intermittent or on-and-off, is a slowdown / performance problem, came back after a first fix
-attempt, needs a permanent regression test or a written post-mortem, or the user says "diagnose
-this".
+After each test, note what changed, what happened and what that rules in or out. Check every new guess against the whole list;
+one contradicting result means the guess is wrong or incomplete. When unsure what to try, design the single test whose result
+settles the question, instead of several similar ones. A guess is confirmed only after this check.
