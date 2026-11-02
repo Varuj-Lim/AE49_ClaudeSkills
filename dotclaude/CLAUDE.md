@@ -168,7 +168,7 @@ for the very `~/.claude` files this session is already allowed to write, and "Sk
 repo sync" above REQUIRES the mirror, the commit and the push in the SAME turn. So
 whenever a session touches `~/.claude/skills/`, `~/.claude/agents/` or this file, it
 edits, commits and pushes in that clone as well, and that is NOT a cross-project
-write. A sibling hub's checkout is outside the rule and still off limits, and
+write. A sibling hub's checkout stays off limits, and
 the handoff prompt below is still the deliverable for it. Written because on
 2026-09-22 a session stopped to reason the two rules against each other before a
 one-line doc fix — the answer belongs in the rule, not re-derived every time.

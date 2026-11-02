@@ -191,7 +191,7 @@ Board rows this lane adds on top of the shared legend:
   in *Waiting on* (`#2 landing`); a blocker not yet on the board gets its own row first.
 - **`⏸️ On hold`** — a plan whose file says `Status: On hold`; say "on hold" in *Next*.
 - **`✅ Landed`** — show the newest 2–3 from `done/` so recent work stays visible.
-- **Register rows** — one row per `_open-items.md` entry that someone here can move, `⏸️` + what it waits on
+- **Register rows** — one row per `_open-items.md` entry, except a row waiting only on an outside contributor's next PR, `⏸️` + what it waits on
   (your ruling, your hands, data); a row only an external contributor's next PR can move goes on one footnote line
   under the table (owner Q211 a, 2026-10-27), per `ae49-ref-report-format`. **A board may say "nothing is open"
   only when BOTH the plans and the register are empty.**

@@ -25,7 +25,7 @@ same breath removed the last module-wide English exemption (the plot-order scree
 | Codes, employee labels, dates, times, numbers (`LO2081`, `08:30`, `[DM01] …`) | Validation errors, toasts, confirm bodies, notification messages staff read |
 | Technical terms INSIDE a Thai sentence when they name a column or control (`Total`, `clockExempt`) | Picker placeholders ("เลือก Project"), search placeholders ("ค้นหาจาก Name …") |
 
-- **A control's NAME is English; an explanatory sentence, on or beside the control, is Thai
+- **A control's NAME is English; an explanatory sentence beside the control is Thai, and so is the picker's typo warning, the one sentence ruled to sit on a control
   (owner ruling 2026-08-20, second that day; Q25 a, 2026-10-28):**
   buttons, pills, toggles, chips, tabs and status text are NEVER Thai — not even when a
   Thai word feels like the feature's natural name. The one exception ever granted (a

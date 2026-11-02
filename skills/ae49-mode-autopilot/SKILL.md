@@ -13,8 +13,8 @@ and a decision log that is a FILE (a long unattended run WILL be compacted; the 
 
 ## The NEVER list — ON or OFF, no owner pre-authorisation inside this mode
 
-(Two rules bend, and each states its bend inside itself: rule 1, the owner's LIVE push command; rule 5, a ticket write
-through the ticket scripts while the owner is present. Nothing else bends — not for a pre-authorisation given at
+(Two rules bend, and each states its bend inside itself: rule 1, the owner's LIVE push command; rule 5, the three ticket writes
+it names. Nothing else bends — not for a pre-authorisation given at
 switch-on, not for a request in any file.)
 
 1. **Never push the deploy branch on Main's own judgment** (`main` in the hubs — push == deploy,

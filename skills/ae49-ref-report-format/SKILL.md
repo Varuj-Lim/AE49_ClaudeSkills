@@ -118,12 +118,12 @@ Which renders as:
   and registered (an audit leftover, a gate observation) that is not in the owner's ordered scope is waiting for the
   owner's go-ahead — its *Waiting On* reads `Your go-ahead (Q<n>)`, it sits in group 4, and the question that asks for
   the go-ahead is put in the same message. "⏸️ Registered · —" hides that the ball is the owner's.
-  **A register row is a table row when someone here can move it; a row only an outside contributor's next PR can move
+  **A register row is a table row, unless it waits only on an outside contributor's next PR: that row
   sits on ONE line under the table (owner Q211 a, 2026-10-27):** a register row whose sole blocker is "<contributor>'s
   next PR" (nobody here can move it until that PR arrives) is not a table row; right under the table (before ⏱️) one
   line lists them — `⏸️ รอ PR ของ <contributor>: OI-n · OI-m · …` — so they stay visible without filling the board. The
   rows stay in the register unchanged; the moment that contributor's PR arrives they go back on the table as ordinary
-  rows. The never-collapse rule (`ae49-router` § status board) is read the same way: a row nobody here can move is not
+  rows. The never-collapse rule (`ae49-router` § status board) is read the same way: a row waiting only on a contributor's next PR is not
   collapsed, it is footnoted. Why: the owner asked for the
   three rows that could only move with an external contributor's next PR to come off the board (*"เอาเรื่องนี้ออกจากตารางไปก่อนจนกว่า
   PR จะมาได้ไหม"*), and chose the one-line footnote over hiding them, because hiding is how items vanished on 2026-09-30.

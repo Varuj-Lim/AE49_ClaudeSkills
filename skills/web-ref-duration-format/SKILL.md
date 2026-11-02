@@ -35,7 +35,7 @@ consistency lives so the next duration is not invented per page.
 
 `Late` · `Total Hours` · `Hours` · `Break` · `Start / End` — the unit rides on the
 VALUE (`1h 4m`), so a table head never carries `(min)`, `(h)`, `(hrs)`; a chart axis or a
-report title states its unit for a scale (`(h.)` on the draftsman charts) — that is a
+report title may state its unit when its scale needs it (`(h.)` on the draftsman charts) — that is a
 chart rule, not a table one.
 
 ## 3. Prose vs cells
