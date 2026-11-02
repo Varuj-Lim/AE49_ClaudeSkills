@@ -163,6 +163,7 @@ and 🤖 lines (owner 2026-10-22: the decide → ask report had the decisions an
 1. **Re-read the state file and the tail of the log first.** Not ON → do nothing and stop the
    heartbeat. If the five session skills (`~/.claude/CLAUDE.md`) are not in context — a compact
    happened — re-invoke them before anything else.
+1b. **Session length** follows `ae49-router` § Session length: `ask` obeys its table, `decide` carries on past a compact until 85 % (owner Q348 a, 2026-11-02).
 2. **Pick the next actionable item inside the scope** by the chain graph (`ae49-router`); respect
    the budget. Nothing actionable and nothing running → stop the heartbeat (ScheduleWakeup `stop`)
    and write `QUEUE EMPTY` in the log; the state stays ON until the owner's `off`, so the report still runs.

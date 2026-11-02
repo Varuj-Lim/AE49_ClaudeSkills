@@ -115,6 +115,8 @@ ask the owner to run `/context` and wait for the number.
 The 🧹 line sits right above the 🤖 line and names the nearest break:
 `🧹 Session ยาวแล้ว — จุดพักถัดไป: <what is running, about when it ends>`.
 
+**Autopilot in `decide`** (owner Q348 a, 2026-11-02): the owner is away, so 75 % and a compact do not stop the run; after a compact it re-invokes the session skills and carries on. At 85 % it starts nothing new and swaps at the first clean break. In `ask` the table applies as written.
+
 **A clean break** means no agent running, no gate section open, and no question that lives only in chat. Unfinished work may
 stay when the in-flight memory names it: an uncommitted tree, or a built but unaudited worktree.
 
