@@ -64,7 +64,7 @@ After the report, ask the user **which finding(s) they want to fix** (they refer
 
 - Write the fix as `docs/plans/<slug>.md` from that skill's `TEMPLATE-FORMAT.md` (its canonical template).
 - Set **Status** `Ready`, stamp **Created** with today's date, and fill **Files to touch** completely (Main's overlap check reads it to detect two builds colliding on the same file).
-- Commit & push ONLY that plan file (never `git add -A`).
+- Commit ONLY that plan file (never `git add -A`) and push the backup branch, never the deploy branch (`web-ref-deploy-landing` §4).
 
 The scrutiny already did the design work, so reuse the findings / evidence / fixes as the plan content and skip the grilling step unless a fix decision is still open. Hand off — Main builds it later via the `impl:` lane (an `ae49-implement` agent). Never run the app-code fix inline.
 

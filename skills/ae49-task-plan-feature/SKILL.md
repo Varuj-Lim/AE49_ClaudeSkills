@@ -98,14 +98,12 @@ applies if Main writes it inline.
    not run `git add`, `git commit`, `git push`, or any branch command; leave
    `docs/plans/<slug>.md` uncommitted in the working tree and return its path to Main.
 
-   **Main then commits the plan to `main` AND PUSHES IT.** This push is a hard
-   prerequisite, not a nicety: `ae49-implement` runs in a throwaway worktree created
-   from **origin/main**, so an unpushed plan is invisible to the builder and the build
-   will fail to find its own plan file. Stage ONLY the plan file(s) this run wrote or
-   changed (`docs/plans/<slug>.md`, plus any existing plan whose `**After:**` was edited
-   on the urgent path) — never `git add -A`. `git pull --rebase`, then push. **Do not
-   spawn ae49-implement until `git push` has succeeded.** If no remote is configured,
-   tell the user the plan cannot be built by a worktree agent until one is.
+   **Main then commits the plan locally and pushes the BACKUP branch, never the deploy
+   branch** (`web-ref-deploy-landing` §4; in the hubs a push to the deploy branch deploys). Builders
+   start from the local default branch (their Step 0), so a local commit is what they need.
+   Stage ONLY the plan file(s) this run wrote or changed (`docs/plans/<slug>.md`, plus any
+   existing plan whose `**After:**` was edited on the urgent path) — never `git add -A`.
+   **Do not spawn ae49-implement until that commit exists.**
 
 9. **Mark complete.** If you are Main and tracking this run in the session task list,
    mark it `completed`. The ae49-plan agent has no task tools — it simply returns its
@@ -116,9 +114,8 @@ applies if Main writes it inline.
    implement here. ALWAYS close the turn with this exact standard hand-off line, so the
    user knows the plan is finished and you're ready for the next one:
 
-   > ✅ Planning done — plan committed and **pushed to main** (the builder's worktree
-   > needs it there). Say `impl: <slug>` to dispatch ae49-implement. Ready for your
-   > next `plan:`.
+   > ✅ Planning done — plan committed on the default branch and backed up. Say
+   > `impl: <slug>` to dispatch ae49-implement. Ready for your next `plan:`.
 
 ## Output
 

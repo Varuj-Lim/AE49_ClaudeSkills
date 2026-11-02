@@ -128,14 +128,12 @@ findings must reflect the code as it is right now.
 
    Set **Status** to `Ready` and stamp **Created** with today's date.
 
-9. **Commit + push the plan**, exactly as `ae49-task-plan-feature` step 8. Confirm you are on
+9. **Commit the plan and push the backup branch, never the deploy branch**, exactly as `ae49-task-plan-feature` step 8. Confirm you are on
    the default branch first (`git rev-parse --abbrev-ref HEAD`); if not, do NOT commit — tell
    the user the plan is written and held. Then stage ONLY `docs/plans/<slug>.md` plus any existing plan whose
    `**After:**` you edited in step 8's wiring — never `git add -A` (`git add <file>` creates the
    folder for you). Commit with a message naming the extraction (follow the repo's commit
-   convention). Then, if a remote is configured, `git pull --rebase` first (so the push isn't
-   rejected non-fast-forward) and push. If no remote, commit only and tell the user push was
-   skipped.
+   convention). Then push the backup branch (`web-ref-deploy-landing` §4).
 
 10. **Mark complete.** Mark this audit run complete in the session task list: call
     **TaskUpdate** to set the audit task's status to `completed`. If you never registered
