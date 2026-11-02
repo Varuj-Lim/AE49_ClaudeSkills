@@ -199,6 +199,7 @@ drift across skills.
 
 After drafting, verify:
 
+- [ ] `node ~/.claude/skills/ae49-task-write-a-skill/scripts/validate-skills.cjs` exits 0 (an unquoted `: ` in a description silently loses its trigger words)
 - [ ] Description includes triggers ("Use when...")
 - [ ] Name has the `<scope>-<type>-<name>` form (ref/task segment)
 - [ ] SKILL.md under 150 lines
