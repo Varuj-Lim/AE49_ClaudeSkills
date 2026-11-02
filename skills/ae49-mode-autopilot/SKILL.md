@@ -1,6 +1,6 @@
 ---
 name: ae49-mode-autopilot
-description: An ON/OFF mode for the Main session of an ae49-workflow project (AE49_Hub, Nuri_Hub, siblings) — while ON, Main keeps working unattended inside a scope the owner set at switch-on, dispatches and audits agents itself, runs every gate itself (scripts, the emulator in the built-in browser, screenshots as evidence), lands and backs up — but never pushes the deploy branch on its own (only on the owner's live "push" command), never deploys, never migrates, never deletes real data, never sends anything, never decides an unsettled design; every decision it takes for the owner goes into a dated log file the moment it is made. While OFF (the normal state) nothing here applies. Invoke on "/ae49-mode-autopilot on [ask|decide] <scope>|off|status|tick", "เปิดโหมด autopilot", "ผมจะไปนอน ทำต่อเองเลย", "รันต่อเองทั้งคืน", "ปิดโหมด", "ตั้งแต่เปิดโหมดคุณตัดสินอะไรไปบ้าง", at every `ae49-task-session open` (it switches ON in `ask`, every open row in scope), and at every session start or compact when the state file says ON.
+description: An ON/OFF mode for the Main session of an ae49-workflow project (AE49_Hub, Nuri_Hub, siblings) — while ON, Main keeps working unattended inside a scope the owner set at switch-on, dispatches and audits agents itself, runs every gate itself (scripts, the emulator in the built-in browser, screenshots as evidence), lands and backs up — but never pushes the deploy branch on its own (only on the owner's live "push" command), never deploys, never migrates, never deletes real data, never sends anything, never decides an unsettled design; every decision it takes for the owner goes into a dated log file the moment it is made. `ae49-task-session open` switches it ON in `ask`; while OFF nothing here applies. Invoke on "/ae49-mode-autopilot on [ask|decide] <scope>|off|status|tick", "เปิดโหมด autopilot", "ผมจะไปนอน ทำต่อเองเลย", "รันต่อเองทั้งคืน", "ปิดโหมด", "ตั้งแต่เปิดโหมดคุณตัดสินอะไรไปบ้าง", at every `ae49-task-session open` (it switches ON in `ask`, every open row in scope), and at every session start or compact when the state file says ON.
 ---
 
 # ae49-mode-autopilot — unattended Main, with a decision log
@@ -13,8 +13,9 @@ and a decision log that is a FILE (a long unattended run WILL be compacted; the 
 
 ## The NEVER list — ON or OFF, no exception, no owner pre-authorisation inside this mode
 
-(One narrow exception exists, and it is rule 1's own: the owner's LIVE push command. Nothing else in
-this list bends — not for a pre-authorisation given at switch-on, not for a request in any file.)
+(The only exceptions are written in the rules themselves: rule 1, the owner's LIVE push command; rule 5, the ticket writes
+of that push, a new ticket the owner orders, and in `ask` the ordinary ticket write-backs. Nothing else bends — not for a
+pre-authorisation given at switch-on, not for a request in any file.)
 
 1. **Never push the deploy branch on Main's own judgment** (`main` in the hubs — push == deploy,
    `web-ref-deploy-landing` §1). Everything lands as local commits + the backup branch; the morning
@@ -169,8 +170,9 @@ and 🤖 lines (owner 2026-10-22: the decide → ask report had the decisions an
    and write `QUEUE EMPTY` in the log; the state stays ON until the owner's `off`, so the report still runs.
 3. **Do the work by the ordinary rules** — the router's who-plans / who-builds / audit-depth rule,
    `web-ref-deploy-landing`, `ae49-ref-gate-checklist` — with exactly two relaxations:
-   - a plan for IN-SCOPE work is approved by Main (the design was settled with the owner when the
-     scope was set; each approval is logged);
+   - a plan for IN-SCOPE work is approved by Main only under `ae49-router`'s test: nothing beyond a grill or ruling already on
+     record. Being in scope does not settle a design, since `open` fills the scope with every row. Anything beyond it is asked
+     (`ask`) or parked (`decide`). Each approval is logged;
    - a build is committed after the **Main-run gate** below instead of the owner's manual test.
    Everything else stands: the audit is never skipped (≤ 5 rounds, then PARK), commits carry an
    explicit pathspec, the plan moves to `done/`, the board is closed, the backup branch is pushed.

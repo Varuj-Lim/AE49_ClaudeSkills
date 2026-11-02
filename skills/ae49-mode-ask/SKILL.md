@@ -11,9 +11,9 @@ commits. This mode makes that contract explicit.
 
 ## Turning it on / off
 
-- **ON:** the user says "ask mode", "โหมดถาม", "ถามเฉยๆ", "แค่ถามนะ",
+- **ON:** the user says "ask mode", "ถามเฉยๆ", "แค่ถามนะ",
   "consult mode", or `/ae49-mode-ask`. Confirm with one short line and the
-  💬 marker, then answer.
+  💬 marker, then answer. While ON, Autopilot's `tick` pauses and no agent is dispatched. ("โหมดถาม" is Autopilot's `ask`, not this mode.)
 - **OFF:** the user says "ask mode off", "stop ask mode", "normal mode" — or
   gives an **explicit go** on something discussed: "ทำเลย", "จัดไป", "ลงมือ",
   "go ahead", or any router lane prefix (`plan:` / `impl:` / `refine:`).
