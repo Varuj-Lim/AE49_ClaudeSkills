@@ -1,6 +1,6 @@
 ---
 name: web-ref-routes
-description: "Canon (web-ref-*) route shape: a record page is /<list>/[id]/view, edit /<list>/[id]/edit, create /<list>/add, nested under its list; bare /<list>/[id] has NO page (404, never a redirect); a renamed route moves every link in the same change, links stored in data (bell, LINE, mail) by a ruled migration with a dry run. Use for any route, URL or link."
+description: "Canon (web-ref-*) route shape: record page /<list>/[id]/view, edit /<list>/[id]/edit, create /<list>/add; bare /<list>/[id] has NO page (404, never a redirect); a renamed route moves every link, links stored in data (bell, LINE, mail) by a ruled migration. Use for any route, URL, path or link; ลิงก์เสีย, หน้า detail, ลิงก์ใน bell, เปิดเป็นหน้า."
 ---
 
 # web-ref-routes — the record-page route shape

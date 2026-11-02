@@ -22,3 +22,7 @@ Why the rules are shaped as they are. The rules themselves live in `SKILL.md`; a
 - **The faster line (owner 2026-10-20, the same day).** *"ช่วยเพิ่มด้วยว่าสามารถทำให้เร็วขึ้นได้ด้วยอะไรในรายงานด้วยนะ"*.
 - **Autopilot line (owner 2026-10-07).** The owner had to ask "did you go into autopilot?"; a fixed last line answers that at a
   glance. It replaced the open-day row of owner Q11 a the same day.
+
+Old trigger words, cut from the description because they did not fit the 350-character limit:
+
+- format the report per ae49-ref-report-format

@@ -1,6 +1,6 @@
 ---
 name: web-ref-table
-description: "Canon (web-ref-table) for every hub table, three types: GENERAL (lists, queues), CALCULATION (spreadsheet-ported), SCHEDULE (Gantt/calendar). Column widths T1-T7, header rules T8-T10, search + filter + Clear, sort arrows, pagination (cap 50), bulk verbs, ⋮ menu, Excel paste. Use for ANY table; ตารางขยับ, ลูกศร sort, วางข้อมูลจาก Excel."
+description: "Canon (web-ref-table) for every hub table, three types: GENERAL, CALCULATION (spreadsheet-ported), SCHEDULE (Gantt/calendar). Column widths, header rules, search + filter + Clear, sort arrows, pagination (cap 50), bulk verbs, ⋮ menu, Excel paste. Use for ANY table; ตารางขยับ, หน่วยใต้หัวตาราง, โหลดนาน, ลูกศร sort, วางข้อมูลจาก Excel, ใส่ราคา."
 ---
 
 # Table canon - one folder, three table types

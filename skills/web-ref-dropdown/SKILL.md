@@ -1,6 +1,6 @@
 ---
 name: web-ref-dropdown
-description: "Canon (web-ref-*) for adding a NEW value in a dropdown: the dropdown itself offers one row Use \"<typed>\" as a new value, never a separate + Add button, datalist or other page; shared-catalog values open the catalog's create popup from that row. Closed lists (status, people, records) stay strict. Use for any dropdown or combobox; เพิ่มตัวเลือก."
+description: "Canon (web-ref-*) for a NEW dropdown value: the dropdown offers one row Use \"<typed>\" as a new value, never a separate + Add button, datalist or other page; shared-catalog values open its create popup. Closed lists (status, people, records) stay strict. Use for any dropdown or combobox; เพิ่มตัวเลือก, เพิ่มข้อมูลใน dropdown, add a new option."
 ---
 
 # web-ref-dropdown — adding a new value from the dropdown itself

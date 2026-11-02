@@ -1,6 +1,6 @@
 ---
 name: web-ref-popup
-description: "Canon (web-ref-*) for every hub popup, modal and dialog: built from POPUP_* tokens; actions by KIND (View / Edit top-right on read-only, Cancel + confirm bottom row on confirm or form); close by KIND (read-only also on click-outside, confirm or form only by its button, mixed per mode); no Escape key, no animation. Use for any popup or picker."
+description: "Canon (web-ref-*) for every hub popup, modal, dialog: POPUP_* tokens; actions by KIND (View / Edit top-right on read-only, Cancel + confirm bottom row on confirm or form); read-only also closes on click-outside, confirm or form only by its button; no Escape, no animation. Use for any popup or picker; close when I click outside, a confirm dialog."
 ---
 
 # Popups — shared canon

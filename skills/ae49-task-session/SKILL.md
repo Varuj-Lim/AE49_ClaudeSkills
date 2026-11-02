@@ -1,6 +1,6 @@
 ---
 name: ae49-task-session
-description: "Session ceremonies of an ae49-workflow project: open starts the day or a fresh session, swap closes THIS session on the SAME machine, close ends the day before switching MACHINES. No argument: NEW session runs open, used one swap; close only when typed. Use on เปิดวัน, มาทำต่อ, ปิด session, ปิดวัน, ย้ายเครื่อง. Handoff DOCUMENT: ae49-task-handoff."
+description: "Session ceremonies: open starts the day or a fresh session, swap closes THIS session on the SAME machine, close ends the day before switching MACHINES. No argument: NEW session runs open, used one swap; close only when typed. Use on เปิดวัน, เปิด session ใหม่, มาทำต่อ, ปิด session, ปิดวัน, ย้ายเครื่อง. Handoff DOCUMENT: ae49-task-handoff."
 argument-hint: "(empty) = open in a new session / swap in a used one · open · swap · close"
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: web-task-audit-project
-description: "Canon PROCESS for a hub's whole-codebase pattern audit: scope/menu parsing, PHASED execution (a scope over 6 topics runs one phase per context with a disk checkpoint), resume, router fan-out, report per ae49-ref-report-format, docs/plans output. Topics come from the project's <proj>-task-audit-project. Use to audit patterns. No app code edited."
+description: "Canon PROCESS for a hub's whole-codebase pattern audit: PHASED execution (over 6 topics runs one phase per context with a disk checkpoint), resume, report per ae49-ref-report-format, docs/plans output. Topics come from the project's <proj>-task-audit-project. Use on audit the project, sweep the app, audit patterns. No app code edited."
 ---
 
 # Project Pattern Audit — canon process

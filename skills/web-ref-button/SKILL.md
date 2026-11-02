@@ -1,6 +1,6 @@
 ---
 name: web-ref-button
-description: "Canon (web-ref-*) cross-hub button rule: every button label renders on ONE line, never wrapped; a crowded row gives way elsewhere (subtitle wraps, action group keeps its width, whole buttons wrap), never inside a button. Use for any button, pill or header action; ปุ่มขึ้น 2 บรรทัด, ปุ่มตกบรรทัด. Each hub's <hub>-ref-button holds tokens."
+description: "Canon (web-ref-*) button rule: every button label renders on ONE line, never wrapped; a crowded row gives way elsewhere (subtitle wraps, action group keeps its width, whole buttons wrap), never inside a button. Use for any button, pill or header action; ปุ่มขึ้น 2 บรรทัด, ปุ่มตกบรรทัด, button wraps, label on two lines. Tokens: <hub>-ref-button."
 ---
 
 # web-ref-button — the cross-hub button canon

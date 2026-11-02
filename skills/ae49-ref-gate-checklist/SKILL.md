@@ -7,7 +7,7 @@ description: "The ONE rulebook for the owner's manual-test gate in every ae49-wo
 
 THIS file keeps the working core — invoke it before every gate, run
 `validate-gate.cjs`, the item format with its three tags, the 5–7 budget — so one read still gives the
-rules a compact erases; the long sections live in the
+rules a compact returns cut or not at all; the long sections live in the
 topic files below. Why the rules are shaped as they are, and the old section names: [history.md](history.md).
 
 ## Read X when Y
@@ -22,8 +22,8 @@ topic files below. Why the rules are shaped as they are, and the old section nam
 | [closed-format.md](closed-format.md) | landing: the CLOSED payload shape, the closed-line grammar and slot rules (what `close-gate.cjs` writes) |
 | [delegated.md](delegated.md) | handing a gate section to an `ae49-gate` sub-agent: who decides what, ports, running gates at once, starting during the audit; tools in `resources/gate-tools/` |
 
-**Why a skill plus scripts:** the router's body leaves context with a compact, so these rules are a skill Main invokes
-before every gate, and the checkable half of them is a SCRIPT, which a compact cannot erase.
+**Why a skill plus scripts:** a compact returns the router's body cut or not at all, so these rules are a skill Main invokes
+before every gate, and the checkable half of them is a SCRIPT, which a compact cannot cut.
 
 ## Use the scripts — they hold what a machine can check
 

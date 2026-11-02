@@ -1,6 +1,6 @@
 ---
 name: ae49-mode-autopilot
-description: "ON/OFF mode for Main in ae49-workflow projects: works unattended inside the scope set at switch-on, runs the gates, logs each decision. NEVER pushes the deploy branch unasked, deploys, migrates, deletes real data, sends or decides an unsettled design. Invoke on เปิดโหมด autopilot, ผมจะไปนอน, รันต่อเอง, ปิดโหมด, tick, session open or compact."
+description: "ON/OFF mode for Main: works unattended inside the scope set at switch-on, logs each decision. NEVER pushes the deploy branch unasked, deploys, migrates, deletes real data, sends or decides an unsettled design. Invoke on เปิดโหมด autopilot, ผมจะไปนอน, รันต่อเอง, ปิดโหมด, ตั้งแต่เปิดโหมดคุณตัดสินอะไรไปบ้าง, tick, session open or compact."
 ---
 
 # ae49-mode-autopilot — unattended Main, with a decision log

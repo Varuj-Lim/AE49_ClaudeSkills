@@ -1,6 +1,6 @@
 ---
 name: web-ref-form-errors
-description: "Canon (web-ref-*) for a wrong form value: the field gets a RED FRAME and the box above the Save row says what is wrong, always both. A wrong value goes red at once, a required empty field when Save is refused, and the frame clears when the field is right. Use for any form, validation, setError or editable grid; กรอบแดง, ช่องไหนผิด."
+description: "Canon (web-ref-*) for a wrong form value: the field gets a RED FRAME and the box above the Save row says what is wrong, always both. A wrong value goes red at once, an empty required field on refused Save; the frame clears when right. Use for any form, validation, setError or editable grid; กรอบแดง, ช่องไหนผิด, make this field red, show an error."
 ---
 
 # Form errors: the red frame and the box

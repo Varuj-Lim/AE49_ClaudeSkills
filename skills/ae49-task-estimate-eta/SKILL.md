@@ -1,6 +1,6 @@
 ---
 name: ae49-task-estimate-eta
-description: "Estimates how long open work in an ae49-workflow project will take and the clock time (ICT) it all finishes, from the plan board, open-items register and running agents, using MEASURED stage durations. Default short: a few Thai lines; full (ขอตาราง, แบบละเอียด) adds the English table. Use on อีกนานไหม, เสร็จกี่โมง, ประเมินเวลา, ETA."
+description: "Estimates how long open work in a project will take and the clock time (ICT) it all finishes, from the plan board, open-items register and running agents, using MEASURED stage durations. Default: a few Thai lines; full (ขอตาราง, แบบละเอียด) adds the English table. Use on อีกนานไหม, เสร็จกี่โมง, งานทั้งหมดจะเสร็จเมื่อไหร่, ประเมินเวลา, ETA."
 ---
 
 # Estimate ETA — how long each open item takes, and when it all finishes

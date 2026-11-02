@@ -113,7 +113,7 @@ The description is **the only thing your agent sees** when deciding which skill 
 
 **Format**:
 
-- Max 1024 chars
+- Max 350 chars, because all descriptions share a listing budget of 1 % of the context window (`skillListingBudgetFraction`), and a long one pushes other skills out of the listing. Cut prose, keep the words a person really types, Thai first; a phrase that does not fit goes into the skill's `history.md`. `scripts/validate-skills.cjs` fails over 350
 - Write in third person
 - First sentence: what it does
 - Second sentence: "Use when [specific triggers]"
@@ -163,7 +163,7 @@ skill costs a description slot. So:
   `node_modules`, `.next`) and update them in the SAME change — skills, agents, `CLAUDE.md`,
   `AGENTS.md`, audit topics, code comments, plus a handoff prompt for each sibling hub that cites them —
   or keep the most-cited skill's name as the folder name.
-- **Description ≤ 1,024 characters**, index `SKILL.md` ≤ 150 lines; it links every topic file directly
+- **Description ≤ 350 characters** (the listing budget, see Description Requirements), index `SKILL.md` ≤ 150 lines; it links every topic file directly
   (one level of links, even into subfolders). A topic file over ~500 lines gets its own subfolder.
 - **Split a topic back out** only when it needs triggers the index description cannot carry, or must load
   on its own — the 2026-09-25 split of the gate rules out of `ae49-router` (to survive a compact) is the

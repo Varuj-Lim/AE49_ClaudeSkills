@@ -30,7 +30,7 @@ because no new session began. The session therefore keeps a perfect memory of WH
 rules for HOW. **Re-invoke all five immediately after any compact — before the next gate, report, landing or push.** A
 summary can carry a decision; it cannot carry a procedure it never mentioned. A SessionStart hook
 (`~/.claude/hooks/after-compact-note.cjs`, matcher `compact`) prints a reminder after every compact; it only reminds, the
-re-invoking is still Main's. The story behind this rule: `~/.claude/history-claude-md.md`.
+re-invoking is still Main's. The story behind this rule: `dotclaude/history.md` in the skills repo.
 
 # Skills repo sync (rule 2026-08-13)
 

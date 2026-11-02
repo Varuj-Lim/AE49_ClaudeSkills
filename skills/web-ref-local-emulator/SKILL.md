@@ -1,6 +1,6 @@
 ---
 name: web-ref-local-emulator
-description: "Canon (web-ref-*) emulator discipline for hubs with one-click .cmd launchers: the OWNER presses launchers, never Claude (bar stop on a live shutdown order); probe before naming a button; aliveness check; port scheme; look-alike safe-kill; refresh; stale-cache 404. Use to start, stop, refresh or debug an emulator, or before naming any launcher."
+description: "Canon (web-ref-*) emulator discipline for hubs with .cmd launchers: the OWNER presses launchers, never Claude (bar stop on a live shutdown order); probe before naming a button; look-alike safe-kill; refresh; stale-cache 404. Use to start, stop, refresh or debug an emulator, before naming any launcher, or when a launcher/emulator ruling lands."
 ---
 
 # Local emulator — shared discipline

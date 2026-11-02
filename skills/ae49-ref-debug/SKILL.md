@@ -1,6 +1,6 @@
 ---
 name: ae49-ref-debug
-description: "Debugging discipline in two levels: SKILL.md is the everyday order to follow before suggesting any fix; hard.md is the fuller loop (pass/fail check, ranked causes, regression test). Use when debugging starts: bug report, broken, crashing, pasted error or stack trace. Read hard.md for on-and-off bugs, slowdowns, regressions."
+description: "Debugging discipline in two levels: SKILL.md is the everyday order to follow before suggesting any fix; hard.md is the fuller loop (pass/fail check, ranked causes, regression test). Use when debugging starts: bug report, broken, crashing, diagnose this, pasted error or stack trace. Read hard.md for on-and-off bugs, slowdowns, regressions."
 ---
 
 # Debugging

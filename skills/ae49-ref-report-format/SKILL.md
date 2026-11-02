@@ -1,6 +1,6 @@
 ---
 name: ae49-ref-report-format
-description: "The one format for any findings, review, audit or status report: plain language, emoji-tagged severity tiers, a per-finding ID the user can refer back to, concise labelled lines, an emoji verdict. Use for every review, audit, findings list or status board, and when a skill says format per ae49-ref-report-format. Never an ad-hoc layout."
+description: "The one format for any findings, review, audit or status report: plain language, emoji-tagged severity tiers, a per-finding ID the user can refer back to, concise labelled lines, an emoji verdict. Use for every status board, when a skill says format per ae49-ref-report-format, and on review this, audit that, what's wrong with, give me findings."
 ---
 
 # Report format
@@ -190,7 +190,7 @@ Which renders as:
   from `~/.claude/autopilot/<project-folder>/state.json` (no file = Off):
   `🤖 Autopilot mode: On (ask)` · `🤖 Autopilot mode: On (decide)` · `🤖 Autopilot mode: Off`.
   It is a status line, never a board row — the Autopilot state is NOT a table row on any
-  board, the open-day board included. It is not a row, so the board the owner scans for their own moves holds only actions.
+  board, the open-day board included. It is not a row because the owner scans the board for rows to act on, and this state is nothing to act on.
   It follows the 👤 line because the ask is still the last thing to READ; the 🤖 line is only
   glanced at.
 

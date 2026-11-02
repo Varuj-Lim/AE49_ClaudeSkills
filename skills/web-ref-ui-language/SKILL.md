@@ -1,6 +1,6 @@
 ---
 name: web-ref-ui-language
-description: "Canon (web-ref-*) for UI language: EXPLANATIONS ARE THAI, IDENTIFIERS ARE ENGLISH, US spelling. Sentences staff read (hints, captions, empty states, confirm BODIES, errors, toasts) are plain Thai; what names something on screen (headings, labels, buttons, status, dialog TITLES) stays English; never Thai on a control. Use for any UI string."
+description: "Canon (web-ref-*) for UI language: EXPLANATIONS ARE THAI, IDENTIFIERS ARE ENGLISH, US spelling. Sentences staff read (hints, empty states, confirm BODIES, errors, toasts) are plain Thai; what names something (headings, labels, buttons, status, dialog TITLES) stays English. Use for any UI string; ทำไมไม่เป็นไทย, add an error message, translate this."
 ---
 
 # UI language — shared canon (Thai explainers · English identifiers)

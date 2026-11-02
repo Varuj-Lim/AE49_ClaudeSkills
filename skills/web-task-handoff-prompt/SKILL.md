@@ -1,6 +1,6 @@
 ---
 name: web-task-handoff-prompt
-description: "The ONE format for a cross-project HANDOFF PROMPT: the paste-ready block that carries a change to a sibling hub's OWN session. The only allowed way across projects (one session, one project), never a cross-edit. Use on เขียน prompt ให้ Nuri, handoff ให้อีกโปรเจกต์, port this to the other hub. SAME-project fresh session: ae49-task-session swap."
+description: "The ONE format for a cross-project HANDOFF PROMPT: the paste-ready block that carries a change to a sibling hub's OWN session. The only allowed way across projects, never a cross-edit. Use on เขียน prompt ให้ Nuri, handoff ให้อีกโปรเจกต์, ส่งไปแก้ฝั่งนั้นด้วย, port this to the other hub. SAME-project fresh session: ae49-task-session swap."
 ---
 
 # Cross-project handoff prompt — the shared format

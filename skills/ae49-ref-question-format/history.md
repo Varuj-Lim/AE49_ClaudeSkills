@@ -17,3 +17,9 @@ Why the rules are shaped as they are. The rules themselves live in `SKILL.md`; a
 - **Four facts on their own lines (owner rule 2026-10-06).** The owner's words: "Create new format rule … you have to create
   new line for ข้อดี ข้อเสีย ต้นทุน separate for each choice".
 - **Counter restart (owner 2026-10-28).** *"เริ่มรันเลข Q จาก 1 ใหม่ได้แล้วนะ 300 กว่าแล้วเยอะมากแล้ว"*.
+
+Old trigger words, cut from the description because they did not fit the 350-character limit:
+
+- which option
+- did you mean X
+- what goes wrong

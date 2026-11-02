@@ -1,11 +1,13 @@
 ---
 name: web-ref-record-codes
-description: "Canon (web-ref-*) for running record codes (TK0040, ITK, LO, OT, PR, DMO, any counter): issued once, NEVER reused even after deletion; counters only go up, gaps are normal, not fixed. Real records are canceled or rejected; Delete is for test or mistaken ones. Use for any counter, code-minting create flow, delete action; ทำไมเลขข้าม, ลบแล้วเลขหาย."
+description: "Canon (web-ref-*) for record codes (TK0040, ITK, LO, OT, PR, DMO, any counter): issued once, NEVER reused even after deletion; counters only go up, gaps are normal. Real records are canceled or rejected; Delete is for test or mistaken ones. Use for any counter, code-minting create flow, delete action; ทำไมเลขข้าม, ลบแล้วเลขหาย, ให้ใช้เลขเดิม."
 ---
 
 # Record codes — never reused
 
 **Owner ruling 2026-10-30 (AE49_Hub, Q173 a):** "เลขที่ใช้แล้วห้ามใช้ซ้ำ แม้ใบนั้นจะถูกลบ" — and, the same day, "อันนี้คือสำหรับทุกหน้าเลย … เอาไปใส่ในระดับ User". The owner had asked whether deleting the last record (TK0039) should let the next one take its number; Main recommended no and the owner ruled it for every page.
+
+Each hub keeps only its counter paths in its own facts skills; the rule changes here once.
 
 ## The rule
 

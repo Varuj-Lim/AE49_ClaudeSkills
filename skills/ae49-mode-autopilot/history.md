@@ -31,3 +31,9 @@ Why the rules are shaped as they are. The rules themselves live in `SKILL.md`; a
   split into two named modes the same day.
 - **Decision report in Thai cells (owner rule 2026-10-21).** *"เขียนรายงานรูปแบบตารางเป็นข้อๆในภาษาไทย"* then *"ชื่อหัวข้อเป็น English ได้
   แต่คำอธิบายอยากให้เป็นไทยนะ"*.
+
+Old trigger words, cut from the description because they did not fit the 350-character limit:
+
+- ผมจะไปนอน ทำต่อเองเลย
+- รันต่อเองทั้งคืน
+- /ae49-mode-autopilot on [ask|decide] <scope>|off|status|tick

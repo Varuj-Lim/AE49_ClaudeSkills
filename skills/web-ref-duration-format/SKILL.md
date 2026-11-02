@@ -1,6 +1,6 @@
 ---
 name: web-ref-duration-format
-description: "Canon (web-ref-*) for writing a duration: MINUTE-PRECISE reads 1h 4m / 42m / 2h, HALF-HOUR-GRID reads 3.5h / 4h, never mixed; a column is named for the quantity (Late, Total Hours), never the unit (Late (min)); Thai prose says สาย 64 นาที, cells say 1h 4m. Use for any hours, minutes, lateness or time-span figure; how long, late by."
+description: "Canon (web-ref-*) for writing a duration: MINUTE-PRECISE reads 1h 4m / 42m / 2h, HALF-HOUR-GRID reads 3.5h / 4h, never mixed; a column is named for the quantity, never the unit (Late (min)); Thai prose says สาย 64 นาที. Use for any hours, minutes or time-span figure; how long, late by, show the hours, add a minutes column, format the time worked."
 ---
 
 # Duration format — shared canon

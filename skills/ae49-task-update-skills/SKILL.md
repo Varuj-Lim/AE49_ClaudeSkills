@@ -59,15 +59,17 @@ silently leaving the agents stale.
      same-turn mirror rule) → STILL apply, but first stash the local version in
      the session scratchpad and NAME it in the report, so nothing is lost
      silently and the owner can re-add it via the clone afterwards.
-   - **`UPDATE CLAUDE.md` is the scrub, not drift.** The public repo's
+   - **`UPDATE CLAUDE.md` is a real difference: diff it.** The public repo's
      `dotclaude/CLAUDE.md` carries scrubbed wording (§Files I hand you,
-     2026-08-28 — see the hub memory `public-repo-is-scrubbed`), so that line
-     shows every day and is NEVER applied: the local file is the real one. Only
-     a NEW rule in the repo copy (diff it) gets ported by hand. This supersedes
+     2026-08-28 — see the hub memory `public-repo-is-scrubbed`), and the local
+     file now holds the same text (diff ignoring line endings, 2026-11-02), so
+     that line normally stays quiet. When it shows it is NEVER applied blind:
+     the local file is the real one. Only a NEW rule in the repo copy (diff it)
+     gets ported by hand. This supersedes
      the 2026-08-24 sentence that CLAUDE.md follows the overwrite rule. If the
      repo has no `dotclaude/CLAUDE.md`, CLAUDE.md is silently skipped anyway.
 3. Apply. `-Apply` is all-or-nothing and would drag `CLAUDE.md` along, so while
-   the scrub line is present apply **per item**: copy each `ADD` / `UPDATE`
+   a `CLAUDE.md` line shows apply **per item**: copy each `ADD` / `UPDATE`
    skill folder down from the clone (mirror semantics — drop files the repo
    dropped), agents likewise; run `-Apply` wholesale only when no `CLAUDE.md`
    line shows. Re-run the preview to prove it is quiet. The script itself never

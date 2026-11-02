@@ -1,6 +1,6 @@
 ---
 name: web-ref-deploy-landing
-description: "Canon (web-ref-*) landing and deploy discipline for hubs whose default branch auto-deploys to Firebase App Hosting: push==deploy, non-deploying backup branch, rules deployed SEPARATELY and BEFORE the manual-test gate, one commit per feature with explicit pathspec, tiny-fix fast path, rollback. Use to land, commit, push, deploy or roll back."
+description: "Canon (web-ref-*) landing and deploy discipline for hubs whose default branch auto-deploys to App Hosting: push==deploy, backup branch, rules deployed SEPARATELY and BEFORE the manual-test gate, one commit per feature with explicit pathspec, rollback. Use to land, commit, push, deploy or roll back, or when a deploy/landing ruling arrives."
 ---
 
 # Landing and deploying — shared discipline

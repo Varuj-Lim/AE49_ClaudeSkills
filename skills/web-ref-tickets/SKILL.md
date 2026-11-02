@@ -1,11 +1,13 @@
 ---
 name: web-ref-tickets
-description: "Canon (web-ref-*) for Ticket pages: the TRIAGER gets Change status, Cancel, Delete (in that order) in both the list row's ⋮ and the ticket page's ⋮; Change status offers every status but the current; both write exactly what the edit form's Status picker writes (one write path); the submitter keeps own Cancel. Use for any ticket page."
+description: "Canon (web-ref-*) for Ticket pages: the TRIAGER gets Change status, Cancel, Delete (that order) in both list row and ticket page ⋮; both write exactly what the edit form's Status picker writes; the submitter keeps own Cancel. Use for any ticket page; ปุ่มยกเลิกใน 3 Dot, เปลี่ยน Status ใน 3 Dot, change the ticket status, cancel a ticket."
 ---
 
 # Tickets — shared canon
 
 **Owner rulings 2026-10-30 (AE49_Hub):** "ช่วยทำปุ่มยกเลิกใน 3 Dot ให้ผมเพิ่มหน่อย", then "ให้ผมสามารถเปลี่ยน Status เป็นทุกแบบได้ใน 3 Dot เลย จะได้ไม่ต้องกด เข้าไป Edit Status มันลำบาก", and "อันนี้ควรเป็นกติกากลางของหน้า Ticket" — so this is the rule for every hub's Ticket pages, not one hub's.
+
+Each hub keeps its paths and role mapping in its own `<hub>-ref-tickets` facts skill; the rule changes here once.
 
 ## The triager's ⋮ — list row AND ticket page
 

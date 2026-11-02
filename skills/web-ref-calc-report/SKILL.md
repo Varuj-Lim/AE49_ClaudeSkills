@@ -1,6 +1,6 @@
 ---
 name: web-ref-calc-report
-description: "Canon (web-ref-*) for a calculation report in any hub: every computed value shows its equation, the same equation with real values put in, and the result with unit, as separate parts checkable by hand; a computed table value has an ƒx at the cell's top right opening a how-calculated popup. Use for design sheets; สมการ, แทนค่า."
+description: "Canon (web-ref-*) for a calculation report: every computed value shows its equation, the same equation with real values put in, and the result with unit, checkable by hand; a computed table value has an ƒx at the cell's top right opening a how-calculated popup. Use for design sheets; รายการคำนวณ, ค่ามาจากไหน, สมการ, แทนค่า, วิธีคำนวณของช่องนี้."
 ---
 
 # Calculation reports show their working

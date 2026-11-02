@@ -48,3 +48,7 @@ other both ways and ran as pairs); one name with three verbs is easier to reach 
   replaced the 2026-10-06 "ask every close-day" rule.
 - **The owner's emulator closes itself once shutdown is ordered (owner rule 2026-10-07).** The owner's words: "once I told you to
   close computer I allow you to close emulator by using stop-emu.cmd, don't ask me … sometime I already away from keyboard".
+
+Old trigger words, cut from the description because they did not fit the 350-character limit:
+
+- open/close the day

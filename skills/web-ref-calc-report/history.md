@@ -1,0 +1,6 @@
+# web-ref-calc-report history
+
+Old trigger words, cut from the description because they did not fit the 350-character limit:
+
+- เครื่องหมายในช่อง
+- show the working

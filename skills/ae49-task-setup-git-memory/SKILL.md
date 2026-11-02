@@ -1,6 +1,6 @@
 ---
 name: ae49-task-setup-git-memory
-description: "Set up git-synced, per-person Claude memory in a project repo: .claude/memory/shared/ (team truths) + <person>/ (working style), a router MEMORY.md with a git-user to folder table, and the CLAUDE.md rule that makes every session read and write it. Use on set up git memory, sync memory via git, or when a second machine or teammate splits memory."
+description: "Set up git-synced, per-person memory in a project repo: .claude/memory/shared/ + <person>/ (working style), a router MEMORY.md with a git-user to folder table, and the CLAUDE.md rule that makes every session read and write it. Use on set up git memory, sync memory via git, memory in the repo, or when a second machine or teammate splits memory."
 ---
 
 # Set up git-synced per-person project memory

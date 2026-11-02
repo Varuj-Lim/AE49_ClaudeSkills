@@ -1,6 +1,6 @@
 ---
 name: web-task-ticket-to-plan
-description: "Canon ticket-to-plan doorway for hubs: read the support tickets, owner picks, clarify until settled, hand off into the NORMAL plan flow; queue ORDER in queue-order.md; owner-to-team STAFF NOTE in staff-note.md; two-step write-back in hard-rules.md. Use on ticket to plan, read the tickets, ดู ticket, จดไว้ถามทีม, เขียน ticket แจ้งทีม."
+description: "Canon ticket-to-plan doorway: read the support tickets, owner picks, clarify until settled, hand off into the NORMAL plan flow; queue ORDER in queue-order.md; owner-to-team STAFF NOTE in staff-note.md; two-step write-back in hard-rules.md. Use on ดู ticket, เปิด ticket บอก user, จดไว้ถามทีม, เขียน ticket แจ้งทีม, ticket to plan, read the tickets."
 ---
 
 # Ticket → Plan — shared doorway workflow
