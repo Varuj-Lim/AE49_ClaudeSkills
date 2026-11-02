@@ -49,7 +49,7 @@ branch. Run it after every landing. It is never a substitute for the user's
 are NOT deployed by App Hosting. They go out through their own command:
 
 ```
-npx firebase-tools deploy --only firestore:rules --project <project-id>
+npx.cmd firebase-tools deploy --only firestore:rules --project <project-id> --account <owner's account>
 ```
 
 **When the gate runs against PRODUCTION, deploy the rules before opening it** —
@@ -73,8 +73,9 @@ de-risks landing day, but say plainly that it is a landing step, not a gate
 prerequisite, whenever the gate is on the emulator.
 
 **Deploy lines.** Chat: `cd <live path>; npx.cmd firebase-tools deploy --only <what> --project <id> --account <owner's account>`. In
-files, the `cd` is `cd $env:USERPROFILE\Documents\<project>;`. Always `--account`, never `login:use`: a PC whose default account
-is another project's gets 403 `serviceusage`. First-time secrets, the mail extension and cross-service rules:
+files, the `cd` is `cd $env:USERPROFILE\Documents\<project>;`. On a PC always `--account`, never `login:use`: a PC whose default account
+is another project's gets 403 `serviceusage`; an account not logged in yet needs `login:add` once. Cloud Shell runs as its signed-in
+account, so its blocks leave `--account` out. First-time secrets, the mail extension and cross-service rules:
 [first-deploys.md](first-deploys.md).
 
 ## 3b. A secret VALUE goes in through the Secret Manager web page — never a hidden CLI prompt (owner 2026-10-26)
@@ -114,8 +115,8 @@ check for those before copying, and re-apply them after.
 ## 5. One commit per feature, explicit pathspec
 
 **Land with `resources/land.cjs --message-file <file> [--plan <plan>] -- <paths>`.** It stops when a named path has no change,
-commits only those paths whatever else is staged, and lists what went in; read that list. Run `archive-plan.cjs` first, since it
-refuses before moving anything.
+commits only those files whatever else is staged, and lists what went in; read that list. It lands on the default branch only.
+Then run `archive-plan.cjs`, which needs the landing sha.
 
 Stage the exact paths that belong to the feature. **Never `git add .` / `-A`** —
 these repos routinely carry a second feature's uncommitted work, a checklist

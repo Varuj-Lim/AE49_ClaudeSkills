@@ -59,7 +59,7 @@ every gate, and the checkable half of them is a SCRIPT, which a compact cannot e
 | Script | Run | What it does |
 |---|---|---|
 | `resources/validate-gate.cjs` | `node ~/.claude/skills/ae49-ref-gate-checklist/resources/validate-gate.cjs docs/gate-checklist.js` — after EVERY write of the page | FAILS on: a section heading without a circled numeral; more than 7 parent items in a section; more than 5 sub-steps under a parent; a parent item without the three tags; a title without its numeral or environment; a closed payload off the grammar. WARNS on markdown (the page renders text literally) and on a section under 5 items. |
-| `resources/close-gate.cjs` | `node …/close-gate.cjs docs/gate-checklist.js --slug <slug> --score P/N --commit <sha>[,…] [--waived W] [--waiting O] [--prod M/M] [--deployed web]` — at landing | Writes the CLOSED payload in `closed-format.md`'s grammar, keeping the gate's feature and title; the date comes from the clock in ICT; refuses a placeholder sha; validates before writing. |
+| `resources/close-gate.cjs` | `node …/close-gate.cjs docs/gate-checklist.js --slug <slug> --score P/N --commit <sha>[,…] [--section <heading>] [--viewed E] [--waived W] [--waiting O] [--prod M/M] [--deployed web]` — at landing | Writes the CLOSED payload in `closed-format.md`'s grammar, keeping the gate's feature and title; the date comes from the clock in ICT; refuses a placeholder sha; validates before writing. |
 | `resources/gate-checklist.html` | copied once into a project | The page template (see "Template adoption" in [page.md](page.md)). |
 
 The scripts do not replace the rules below — they cannot tell whether an item is a full Thai

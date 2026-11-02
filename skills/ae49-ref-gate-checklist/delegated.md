@@ -14,7 +14,7 @@ Delegation covers only **Main-run gates**: autopilot (`ae49-mode-autopilot`, the
   - the sets it may use;
   - a scratch dir.
 - **Main** reads the evidence and screenshots and decides each item. Main spot-checks **at least one item per section** in its own Chrome on its project's Main port (`9d33`, Ports below). That is always required until plan `ae49-gate-agent` items 3–5 have passed, and after that whenever a reading looks off.
-- **Wording:** the landing note says "run by ae49-gate :<port>, verdict Main". The log line keeps `(M Main-verified)`. The closed line's grammar is unchanged (`closed-format.md`).
+- **Wording:** the landing note says "run by ae49-gate :<port>, verdict Main". The log and closed line count screen items as `(E Main-viewed)`, which is the agent's run judged by Main (`waived.md`, `closed-format.md`).
 - **`ae49-gate`** (`~/.claude/agents/ae49-gate.md`) runs one section in its own headless Chrome and returns per-item evidence: PASS / FAIL / CANNOT-VERIFY. It never decides the gate.
 
 ## When gates may run at once

@@ -39,7 +39,7 @@ file, or "applied in the main checkout" with the file list). Your job is to try 
 ## The plan version
 
 When the dispatch names a plan sha, judge the build against that version (`git show <sha>:<plan>`). A decision added after it is
-reported as NEW SCOPE, not as a BLOCKER.
+reported as NEW SCOPE, not as a BLOCKER: list what it needs, so Main builds or registers it before the plan closes.
 
 ## Two depths — Main names one in the dispatch (owner 2026-09-25)
 

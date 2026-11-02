@@ -27,7 +27,7 @@ const { execFileSync } = require("child_process");
 const [file, ...rest] = process.argv.slice(2);
 const arg = (name) => { const i = rest.indexOf("--" + name); return i >= 0 ? rest[i + 1] : undefined; };
 const die = (m) => { console.error("close-gate: " + m); process.exit(2); };
-if (!file) die("usage: node close-gate.cjs <docs/gate-checklist.js> --slug <slug> --score <N/N> --commit <sha>[,…] [--waived W] [--waiting O] [--prod M/M] [--deployed scope] [--date YYYY-MM-DD]");
+if (!file) die("usage: node close-gate.cjs <docs/gate-checklist.js> --slug <slug> --score <N/N> --commit <sha>[,…] [--section <heading>] [--viewed E] [--waived W] [--waiting O] [--prod M/M] [--deployed scope] [--date YYYY-MM-DD]");
 
 const slug = arg("slug"), score = arg("score"), commitArg = arg("commit");
 if (!slug) die("--slug is required");
@@ -80,8 +80,9 @@ const headings = items.filter(isHeading);
 const sectionArg = arg("section");
 if (headings.length > 1 && !sectionArg) die("several sections are open, so name the one that landed with --section:\n  " + headings.join("\n  "));
 if (sectionArg) {
-  const start = items.findIndex((item) => isHeading(item) && item.slice(3).includes(sectionArg));
-  if (start < 0) die("no open section matches: " + sectionArg);
+  const matches = headings.filter((item) => item.slice(3).includes(sectionArg));
+  if (matches.length !== 1) die(`--section "${sectionArg}" matches ${matches.length} open sections:\n  ` + (matches.length ? matches : headings).join("\n  "));
+  const start = items.indexOf(matches[0]);
   let end = start + 1;
   while (end < items.length && !isHeading(items[end])) end++;
   const remaining = [...items.slice(0, start), ...items.slice(end)];
@@ -97,7 +98,7 @@ if (sectionArg) {
       die("the page without that section failed validation — nothing written");
     }
     fs.renameSync(openTmp, file);
-    console.log("section removed, page stays open. For the landing note: " + closed);
+    console.log(`removed "${matches[0]}", page stays open. For the landing note: ` + closed);
     process.exit(0);
   }
 }

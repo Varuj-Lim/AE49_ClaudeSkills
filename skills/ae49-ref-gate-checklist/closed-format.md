@@ -21,8 +21,8 @@ window.GATE_CHECKLIST = {
 ## The closed line — grammar
 
 ```
-<slug> landed <YYYY-MM-DD> (gate <P>/<N>[ dev + <M>/<M> prod][ (<not passed>)]; commit <sha>[; deployed <scope>])
-<not passed> ::= any of <W> waived, <O> waiting owner, <E> Main-viewed, in that order, comma-separated
+<slug> landed <YYYY-MM-DD> (gate <P>/<N>[ dev + <M>/<M> prod][ (<note>)]; commit <sha>[; deployed <scope>])
+<note> ::= any of <W> waived, <O> waiting owner, <E> Main-viewed, in that order, comma-separated
 ```
 
 Slot rules, in order, `; `-separated inside the parentheses:
@@ -62,6 +62,7 @@ Slot rules, in order, `; `-separated inside the parentheses:
 - `stock-model-per-warehouse-p3 landed 2026-08-28 (gate 6/6; commit abc1234; deployed web+rules)`
 - `tools-data-link-archiver-p2 landed 2026-09-25 (gate 3/7 (4 waived); commit 1a2b3c4)`
 - `bulk-actions-2026-09-23 landed 2026-09-25 (gate 32/34 (2 waiting owner); commit 2468650)`
+- `box-into-view landed 2026-11-02 (gate 7/7 (2 Main-viewed); commit 64345d6)`: Main-viewed items are among the 7 passed; no person saw those screens
 
 ## Don'ts
 

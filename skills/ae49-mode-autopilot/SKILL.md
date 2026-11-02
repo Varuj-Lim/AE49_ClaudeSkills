@@ -246,7 +246,7 @@ owner can answer "เปลี่ยน D7". The sections:
 
 1. **Decisions taken for you** — the table `# | Decision | Chosen | Alternatives | Undo | Risk`, every
    `D<n>` line, oldest first. This is the section the owner came for; it is never summarised away.
-2. **Landed** — slug, commit, gate score with the Main-verified count, evidence links, and the
+2. **Landed** — slug, commit, gate score with the Main-viewed count and which items those are, evidence links, and the
    extended checks as one line each (what was checked → result).
 3. **Ready to push** — the commits on the deploy branch that the morning push would deploy, and any
    rules / functions / indexes deploy that must precede it.

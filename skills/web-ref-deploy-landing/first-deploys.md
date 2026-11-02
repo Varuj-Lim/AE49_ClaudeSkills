@@ -15,7 +15,8 @@ Create the Secret Manager secret and grant access BEFORE the push whose `apphost
 - **Blaze plan** is required. The deploy asks to enable APIs: answer **Y**.
 - **Password:** `extensions/firestore-send-email.env` carries a resource PATH, committed on purpose:
   `SMTP_PASSWORD=projects/${param:PROJECT_NUMBER}/secrets/ext-firestore-send-email-SMTP_PASSWORD/versions/latest`.
-  Create the secret on the Secret Manager page (§3b) before the first deploy, so the CLI never asks. Without this line the instance
+  Create the secret on the Secret Manager page (§3b) before the first deploy. This order has not been tried on a first install; if
+  the CLI still asks, stop and do not type the value there. Without this line the instance
   is created with no password and mail fails with `Missing credentials for "PLAIN"`.
 - **New value:** add a version on the web page, then `deploy --only extensions`. A wrong value shows as Gmail
   `535-5.7.8 … not accepted`.
@@ -30,6 +31,10 @@ cross-service rules. Grant the new role?": the owner answers **Y**, or every upl
 No prompt and no `[rules] Error checking or updating …` warning means the role is already granted. A re-run does not ask again,
 because an unchanged ruleset reads "already up to date". To fix a missed grant, in Google Cloud IAM grant
 `roles/firebaserules.firestoreServiceAgent` to `service-<project-number>@gcp-sa-firebasestorage.iam.gserviceaccount.com`.
+
+## Functions
+
+Deploy functions after the App Hosting backend exists, when they need its address.
 
 ## Reading it back
 

@@ -1,10 +1,10 @@
-**Scope (part of ae49-ref-gate-checklist, split out 2026-10-09):** the three recorded outcomes when an item is not clicked through (waived, Main-verified, waiting owner), the `[ENV] (Main)` item form and the backtick rule. Moved whole from the `SKILL.md` section "Waived and Main-verified items (owner 2026-09-25)". Cited by `ae49-router` as "Waived and Main-verified items".
+**Scope (part of ae49-ref-gate-checklist, split out 2026-10-09):** the four recorded outcomes when an item is not clicked through (waived, Main-verified, Main-viewed, waiting owner), the `[ENV] (Main)` item form and the backtick rule. Moved whole from the `SKILL.md` section "Waived and Main-verified items (owner 2026-09-25)". Cited by `ae49-router` as "Waived and Main-verified items".
 
 ## Waived and Main-verified items (owner 2026-09-25)
 
 The owner may decide not to click through a section — a feature they will rarely use, a
 production-only gate that costs real time, an item the audit and the automated tests already
-cover. Three outcomes exist, and all three are RECORDED, never silently counted as passed:
+cover. Four outcomes exist, and all four are RECORDED, never silently counted as passed:
 
 - **Waived** — the owner says an item (or the rest of a section) is not tested ("ไว้ใช้จริงค่อยดู",
   "ข้ามได้"). The closed line then reads `gate 3/7 (4 waived)` (`closed-format.md`;
@@ -28,7 +28,7 @@ cover. Three outcomes exist, and all three are RECORDED, never silently counted 
   answers. The count is never folded into "waived" — the bulk-actions landing of 2026-09-25
   (items 4.4 / 5.3, the toolbar line counts) had no slot for it and was written as waived.
 
-Before either, Main says once, in plain words, what will NOT have been seen by anyone if the
+Before waiving, Main says once, in plain words, what will NOT have been seen by anyone if the
 items are waived — then does what the owner decides.
 
 **Items Main performs itself** — reading a manifest, a bucket, a log, an execution — have no

@@ -307,7 +307,8 @@ scanned.
   run on every auto-approved build.
 - **The plan is frozen per dispatch (L3, 2026-11-02):** a dispatch names the plan's commit sha, and builder and auditor work from
   that version. A decision made after it goes into the plan for the next round; the audit reports it as NEW SCOPE, never as a
-  BLOCKER against a build that could not have known it (CCP_Hub 2026-10-31: four such first-round BLOCKERs in a day).
+  BLOCKER against a build that could not have known it (CCP_Hub 2026-10-31: four such first-round BLOCKERs in a day). NEW SCOPE still has to
+  be built, or be written down as a plan or register row, before the plan closes.
 - The **audit gate** (adopted 2026-08-01, owner mandate — EVERY build, Main's inline builds
   included): after the build is finished and BEFORE the user sees anything, spawn the headless
   **`ae49-audit`** agent with the plan path + the build worktree/diff (or the hub file list).

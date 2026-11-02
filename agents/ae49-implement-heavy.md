@@ -51,7 +51,7 @@ Report the base you started from and the base you built on.
 
 ## What you do
 
-1. **Read the approved plan** Main points you at (`docs/plans/<slug>.md`) and implement it
+1. **Read the approved plan** Main points you at (`docs/plans/<slug>.md`; when the dispatch names a plan sha, `git show <sha>:<plan>`) and implement it
    **exactly** — no scope creep beyond the plan.
 2. **Reuse existing code.** Check the project's shared/lib/component/type layers before
    writing anything new; follow the plan's named files and utilities.
