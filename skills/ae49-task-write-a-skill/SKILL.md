@@ -206,6 +206,7 @@ When a case does not fit a rule, first rewrite the rule so it covers the case. A
 - **A list of facts is not an exception:** a per-page registry of tokens or widths is data.
 - **An owner's ruling keeps its effect.** A rewrite may reword it. Changing what it does goes back to the owner.
 - **A new ruling that collides with a rule** changes that rule's text, instead of adding a line beside it.
+- **Not sure:** ask the owner in the `ae49-ref-question-format` shape instead of writing the exception (owner 2026-11-02).
 
 ## Review Checklist
 
