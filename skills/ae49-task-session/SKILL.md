@@ -1,6 +1,6 @@
 ---
 name: ae49-task-session
-description: "The session ceremonies of an ae49-workflow project (AE49_Hub, Nuri_Hub, siblings) — `open` starts the day or a fresh session (ff main from backup, skills sync, 🎒 check, restore a parked tree, re-open the gate, Autopilot ON in ask, the board); `swap` closes THIS session on the SAME machine (commit, rewrite in-flight memory, Autopilot as is, backup push; the user opens the new one); `close` ends the day before switching MACHINES (Autopilot OFF + report, stop engines, park trees on transport branches, 🎒 carry list, backup push). No argument: a NEW session runs open, a used one runs swap; close runs only when typed. Use on /ae49-task-session, \"เปิดวัน\", \"มาทำต่อ\", \"เปิด session ใหม่\", \"ปิด session\", \"ปิดวัน\", \"ย้ายเครื่อง\", \"open/close the day\", or when the owner accepts the router's fresh-session offer. A handoff DOCUMENT is ae49-task-handoff."
+description: "The session ceremonies of an ae49-workflow project (AE49_Hub, Nuri_Hub, siblings) — `open` starts the day or a fresh session (ff main from backup, skills sync, 🎒 check, restore a parked tree, re-open the gate, Autopilot ON in ask, the board); `swap` closes THIS session on the SAME machine (commit, rewrite in-flight memory, Autopilot as is, backup push; the user opens the new one); `close` ends the day before switching MACHINES (Autopilot OFF + report, stop engines, park trees on transport branches, 🎒 carry list, backup push). No argument: a NEW session runs open, a used one runs swap; close runs only when typed. Use on /ae49-task-session, \"เปิดวัน\", \"มาทำต่อ\", \"เปิด session ใหม่\", \"ปิด session\", \"ปิดวัน\", \"ย้ายเครื่อง\", \"open/close the day\", or when the router reaches a clean break in a long session. A handoff DOCUMENT is ae49-task-handoff."
 argument-hint: "(empty) = open in a new session / swap in a used one · open · swap · close"
 ---
 
@@ -28,7 +28,7 @@ as pairs); one name with three verbs is easier to reach for. The doc mode stays 
   typed argument `close`, or the owner's words about switching machines / ending the day ("ปิดวัน",
   "ย้ายเครื่อง", "เอางานกลับบ้าน"), starts it.
 - A compacted session counts as USED (the summary proves work happened) → `swap`.
-- The router's fresh-session offer, when accepted, runs `swap`.
+- The router's clean break in a long session runs `swap` (`ae49-router` § Session length).
 
 ## What each verb does — one line
 

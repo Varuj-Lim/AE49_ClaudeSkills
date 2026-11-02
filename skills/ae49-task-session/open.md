@@ -23,13 +23,14 @@ and an Autopilot left ON by a swap is ticked in 7b.
 
    ```
    git fetch origin
-   git status --short                  # expect clean — close / swap left it clean
+   git status --short
    git merge --ff-only origin/main
    git merge --ff-only origin/backup   # backup normally leads main between pushes
    ```
 
-   A dirty tree here, or an ff failure, means something unexpected happened —
-   stop and resolve with the user before touching anything.
+   A dirty file is expected when it is dev-server churn (`web-ref-deploy-landing` §7: leave it while the
+   emulator runs, never commit it) or work the in-flight memory names. Any other dirty file, or an ff
+   failure, means something unexpected happened: stop and resolve with the user before touching anything.
 
 2. **Skills sync.** If this machine's daily drift hook reported changes, act on
    its report; if the machine has no hook, run the `ae49-task-update-skills`
@@ -43,8 +44,8 @@ and an Autopilot left ON by a swap is ticked in 7b.
    how a three-week-old ruling went unseen on this machine). Freshly applied
    skills load in the NEXT session — say so.
 
-3. **Read the in-flight memory** (the driver's folder under the project's
-   `.claude/memory/`). It is the park manifest: which `park/` branch holds the
+3. **Read the in-flight memory** (`inflight-now.md` in the driver's folder under the project's
+   `.claude/memory/`; a project not moved to it yet: its newest `inflight-*` file). It is the park manifest: which `park/` branch holds the
    hub tree, which agent branches hold queued builds, the gate state, and the
    first action.
 

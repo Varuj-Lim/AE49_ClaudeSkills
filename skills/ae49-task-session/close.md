@@ -82,7 +82,7 @@ landed, and had to ask the owner whether to switch it off (*"เพิ่มก�
    whether something changed? Ask the user. Nothing to carry → record that
    explicitly.
 
-6. **Update the in-flight memory.** Rewrite the driver's inflight file so every
+6. **Update the in-flight memory.** Rewrite the driver's `inflight-now.md` whole so every
    queue item points at a BRANCH (never a machine path or Temp patch file), and
    record: parked-by machine name, date, gate state, the step-5 🎒 carry list
    with each item's reason, and what open-day should restore first. Commit it:
