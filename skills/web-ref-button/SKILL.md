@@ -1,6 +1,6 @@
 ---
 name: web-ref-button
-description: "Canon (web-ref-*) button ladder: rungs by meaning, red only where data is destroyed, orange a caution that destroys no data, quiet text for view helpers, navigation as a link, bare label, one width, ONE line. Use for any button, pill or header action; ปุ่มแดง, ปุ่มส้ม, ปุ่มขึ้น 2 บรรทัด, ปุ่มตกบรรทัด, add a button, button wraps."
+description: "Canon (web-ref-*) button ladder: rungs by meaning, red only where data is destroyed, orange a caution that destroys no data, quiet text for view helpers, a helper that leaves as a link, bare label, one width, ONE line. Use for any button, pill or header action; ปุ่มแดง, ปุ่มส้ม, ปุ่มขึ้น 2 บรรทัด, ปุ่มตกบรรทัด, add a button, button wraps."
 ---
 
 # web-ref-button — the cross-hub button canon
