@@ -133,7 +133,8 @@ function reasonFor(raw, startCwd, backslashEscapes) {
   }
   let cwd = startCwd;
   const vars = {};
-  for (const words of commands) {
+  for (const rawWords of commands) {
+    const words = rawWords.map((w) => expand(w, vars));
     const bashSet = words.length === 1 && words[0].match(/^(\w+)=(.+)$/);
     if (bashSet) { vars[bashSet[1]] = bashSet[2]; if (/^(127\.0\.0\.1|localhost):/.test(vars.FIRESTORE_EMULATOR_HOST ?? "")) vars.__emulator = true; continue; }
     const psSet = words.length === 3 && words[1] === "=" && words[0].match(/^\$(?:env:)?(\w+)$/);
