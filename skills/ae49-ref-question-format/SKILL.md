@@ -86,6 +86,11 @@ spelled out with its consequence, and a recommendation with the reason. That is 
     ruling of the same number. The log line records the ruling as `ruling: owner Q<n> (a) — <one line>`.
 13. **The board's 👤 line still names the pending question** ("รอคุณ: Q5 a/b") — that line is a
     pointer, never the question itself; the question lives in its own block above.
+14. **Option (a) is ALWAYS Main's recommendation (owner rule 2026-11-03).** The recommended option is listed first
+    and marked "— แนะนำ"; the rest follow from the closest alternative to the farthest, and "อธิบายเอง" / "เลือกเอง", when
+    offered, is last. When Main has no preference (rule 7), (a) is the option Main would take if made to choose, and the
+    "ผมแนะนำ" line says the options are equal. The answer template and the first `wrap_up` button then read the same
+    (a). Why: the owner answers fast by taking (a) and wanted that to be safe every time, not a habit that usually held.
 
 ## A good one and a bad one (the 2026-10-01 pair)
 
