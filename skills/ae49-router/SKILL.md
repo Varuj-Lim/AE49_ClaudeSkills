@@ -155,9 +155,9 @@ re-read from disk — never report from memory:
 3. Output ONE table, one row per item, in the four-group order of `ae49-ref-report-format` (in progress → done today → waiting on others → waiting on the owner), FIVE columns: **# | Feature /
    plan / task | Stage | Waiting On | Next** (rulings 2026-08-13 and 2026-09-16; the row
    number lets the owner answer "ข้อ 3").
-   **NEVER collapse items into one row** (user ruling 2026-08-14): no "Ready ×6", no
-   "plan A + plan B" merged rows — every plan and tracked item gets its OWN row even
-   when many share a state or share one gate.
+   **Items with the same cause share one row, and that row names every item** (owner 2026-11-03, `ae49-ref-report-format`; replaces
+   the 2026-08-14 never-collapse ruling): no "Ready ×6" count alone. Items that merely share a state, without one thing that frees them all,
+   keep their own rows.
 
    - **Item** — the plan slug, or a short name for planless work worth a row
      (e.g. "Unpushed on main", a paused audit, tickets awaiting clarify).
@@ -186,7 +186,7 @@ Board rows this lane adds on top of the shared legend:
   in *Waiting on* (`#2 landing`); a blocker not yet on the board gets its own row first.
 - **`⏸️ On hold`** — a plan whose file says `Status: On hold`; say "on hold" in *Next*.
 - **`✅ Landed`** — show the newest 2–3 from `done/` so recent work stays visible.
-- **Register rows** — one row per `_open-items.md` entry, except a row waiting only on an outside contributor's next PR, `⏸️` + what it waits on
+- **Register rows** — every `_open-items.md` entry is named on the board, in its own row or a same-cause row, except a row waiting only on an outside contributor's next PR, `⏸️` + what it waits on
   (your ruling, your hands, data); a row only an external contributor's next PR can move goes on one footnote line
   under the table (owner Q211 a, 2026-10-27), per `ae49-ref-report-format`. **A board may say "nothing is open"
   only when BOTH the plans and the register are empty.**

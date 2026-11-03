@@ -103,7 +103,7 @@ and an Autopilot left ON by a swap is ticked in 7b.
    in-flight file (the commit can ride the next landing). Report the board per
    `ae49-ref-report-format` and name the single next action.
    **The board renders every row of `docs/plans/_open-items.md`** (owner ruling
-   2026-09-30, `ae49-router` §"The open-items register") — one `⏸️` row per entry
+   2026-09-30, `ae49-router` §"The open-items register") — each entry named, same-cause entries in one `⏸️` row
    with what it waits on — so the day starts with the whole picture, not only the
    plans and the park. An open-day report that says "clean board" while the
    register holds rows is wrong.

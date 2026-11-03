@@ -88,7 +88,12 @@ Which renders as:
 
 ### Rules that keep the board honest
 
-- **One row per item, always the same columns.** Adapt column *names* only if the domain
+- **Items with the same cause share ONE row (owner 2026-11-03: *"อยากให้รวม เรื่องที่ติดจากสาเหตุเดียวกัน ไปอยู่ใน Row เดียวกัน"*).** Items that wait on the
+  same thing and move when that one thing happens merge into one row. The item cell names EVERY item by its slug or `OI-n`, never a count
+  alone, so nothing vanishes; the *Next* cell says what each does when it differs. A row splits again the moment its items no longer wait on
+  the same thing. Only waiting rows merge: work in progress, done today, and anything with its own owner question keep their own row.
+  This replaces the 2026-08-14 never-collapse ruling.
+- **Otherwise one row per item, always the same columns.** Adapt column *names* only if the domain
   genuinely differs (tickets, deploys); never drop "Waiting on".
 - **A blocker that is another item is written as its row number: `#N <event>`** (owner ruling
   2026-09-23). When a row waits on another feature, plan or task — a plan in its `After:` chain,
@@ -120,8 +125,7 @@ Which renders as:
   next PR" (nobody here can move it until that PR arrives) is not a table row; right under the table (before ⏱️) one
   line lists them — `⏸️ รอ PR ของ <contributor>: OI-n · OI-m · …` — so they stay visible without filling the board. The
   rows stay in the register unchanged; the moment that contributor's PR arrives they go back on the table as ordinary
-  rows. The never-collapse rule (`ae49-router` § status board) is read the same way: a row waiting only on a contributor's next PR is not
-  collapsed, it is footnoted. Hiding such rows is how items vanish, hence the footnote.
+  rows. A row waiting only on a contributor's next PR is footnoted, not merged. Hiding such rows is how items vanish, hence the footnote.
   **The `Unpushed on <deploy branch>` row carries its line count (owner 2026-10-21):** its Stage cell reads
   `📦 N commits · +A / −D lines (code +a / −d)` — from `git diff --shortstat origin/<b>..<b>` for the whole range and
   the same over the code paths (app, components, lib, functions, worker, rules, indexes, apphosting) — re-run fresh for
