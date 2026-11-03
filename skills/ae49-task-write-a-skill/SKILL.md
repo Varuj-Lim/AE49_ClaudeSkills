@@ -195,6 +195,21 @@ back), the labelled finding lines, and the emoji verdict. Add only the skill's o
 top (its severity / tier labels and its field names). Keep the format in one place so it can't
 drift across skills.
 
+## User level before project level (owner 2026-11-03)
+
+When the owner orders a rule written or changed, decide its home **user level first**: `~/.claude/skills/`
+(a `web-ref-*` canon or an `ae49-*` skill) unless the rule is truly one project's fact.
+
+- **User level** — the rule would hold in any hub: how a UI piece behaves, a process, a format. Write it there;
+  if the project needs its own numbers, the project skill keeps ONE fact line pointing at the canon.
+- **Project level** — only the project's facts: its pixel values, names, ports, wording, a ruling the owner
+  scoped to that hub.
+- **A ruling given in one project is not by itself a project rule.** "ดูดี ทำกติกาได้เลย" said about AWDC's
+  logo became the canon `web-ref-sidebar` plus the AWDC fact "26 px" (2026-11-03: the first write landed only in
+  `awdchub-ref-sidebar`, and the owner had it moved).
+- **Not sure which level:** ask the owner in the `ae49-ref-question-format` shape before writing.
+- A user-level write follows the skills-repo sync rule of `~/.claude/CLAUDE.md` (mirror, commit, push the same turn).
+
 ## A better rule before an exception (owner 2026-11-02)
 
 When a case does not fit a rule, first rewrite the rule so it covers the case. Add an exception only when no clear single rule exists.
@@ -213,6 +228,7 @@ When a case does not fit a rule, first rewrite the rule so it covers the case. A
 After drafting, verify:
 
 - [ ] `node ~/.claude/skills/ae49-task-write-a-skill/scripts/validate-skills.cjs <skills folder>` exits 0, naming the project's `.claude/skills` for a project skill (no folder = user skills; an unquoted `: ` in a description silently loses its trigger words)
+- [ ] The rule's level was decided by "User level before project level" (user first; asked when unsure)
 - [ ] Every exception passed the test in "A better rule before an exception"
 - [ ] Description includes triggers ("Use when...")
 - [ ] Name has the `<scope>-<type>-<name>` form (ref/task segment)
