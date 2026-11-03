@@ -180,6 +180,9 @@ Read the legend from that skill so every report in every project uses one set.
 on the table itself: name what the user has to do, or say plainly that nothing is waiting on
 them and what is being waited on instead. The format lives THERE, not here.
 
+**A `status:` board makes every owner row actionable in the same message (owner Q417 a, 2026-11-03)** — the
+rule and its shape live in `ae49-ref-report-format` ("The `status:` follow-through"); this lane runs it every time.
+
 Board rows this lane adds on top of the shared legend:
 
 - **`⏸️ Blocked`** — point at the unlanded plans from its `After:` chain by their row numbers

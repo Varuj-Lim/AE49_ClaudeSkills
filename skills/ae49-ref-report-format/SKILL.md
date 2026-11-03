@@ -162,6 +162,18 @@ Which renders as:
   that could run in parallel, a batch that could split), each as `what to do · minutes saved`,
   e.g. `⚡ เร่งได้: ตอบ Q34–Q41 ตอนนี้ (−30–60 นาที) · ทำ Cloud Shell setup ระหว่าง B1 build (−30–60 นาที)`.
   Offers only — Main never acts on them without the owner. None found → `⚡ ไม่มีทางเร่งตอนนี้`.
+- **The `status:` follow-through — every owner row actionable in the same message (owner Q417 a, 2026-11-03).**
+  When the owner asks for the board (`status:`, "งานค้างมีอะไรบ้าง", "รายงานหน่อย"), the board is followed, before ⏱️,
+  by one block per row whose *Waiting On* is the owner's, so the owner can act on every row without asking back:
+  - **waiting on a ruling** → the question in full `ae49-ref-question-format` shape, even if it was asked before (the
+    Q32 a "ask once" rule governs ordinary reports, not this board);
+  - **waiting on the owner's hands** → the complete steps, with every command written per `~/.claude/CLAUDE.md`
+    § Communication and the result to send back;
+  - **waiting on an event no one here controls** (an external contributor's PR, a date) → no question, one line on
+    what it waits for.
+  More than 10 → the 10 that unblock the most work first, and say how many follow. Ordinary progress reports keep the
+  short 👤 pointer. Why: on 2026-11-03 the board's owner rows read "Your hands" / "Your reading" and the owner had to
+  ask "ขอขั้นตอน" three times in one afternoon.
 - **Close with the 👤 "your move" line — REQUIRED, never omitted (user rule, 2026-08-28).**
   The very last line of the message answers the question the reader actually has: *is anything
   waiting on me?* It restates, as concrete actions, every row whose *Waiting on* points at the
