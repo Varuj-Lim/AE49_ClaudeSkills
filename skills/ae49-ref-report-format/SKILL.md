@@ -108,7 +108,7 @@ Which renders as:
   arrives — write "🔍 Audit running", never a predicted verdict or a percentage.
 - **Row order — four groups, always in this order (owner ruling 2026-10-21):**
   1. 🔨🔍🧪🔧 **In progress** — builder, audit, fold, Main-run gate — in chain order (a row before the rows it unblocks).
-  2. ✅ **Done today** — landed / committed / closed / live since the day began (Thai calendar day); older ones drop off.
+  2. ✅ **Done today** — landed / committed / closed / live since the day began (Thai calendar day) and since the owner's last push command; they leave at whichever comes first, a new Thai day or that push (owner 2026-11-03). The message that reports the push says in prose what it deployed.
   3. ⏸️📋📝📦 **Waiting on something other than the owner** — a token reset, another row's landing (`#N landing`), a plan being written, a parked or registered item to do later.
   4. 👤 **Waiting on the owner** — a question, a button, a command, a push, a Billing read, the owner's gate — LAST, so the ask is the final thing read before the 👤 line.
   **A register row that no one is moving waits on the OWNER, never on "—" (owner 2026-10-21):** an item Main found
