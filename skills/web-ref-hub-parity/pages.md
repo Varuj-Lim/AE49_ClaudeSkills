@@ -16,3 +16,12 @@ hubs is still in scope: the run asks whether the others should have it, unless `
 
 A hub whose own paths differ (another component folder, a renamed collection) maps them by concept during its run; this
 table holds AE49's paths only.
+
+## Settled behaviours — every hub follows these
+
+A behaviour the owner ruled as THE right way for all hubs. A parity run treats a hub that differs as a gap to close (never a
+divergence to record), unless the owner rules otherwise for that hub.
+
+| # | Page | Behaviour | Ruling | หมายเหตุ |
+|---|---|---|---|---|
+| 1 | Employees → Edit | **A login's email is changed in place, never by making a new employee.** RD (not a visitor) edits another person's Email box; a `Confirm New Email` box appears under it once the value changes and must match. The caller's own record, and the record of the RD behind a Sign-in-as tab, stay locked. A server route changes the login email and the profile email together and puts the login back if the profile write fails; the change is written to the activity log. | AE49 2026-11-04 Q481 b (AWDC's shape) | ประวัติทุกอย่าง (เวลาเข้าออก ลา OT ticket) ผูกกับบัญชีเดิม สร้างคนใหม่จะทำให้ประวัติแยกเป็นสองคน |

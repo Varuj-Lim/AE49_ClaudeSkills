@@ -14,7 +14,7 @@ parity run asks it again. The procedure that reads and writes this ledger is `we
 | File | Holds | Who writes it, when |
 |---|---|---|
 | [divergences.md](divergences.md) | Every deliberate difference: one row per topic, one column per hub, a short Thai note; and each hub's parity baseline (the AE49 commit its last run ruled up to) | `web-task-hub-parity` at the close of every run, in any hub's session |
-| [pages.md](pages.md) | The pages in scope and the AE49 paths behind them (the safety-net filter) | Any session, when the owner adds or drops a page |
+| [pages.md](pages.md) | The pages in scope and the AE49 paths behind them (the safety-net filter); the SETTLED behaviours every hub follows (owner rulings, e.g. the login-email change) | Any session, when the owner adds or drops a page |
 | [changelog.md](changelog.md) | One row per AE49 landing that touched a path in `pages.md` | AE49_Hub's session at landing (`web-ref-deploy-landing` §5a) |
 
 ## Rules
