@@ -72,12 +72,6 @@ Merge into `~/.claude/settings.json` (create the file if missing):
 ```json
 {
   "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash|PowerShell",
-        "hooks": [{ "type": "command", "command": "node \"$HOME/.claude/hooks/guard-commands.cjs\"", "timeout": 10 }]
-      }
-    ],
     "SessionStart": [
       {
         "matcher": "compact",
@@ -99,7 +93,8 @@ Merge into `~/.claude/settings.json` (create the file if missing):
 }
 ```
 
-- `guard-commands.cjs` asks before a force push, a deploy, `--apply` or `reset --hard`.
+- `guard-commands.cjs` is NOT registered (owner Q453 c, 2026-11-04: its approval prompts were unwanted). The file stays
+  in `hooks/`; to bring the guard back, add a `PreToolUse` entry with matcher `Bash|PowerShell` running it.
 - `after-compact-note.cjs` says what a compact dropped.
 - `daily-skills-check.ps1` reports drift from this repo once a day.
 
