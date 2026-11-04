@@ -21,6 +21,10 @@ the rule was first written into the project skill `awdchub-ref-sidebar` by mista
    while their heights differed (AWDC about 3.8 : 1 → 98 × 26; CCP about 2.8 : 1 → 96 × 34); AWDC at a fixed 34 px
    came out about 130 px wide and looked too big.
 4. **The logo links to the hub's Home**, with an accessible name ("Go to Home").
+5. **A window under 768 px (a phone) starts with the Sidebar collapsed** (AWDC owner 2026-11-03 Q6 a; every hub
+   since AWDC 2026-11-04 P6 a, `web-task-hub-parity`). The width is read ONCE when the shell loads; from then on only the
+   collapse button decides. Why: an open Sidebar left about 150 px of page at 375 px. AWDC_Hub commit `76082c9` is the
+   reference (`useState(() => typeof window === "undefined" || window.innerWidth >= 768)`).
 
 ## Where the facts live
 

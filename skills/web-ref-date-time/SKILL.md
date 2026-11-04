@@ -28,6 +28,11 @@ Each hub keeps its helpers, components and its own ruled format in `<hub>-ref-da
 - **One picker,** the same way as dates; never a hand-built list of times. A hub with no clock time yet builds the shared control when the first one appears.
 - A stored value off the picker's step still displays and is never auto-rounded.
 - A date with a time uses the hub's helper for that pair.
+- **A date with a time shown as a VALUE is two lines** — the date on top, the time below in gray — in a table cell
+  and in a detail field's value, through ONE shared component (AE49_Hub `components/ui/DateTimeCell.tsx`: two
+  `whitespace-nowrap` lines, `leading-tight`, non-truncating). The one-line pair stays only inside a sentence, a
+  caption, a tooltip or a toast. A column's width is set by the DATE line. Never hand-build the two lines from two
+  helpers. (AE49 owner Q107 b, 2026-10-21; lifted to every hub by AWDC 2026-11-04 P5 a, `web-task-hub-parity`.)
 
 ## 3. Durations: two families, picked by what the number IS
 

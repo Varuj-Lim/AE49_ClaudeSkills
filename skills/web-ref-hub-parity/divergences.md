@@ -22,6 +22,6 @@ next run fills it). Sources: each hub's `CLAUDE.md` and `<hub>-ref-*` skills as 
 | 4 | Department / position values | Its own | Its own (engineering positions) | Its own (textile positions) | Its own | รายชื่อตำแหน่งเป็นข้อมูลของแต่ละบริษัท |
 | 5 | LINE messenger | Yes | Removed completely | Removed completely | Yes (Settings → Integrations) | AWDC กับ CCP ไม่ใช้ LINE |
 | 6 | Brand palette and logo | Its own tokens | `awdc-*` charcoal, AWDC wordmark | `ccp-*` blue | `nuri-*` terra | สีและโลโก้ตามแบรนด์แต่ละบริษัท |
-| 7 | Modules outside the shared pages | Attendance, leave, projects, draftsman, R&D, IT, policies, … | None yet | Production modules | Inventory and sales | module ของงานแต่ละบริษัทอยู่นอกขอบเขตการเทียบ |
+| 7 | Modules outside the shared pages, and the pages that serve them | Attendance, leave, projects, draftsman, R&D, IT, policies, …; also Dashboard, Employees → Organization / Ranks, Settings → Holidays / Human Resources | None yet; those five pages stay AE49-only until AWDC has a module (AWDC 2026-11-04 P9 a) | Production modules | Inventory and sales | module ของงานแต่ละบริษัทอยู่นอกขอบเขตการเทียบ |
 | 8 | Invite link + Employees → Approvals | Yes | Yes (2026-11-01 Q1 a) | No — "no self-registration, no Approvals page" (2026-10-19 Q32 a) | ? | CCP ตัดสินไว้ก่อน AWDC จะเปิดใช้ รอบแรกของ CCP ควรถามใหม่ |
 | 9 | Infrastructure (Firebase project, ports, accounts, mail sender) | Its own | Its own | Its own | Its own | ค่าจริงอยู่ใน CLAUDE.md ของแต่ละ Hub ห้ามเขียนที่นี่ |

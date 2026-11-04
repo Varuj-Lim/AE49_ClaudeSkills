@@ -56,6 +56,11 @@ format lives on in step 4). The ledger it reads and writes is `web-ref-hub-parit
    - **AE49 adopts this hub's way** — the hub keeps it; AE49 changes.
    - **Stays different on purpose** — a row in `divergences.md`.
    Layered rulings are allowed ("AE49 wins the behavior, the label stays this hub's").
+   **Many items → group by cause (run 1, 2026-11-04: 94 items became P1–P10).** Items with one cause and one likely
+   ruling share ONE question whose context names every item ID (e.g. "the shared parts AE49 added after the clone").
+   A pile of small taste items the owner wants to see one by one goes on the hub's gate page instead
+   (`ae49-ref-gate-checklist` format, one item per difference, "tick = follow AE49, no tick = keep and record"); the
+   ticks live in the owner's browser, so the owner replies with the ticked numbers ("① 3, ③ 2" or "ไม่ติ๊กเลย").
 5. **Close out — the same session, before anything else.** Rulings that live only in chat are lost.
    - **This hub follows** → one plan `docs/plans/hub-parity-<YYYY-MM-DD>.md` holding every such item, through the
      normal `ae49-router` flow (plan → build → audit → gate → land).
