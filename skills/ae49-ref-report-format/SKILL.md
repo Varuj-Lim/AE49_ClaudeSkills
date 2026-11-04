@@ -174,6 +174,10 @@ Which renders as:
   More than 10 → the 10 that unblock the most work first, and say how many follow. Ordinary progress reports keep the
   short 👤 pointer. Why: on 2026-11-03 the board's owner rows read "Your hands" / "Your reading" and the owner had to
   ask "ขอขั้นตอน" three times in one afternoon.
+- **Every block of steps for the owner's hands opens with 🛠️ (owner 2026-11-04: *"ทุกครั้งที่มีขั้นตอนของคุณ ให้ใช้ Emoji ด้วยจะได้เห็นชัดขึ้น"*).**
+  The heading of any block that tells the owner to DO something — run a command, click in a console, deploy, fill a
+  form — reads `🛠️ **ขั้นตอนของคุณ (…นาที):**`, in any message, board or not. One emoji, always the same one, so the
+  owner finds his part at a glance in a long reply; Main's own steps and explanations never carry it.
 - **Close with the 👤 "your move" line — REQUIRED, never omitted (user rule, 2026-08-28).**
   The very last line of the message answers the question the reader actually has: *is anything
   waiting on me?* It restates, as concrete actions, every row whose *Waiting on* points at the
