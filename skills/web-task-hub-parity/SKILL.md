@@ -16,7 +16,23 @@ format lives on in step 4). The ledger it reads and writes is `web-ref-hub-parit
   project). Pin ONE commit for the whole run.
 - **User skills** — `~/.claude/skills/`.
 - **No other hub, ever** — not CCP, not NURI, not to "check how they did it".
-- **Run in AE49_Hub's own session:** AE49 is compared with the skills only; there is no hub column to fill.
+- **Run in AE49_Hub's own session:** AE49 is compared with the skills only; there is no hub column to fill. Follow
+  § "Run in AE49_Hub" below instead of steps 1, 2 and 5.
+
+## Run in AE49_Hub (owner 2026-11-04)
+
+The reference hub has no hub to follow, so its run checks AE49 against the user skills only:
+- **Step 1 — no snapshot.** Read AE49's own working tree (its committed `main`); nothing comes from GitHub.
+- **Step 2 — baseline = a skills-repo commit.** AE49's row in `divergences.md` § Baselines holds the AE49_ClaudeSkills
+  commit its last run ruled up to. No baseline → a FULL scan of `pages.md` against every canon those pages follow;
+  a baseline → only the skills-repo commits since it on those canons, plus AE49's own commits on the `pages.md`
+  paths since the baseline date (`git log`).
+- **Steps 3–4 as written**, with one difference: every difference is "AE49 vs the skill", and the options are only
+  **AE49 follows the skill** or **the skill changes to match AE49** (layered allowed). No "keeps different" row: a
+  rule AE49 breaks on purpose is a skill change.
+- **Step 5 — close-out:** AE49 follows → a plan in AE49 through its normal flow, and each landing logs a
+  `changelog.md` row (`web-ref-deploy-landing` §5a) so the other hubs pick it up; the skill changes → edit, mirror,
+  commit, push now. No handoff prompt. Then write today's date and the skills-repo commit into AE49's baseline row.
 
 ## Steps
 
