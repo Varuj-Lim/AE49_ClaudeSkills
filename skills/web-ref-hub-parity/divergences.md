@@ -8,7 +8,7 @@ next run fills it). Sources: each hub's `CLAUDE.md` and `<hub>-ref-*` skills as 
 | Hub | Last parity run | Ruled up to AE49 commit | หมายเหตุ |
 |---|---|---|---|
 | AE49 | — | n/a (reference; its run compares with the skills only) | AE49 เป็นต้นแบบ เทียบกับ skill อย่างเดียว |
-| AWDC | — | — | ยังไม่เคยรัน รอบแรกสแกนเต็ม |
+| AWDC | 2026-11-04 (run 1, 94 items) | `3c5c186c` | รอบแรกเสร็จ รอบหน้าดูเฉพาะ changelog + ตาข่าย GitHub หลัง commit นี้ |
 | CCP | — | — | ยังไม่เคยรัน รอบแรกสแกนเต็ม |
 | NURI | — | — | ยังไม่เคยรัน รอบแรกสแกนเต็ม |
 
@@ -25,3 +25,6 @@ next run fills it). Sources: each hub's `CLAUDE.md` and `<hub>-ref-*` skills as 
 | 7 | Modules outside the shared pages, and the pages that serve them | Attendance, leave, projects, draftsman, R&D, IT, policies, …; also Dashboard, Employees → Organization / Ranks, Settings → Holidays / Human Resources | None yet; those five pages stay AE49-only until AWDC has a module (AWDC 2026-11-04 P9 a) | Production modules | Inventory and sales | module ของงานแต่ละบริษัทอยู่นอกขอบเขตการเทียบ |
 | 8 | Invite link + Employees → Approvals | Yes | Yes (2026-11-01 Q1 a) | No — "no self-registration, no Approvals page" (2026-10-19 Q32 a) | ? | CCP ตัดสินไว้ก่อน AWDC จะเปิดใช้ รอบแรกของ CCP ควรถามใหม่ |
 | 9 | Infrastructure (Firebase project, ports, accounts, mail sender) | Its own | Its own | Its own | Its own | ค่าจริงอยู่ใน CLAUDE.md ของแต่ละ Hub ห้ามเขียนที่นี่ |
+| 10 | Login page right panel | Slideshow + festival animations | Static logo (2026-11-04 P8 ② 4) | ? | ? | หน้า login ของ AWDC เป็นโลโก้นิ่ง ไม่ต้องทำสไลด์ |
+| 11 | Employees → Directory columns | Team, Draftsman Team, LINE (module columns) | Position (2026-11-04 P8 ④ 3) | ? | ? | คอลัมน์ตามข้อมูลของแต่ละบริษัท |
+| 12 | Forgot-password overall cap per hour | 30 | 10 (2026-11-04 P4, item R10) | ? | ? | AWDC ใช้ Gmail ของบริษัท จึงจำกัดต่ำกว่า |
