@@ -1,6 +1,6 @@
 ---
 name: web-ref-local-emulator
-description: "Canon (web-ref-*) emulator discipline for hubs with .cmd launchers: the OWNER presses launchers, never Claude (bar stop on a live shutdown order); probe before naming a button; look-alike safe-kill; refresh; stale-cache 404. Use to start, stop, refresh or debug an emulator, before naming any launcher, or when a launcher/emulator ruling lands."
+description: "Canon (web-ref-*) emulator discipline for hubs with .cmd launchers: the OWNER presses launchers (bends: stop on a live shutdown order; start / safe-close in a VISIBLE Terminal panel tab, Q458 a; refresh stays the owner's); probe before naming a button; look-alike safe-kill; refresh; stale-cache 404. Use to start, stop, refresh or debug an emulator, before naming any launcher, or when a launcher/emulator ruling lands."
 ---
 
 # Local emulator — shared discipline
@@ -25,6 +25,14 @@ refreshing is not.
 
 **The one bend: the owner's live message orders the machine shut down** (owner 2026-10-07, written in
 `ae49-task-session` `close.md`). Then Claude runs the safe-stop launcher itself and no other launcher.
+
+**Second bend — start and safe-close in a VISIBLE terminal (owner Q458 a, 2026-11-04, AE49_Hub; every hub).** When the
+app has a Terminal panel (`mcp__terminal__run_in_terminal`), Claude may press the START and SAFE-CLOSE launchers itself:
+- **Start** runs in a Terminal panel tab the owner can see and stop (never a background Bash/PowerShell shell — that hidden
+  shell is the collision above). Probe the suite's ports FIRST; if anything already listens, do not start a second one.
+- **Safe-close** only when no gate section, `ae49-gate` agent, builder probe or owner session is using the suite.
+- **Refresh stays the owner's** (it wipes the export and costs thousands of production reads).
+- Name the tab in chat with its link so the owner can find it.
 Claude runs a launcher in no other case.
 
 ### 1b. A builder's PRIVATE, self-closing suite is not the owner's suite (owner Q13 a, 2026-10-29)
