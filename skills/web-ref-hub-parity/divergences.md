@@ -1,0 +1,27 @@
+# Deliberate divergences — what each hub keeps different from AE49 on purpose
+
+A parity run lists a difference that matches a row here and does NOT ask about it. `?` = not recorded yet (the hub's
+next run fills it). Sources: each hub's `CLAUDE.md` and `<hub>-ref-*` skills as of 2026-11-04, unless a ruling is cited.
+
+## Baselines
+
+| Hub | Last parity run | Ruled up to AE49 commit | หมายเหตุ |
+|---|---|---|---|
+| AE49 | — | n/a (reference; its run compares with the skills only) | AE49 เป็นต้นแบบ เทียบกับ skill อย่างเดียว |
+| AWDC | — | — | ยังไม่เคยรัน รอบแรกสแกนเต็ม |
+| CCP | — | — | ยังไม่เคยรัน รอบแรกสแกนเต็ม |
+| NURI | — | — | ยังไม่เคยรัน รอบแรกสแกนเต็ม |
+
+## Divergences
+
+| # | Topic | AE49 | AWDC | CCP | NURI | หมายเหตุ |
+|---|---|---|---|---|---|---|
+| 1 | Hub's role | Reference | Follows AE49 (cloned via CCP) | Follows AE49 (cloned from AE49) | Follows AE49 by concept (own codebase) | NURI ไม่ได้ clone มาจาก AE49 จึงเทียบกันที่ "พฤติกรรม" ไม่ใช่บรรทัด code |
+| 2 | UI language | Thai sentences, English names (`web-ref-ui-language`) | Every word US English (`awdchub-ref-ui-language`) | Thai sentences, English names | ? | AWDC เป็นภาษาอังกฤษทั้งเว็บโดยตั้งใจ |
+| 3 | Access model | Many departments; a department grants powers | Two departments: Staff, Developer (only Developer is privileged) | Two departments: Staff, Developer | Four roles: developer, admin, manager, staff | สิทธิ์ต่างกันตามธุรกิจ ไม่ต้องทำให้เหมือน |
+| 4 | Department / position values | Its own | Its own (engineering positions) | Its own (textile positions) | Its own | รายชื่อตำแหน่งเป็นข้อมูลของแต่ละบริษัท |
+| 5 | LINE messenger | Yes | Removed completely | Removed completely | Yes (Settings → Integrations) | AWDC กับ CCP ไม่ใช้ LINE |
+| 6 | Brand palette and logo | Its own tokens | `awdc-*` charcoal, AWDC wordmark | `ccp-*` blue | `nuri-*` terra | สีและโลโก้ตามแบรนด์แต่ละบริษัท |
+| 7 | Modules outside the shared pages | Attendance, leave, projects, draftsman, R&D, IT, policies, … | None yet | Production modules | Inventory and sales | module ของงานแต่ละบริษัทอยู่นอกขอบเขตการเทียบ |
+| 8 | Invite link + Employees → Approvals | Yes | Yes (2026-11-01 Q1 a) | No — "no self-registration, no Approvals page" (2026-10-19 Q32 a) | ? | CCP ตัดสินไว้ก่อน AWDC จะเปิดใช้ รอบแรกของ CCP ควรถามใหม่ |
+| 9 | Infrastructure (Firebase project, ports, accounts, mail sender) | Its own | Its own | Its own | Its own | ค่าจริงอยู่ใน CLAUDE.md ของแต่ละ Hub ห้ามเขียนที่นี่ |

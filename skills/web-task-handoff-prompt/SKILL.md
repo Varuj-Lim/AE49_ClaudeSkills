@@ -8,8 +8,8 @@ description: "The ONE format for a cross-project HANDOFF PROMPT: the paste-ready
 **Why this exists (owner, 2026-09-10):** on that day Main hand-wrote two handoff
 prompts (the dropdown-chevron change and the emulator launcher prompt) in two
 different shapes, while the rule that demands them lived in three places
-(user `CLAUDE.md` "One session, one project folder", `ae49-task-compare-conventions`
-Phase 3 item 5, `web-ref-local-emulator` §8) and none carried a template. This
+(user `CLAUDE.md` "One session, one project folder", `web-task-hub-parity` (then `ae49-task-compare-conventions`)
+step 5, `web-ref-local-emulator` §8) and none carried a template. This
 skill is the single source; those three point here.
 
 ## When
@@ -17,7 +17,7 @@ skill is the single source; those three point here.
 - A change made or ruled in THIS project must also happen in a sibling hub —
   launcher parity (`web-ref-local-emulator` §8), a shared UI component that both
   hubs copy (e.g. `components/ui/SelectField.tsx`), a convention alignment
-  (`ae49-task-compare-conventions`), a project skill or audit topic that mirrors a
+  (`web-task-hub-parity`), a project skill or audit topic that mirrors a
   sibling's, a ruling the owner wants applied everywhere.
 - This session may READ the sibling's checkout to compare, but never writes there:
   no file edits, no git, no scripts, no launcher presses (user CLAUDE.md rule

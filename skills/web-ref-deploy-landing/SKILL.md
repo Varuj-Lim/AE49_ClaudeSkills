@@ -144,6 +144,13 @@ file's line endings. Write the notes file with the Write tool: every inline arch
 wrote before this broke at least once on the shell layer (an apostrophe closing a single-quoted
 `node -e`, a backslash eaten on the way to disk).
 
+**§5a — AE49_Hub only: log a shared-page change for the other hubs (owner 2026-11-04).** When a landing commit in
+AE49_Hub touches a path listed in `~/.claude/skills/web-ref-hub-parity/pages.md`, append one row to that skill's
+`changelog.md` in the same turn — date, short sha, page, what changed in plain English, `follow` / `ask` / `AE49 only`,
+a short Thai note — then mirror, commit and push the skills repo. The other hubs' `web-task-hub-parity` runs read
+these rows instead of re-reading AE49 whole; a missed row is caught by that skill's GitHub safety net, so this costs
+one table row, not a gate.
+
 ## 5b. Production-only gates — build from a transport branch, not from the deploy branch
 
 Some gates can only run on real infrastructure that is BUILT FROM A COMMIT — a Cloud Run
