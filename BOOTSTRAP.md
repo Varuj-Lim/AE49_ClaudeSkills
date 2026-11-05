@@ -96,7 +96,8 @@ Merge into `~/.claude/settings.json` (create the file if missing):
 - `guard-commands.cjs` is NOT registered (owner Q453 c, 2026-11-04: its approval prompts were unwanted). The file stays
   in `hooks/`; to bring the guard back, add a `PreToolUse` entry with matcher `Bash|PowerShell` running it.
 - `after-compact-note.cjs` says what a compact dropped.
-- `daily-skills-check.ps1` reports drift from this repo once a day.
+- `daily-skills-check.ps1` reports drift from this repo once a day, and on that run also starts the token-usage sync
+  of `ae49-task-usage-report` in the background once `~/.claude/usage-sync` is cloned (that skill's "A new machine").
 
 ✅ Verify: the files exist, and the first Claude session of the day opens with the
 drift-check line. (`skills-check-last-run.txt` appears after the first run.)

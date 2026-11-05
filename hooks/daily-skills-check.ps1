@@ -8,6 +8,14 @@ $stamp = Join-Path $env:USERPROFILE ".claude\hooks\skills-check-last-run.txt"
 $today = (Get-Date).ToString("yyyy-MM-dd")
 if ((Test-Path $stamp) -and ((Get-Content $stamp -Raw).Trim() -eq $today)) { exit 0 }
 
+# Once a day, also push this machine's token totals to the usage-sync clone
+# (ae49-task-usage-report). Detached and silent: it reads every transcript (~15 s),
+# so the session never waits on it, and a missing clone or no network just skips.
+$usageScript = Join-Path $env:USERPROFILE ".claude\skills\ae49-task-usage-report\scripts\usage.cjs"
+if ((Test-Path $usageScript) -and (Test-Path (Join-Path $env:USERPROFILE ".claude\usage-sync\.git"))) {
+  try { Start-Process -FilePath "node" -ArgumentList "`"$usageScript`" --sync --quiet" -WindowStyle Hidden } catch {}
+}
+
 $checkScript = Join-Path $env:USERPROFILE ".claude\skills\ae49-task-update-skills\scripts\update-skills.ps1"
 
 try {
