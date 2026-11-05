@@ -30,6 +30,9 @@ spelled out with its consequence, and a recommendation with the reason. That is 
   - ต้นทุน: …
 - **(c) <ชื่อสั้น>** … (มีเท่าที่จำเป็น 2–4 ตัวเลือก แต่ละตัวเลือกมี 4 บรรทัดนี้เสมอ)
 
+**📐 มาตรฐาน:** (เฉพาะคำถามงานออกแบบโครงสร้าง — rule 15) ACI / วสท. / มยผ. / กฎกระทรวง กำหนดเรื่องนี้ว่าอะไร พร้อมเลขข้อ
+**🏢 ที่ทำกันทั่วไป:** (เฉพาะคำถามงานออกแบบโครงสร้าง) บริษัทออกแบบทั่วไปทำเรื่องนี้อย่างไร
+
 **ผมแนะนำ (a) เพราะ** <เหตุผล 1–2 ประโยค ในภาษาคน — ไม่ใช่ "ตาม canon">
 
 **ตอบได้ว่า:** a / b / c หรือพิมพ์ทางของคุณเอง · เมื่อตอบแล้วผมจะ <สิ่งที่เกิดต่อ เช่น "ถามข้อถัดไปเรื่อง LINE" / "เขียน plan ให้อนุมัติ">
@@ -91,6 +94,21 @@ spelled out with its consequence, and a recommendation with the reason. That is 
     offered, is last. When Main has no preference (rule 7), (a) is the option Main would take if made to choose, and the
     "ผมแนะนำ" line says the options are equal. The answer template and the first `wrap_up` button then read the same
     (a). Why: the owner answers fast by taking (a) and wanted that to be safe every time, not a habit that usually held.
+
+15. **A structural-engineering question carries 📐 and 🏢 (owner Q489 a, 2026-11-05).** When the decision is about
+    structural design — an R&D calculation page, a calculation engine, an engineering default, a code check, a detailing
+    limit — the question adds two lines after the options and before "ผมแนะนำ", apart from the options' pros and cons:
+    - **📐 มาตรฐาน** — what the governing code says: ACI, and the Thai ones (วสท., มยผ., กฎกระทรวง) where they apply. A
+      clause number is written only when it comes from a source in the project (a spec, a decoded workbook, an engine
+      comment) and that source is named; one recalled from memory is marked "จากความจำ ควรตรวจ", because a wrong
+      clause written confidently misleads worse than none. No clause governs it → say so.
+    - **🏢 ที่ทำกันทั่วไป** — how design firms usually do it: common practice, design-software defaults (ETABS, SAFE,
+      spColumn …), handbook guidance. It is general practice, never a statistic; when Main does not know, it writes
+      "ไม่แน่ใจ" instead of guessing.
+    An option that matches or departs from the code says so in its ข้อดี / ข้อเสีย in a few words ("ตรง ACI", "เข้มกว่า ACI");
+    the detail stays in 📐. Questions about UI, data or workflow keep the shape without these two lines.
+    Why: the owner decides engineering forks by the code and by what practitioners do; with both in the question the
+    owner no longer has to look them up (Q473, the spiral pitch cap, was the example).
 
 ## A good one and a bad one (the 2026-10-01 pair)
 
