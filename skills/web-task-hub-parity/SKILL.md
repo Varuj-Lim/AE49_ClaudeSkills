@@ -1,6 +1,6 @@
 ---
 name: web-task-hub-parity
-description: Compare THIS hub's shared pages (Home, Notifications, Employees, Support, Settings, sign-in pages, the shell) with AE49_Hub - the reference hub - and with the user skills, then walk every difference to an owner ruling - this hub follows AE49, the skill changes, AE49 changes, or it stays different on purpose. Reads only this hub, AE49 on GitHub and the user skills. Use on /web-task-hub-parity, เทียบกับ AE49, ทำให้เหมือน AE49 Hub, Hub นี้ต่างจาก AE49 ตรงไหน, ให้ consistent กัน, ไล่เคาะทีละข้อ.
+description: Compare THIS hub's shared pages (Home, Notifications, Employees, Support, Settings, sign-in pages, the shell) with AE49_Hub - the reference hub - and with the user skills, then walk every difference to an owner ruling - this hub follows AE49, the skill changes, AE49 changes, or it stays different on purpose. Reads only this hub, AE49 on GitHub and the user skills. In AE49_Hub itself it is the FAMILY run: AE49 vs NURI, CCP, AWDC (from GitHub) and the skills, recommending the best version - easiest to use, simplest, fastest, least work. Use on /web-task-hub-parity, เทียบกับ AE49, ทำให้เหมือน AE49 Hub, Hub นี้ต่างจาก AE49 ตรงไหน, ให้ consistent กัน, ไล่เคาะทีละข้อ.
 ---
 
 # web-task-hub-parity — keep this hub's shared pages equal to AE49_Hub
@@ -15,24 +15,56 @@ format lives on in step 4). The ledger it reads and writes is `web-ref-hub-parit
   may hold unpushed work, and no `git` command runs against another hub's checkout (user `CLAUDE.md`, one session one
   project). Pin ONE commit for the whole run.
 - **User skills** — `~/.claude/skills/`.
-- **No other hub, ever** — not CCP, not NURI, not to "check how they did it".
-- **Run in AE49_Hub's own session:** AE49 is compared with the skills only; there is no hub column to fill. Follow
-  § "Run in AE49_Hub" below instead of steps 1, 2 and 5.
+- **No other hub, ever** — not CCP, not NURI, not to "check how they did it". **The one exception is AE49's own run**
+  (below): the parent hub reads its child hubs, from GitHub only, the same way a child reads AE49.
+- **Run in AE49_Hub's own session:** follow § "Run in AE49_Hub — the family run" instead of the steps below.
 
-## Run in AE49_Hub (owner 2026-11-04)
+## Run in AE49_Hub — the family run (owner 2026-11-05, replacing the skills-only run of 2026-11-04)
 
-The reference hub has no hub to follow, so its run checks AE49 against the user skills only:
-- **Step 1 — no snapshot.** Read AE49's own working tree (its committed `main`); nothing comes from GitHub.
-- **Step 2 — baseline = a skills-repo commit.** AE49's row in `divergences.md` § Baselines holds the AE49_ClaudeSkills
-  commit its last run ruled up to. No baseline → a FULL scan of `pages.md` against every canon those pages follow;
-  a baseline → only the skills-repo commits since it on those canons, plus AE49's own commits on the `pages.md`
-  paths since the baseline date (`git log`).
-- **Steps 3–4 as written**, with one difference: every difference is "AE49 vs the skill", and the options are only
-  **AE49 follows the skill** or **the skill changes to match AE49** (layered allowed). No "keeps different" row: a
-  rule AE49 breaks on purpose is a skill change.
-- **Step 5 — close-out:** AE49 follows → a plan in AE49 through its normal flow, and each landing logs a
-  `changelog.md` row (`web-ref-deploy-landing` §5a) so the other hubs pick it up; the skill changes → edit, mirror,
-  commit, push now. No handoff prompt. Then write today's date and the skills-repo commit into AE49's baseline row.
+AE49 is the parent hub; NURI_Hub, CCP_Hub and AWDC_Hub are its children. AE49's run compares **AE49 with every child
+AND with the user skills**, and for each difference proposes the BEST version, whichever hub or skill it lives in
+today — not only "follow AE49".
+
+**What "best" means (owner 2026-11-05)** — the recommended option (a) is the version that, in this order:
+1. **is easiest for staff to use** — the clearest UI / UX, the fewest clicks, the plainest words;
+2. **is least complex** — fewer moving parts, less code, fewer special cases;
+3. **runs fastest** — fewer reads, faster page, no extra round trips;
+4. **costs least to reach** — the fewest hubs and files to change to get every hub onto it.
+A higher criterion wins over a lower one; the question says which criterion decided it and why, in one line. A side
+that prevents a real bug wins over all four and says so.
+
+- **Step 1 — pin and snapshot every child.** AE49 is read from its own working tree (committed `main`). Each child is
+  read from **GitHub `main` only** (`Varuj-Lim/NURI_Hub`, `Varuj-Lim/CCP_Hub`, `Varuj-Lim/AWDC_Hub`): pin ONE commit
+  per child and extract its tarball into a NEW scratchpad folder, exactly as step 1 below — never the child's local
+  folder, never a `git` command there (a sibling session may be working in it).
+- **Step 2 — the family baseline.** AE49's row in `divergences.md` § Baselines holds the date of its last family run,
+  the skills-repo commit and each child's pin (`NURI <sha> · CCP <sha> · AWDC <sha>`). No family baseline → a FULL scan
+  of `pages.md` across all four hubs and the canons those pages follow. A baseline → only: AE49's commits on the
+  `pages.md` paths since its date (`git log`), each child's commits on its matching paths since that child's pin
+  (`gh api …/commits?sha=<pin>&since=…&path=…`), and the skills-repo commits since it on those canons.
+- **Step 3 — scan, one agent per child.** Dispatch three read-only agents in parallel, one per child, each comparing
+  AE49 ⇄ that child ⇄ the skills over the `pages.md` groups, every difference with `file:line` on each side. Main
+  merges them into ONE table keyed by topic with one column per hub (AE49 · NURI · CCP · AWDC · skill), so a topic where
+  two children already agree is one item, not two. Classify as in step 3 below (Expected / Already ruled / Open);
+  each child's own earlier rulings (its rows in `divergences.md`, its scan files in the snapshot) count as ruled.
+- **Step 4 — the ruling walk** as in step 4 below, with every hub shown side by side (the ASCII mock / label / snippet
+  of each), the cause of each difference, and the options drawn from:
+  - **Every hub follows AE49** (the skill states it if it does not yet);
+  - **Every hub follows <child>'s way** — AE49 adopts it too, the skill is updated to it;
+  - **The skill's way** — the hubs that differ from the skill follow it;
+  - **Stays different on purpose** — a `divergences.md` cell per hub that keeps its own.
+  Layered rulings allowed. The (a) option is the best one by the four criteria above, with the criterion named.
+- **Step 5 — close-out, the same session.**
+  - **AE49 changes** → one plan in AE49 (`docs/plans/hub-parity-family-<YYYY-MM-DD>.md`) through the normal flow;
+    each landing logs a `changelog.md` row (`web-ref-deploy-landing` §5a).
+  - **A skill changes** → edit, mirror, commit and push now.
+  - **A child changes** → ONE handoff prompt per child (`web-task-handoff-prompt`) holding all of that child's items,
+    each citing the ruling (`AE49 <date> Pn`) and the AE49 / skill source to copy from — never an edit in the child.
+  - **Stays different** → the `divergences.md` cells.
+  - **The evidence** → the merged scan with every ruling in `docs/specs/hub-parity/family-<YYYY-MM-DD>.md` in AE49,
+    committed. A child's own later run reads it from its AE49 snapshot and treats those rulings as Already ruled.
+  - **Baselines** → AE49's row only (date, skills commit, the three child pins). A child's row moves only in that
+    child's own run, after it has built its handoff.
 
 ## Steps
 
@@ -94,7 +126,8 @@ Per `ae49-ref-report-format`: an English table `# | Page | Difference | Kind | R
 
 ## Don'ts
 
-- Don't read another hub than this one and AE49, and don't read AE49 from its local folder.
+- Don't read another hub than this one and AE49 (AE49's family run reads its children, from GitHub), and don't read
+  any other hub from its local folder.
 - Don't ask an Expected or Already-ruled difference again.
 - Don't offer an option without its cost (files, a plan, a handoff, the owner's hands).
 - Don't move the baseline while an item up to the pin is unruled.

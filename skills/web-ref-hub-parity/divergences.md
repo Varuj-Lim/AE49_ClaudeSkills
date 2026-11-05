@@ -7,7 +7,7 @@ next run fills it). Sources: each hub's `CLAUDE.md` and `<hub>-ref-*` skills as 
 
 | Hub | Last parity run | Ruled up to AE49 commit | หมายเหตุ |
 |---|---|---|---|
-| AE49 | — | — (for AE49 this cell holds the AE49_ClaudeSkills commit its run ruled up to) | AE49 เป็นต้นแบบ เทียบกับ skill อย่างเดียว จุดอ้างอิงเป็น commit ของ skills repo |
+| AE49 | — | — (for AE49 this cell holds its FAMILY run's skills-repo commit and the three child pins: `skills <sha> · NURI <sha> · CCP <sha> · AWDC <sha>`) | AE49 เป็น Hub แม่ รอบของ AE49 เทียบกับ Hub ลูกทั้งสามและ skill แล้วเสนอแบบที่ดีที่สุด (owner 2026-11-05) |
 | AWDC | 2026-11-04 (run 1, 94 items) | `3c5c186c` | รอบแรกเสร็จ รอบหน้าดูเฉพาะ changelog + ตาข่าย GitHub หลัง commit นี้ |
 | CCP | — | — | ยังไม่เคยรัน รอบแรกสแกนเต็ม |
 | NURI | — | — | ยังไม่เคยรัน รอบแรกสแกนเต็ม |
