@@ -58,6 +58,11 @@ Every computed cell of a table has `ƒx` at the cell's **top right**, not `?`, s
 - **Rounding is visible.** Display values to enough digits that a calculator reproduces the result. When the engine rounds at a
   step, as ported workbooks do, the substitution shows that rounded value. When display rounding alone would change the last digit,
   say so once in the report's notes. Where float noise puts a shown value one unit from a calculator, the result stays and the popup says why.
+- **A pass / fail ratio is rounded UP to 4 decimals (owner 2026-11-05, AE49 TK0052 Q498).** The demand / capacity ratio that
+  decides ผ่าน / ตรวจสอบ is ROUNDUP to 4 decimal places, never 3, and passes at ≤ 1 (= 100.0 % ผ่าน). Shown as a percentage
+  with 1 decimal, a 4-decimal ratio keeps the verdict and the number on screen in step: what reads 100.0 % passed on
+  1.0000 or less, not on a value that 3-decimal rounding pushed up to 1.000. Every new or ported check follows it; an
+  existing engine moves to it in its next plan, with the engine-version bump that changed picks require.
 - **Text in the label file** of the module; symbols, units and numbers stay as engineers write them. Words are Thai
   (`web-ref-ui-language`).
 - **Screen and paper are one component.** Length is accepted: a report may run to more pages so the working stays visible.
