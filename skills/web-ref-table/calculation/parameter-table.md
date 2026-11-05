@@ -134,6 +134,10 @@ columns there are: the reason is the repetition, not the count. A repeated-row t
 - **The name column is fixed and IDENTICAL across sibling tables** — two tables that show the
   same records (input above, output below) must start at the same place (gate ⑫). Its width is
   the smallest that holds the longest realistic value.
+- **Or one merged table, each result beside what drives it (owner 2026-11-05, AE49 TK0052 Q499).** Inputs and outputs
+  of one record may share ONE row, the result placed right after the input it judges (`Rebar A | … | Bars | Flex
+  Cap.`), under a grouping header row (`Footing | Rebar …`) above the band row. It is wide by design: it scrolls
+  sideways inside the card with the name column frozen, and the rules above (one flexible column, `min-width` = Σ) hold.
 - **Wider than the card → it scrolls sideways INSIDE the card, name column sticky left.**
   Never squeeze a column below its measured width to avoid the scrollbar.
 - **Over-long values clip** with an ellipsis and the full value on hover; a status pill never
@@ -157,8 +161,9 @@ columns there are: the reason is the repetition, not the count. A repeated-row t
 
 - **On screen:** the ratio itself, green when it passes and red when it fails — no pill, no
   word, no mark (owner 2026-09-16, four steps to *"เอาเครื่องหมายออก … ตัวอักษรใช้สีแทน"*).
-  Allowed only because the value already says pass/fail (threshold 1.000); the cell still
-  carries a Thai `title` / `aria-label` (`ผ่าน · 0.860`). A state whose value does not spell
+  Allowed only because the value already says pass/fail (passes at ≤ 1, i.e. ≤ 100 %; owner 2026-11-05 Q498 a —
+  shown as a ratio or as a percentage rounded UP to its last decimal, `web-ref-calc-report`, so a shown 100.0 % is
+  always green); the cell still carries a Thai `title` / `aria-label` (`ผ่าน · 86.0 %`). A state whose value does not spell
   itself out keeps a word or a shape. A pill is for a state a PERSON set, not a computed one.
 - **On paper:** the colored number PLUS a failure glyph in front of a failing value — a sheet
   gets photocopied in black and white, so color is never the only carrier there.
