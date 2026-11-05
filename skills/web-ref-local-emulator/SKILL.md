@@ -34,6 +34,8 @@ SAFE-CLOSE and REFRESH launchers itself:
   Ctrl-C ("Terminate batch job (Y/N)?") twice in a row on AWDC. So the tab only HANDS it to Windows:
   `run_in_terminal` with `Start-Process -FilePath .\.claude\<launcher>.cmd -WorkingDirectory <hub path>`. The launcher then
   runs in a normal cmd window, exactly as if the owner double-clicked it: they can watch it and close it with Ctrl+C.
+  **Leave that Terminal tab OPEN** — closing it (`stop_terminal_tab close`) also ended the cmd window and the whole suite
+  on AWDC, 2026-11-05. The tab is cleaned up with the suite, after the safe-close.
 - **Start:** never a background Bash/PowerShell shell — that hidden shell is the collision above. Probe the suite's ports
   FIRST; if anything already listens, do not start a second one. After starting, probe the hub until it names `firestore`.
 - **Safe-close** only when no gate section, `ae49-gate` agent, builder probe or owner session is using the suite.
