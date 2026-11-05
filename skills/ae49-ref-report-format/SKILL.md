@@ -178,6 +178,11 @@ Which renders as:
   The heading of any block that tells the owner to DO something — run a command, click in a console, deploy, fill a
   form — reads `🛠️ **ขั้นตอนของคุณ (…นาที):**`, in any message, board or not. One emoji, always the same one, so the
   owner finds his part at a glance in a long reply; Main's own steps and explanations never carry it.
+- **Every command the owner runs gets its own ▶️ line right above its code block (owner 2026-11-05: *"ตอนคุณพิมพ์มาหาผม เพื่อให้ผมรัน Script ช่วยติด Emoji แยกมาให้ผมด้วยก่อนชุดคำสั่งทุกครั้ง เพราะว่า บางที่ผมเลื่อนหาไม่เจอ"*).**
+  Inside a 🛠️ block, or anywhere a command is handed over, each code block the owner pastes is preceded by its own
+  line `▶️ **คำสั่ง n/N — <PowerShell | Cloud Shell>:**` (numbered when there is more than one), so a long reply shows
+  every command, not only the block heading. The plain-text copy of the command (`~/.claude/CLAUDE.md` § Communication)
+  still follows the code block. A command shown only to explain something, or run by Main itself, carries no ▶️.
 - **Close with the 👤 "your move" line — REQUIRED, never omitted (user rule, 2026-08-28).**
   The very last line of the message answers the question the reader actually has: *is anything
   waiting on me?* It restates, as concrete actions, every row whose *Waiting on* points at the
