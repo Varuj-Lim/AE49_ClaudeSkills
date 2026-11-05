@@ -66,6 +66,12 @@ matching icon. A funnel on a button labelled `Date range` is a lie.
   resets it" — the compensation is a `Select all` control, one click back to
   inactive. Pick this side everywhere; the cost of two projects disagreeing is a
   user who believes their data was deleted.
+- **The one exception — a retired-state filter (owner Q495 a, 2026-11-05, AE49 `it-asset-status`).** When a status
+  marks records as out of use (Broken, Donated, Spare …) and the owner rules that the list hides them by default, that
+  status filter STARTS with only the in-use value ticked, and `Clear` returns it to that default, not to all ticked.
+  It needs that ruling on record per list: the filter's caption or tooltip says in Thai what is hidden, the counter
+  of `Clear (N)` does not count the default as an active filter, and the URL key stays absent at the default. Every
+  other filter keeps "all ticked = inactive".
 - **Single-value: the only sentinel is `""`.** A magic `"all"` string is allowed
   only with a comment at the call site saying why.
 - `Clear` must also reset **the panel that is currently open**, not just the
