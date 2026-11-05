@@ -53,3 +53,17 @@ The owner's words and the old-name map: [history.md](history.md).
 - `park/*` and worktree-agent branches are TRANSPORT ONLY — never merged, never a PR; the landing of their
   feature deletes them (`git push origin --delete park/<name>`), never open.
 
+## Emulator auto-close — swap and close (owner 2026-11-05)
+
+Owner: *"ตอนสั่ง /ae49-task-session ถ้าหากไม่มีงานอะไรเหลือค้างเลย ให้ปิด Emu อัตโนมัติไม่ต้องรอผมบอก"*. As the last step
+before the report, **swap** and **close** probe the project's emulator suite (its hub port, `web-ref-local-emulator`) and,
+when it is up and NOTHING pending uses it, Main safe-closes it itself without asking:
+- **Nothing pending means:** no plan building, in audit or at its gate; no gate section open; no `ae49-gate` agent,
+  builder probe or harness on the suite; nothing queued to start next that needs it. A register row held on the owner's
+  word or on a date does not count.
+- **How:** the project's safe-stop launcher (it exports the data first) in a visible Terminal panel tab, exactly as
+  `web-ref-local-emulator` § 1's second bend presses it, then its safe-kill check (ports free, no orphan `java` / `node`).
+- **Report:** one line, `ปิด emulator แล้ว — ไม่มีงานค้าง` with the tab link. Something pending → the suite stays up and
+  the line names what still uses it. The launcher refuses or the export fails → leave it up and quote the exact message.
+- **open** does not auto-close: a suite that is up at open was usually just started by the owner for the day's work.
+

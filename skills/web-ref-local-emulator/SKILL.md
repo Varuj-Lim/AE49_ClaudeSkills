@@ -1,6 +1,6 @@
 ---
 name: web-ref-local-emulator
-description: "Canon (web-ref-*) emulator discipline for hubs with .cmd launchers: the OWNER presses launchers (bends: stop on a live shutdown order; start / safe-close in a VISIBLE Terminal panel tab, Q458 a; refresh there too when nothing uses the suite, Q487 a); probe before naming a button; look-alike safe-kill; refresh; stale-cache 404. Use to start, stop, refresh or debug an emulator, before naming any launcher, or when a launcher/emulator ruling lands."
+description: "Canon (web-ref-*) emulator discipline for hubs with .cmd launchers: the OWNER presses launchers (bends: stop on a live shutdown order; start / safe-close in a VISIBLE Terminal panel tab, Q458 a; refresh there too when nothing uses the suite, Q487 a; safe-close unasked at a session swap / close when nothing pending uses it, 2026-11-05); probe before naming a button; look-alike safe-kill; refresh; stale-cache 404. Use to start, stop, refresh or debug an emulator, before naming any launcher, or when a launcher/emulator ruling lands."
 ---
 
 # Local emulator — shared discipline
@@ -36,6 +36,8 @@ SAFE-CLOSE and REFRESH launchers itself:
   (read-only, thousands of reads) and WIPES the emulator world, so Claude presses it only when ALL hold: no gate section
   open, no `ae49-gate` agent, builder probe or harness using the suite, every seeded test batch already swept, and the
   work in hand needs fresher data. One line in chat BEFORE pressing (what it is for), then the same visible tab.
+- **Safe-close at a session swap or close, unasked, when nothing pending uses the suite** (owner 2026-11-05) — the
+  rule and what "nothing pending" means live in `ae49-task-session` § Emulator auto-close.
 - Name the tab in chat with its link so the owner can find it.
 Claude runs a launcher in no other case.
 

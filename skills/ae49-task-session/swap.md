@@ -26,6 +26,7 @@ Autopilot OFF, all of which only slow a same-machine swap down or break it (owne
    off report.
 4. **Backup push** — the project's no-deploy backup push, exactly as [close](close.md) step 7
    (that skill owns the command and the never-push-the-deploy-branch rule).
+4b. **Emulator auto-close** — [SKILL.md](SKILL.md) § Emulator auto-close: nothing pending uses the suite → safe-close it.
 5. **Report in two or three lines and stop** — the in-flight file's path, what was committed / pushed, anything the user still
    has to look at (a rollout, a deploy), and the one line to type in the NEW session:
    `/ae49-task-session` (bare — in the new, empty session it runs [open](open.md)) — then the 🤖 line. **The USER closes this session and opens the new one
@@ -34,7 +35,7 @@ Autopilot OFF, all of which only slow a same-machine swap down or break it (owne
    checkout, which is exactly the parallel writer the swap is meant to avoid (owner 2026-10-27).
 
 Skipped on purpose: park branches, worktree parking, the 🎒 hand-carry list, the engines stop
-(no agent is running — step 0; a dev server or emulator may stay up), the close-day-park log entry (one line is optional), the
+(no agent is running — step 0; a dev server may stay up, the emulator follows step 4b), the close-day-park log entry (one line is optional), the
 skills-repo sync check, the shutdown question.
 
 For switching MACHINES, use [close](close.md) instead (work must travel via

@@ -35,7 +35,8 @@ switch-off. Step 6 then records `Autopilot: OFF (switched off at close-day)` in 
      an exploration is not). Stop with `TaskStop`; never park a worktree whose builder is alive.
    - Emulator / dev server that MAIN started (`preview_start`) → `preview_stop`, then the safe-kill
      check of `web-ref-local-emulator` (ports free, no orphan `java` / `node`). One the OWNER started
-     in their own terminal → tell them: close it with Ctrl+C, never the window X (as before).
+     → [SKILL.md](SKILL.md) § Emulator auto-close (owner 2026-11-05): nothing pending uses it → Main safe-closes it;
+     something still uses it → name it, and the owner closes it later with Ctrl+C, never the window X.
    - A backup push or skills push still in flight → wait for it; step 7 / 8 re-run them anyway.
    Record "engines: all stopped" (or what was left running and why) in the step-9 report; step 10
    refuses to shut the machine down while this line is not clean.
