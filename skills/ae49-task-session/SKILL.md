@@ -61,7 +61,7 @@ when it is up and NOTHING pending uses it, Main safe-closes it itself without as
 - **Nothing pending means:** no plan building, in audit or at its gate; no gate section open; no `ae49-gate` agent,
   builder probe or harness on the suite; nothing queued to start next that needs it. A register row held on the owner's
   word or on a date does not count.
-- **How:** the project's safe-stop launcher (it exports the data first) in a visible Terminal panel tab, exactly as
+- **How:** the project's safe-stop launcher (it exports the data first) in its own visible cmd window, exactly as
   `web-ref-local-emulator` § 1's second bend presses it, then its safe-kill check (ports free, no orphan `java` / `node`).
 - **Report:** one line, `ปิด emulator แล้ว — ไม่มีงานค้าง` with the tab link. Something pending → the suite stays up and
   the line names what still uses it. The launcher refuses or the export fails → leave it up and quote the exact message.

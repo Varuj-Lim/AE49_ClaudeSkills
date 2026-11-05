@@ -1,6 +1,6 @@
 ---
 name: web-ref-local-emulator
-description: "Canon (web-ref-*) emulator discipline for hubs with .cmd launchers: the OWNER presses launchers (bends: stop on a live shutdown order; start / safe-close in a VISIBLE Terminal panel tab, Q458 a; refresh there too when nothing uses the suite, Q487 a; safe-close unasked at a session swap / close when nothing pending uses it, 2026-11-05); probe before naming a button; look-alike safe-kill; refresh; stale-cache 404. Use to start, stop, refresh or debug an emulator, before naming any launcher, or when a launcher/emulator ruling lands."
+description: "Canon (web-ref-*) emulator discipline for hubs with .cmd launchers: the OWNER presses launchers (bends: stop on a live shutdown order; start / safe-close in its OWN visible cmd window (Start-Process, 2026-11-05; Q458 a); refresh the same way when nothing uses the suite, Q487 a; safe-close unasked at a session swap / close when nothing pending uses it, 2026-11-05); probe before naming a button; look-alike safe-kill; refresh; stale-cache 404. Use to start, stop, refresh or debug an emulator, before naming any launcher, or when a launcher/emulator ruling lands."
 ---
 
 # Local emulator — shared discipline
@@ -26,19 +26,24 @@ refreshing is not.
 **The one bend: the owner's live message orders the machine shut down** (owner 2026-10-07, written in
 `ae49-task-session` `close.md`). Then Claude runs the safe-stop launcher itself and no other launcher.
 
-**Second bend — start, safe-close and refresh in a VISIBLE terminal (owner Q458 a, 2026-11-04; refresh Q487 a, 2026-11-05;
+**Second bend — start, safe-close and refresh in a VISIBLE cmd window (owner Q458 a, 2026-11-04; refresh Q487 a, 2026-11-05;
 AE49_Hub; every hub).** When the app has a Terminal panel (`mcp__terminal__run_in_terminal`), Claude may press the START,
 SAFE-CLOSE and REFRESH launchers itself:
-- **Start** runs in a Terminal panel tab the owner can see and stop (never a background Bash/PowerShell shell — that hidden
-  shell is the collision above). Probe the suite's ports FIRST; if anything already listens, do not start a second one.
+- **Every launcher opens in its OWN cmd window (owner 2026-11-05: *"ให้มาเปิดด้วยหน้าต่าง cmd ตลอดเพราะมีหลายครั้งที่เปิดผ่าน
+  Terminal Tab แล้วไม่ขึ้น"*).** Typed straight into a Terminal panel tab, a `.cmd` launcher was cut off by the tab's own
+  Ctrl-C ("Terminate batch job (Y/N)?") twice in a row on AWDC. So the tab only HANDS it to Windows:
+  `run_in_terminal` with `Start-Process -FilePath .\.claude\<launcher>.cmd -WorkingDirectory <hub path>`. The launcher then
+  runs in a normal cmd window, exactly as if the owner double-clicked it: they can watch it and close it with Ctrl+C.
+- **Start:** never a background Bash/PowerShell shell — that hidden shell is the collision above. Probe the suite's ports
+  FIRST; if anything already listens, do not start a second one. After starting, probe the hub until it names `firestore`.
 - **Safe-close** only when no gate section, `ae49-gate` agent, builder probe or owner session is using the suite.
 - **Refresh, at a safe moment (owner Q487 a, 2026-11-05, replacing "refresh stays the owner's")** — it reads production
   (read-only, thousands of reads) and WIPES the emulator world, so Claude presses it only when ALL hold: no gate section
   open, no `ae49-gate` agent, builder probe or harness using the suite, every seeded test batch already swept, and the
-  work in hand needs fresher data. One line in chat BEFORE pressing (what it is for), then the same visible tab.
+  work in hand needs fresher data. One line in chat BEFORE pressing (what it is for), then its own cmd window as above.
 - **Safe-close at a session swap or close, unasked, when nothing pending uses the suite** (owner 2026-11-05) — the
   rule and what "nothing pending" means live in `ae49-task-session` § Emulator auto-close.
-- Name the tab in chat with its link so the owner can find it.
+- Say in chat that a cmd window was opened and for which launcher, so the owner can find it.
 Claude runs a launcher in no other case.
 
 ### 1b. A builder's PRIVATE, self-closing suite is not the owner's suite (owner Q13 a, 2026-10-29)
