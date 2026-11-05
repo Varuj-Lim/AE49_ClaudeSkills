@@ -21,6 +21,19 @@ is written in full, complete sentences: each finding says what the thing is, why
 unsafe, and what happens if it is removed/fixed versus left alone. Comprehension beats token
 savings in reports; the user must never have to guess what a compressed fragment meant.
 
+## 1a. A reply after the owner's answers has THREE sections, each with its own emoji (owner 2026-11-05)
+
+When the owner answers questions or hands over items, the reply is split into three labelled sections, in this order:
+
+1. **✅ บันทึกแล้ว** — what was recorded and done from the owner's words (rulings logged, plans updated, tickets filed,
+   files copied), one bullet each.
+2. **💬 ตอบคำถาม** — answers to any question the owner asked in that message.
+3. **🙋 ที่ต้องการจากคุณ** — what Main still needs from the owner (questions, files, commands), each item concrete.
+
+A section with nothing in it is left out. The status board, the ⏱️ / ⚡ lines and the 👤 / 🤖 lines follow after these
+sections as usual. Why: on 2026-11-05 the owner found the record, the answers and the asks mixed in one list and asked
+for them to be split ("ตอนตอบกลับให้แยกออกเป็น 3 หมวด … ต้องมี Emoji แยกออกจากกัน กดลงกติกากลางนะ").
+
 ## 1b. Multi-track status boards are TABLES (user rule, 2026-08-05)
 
 Whenever a report covers the state of **multiple parallel items** — in-flight builds, plans,
