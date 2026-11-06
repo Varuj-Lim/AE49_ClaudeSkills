@@ -7,4 +7,4 @@ on http://127.0.0.1:8049 so the page runs in the Claude app's Browser pane.
 Install on a machine: copy `town.html` and `serve.cjs` to `~/.claude/agent-town/`, the hook to `~/.claude/hooks/`, then add
 to `~/.claude/settings.json` hooks: `PreToolUse` (matcher `*`), `PostToolUse` (matcher `Agent|Task`), `SubagentStart`,
 `SubagentStop`, `Stop`, `UserPromptSubmit` → `node "<home>/.claude/hooks/agent-town-hook.cjs"`, and `SessionStart` →
-`node "<home>/.claude/agent-town/serve.cjs" --ensure`. Open http://127.0.0.1:8049/ in the Browser pane.
+nothing at SessionStart: open it with the skill `ae49-task-agent-town` (it starts the server on demand).
