@@ -170,6 +170,13 @@ for (const [x, z, s] of [[-19, -16, 1.2], [-21, 4, 1], [20, -15, 1.1], [21, 3, 0
 // ── Real models (owner 2026-11-06): a role listed here wears its .glb once it has loaded; until then, or if it fails,
 //    the robot built from shapes stays. The model is a statue (no rig), so it moves as one piece.
 const MODEL_URLS = { builder: "models/builder-g70.glb", planner: "models/planner.glb" };
+// Clips by town state, per role (owner's Tripo export 2026-11-06). A state missing here falls back to "idle".
+// "work" alternates its list every 8 s. Clips are played in place: the hips' horizontal drift is removed at load.
+const MODEL_CLIPS = {
+  planner: { idle: ["idle"], walk: ["walk"], work: ["Pointing to the front", "Typing / Writing / Using tablet"],
+    question: ["Thinking"], celebrate: ["Cheer / Clap"], wave: ["Wave / Nod"], sleep: ["Sit / Sleep"],
+    alarm: ["Looking around / Searching"] },
+};
 const MODEL_SCALE = { builder: 2.6, planner: 2.5 };
 // A rigged (skinned) model: cloned with SkeletonUtils, posed by code each frame (rigPose below), turned to face +Z.
 const MODEL_RIGGED = { planner: { turn: 0, metalness: 0.25 } };
@@ -178,7 +185,13 @@ function loadModel(url) {
   if (!modelCache.has(url)) modelCache.set(url, new Promise((ok, bad) => {
     if (!THREE.GLTFLoader) { bad(new Error("no GLTFLoader")); return; }
     new THREE.GLTFLoader().load(url, (gltf) => {
-      gltf.scene.traverse((o) => { if (o.isMesh) { o.geometry.computeVertexNormals(); o.material.side = THREE.DoubleSide; o.castShadow = true; } });
+      gltf.scene.traverse((o) => { if (o.isMesh) { if (!o.isSkinnedMesh) o.geometry.computeVertexNormals(); o.material.side = THREE.DoubleSide; o.castShadow = true; } });
+      for (const clip of gltf.animations || []) for (const tr of clip.tracks) {
+        if (!/Hips\.position$/.test(tr.name)) continue;            // in place: keep the bounce, drop the walk forward
+        const v = tr.values, x0 = v[0], z0 = v[2];
+        for (let i = 0; i < v.length; i += 3) { v[i] = x0; v[i + 2] = z0; }
+      }
+      gltf.scene.userData.clips = gltf.animations || [];
       ok(gltf.scene);
     }, undefined, bad);
   }));
@@ -186,6 +199,16 @@ function loadModel(url) {
 }
 // ── Rig posing by code (the export has no clips): each pose turns Mixamo bones about axes of the model frame
 //    on top of the T-pose rest. Mixamo frame: the model faces +Z, its left arm points +X (AX.right is the side axis).
+function playClip(an, st, t, dt) {
+  const list = an.map[st] || an.map.idle; const name = list[Math.floor(t / 8) % list.length];
+  const next = an.actions[name] || an.actions[(an.map.idle || [])[0]];
+  if (next && next !== an.current) {
+    next.reset().setLoop(THREE.LoopRepeat, Infinity).play();
+    if (an.current) an.current.crossFadeTo(next, 0.35, false);
+    an.current = next;
+  }
+  an.mixer.update(dt);
+}
 function makeRig(model) {
   model.updateMatrixWorld(true);
   const bones = {};
@@ -277,7 +300,15 @@ function makeRobot(role) {
     const rig = MODEL_RIGGED[role];
     const c = rig && THREE.SkeletonUtils ? THREE.SkeletonUtils.clone(m) : m.clone();
     const holder = new THREE.Group(); holder.add(c); holder.scale.setScalar(MODEL_SCALE[role] || 2.5);
-    if (rig) { c.rotation.y = rig.turn; c.traverse((o) => { if (o.isMesh && rig.metalness !== undefined) o.material.metalness = rig.metalness; }); parts.rig = makeRig(c); }
+    if (rig) {
+      c.rotation.y = rig.turn; c.traverse((o) => { if (o.isMesh && rig.metalness !== undefined) o.material.metalness = rig.metalness; });
+      const clips = m.userData.clips || [];
+      if (clips.length && MODEL_CLIPS[role]) {
+        const mixer = new THREE.AnimationMixer(c); const actions = {};
+        for (const clip of clips) actions[clip.name] = mixer.clipAction(clip);
+        parts.anim = { mixer, actions, map: MODEL_CLIPS[role], current: null };
+      } else parts.rig = makeRig(c);
+    }
     body.visible = false; g.add(holder); parts.model = holder;
   }).catch((e) => console.warn("model", role, e.message));
   return { group: g, parts, role };
@@ -576,7 +607,7 @@ function animate(a, t, dt) {
   if (p.beacon) p.beacon.material.emissiveIntensity = st === "work" || st === "walk" ? 0.6 + Math.abs(Math.sin(t * 5)) : 0.3;
   setBubble(a, st === "sleep" ? "Zz" : st === "alarm" ? "!" : st === "celebrate" ? "✓" : st === "question" ? "?" : null);
   if (p.bubble.visible) p.bubble.position.y = 3 + Math.sin(t * 2) * 0.1;
-  if (p.rig) rigPose(p.rig, st, t);
+  if (p.anim) playClip(p.anim, st, t, dt); else if (p.rig) rigPose(p.rig, st, t);
   if (st === "work" && a.house && (a.role === "builder" || a.role === "heavy") && Math.random() < dt * 3) dust(g.position);
 }
 tick();
