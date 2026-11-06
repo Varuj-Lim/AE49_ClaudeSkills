@@ -19,7 +19,11 @@ write events, the page reads them.
 
 ## Verbs
 
-- **open** (default; เปิดเมือง): `node "$HOME/.claude/agent-town/serve.cjs" --ensure`, then `preview_start` with
+**A bare `/ae49-task-agent-town` is a TOGGLE (owner 2026-11-06):** the town is OPEN when the server answers on
+`http://127.0.0.1:8049/ping` or a Browser tab shows `127.0.0.1:8049` (`tabs_context`) → run **close**; otherwise run **open**.
+Say in one line which one ran. Words win over the toggle: "เปิดเมือง" always opens, "ปิดเมือง" always closes, "ปรับเมือง" changes.
+
+- **open** (เปิดเมือง): `node "$HOME/.claude/agent-town/serve.cjs" --ensure`, then `preview_start` with
   `url: "http://127.0.0.1:8049/"` (the built-in browser). One line to the owner: the town is open, drag to turn the camera,
   🌙 for night, ⟲ to reset.
 - **close** (ปิดเมือง): close the Browser tab showing `127.0.0.1:8049`, then stop the server — find the listener on port
