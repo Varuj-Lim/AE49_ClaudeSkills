@@ -16,6 +16,7 @@ write events, the page reads them.
 | `~/.claude/hooks/agent-town-hook.cjs` | hook on PreToolUse (`*`), PostToolUse (`Agent\|Task`), SubagentStart, SubagentStop, Stop, UserPromptSubmit in `~/.claude/settings.json`; appends to `~/.claude/agent-town/state.json` (last 400 events) and rewrites `events.js` |
 | `~/.claude/agent-town/town.html` | the town: robots, houses (11 stages), day / night, camera; polls `events.js` every 2 s; pauses while hidden |
 | `~/.claude/agent-town/serve.cjs` | static server on `http://127.0.0.1:8049` (`--ensure` starts it detached only if nothing answers) |
+| `<skills clone>/agent-town/install.cjs` | installs / updates the town on a machine: copies `agent-town/` to `~/.claude/agent-town` (keeps the machine's `state.json`, `events.js`, `*-source.glb`), the hook to `~/.claude/hooks/`, and adds the six hook entries to `~/.claude/settings.json` after a backup; `--dry-run` first; idempotent (owner Q639 a, 2026-11-06) |
 
 ## Verbs
 
@@ -23,7 +24,11 @@ write events, the page reads them.
 `http://127.0.0.1:8049/ping` or a Browser tab shows `127.0.0.1:8049` (`tabs_context`) → run **close**; otherwise run **open**.
 Say in one line which one ran. Words win over the toggle: "เปิดเมือง" always opens, "ปิดเมือง" always closes, "ปรับเมือง" changes.
 
-- **open** (เปิดเมือง): `node "$HOME/.claude/agent-town/serve.cjs" --ensure`, then `preview_start` with
+- **open** (เปิดเมือง): FIRST, if `~/.claude/agent-town/town.html` or `~/.claude/hooks/agent-town-hook.cjs` is missing, or the
+  clone's `agent-town/` is newer (another machine — e.g. the owner's home PC): `git -C <skills clone> pull --ff-only`, then
+  `node <skills clone>/agent-town/install.cjs --dry-run`, then without `--dry-run` (the clone's path is in this machine's local
+  memory; usually `~/Documents/AE49_ClaudeSkills`); say in one line what it installed and that new hooks record from the NEXT
+  session. Then `node "$HOME/.claude/agent-town/serve.cjs" --ensure`, then `preview_start` with
   `url: "http://127.0.0.1:8049/"` (the built-in browser). One line to the owner: the town is open, drag to turn the camera,
   🌙 for night, ⟲ to reset.
 - **close** (ปิดเมือง): close the Browser tab showing `127.0.0.1:8049`, then stop the server — find the listener on port
