@@ -6,8 +6,8 @@ const { auth, cfg } = require("./emu-admin.cjs");
 (async () => {
   const email = process.env.GATE_ACCOUNT_EMAIL || cfg.accountEmail;
   const u = await auth.getUserByEmail(email);
-  const token = await auth.createCustomToken(u.uid, { impersonatedBy: u.uid });
-  const marker = { targetUid: u.uid, impersonatedBy: u.uid, label: "headless gate (" + email + ")", byLabel: "gate" };
+  const token = await auth.createCustomToken(u.uid, { impersonatedBy: u.uid, signedInAsBy: u.uid }); // both claim names: AE49 + AWDC read signedInAsBy (hub-parity B7), older hubs impersonatedBy
+  const marker = { targetUid: u.uid, impersonatedBy: u.uid, signedInAsBy: u.uid, label: "headless gate (" + email + ")", byLabel: "gate" };
   console.log(JSON.stringify({ token, marker }));
   process.exit(0);
 })().catch((e) => { console.error(e.message); process.exit(1); });
