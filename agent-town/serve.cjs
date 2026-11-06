@@ -10,7 +10,7 @@ const { spawn } = require("child_process");
 
 const PORT = 8049;
 const ROOT = __dirname;
-const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json" };
+const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".json": "application/json", ".glb": "model/gltf-binary", ".jpg": "image/jpeg", ".png": "image/png" };
 
 if (process.argv.includes("--ensure")) {
   const req = http.get({ host: "127.0.0.1", port: PORT, path: "/ping", timeout: 400 }, (res) => { res.resume(); process.exit(0); });
@@ -26,7 +26,7 @@ http.createServer((req, res) => {
   const url = decodeURIComponent((req.url || "/").split("?")[0]);
   if (url === "/ping") { res.end("ok"); return; }
   const file = path.normalize(path.join(ROOT, url === "/" ? "town.html" : url));
-  if (!file.startsWith(ROOT) || !/\.(html|js|json)$/.test(file)) { res.statusCode = 404; res.end(); return; }
+  if (!file.startsWith(ROOT) || !/\.(html|js|json|glb|jpg|png)$/.test(file)) { res.statusCode = 404; res.end(); return; }
   fs.readFile(file, (err, data) => {
     if (err) { res.statusCode = 404; res.end(); return; }
     res.setHeader("Content-Type", TYPES[path.extname(file)] || "text/plain");

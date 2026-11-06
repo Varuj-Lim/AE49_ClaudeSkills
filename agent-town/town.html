@@ -39,6 +39,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script>
 "use strict";
 if (!window.THREE) { document.getElementById("err").style.display = "flex"; throw new Error("no three"); }
@@ -165,6 +166,21 @@ for (const [x, z] of [[-3.5, -1.5], [3.5, -1.5], [-3.5, 2.2], [3.5, 2.2], [-15, 
 for (const [x, z, s] of [[-19, -16, 1.2], [-21, 4, 1], [20, -15, 1.1], [21, 3, 0.9], [-12, 17, 1], [12, 18, 1.2], [-20, 17, 0.8], [19, 18, 1], [-9, -16, 0.9], [9, -17, 1]]) tree(x, z, s);
 
 // ── Robots, built from simple shapes ───────────────────────────────────────────────────────────────────────
+// ── Real models (owner 2026-11-06): a role listed here wears its .glb once it has loaded; until then, or if it fails,
+//    the robot built from shapes stays. The model is a statue (no rig), so it moves as one piece.
+const MODEL_URLS = { builder: "models/builder-g70.glb" };
+const MODEL_SCALE = { builder: 2.6 };
+const modelCache = new Map();
+function loadModel(url) {
+  if (!modelCache.has(url)) modelCache.set(url, new Promise((ok, bad) => {
+    if (!THREE.GLTFLoader) { bad(new Error("no GLTFLoader")); return; }
+    new THREE.GLTFLoader().load(url, (gltf) => {
+      gltf.scene.traverse((o) => { if (o.isMesh) { o.geometry.computeVertexNormals(); o.material.side = THREE.DoubleSide; o.castShadow = true; } });
+      ok(gltf.scene);
+    }, undefined, bad);
+  }));
+  return modelCache.get(url);
+}
 function makeRobot(role) {
   const R = ROLES[role]; const g = new THREE.Group(); const body = new THREE.Group(); g.add(body);
   const bm = M(R.body, { metalness: 0.35, roughness: 0.45 }), tm = M(R.trim, { metalness: 0.3, roughness: 0.5 });
@@ -217,6 +233,7 @@ function makeRobot(role) {
   if (role === "tester") { const lb = box(0.5, 0.04, 0.35, M(0x37424d)); lb.position.set(0, 1.0, 0.45); body.add(lb); const sc = box(0.5, 0.32, 0.03, M(0x0e2a33, { emissive: 0x39e6c6, emissiveIntensity: 0.7 })); sc.position.set(0, 1.18, 0.28); sc.rotation.x = -0.3; body.add(sc); }
   g.scale.setScalar(0.85);
   const bub = bubble("Zz"); bub.position.y = 3; bub.visible = false; g.add(bub); parts.bubble = bub; parts.bubbleChar = "Zz";
+  if (MODEL_URLS[role]) loadModel(MODEL_URLS[role]).then((m) => { const c = m.clone(); c.scale.setScalar(MODEL_SCALE[role] || 2.5); body.visible = false; g.add(c); parts.model = c; }).catch((e) => console.warn("model", role, e.message));
   return { group: g, parts, role };
 }
 function setBubble(a, ch) {
