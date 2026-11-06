@@ -111,6 +111,8 @@ ask the owner to run `/context` and wait for the number.
 The 🧹 line sits right above the 🤖 line and names the nearest break:
 `🧹 Session ยาวแล้ว — จุดพักถัดไป: <what is running, about when it ends>`.
 
+**The owner's answers in a long session are recorded, never acted on (owner 2026-11-07).** Once the session is long (the table's second row), an answer to a question (`Q<n> a`) or a go-ahead the owner gives is written into its plan or the register, logged as a ruling and committed, and nothing more: no fold, no dispatch, no gate, however small the work it unlocks. Main then runs `ae49-task-session swap` at the first clean break and asks the owner to close this session; the NEW session acts on the rulings from the in-flight memory. Other live orders keep the table's few-tool-calls rule. Why: on 2026-11-07 the owner answered Q656–Q659 in a compacted session, said *"จดไว้เฉยๆก่อนนะยังไม่ต้องทำ เดียวจะปิด Session ก่อน"*, and then asked for it as a rule.
+
 **Autopilot in `decide`** (owner Q348 a, 2026-11-02): the owner is away, so 75 % and a compact do not stop the run; after a compact it re-invokes the session skills and carries on. At 85 % it starts nothing new and swaps at the first clean break. In `ask` the table applies as written.
 
 **A clean break** means no agent running, no gate section open, and no question that lives only in chat. Unfinished work may
