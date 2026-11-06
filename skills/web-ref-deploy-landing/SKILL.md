@@ -36,6 +36,10 @@ branch without the user asking for it *in that turn*. "They approved a push
 yesterday" is not approval for today's push, and passing the manual-test gate is
 approval to COMMIT, never to deploy.
 
+**Every deploy push closes a question round** (owner Q663 a, 2026-11-07): the push report carries
+`🔢 คำถาม: รอบนี้ตอบ N ข้อ · รวมทั้งหมด M ข้อ` from the project's `.claude/memory/shared/questions.json`, and the file moves to
+the next round — the rule and the file's shape are `ae49-ref-question-format` rule 12.
+
 ## 2. The backup branch is always allowed
 
 `git push origin <deploy-branch>:<backup-branch>` gets the day's commits off the

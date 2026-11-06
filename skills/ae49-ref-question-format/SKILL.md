@@ -81,12 +81,29 @@ spelled out with its consequence, and a recommendation with the reason. That is 
    add a worked example from the app (a real record, a real screen) and restate each option as
    "ถ้าเลือก (a) คุณจะเห็น … / ต้องทำ …".
 11. **Each option's four facts stand on their OWN lines (owner rule 2026-10-06).** Under every option, ทำอย่างไร / ข้อดี / ข้อเสีย / ต้นทุน are four separate sub-bullets — never one run-on line joined with " · ". The owner reads the options by scanning down the same four slots in each; a run-on line hides which phrase is the cost and which the drawback. A fact that genuinely does not apply is written "—", not dropped, so the four slots stay aligned across options.
-12. **Numbering:** `Q<n>` within one grill; a decode's questions keep the spec's IDs (`DQ1` / `Q6`);
-    an audit's open question relayed to the owner keeps its audit ID. Never reuse a number in one
-    grill.
-    **The running counter restarts at Q1 when the owner says so (owner 2026-10-28) — no push is needed.** Chat keeps the bare `Q<n>`; durable records (log `ruling:` lines,
-    plan Decisions, the register) write the date before it — `2026-10-28 Q1` — so a reset number never reads as an older
-    ruling of the same number. The log line records the ruling as `ruling: owner Q<n> (a) — <one line>`.
+12. **Numbering — one running `Q<n>` per project, restarted after every push, with a running total (owner Q663 a,
+    2026-11-07; replaces the per-grill count and the 2026-10-28 restart-on-request).**
+    - **The counter file** `.claude/memory/shared/questions.json` (git-synced, so both machines agree):
+      `{ "round": <n>, "roundSince": "<push sha | \"start\">", "next": <n>, "askedThisRound": <n>, "answeredThisRound": <n>,
+      "totalAsked": <n>, "totalAnswered": <n>, "seeded": "<how the totals began>" }`. It replaces the in-flight memory's
+      "Next question number" line.
+    - **Asking** takes `next` and bumps it with `askedThisRound` / `totalAsked`; **an answer logged as a ruling** bumps
+      `answeredThisRound` / `totalAnswered`. Every question the owner answers counts, whatever its prefix (a decode's `DQ`,
+      an audit's ID, a contract's `CQ`); only `Q<n>` takes its number from `next` — the others keep their own IDs.
+    - **At the push of the deploy branch** (the owner's "push", `web-ref-deploy-landing`), the push report carries one line,
+      `🔢 คำถาม: รอบนี้ตอบ N ข้อ · รวมทั้งหมด M ข้อ`, then the file moves to the next round: `round` + 1, `roundSince` = the
+      pushed sha, `next` = 1, both this-round counts = 0; committed with the push's memory commit. A backup push is not a push.
+    - **Chat keeps the bare `Q<n>`; durable records write the round before it — `P12-Q5`** (log `ruling:` lines, plan
+      Decisions, the register), so a restarted number never reads as an older ruling of the same number. The log line
+      reads `ruling: owner P12-Q5 (a) — <one line>`. Records written before this rule keep their forms (bare `Q<n>`,
+      `2026-10-28 Q1`) — history, not rewritten.
+    - **A question still open at the push** is asked again in the new round with a new number that names the old one —
+      `Q3 (เดิม P11-Q57)` — and its register row is renumbered in the same commit.
+    - **A project without the file** creates it at its first question: `round` 1, and the totals SEEDED from its own
+      records (logs, plans, the register — the distinct answered IDs), `"seeded"` saying it is an estimate and how it was
+      counted. When asked "ตอบไปกี่ข้อ", Main reads the file, never recounts from memory.
+    - A decode's questions keep the spec's IDs (`DQ1` / `Q6`) and an audit's open question relayed to the owner keeps its
+      audit ID; never reuse a number inside one round.
 13. **The board's 👤 line still names the pending question** ("รอคุณ: Q5 a/b") — that line is a
     pointer, never the question itself; the question lives in its own block above.
 14. **Option (a) is ALWAYS Main's recommendation (owner rule 2026-11-03).** The recommended option is listed first
