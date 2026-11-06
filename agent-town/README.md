@@ -16,3 +16,7 @@ export `Agenet Implement.glb`, 1.84 M triangles / 61 MB, kept on the machine onl
 `tools/decimate-glb.cjs <in> <out> --grid 70 --uvgrid 48` shrinks a single-mesh export by vertex clustering that respects UV
 seams (80 k triangles, 5.5 MB, base-colour texture only). The model is a statue — no rig, no clips — so it moves as one piece;
 a rigged export with the clip names in the skill would animate limbs. `preview-model.html?models=a.glb,b.glb` compares copies.
+- **Planner (2026-11-06):** `models/planner.glb` — the owner's Tripo export, 10 k triangles, Mixamo rig (54 bones, names come back
+  without the `:` through GLTFLoader), no clips. `town.html` poses it in code (`rigPose`: idle, walk, work = pointing, question =
+  hand up, celebrate, wave, alarm, sleep) by turning bones about the Mixamo frame (faces +Z, left arm +X). Clips in a later export
+  replace the code poses role by role.
