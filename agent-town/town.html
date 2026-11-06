@@ -351,8 +351,14 @@ function apply(e, fast) {
     const a = actorFor(e.agent, role); goTo(a, a.home.clone().add(new THREE.Vector3(0.6, 0, 1.4)), "work", fast); return;
   }
   if (e.kind === "tool" && e.agent && e.agent !== "main") {
-    const info = agentInfo.get(e.agent); if (!info) return;
-    const a = actorFor(e.agent, info.role); a.lastTool = now();
+    let info = agentInfo.get(e.agent);
+    if (!info && e.agentType) {  // an agent dispatched before the hook was installed, or whose dispatch was missed: wake it at its station
+      info = { role: roleOf(e.agentType), house: null }; agentInfo.set(e.agent, info);
+      const w = actorFor(e.agent, info.role); goTo(w, w.home.clone().add(new THREE.Vector3(0.6, 0, 1.4)), "work", false);
+      log(e.t || Date.now(), `${ROLES[info.role].label} กำลังทำงานอยู่`);
+    }
+    if (!info) return;
+    const a = actorFor(e.agent, info.role); a.lastTool = now(); if (a.state === "sleep" || a.state === "idle") goTo(a, a.home.clone().add(new THREE.Vector3(0.6, 0, 1.4)), "work", false);
     const h = a.house;
     if (h && (info.role === "builder" || info.role === "heavy" || info.role === "carrier") && /Edit|Write/.test(e.tool)) {
       a.edits = (a.edits || 0) + 1; if (a.edits > 3 && h.stage < 4) setStage(h, 4); if (a.edits > 10 && h.stage < 5) setStage(h, 5);
