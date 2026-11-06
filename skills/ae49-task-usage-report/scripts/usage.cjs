@@ -14,6 +14,10 @@
 //   node usage.cjs --by-model           add a per-model breakdown under each table
 //   node usage.cjs --no-sync            local numbers only, touch no git
 //   node usage.cjs --sync --quiet       sync only, print nothing (the daily hook)
+//   node usage.cjs --record-limit 44 --resets 2026-11-11T22:59:59Z [--sync --quiet]
+//                                       store the logged-in account's weekly-limit % (Main reads
+//                                       it from the app); the report sums every account's
+//                                       current reading out of LIMIT_ACCOUNTS x 100 %
 "use strict";
 
 const fs = require("fs");
@@ -28,6 +32,10 @@ const MACHINE = os.hostname();
 const ICT_MS = 7 * 3600 * 1000;
 const DAY_MS = 86400000;
 const LOCK_STALE_MS = 10 * 60 * 1000;
+// How many Claude accounts share the work (owner Q641 a, 2026-11-07): the weekly limit is
+// reported out of LIMIT_ACCOUNTS x 100 %; an account with no reading this week counts as 0.
+const LIMIT_ACCOUNTS = 2;
+const LIMIT_KEEP_MS = 12 * 7 * DAY_MS;
 
 // USD per million tokens (Anthropic list prices, claude-api skill table cached 2026-10-06).
 // Used only as WEIGHTS so a cache read does not count like an output token. cacheRead
@@ -56,23 +64,29 @@ const FAMILY_FALLBACK = {
 
 function args() {
   const a = process.argv.slice(2);
-  const o = { week: "this", weeks: 1, sync: true, syncOnly: false, quiet: false, limitPercent: null, byModel: false };
+  const o = { week: "this", weeks: 1, sync: true, syncOnly: false, quiet: false, limitPercent: null, byModel: false, recordLimit: null, resets: null };
   for (let i = 0; i < a.length; i++) {
     const k = a[i];
     if (k === "--week") o.week = a[++i];
     else if (k === "--weeks") o.weeks = Math.max(1, parseInt(a[++i], 10) || 1);
     else if (k === "--limit-percent") o.limitPercent = parseFloat(a[++i]);
     else if (k === "--by-model") o.byModel = true;
+    else if (k === "--record-limit") o.recordLimit = parseFloat(a[++i]);
+    else if (k === "--resets") o.resets = a[++i];
     else if (k === "--no-sync") o.sync = false;
     else if (k === "--sync") o.syncOnly = true;
     else if (k === "--quiet") o.quiet = true;
     else if (k === "--help" || k === "-h") {
-      console.log(fs.readFileSync(__filename, "utf8").split("\n").slice(1, 16).map((l) => l.replace(/^\/\/ ?/, "")).join("\n"));
+      console.log(fs.readFileSync(__filename, "utf8").split("\n").slice(1, 20).map((l) => l.replace(/^\/\/ ?/, "")).join("\n"));
       process.exit(0);
     } else {
       console.error(`unknown option: ${k} (try --help)`);
       process.exit(2);
     }
+  }
+  if (o.recordLimit != null && (!Number.isFinite(o.recordLimit) || o.recordLimit < 0 || o.recordLimit > 100 || Number.isNaN(Date.parse(o.resets || "")))) {
+    console.error("--record-limit takes a percent 0-100 and needs --resets <ISO time the weekly limit resets>");
+    process.exit(2);
   }
   return o;
 }
@@ -365,8 +379,14 @@ function sync(fresh, o) {
       days: mergeMax(stored.days, fresh.days),
     };
     fs.writeFileSync(file, JSON.stringify(merged, null, 1) + "\n");
+    let limitPath = null;
+    if (o.recordLimit != null) {
+      const account = currentAccount();
+      if (account) limitPath = storeLimit(o, account);
+      else warn("no logged-in account found in ~/.claude.json — the weekly-limit reading was not stored");
+    }
     try {
-      git(["add", path.join("machines", `${MACHINE}.json`)], o.quiet);
+      git(["add", path.join("machines", `${MACHINE}.json`), ...(limitPath ? [limitPath] : [])], o.quiet);
       git(["commit", "--quiet", "-m", `usage: ${MACHINE} ${merged.updatedAt.slice(0, 16)}Z`], true);
     } catch {}
     try {
@@ -397,6 +417,58 @@ function readAllMachines(fresh, synced) {
   return all;
 }
 
+// ---- weekly-limit readings (one file per account) -----------------------------------------
+
+// The account Claude Code is logged in with on this machine (~/.claude.json oauthAccount).
+function currentAccount() {
+  try {
+    const a = JSON.parse(fs.readFileSync(path.join(HOME, ".claude.json"), "utf8")).oauthAccount || {};
+    return a.emailAddress || a.accountUuid || null;
+  } catch {
+    return null;
+  }
+}
+
+const accountFile = (account) => path.join(SYNC_DIR, "limits", `${account.toLowerCase().replace(/[^a-z0-9]/g, "-")}.json`);
+const minuteOf = (iso) => new Date(Math.round(Date.parse(iso) / 60000) * 60000).toISOString();
+
+// Keep one reading per limit week (keyed by its reset time, to the minute): the latest read.
+function storeLimit(o, account) {
+  const file = accountFile(account);
+  let stored = {};
+  try {
+    stored = JSON.parse(fs.readFileSync(file, "utf8"));
+  } catch {}
+  const now = Date.now();
+  const resetsAt = minuteOf(o.resets);
+  const readings = (stored.readings || []).filter((r) => r.resetsAt !== resetsAt && now - Date.parse(r.resetsAt) < LIMIT_KEEP_MS);
+  readings.push({ resetsAt, percent: o.recordLimit, readAt: new Date(now).toISOString(), machine: MACHINE });
+  readings.sort((a, b) => a.resetsAt.localeCompare(b.resetsAt));
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, JSON.stringify({ account, readings }, null, 1) + "\n");
+  return path.relative(SYNC_DIR, file).split(path.sep).join("/");
+}
+
+// Every account's reading for the limit week running now (its reset still ahead).
+function currentLimits(o, synced) {
+  const out = [];
+  const dir = path.join(SYNC_DIR, "limits");
+  const files = synced && fs.existsSync(dir) ? fs.readdirSync(dir).filter((n) => n.endsWith(".json")) : [];
+  for (const n of files) {
+    try {
+      const f = JSON.parse(fs.readFileSync(path.join(dir, n), "utf8"));
+      const now = (f.readings || []).filter((r) => Date.parse(r.resetsAt) > Date.now()).pop();
+      out.push({ account: f.account, reading: now || null });
+    } catch {}
+  }
+  // Not synced: this run's own reading still shows.
+  const me = currentAccount();
+  if (o.recordLimit != null && me && !out.some((x) => x.account === me)) {
+    out.push({ account: me, reading: { percent: o.recordLimit, resetsAt: minuteOf(o.resets), readAt: new Date().toISOString(), machine: MACHINE } });
+  }
+  return out;
+}
+
 // ---- report --------------------------------------------------------------------------------
 
 function priceOf(model) {
@@ -415,7 +487,10 @@ const fmtTok = (n) => (n >= 1e6 ? `${(n / 1e6).toFixed(1)}M` : n >= 1e3 ? `${(n 
 const fmtPct = (x) => `${(x * 100).toFixed(1)}%`;
 const fmtIct = (iso) => (iso ? new Date(Date.parse(iso) + ICT_MS).toISOString().slice(0, 16).replace("T", " ") : "?");
 
-function report(all, keys, o) {
+function report(all, keys, o, limits) {
+  const limitNow = limits.length ? limits.reduce((s, x) => s + (x.reading ? x.reading.percent : 0), 0) : null;
+  const limitMax = Math.max(LIMIT_ACCOUNTS, limits.length) * 100;
+  const thisWeek = weekOfDay(dayOf(Date.now()));
   // Display names: the most recently updated machine's spelling wins.
   const names = {};
   for (const m of Object.values(all).sort((a, b) => String(a.updatedAt).localeCompare(String(b.updatedAt)))) {
@@ -447,8 +522,11 @@ function report(all, keys, o) {
       console.log("No usage recorded for this week.");
       continue;
     }
-    const limitCol = o.limitPercent != null;
-    console.log(`| # | Project | Share | API-equivalent | Output tokens |${limitCol ? " Of weekly limit |" : ""} By machine |`);
+    // The recorded limit applies to the week running now; --limit-percent overrides it.
+    const limitPct = o.limitPercent != null ? o.limitPercent : key === thisWeek ? limitNow : null;
+    const limitCol = limitPct != null;
+    const limitHead = o.limitPercent != null ? "Of weekly limit" : `Of ${limitMax}% limit`;
+    console.log(`| # | Project | Share | API-equivalent | Output tokens |${limitCol ? ` ${limitHead} |` : ""} By machine |`);
     console.log(`|---|---|---|---|---|${limitCol ? "---|" : ""}---|`);
     const sorted = Object.entries(rows).sort((a, b) => b[1].cost - a[1].cost);
     sorted.forEach(([project, r], i) => {
@@ -457,11 +535,11 @@ function report(all, keys, o) {
         .sort((a, b) => b[1] - a[1])
         .map(([mc, v]) => `${mc} ${fmtPct(v / r.cost)}`)
         .join(" · ");
-      const lim = limitCol ? ` ${(share * o.limitPercent).toFixed(1)}% |` : "";
+      const lim = limitCol ? ` ${(share * limitPct).toFixed(1)}% |` : "";
       console.log(`| ${i + 1} | ${names[project] || project} | ${fmtPct(share)} | $${r.cost.toFixed(2)} | ${fmtTok(r.output)} |${lim} ${machines} |`);
     });
     const totalOut = sorted.reduce((s, [, r]) => s + r.output, 0);
-    console.log(`| | **Total** | 100% | $${total.toFixed(2)} | ${fmtTok(totalOut)} |${limitCol ? ` ${o.limitPercent}% |` : ""} |`);
+    console.log(`| | **Total** | 100% | $${total.toFixed(2)} | ${fmtTok(totalOut)} |${limitCol ? ` ${o.limitPercent != null ? `${o.limitPercent}%` : `${limitPct}/${limitMax}%`} |` : ""} |`);
     if (o.byModel) {
       console.log("");
       for (const [project, r] of sorted) {
@@ -479,6 +557,15 @@ function report(all, keys, o) {
       .map(([mc, m]) => `${mc} ${fmtIct(m.updatedAt)}${m.oldFormat ? " (old script's format — not counted until it updates)" : ""}`)
       .join(" · ")}`,
   );
+  if (limits.length) {
+    const parts = limits.map(({ account, reading }) =>
+      reading
+        ? `${account.replace(/@.*$/, "")} ${reading.percent}% (read ${fmtIct(reading.readAt)} on ${reading.machine}, resets ${fmtIct(reading.resetsAt)})`
+        : `${account.replace(/@.*$/, "")} — (no reading since its last reset)`,
+    );
+    for (let i = limits.length; i < LIMIT_ACCOUNTS; i++) parts.push("second account not recorded yet — 0%");
+    console.log(`Weekly limit, all models (Thai time): ${parts.join(" + ")} = ${limitNow}/${limitMax}%`);
+  }
   if (unpriced.size) console.log(`Priced by family (not in the table): ${[...unpriced].join(", ")}`);
 }
 
@@ -497,7 +584,7 @@ function main() {
     }
   }
   if (o.syncOnly) return;
-  report(readAllMachines(fresh, synced), keys, o);
+  report(readAllMachines(fresh, synced), keys, o, currentLimits(o, synced));
 }
 
 main();

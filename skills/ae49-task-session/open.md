@@ -43,6 +43,11 @@ and an Autopilot left ON by a swap is ticked in 7b.
    how a three-week-old ruling went unseen on this machine). Freshly applied
    skills load in the NEXT session — say so.
 
+2b. **Record the weekly limit** (owner Q641 a, 2026-11-07): `get_usage` → `Weekly · all models`, then
+   `node ~/.claude/skills/ae49-task-usage-report/scripts/usage.cjs --record-limit <percentUsed> --resets <resetsAt> --sync --quiet`.
+   Silent; it stores the logged-in account's % for the `X/200 %` line of `ae49-task-usage-report`. A failure is one
+   line in the report, never a stop.
+
 3. **Read the in-flight memory** (`inflight-now.md` in the driver's folder under the project's
    `.claude/memory/`; a project not moved to it yet: its newest `inflight-*` file). It is the park manifest: which `park/` branch holds the
    hub tree, which agent branches hold queued builds, the gate state, and the

@@ -49,6 +49,27 @@ project's share. `--by-model` lists each project's model mix. `--no-sync` stays 
 Thai lines: who used the most, what changed from last week, and anything odd (a machine whose last update is old, a
 model priced by family). Ask for the claude.ai weekly % only when the owner wants the "of weekly limit" column.
 
+## Weekly limit out of 200 % (owner Q641 a, 2026-11-07)
+
+The owner works on **two** Claude accounts and wants the total of both weekly limits, read as `X/200 %`. The % lives
+only in the app, so Main records it: `mcp__ccd_session_mgmt__get_usage` → the window `Weekly · all models` gives
+`percentUsed` and `resetsAt` for the account logged in now. Main then runs
+
+```bash
+node ~/.claude/skills/ae49-task-usage-report/scripts/usage.cjs --record-limit <percentUsed> --resets <resetsAt> --sync --quiet
+```
+
+- **When:** at every `ae49-task-session` open (its step 2b) and before every report (the report run itself takes the
+  same two flags). The account is read from `~/.claude.json` (`oauthAccount.emailAddress`); one file per account in
+  the sync repo, `limits/<account>.json`, keeps the latest reading per limit week (its reset time), 12 weeks back.
+- **The report** adds `Of 200% limit` (each project's share of the token weight × the sum of the accounts' current
+  %) to the table of the week running now, and one line under it: each account's %, when and where it was read, when
+  it resets, and the sum `= X/200%`. An account with no reading since its last reset counts as 0 and is named.
+  `LIMIT_ACCOUNTS = 2` in `usage.cjs` sets the 200; a third account found in `limits/` raises it on its own.
+- **Read it as an approximation:** each account's limit week runs to its own reset time (not Monday–Sunday), and the
+  per-project split uses this ISO week's token weight. The sum is exact; the split is a guide.
+- `--limit-percent P` still overrides the recorded sum for one run.
+
 ## A new machine (once)
 
 1. `gh repo clone AE49_Usage "$HOME/.claude/usage-sync"` (needs the owner's GitHub login on that machine; `gh` picks
