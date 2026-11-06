@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Town</title>
+<style>
+  :root{--hud:#0f1720cc;--ink:#eef3f7;--muted:#a9b6c2;--accent:#6aa8de;--good:#5cc08a;--warn:#e2ac43;--bad:#e8705c}
+  html,body{margin:0;height:100%;background:#9fc6e6;overflow:hidden;font-family:"Sarabun",ui-sans-serif,system-ui,sans-serif}
+  canvas{display:block}
+  .hud{position:fixed;left:8px;right:8px;pointer-events:none;color:var(--ink);font-size:12px}
+  .top{top:8px;display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+  .pill{background:var(--hud);border-radius:8px;padding:6px 9px;backdrop-filter:blur(3px)}
+  .title{font-weight:700;letter-spacing:.04em}
+  .mode{font-family:ui-monospace,Consolas,monospace;font-size:11px;color:var(--muted)}
+  .bottom{bottom:8px;display:flex;flex-direction:column;gap:6px}
+  .log div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.45}
+  .log time{font-family:ui-monospace,Consolas,monospace;color:var(--muted);margin-right:6px}
+  .houses div{display:flex;justify-content:space-between;gap:8px;line-height:1.45}
+  .houses b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:62%}
+  .houses span{color:var(--muted);white-space:nowrap}
+  .btn{pointer-events:auto;cursor:pointer;border:0;background:var(--hud);color:var(--ink);border-radius:8px;padding:6px 9px;font:inherit}
+  .err{position:fixed;inset:0;display:none;align-items:center;justify-content:center;color:#123;font-size:14px;padding:24px;text-align:center}
+</style>
+</head>
+<body>
+<div class="hud top">
+  <div class="pill"><div class="title">AGENT TOWN</div><div class="mode" id="mode">กำลังเริ่ม…</div></div>
+  <div style="display:flex;gap:6px">
+    <button class="btn" id="night" type="button">🌙</button>
+    <button class="btn" id="cam" type="button">⟲</button>
+  </div>
+</div>
+<div class="hud bottom">
+  <div class="pill houses" id="houses" hidden></div>
+  <div class="pill log" id="log"></div>
+</div>
+<div class="err" id="err">โหลด three.js ไม่ได้ — ต้องต่ออินเทอร์เน็ตครั้งแรกเพื่อโหลดไลบรารี</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+"use strict";
+if (!window.THREE) { document.getElementById("err").style.display = "flex"; throw new Error("no three"); }
+
+// ── Roles: one look per agent type ─────────────────────────────────────────────────────────────────────────
+const ROLES = {
+  foreman:  { label: "หัวหน้า (Main)",  body: 0x2f6fa8, trim: 0xf2f5f8, station: [0, 0] },
+  planner:  { label: "นักวางแผน",       body: 0xf0f3f6, trim: 0x39c6e6, station: [-7, -3], float: true },
+  builder:  { label: "ช่างสร้าง",        body: 0xd23a2e, trim: 0xf2b134, station: [5, -6] },
+  heavy:    { label: "ช่างงานใหญ่",      body: 0x6d3fb3, trim: 0xd9a52c, station: [7, -4] },
+  carrier:  { label: "ช่างเอกสาร/ข้อมูล", body: 0xe0b33a, trim: 0xd9dde2, station: [6, 5] },
+  inspector:{ label: "ผู้ตรวจ (audit)",  body: 0x3fae55, trim: 0xe9eef2, station: [-6, 5] },
+  tester:   { label: "นักทดสอบ (gate)",  body: 0x23a3a0, trim: 0xe9eef2, station: [-3, 7] },
+  scout:    { label: "นักสำรวจ",         body: 0x2c7fd4, trim: 0xf08a24, station: [3, 7] },
+};
+function roleOf(type) {
+  type = String(type || "").toLowerCase();
+  if (type.includes("heavy")) return "heavy";
+  if (type.includes("implement-docs") || type.includes("migrate") || type.includes("excel")) return "carrier";
+  if (type.includes("implement")) return "builder";
+  if (type.includes("audit") || type.includes("review")) return "inspector";
+  if (type.includes("gate")) return "tester";
+  if (type.includes("plan")) return "planner";
+  if (type.includes("explore") || type.includes("fetch") || type.includes("guide")) return "scout";
+  return "builder";
+}
+
+// ── Scene ──────────────────────────────────────────────────────────────────────────────────────────────────
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+renderer.setSize(innerWidth, innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.prepend(renderer.domElement);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(32, innerWidth / innerHeight, 0.5, 200);
+const HOME_CAM = new THREE.Vector3(30, 34, 36);
+camera.position.copy(HOME_CAM);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 0, 1); controls.enableDamping = true; controls.maxPolarAngle = 1.35; controls.minDistance = 12; controls.maxDistance = 70;
+addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+
+const hemi = new THREE.HemisphereLight(0xdfefff, 0x6b8a4f, 0.75); scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xfff2dc, 0.9); sun.position.set(14, 26, 10); sun.castShadow = true;
+sun.shadow.mapSize.set(1024, 1024); Object.assign(sun.shadow.camera, { left: -22, right: 22, top: 22, bottom: -22 });
+scene.add(sun);
+
+const M = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.7, metalness: 0.1, ...o });
+const box = (w, h, d, m) => { const x = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); x.castShadow = x.receiveShadow = true; return x; };
+const cyl = (rt, rb, h, m, s = 12) => { const x = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, s), m); x.castShadow = true; return x; };
+const sph = (r, m) => { const x = new THREE.Mesh(new THREE.SphereGeometry(r, 16, 12), m); x.castShadow = true; return x; };
+const emissives = [];  // lamps / windows / eyes that glow at night
+
+// Ground + roads (a cross through the plaza, a ring road)
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), M(0x7fb069)); ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+const roadM = M(0xc9b48a, { roughness: 0.95 });
+for (const [w, d, x, z] of [[44, 2.2, 0, 0], [2.2, 44, 0, 0], [30, 1.6, 0, -11], [30, 1.6, 0, 12], [1.6, 23, -15, 0.5], [1.6, 23, 15, 0.5]]) {
+  const r = box(w, 0.06, d, roadM); r.position.set(x, 0.03, z); r.castShadow = false; scene.add(r);
+}
+const plaza = new THREE.Mesh(new THREE.CylinderGeometry(3.2, 3.2, 0.08, 32), M(0xd9cba6)); plaza.position.y = 0.04; plaza.receiveShadow = true; scene.add(plaza);
+
+// Stations
+function lampPost(x, z) {
+  const g = new THREE.Group(); g.add(cyl(0.06, 0.08, 2.4, M(0x37424d))); g.children[0].position.y = 1.2;
+  const bulbM = M(0xfff1b8, { emissive: 0xffd36b, emissiveIntensity: 0 }); emissives.push(bulbM);
+  const b = sph(0.2, bulbM); b.position.y = 2.5; g.add(b); g.position.set(x, 0, z); scene.add(g);
+}
+function tree(x, z, s = 1) {
+  const g = new THREE.Group(); const t = cyl(0.12 * s, 0.18 * s, 1 * s, M(0x7a5233)); t.position.y = 0.5 * s; g.add(t);
+  const c = new THREE.Mesh(new THREE.ConeGeometry(0.9 * s, 1.8 * s, 9), M(0x3f8a4a)); c.position.y = 1.7 * s; c.castShadow = true; g.add(c);
+  g.position.set(x, 0, z); scene.add(g);
+}
+function office() {  // the Foreman's site office, north of the plaza
+  const g = new THREE.Group();
+  const b = box(3.4, 2, 2.4, M(0x2f6fa8)); b.position.y = 1; g.add(b);
+  const r = box(3.8, 0.25, 2.8, M(0xf2f5f8)); r.position.y = 2.1; g.add(r);
+  const winM = M(0xbfe3ff, { emissive: 0xffd36b, emissiveIntensity: 0 }); emissives.push(winM);
+  const w = box(1.2, 0.7, 0.05, winM); w.position.set(0.6, 1.2, 1.22); g.add(w);
+  const sign = labelSprite("SITE OFFICE", "#2f6fa8"); sign.position.set(0, 2.9, 0); sign.scale.set(2.6, 0.65, 1); g.add(sign);
+  g.position.set(0, 0, -4.2); scene.add(g);
+}
+function stationProp(role) {
+  const [x, z] = ROLES[role].station; const g = new THREE.Group();
+  if (role === "inspector") { const b = box(1.4, 1.6, 1.2, M(0x3fae55)); b.position.y = 0.8; g.add(b); const r = box(1.6, 0.15, 1.4, M(0xe9eef2)); r.position.y = 1.65; g.add(r); }
+  if (role === "tester")    { const b = box(1.8, 1.5, 1.4, M(0x23a3a0)); b.position.y = 0.75; g.add(b); const sM = M(0x0e2a33, { emissive: 0x39e6c6, emissiveIntensity: 0.6 }); const s = box(0.9, 0.5, 0.05, sM); s.position.set(0, 1, 0.72); g.add(s); }
+  if (role === "planner")   { const t = box(1.6, 0.08, 1, M(0xe8e1cf)); t.position.y = 0.9; t.rotation.x = -0.3; g.add(t); for (const s of [-0.7, 0.7]) { const l = cyl(0.04, 0.04, 0.9, M(0x6b5a44)); l.position.set(s, 0.45, 0); g.add(l); } }
+  if (role === "builder" || role === "heavy") { const t = box(1.6, 0.8, 0.8, M(0x8d6a45)); t.position.y = 0.4; g.add(t); const c = box(0.5, 0.5, 0.5, M(0xc28b4a)); c.position.set(0.5, 1.05, 0); g.add(c); }
+  if (role === "carrier")   { for (let i = 0; i < 3; i++) { const c = box(0.6, 0.6, 0.6, M(0xc28b4a)); c.position.set(i * 0.65 - 0.65, 0.3, 0); g.add(c); } const c = box(0.6, 0.6, 0.6, M(0xb17a3c)); c.position.set(0, 0.9, 0); g.add(c); }
+  if (role === "scout")     { const f = cyl(0.05, 0.05, 2.2, M(0x37424d)); f.position.y = 1.1; g.add(f); const fl = box(0.8, 0.45, 0.02, M(0xf08a24)); fl.position.set(0.42, 1.95, 0); g.add(fl); }
+  g.position.set(x + (x > 0 ? 1.4 : -1.4), 0, z); scene.add(g);
+}
+function townHall() {
+  const g = new THREE.Group();
+  const b = box(4, 2.6, 2.6, M(0xe7dcc4)); b.position.y = 1.3; g.add(b);
+  const r = new THREE.Mesh(new THREE.ConeGeometry(3.2, 1.6, 4), M(0x8c4b3a)); r.rotation.y = Math.PI / 4; r.position.y = 3.4; r.castShadow = true; g.add(r);
+  const pole = cyl(0.05, 0.05, 3, M(0x37424d)); pole.position.set(2.6, 1.5, 1.6); g.add(pole);
+  hallFlag = box(0.9, 0.5, 0.02, M(0x5cc08a)); hallFlag.position.set(3.05, 0.6, 1.6); g.add(hallFlag);
+  const sign = labelSprite("TOWN HALL · DEPLOY", "#8c4b3a"); sign.position.set(0, 4.6, 0); sign.scale.set(3.4, 0.7, 1); g.add(sign);
+  g.position.set(0, 0, 15.5); scene.add(g);
+}
+let hallFlag;
+
+function labelSprite(text, color = "#1d2731", bg = "rgba(255,255,255,.92)") {
+  const c = document.createElement("canvas"); c.width = 512; c.height = 128; const x = c.getContext("2d");
+  x.fillStyle = bg; x.beginPath(); x.roundRect ? x.roundRect(4, 8, 504, 112, 26) : x.rect(4, 8, 504, 112); x.fill();
+  x.fillStyle = color; x.font = "600 54px Sarabun, sans-serif"; x.textAlign = "center"; x.textBaseline = "middle";
+  let t = text; while (x.measureText(t).width > 470 && t.length > 4) t = t.slice(0, -2); if (t !== text) t += "…";
+  x.fillText(t, 256, 66);
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), depthTest: false, transparent: true }));
+  s.renderOrder = 10; return s;
+}
+function bubble(char) {
+  const color = { "!": "#e8705c", "?": "#e2ac43", "Zz": "#6b7c8c", "✓": "#2e8b57" }[char] || "#333";
+  const c = document.createElement("canvas"); c.width = c.height = 128; const x = c.getContext("2d");
+  x.fillStyle = "#fff"; x.beginPath(); x.arc(64, 60, 52, 0, Math.PI * 2); x.fill();
+  x.fillStyle = color; x.font = "700 64px sans-serif"; x.textAlign = "center"; x.textBaseline = "middle"; x.fillText(char, 64, 62);
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), depthTest: false, transparent: true }));
+  s.scale.set(0.7, 0.7, 1); s.renderOrder = 11; return s;
+}
+
+office(); townHall();
+for (const r of Object.keys(ROLES)) if (r !== "foreman") stationProp(r);
+for (const [x, z] of [[-3.5, -1.5], [3.5, -1.5], [-3.5, 2.2], [3.5, 2.2], [-15, -11], [15, 12]]) lampPost(x, z);
+for (const [x, z, s] of [[-19, -16, 1.2], [-21, 4, 1], [20, -15, 1.1], [21, 3, 0.9], [-12, 17, 1], [12, 18, 1.2], [-20, 17, 0.8], [19, 18, 1], [-9, -16, 0.9], [9, -17, 1]]) tree(x, z, s);
+
+// ── Robots, built from simple shapes ───────────────────────────────────────────────────────────────────────
+function makeRobot(role) {
+  const R = ROLES[role]; const g = new THREE.Group(); const body = new THREE.Group(); g.add(body);
+  const bm = M(R.body, { metalness: 0.35, roughness: 0.45 }), tm = M(R.trim, { metalness: 0.3, roughness: 0.5 });
+  const eyeM = M(0x0c1a24, { emissive: 0x6fe3ff, emissiveIntensity: 0.9 }); emissives.push(eyeM);
+  const parts = { body, legs: [], arms: [], prop: null };
+  const big = role === "heavy", round = role === "inspector";
+  // legs (floating roles get a thruster instead)
+  if (!R.float) {
+    for (const s of [-1, 1]) {
+      const leg = new THREE.Group(); const l = box(big ? 0.34 : 0.22, big ? 0.7 : 0.6, big ? 0.34 : 0.22, tm); l.position.y = -0.3; leg.add(l);
+      const f = box(big ? 0.42 : 0.28, 0.12, big ? 0.5 : 0.36, bm); f.position.set(0, -0.62, 0.05); leg.add(f);
+      leg.position.set(s * (big ? 0.3 : 0.18), 0.74, 0); body.add(leg); parts.legs.push(leg);
+    }
+  } else {
+    const th = new THREE.Mesh(new THREE.ConeGeometry(0.25, 0.5, 12), M(0x39c6e6, { emissive: 0x39c6e6, emissiveIntensity: 0.8 }));
+    th.rotation.x = Math.PI; th.position.y = 0.55; body.add(th); parts.thruster = th;
+  }
+  // torso
+  let torso;
+  if (round) { torso = sph(0.62, bm); torso.position.y = 1.35; const belt = cyl(0.64, 0.64, 0.14, M(0x7a5233), 20); belt.position.y = 1.05; body.add(belt); }
+  else { torso = box(big ? 1.1 : 0.7, big ? 0.95 : 0.75, big ? 0.7 : 0.48, bm); torso.position.y = big ? 1.35 : 1.2; }
+  body.add(torso);
+  const chest = box(big ? 0.5 : 0.34, 0.22, 0.05, tm); chest.position.set(0, torso.position.y + 0.08, (big ? 0.36 : round ? 0.6 : 0.25)); body.add(chest);
+  // head
+  const head = round ? new THREE.Group() : box(big ? 0.6 : 0.5, big ? 0.46 : 0.42, 0.44, tm);
+  head.position.y = round ? 1.55 : torso.position.y + (big ? 0.72 : 0.6); body.add(head);
+  const visor = box(round ? 0.6 : 0.38, round ? 0.26 : 0.16, 0.05, eyeM);
+  visor.position.set(0, round ? 0.05 : 0.02, round ? 0.6 : 0.23); head.add(visor);
+  if (role === "foreman" || role === "inspector") { const an = cyl(0.025, 0.025, 0.35, M(0x37424d)); an.position.y = round ? 0.72 : 0.38; head.add(an); const lm = M(0xff6b5a, { emissive: 0xff4b3a, emissiveIntensity: 1 }); const lt = sph(0.07, lm); lt.position.y = round ? 0.92 : 0.58; head.add(lt); parts.beacon = lt; }
+  if (role === "inspector") { for (const s of [-1, 1]) { const p = cyl(0.04, 0.04, 0.3, M(0x37424d)); p.rotation.z = s * 0.4; p.position.set(s * 0.18, 0.8, 0); head.add(p); const pr = cyl(0.22, 0.22, 0.03, tm); pr.position.set(s * 0.3, 0.95, 0); head.add(pr); } }
+  // arms (builder has four)
+  const armCount = role === "builder" ? 4 : 2;
+  for (let i = 0; i < armCount; i++) {
+    const s = i % 2 ? 1 : -1, low = i >= 2;
+    const arm = new THREE.Group(); const a = box(big ? 0.26 : 0.16, big ? 0.75 : 0.6, big ? 0.26 : 0.16, tm); a.position.y = -0.3; arm.add(a);
+    const hand = sph(big ? 0.17 : 0.11, bm); hand.position.y = big ? -0.75 : -0.62; arm.add(hand);
+    arm.position.set(s * ((big ? 0.7 : round ? 0.7 : 0.46) + (low ? 0.04 : 0)), torso.position.y + (low ? 0.05 : 0.28), low ? 0.12 : 0);
+    body.add(arm); parts.arms.push(arm);
+  }
+  // props
+  const right = parts.arms[1];
+  const prop = new THREE.Group(); prop.position.set(0, -0.72, 0.18); right.add(prop); parts.prop = prop;
+  if (role === "foreman") { const cb = box(0.4, 0.5, 0.04, M(0x8d6a45)); prop.add(cb); const pp = box(0.32, 0.36, 0.01, M(0xffffff)); pp.position.z = 0.03; prop.add(pp); }
+  if (role === "inspector") { const ring = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.04, 8, 20), M(0x37424d)); prop.add(ring); const gl = new THREE.Mesh(new THREE.CircleGeometry(0.18, 20), M(0xbfe3ff, { transparent: true, opacity: 0.55 })); prop.add(gl); const hd = box(0.06, 0.3, 0.06, M(0x7a5233)); hd.position.y = -0.32; prop.add(hd); }
+  if (role === "scout") { const cp = cyl(0.16, 0.16, 0.05, M(0xd9a52c), 20); cp.rotation.x = Math.PI / 2; prop.add(cp); for (const s of [-1, 1]) { const j = cyl(0.12, 0.12, 0.6, M(0x37424d)); j.position.set(s * 0.18, 1.25, -0.35); body.add(j); const fl = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.35, 10), M(0xffb347, { emissive: 0xff7a1a, emissiveIntensity: 1 })); fl.rotation.x = Math.PI; fl.position.set(s * 0.18, 0.78, -0.35); body.add(fl); (parts.flames ||= []).push(fl); } }
+  if (role === "heavy") { const sh = cyl(0.45, 0.45, 0.08, M(0xd9a52c, { metalness: 0.6 }), 6); sh.rotation.x = Math.PI / 2; parts.arms[0].add(sh); sh.position.set(-0.05, -0.55, 0.22); }
+  if (role === "builder") { const w = box(0.08, 0.45, 0.08, M(0x9aa6b2, { metalness: 0.8 })); w.position.y = -0.1; prop.add(w); const hd = box(0.26, 0.12, 0.12, M(0x9aa6b2, { metalness: 0.8 })); hd.position.y = 0.14; prop.add(hd); }
+  if (role === "carrier") { const c = box(0.7, 0.5, 0.5, M(0xc28b4a)); c.position.set(0, 1.25, 0.55); body.add(c); parts.crate = c; }
+  if (role === "planner") { const hm = M(0x39c6e6, { transparent: true, opacity: 0.35, emissive: 0x39c6e6, emissiveIntensity: 0.6, side: THREE.DoubleSide }); const hp = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.6), hm); hp.position.set(0.55, 1.9, 0.35); hp.rotation.y = -0.5; body.add(hp); parts.holo = hp; }
+  if (role === "tester") { const lb = box(0.5, 0.04, 0.35, M(0x37424d)); lb.position.set(0, 1.0, 0.45); body.add(lb); const sc = box(0.5, 0.32, 0.03, M(0x0e2a33, { emissive: 0x39e6c6, emissiveIntensity: 0.7 })); sc.position.set(0, 1.18, 0.28); sc.rotation.x = -0.3; body.add(sc); }
+  g.scale.setScalar(0.85);
+  const bub = bubble("Zz"); bub.position.y = 3; bub.visible = false; g.add(bub); parts.bubble = bub; parts.bubbleChar = "Zz";
+  return { group: g, parts, role };
+}
+function setBubble(a, ch) {
+  const p = a.parts;
+  if (!ch) { p.bubble.visible = false; return; }
+  if (p.bubbleChar !== ch) { a.group.remove(p.bubble); p.bubble = bubble(ch); p.bubble.position.y = 3; a.group.add(p.bubble); p.bubbleChar = ch; }
+  p.bubble.visible = true;
+}
+
+// ── Houses: one per task, eleven stages ────────────────────────────────────────────────────────────────────
+const STAGES = ["", "แปลงว่าง", "วางแผน", "ฐานราก", "โครง", "ผนัง", "หลังคา (สร้างเสร็จ)", "กำลังตรวจ", "เจอปัญหา", "ทดสอบผ่าน", "Land แล้ว", "ขึ้นจริงแล้ว"];
+const PLOTS = [[-9, -7], [-9, 7], [9, -8], [9, 8], [-21, -7], [-21, 8], [21, -8], [21, 9], [-9, -16], [9, 16], [-3, -14], [3, 16]];
+const WALLS = [0xe9d8b5, 0xd8e4ef, 0xf1d1c4, 0xd9ecd5], ROOFS = [0x8c4b3a, 0x2f5f8a, 0x4f6b3a, 0x7a4f8a];
+const houses = new Map();  // key → { name, stage, group, plot, inspecting, problem, created }
+function houseKeyOf(desc) {
+  const stop = new Set(["build", "fold", "folds", "run", "gate", "re-gate", "regate", "audit", "full", "short", "re-audit", "fix", "the", "of", "and", "for", "a", "on", "settled", "dispatch", "batch", "in", "to", "with"]);
+  const toks = String(desc || "").toLowerCase().replace(/[^a-z0-9ก-๙+.-]+/g, " ").split(" ").filter((t) => t && !stop.has(t) && !/^[①-⑳]$/.test(t));
+  return toks;
+}
+function findHouse(desc, create) {
+  const toks = houseKeyOf(desc); if (!toks.length) return null;
+  let best = null, score = 0;
+  for (const h of houses.values()) { const s = toks.filter((t) => h.toks.includes(t)).length; if (s > score) { score = s; best = h; } }
+  if (best && score >= Math.min(2, toks.length)) return best;
+  if (!create) return null;
+  if (houses.size >= PLOTS.length) {  // retire the oldest finished house
+    const old = [...houses.values()].sort((a, b) => a.created - b.created).find((h) => h.stage >= 10) || [...houses.values()].sort((a, b) => a.created - b.created)[0];
+    scene.remove(old.group); houses.delete(old.key);
+  }
+  const used = new Set([...houses.values()].map((h) => h.plot));
+  const plot = PLOTS.findIndex((_, i) => !used.has(i));
+  const key = toks.join(" ");
+  const h = { key, toks, name: String(desc).replace(/^(build|fold|run|full audit|short audit|re-gate|audit|gate)\s+/i, "").slice(0, 34), stage: 1, plot, created: Date.now(), wall: WALLS[houses.size % 4], roof: ROOFS[(houses.size + 1) % 4], group: null };
+  houses.set(key, h); drawHouse(h); return h;
+}
+function setStage(h, stage, flags = {}) {
+  if (!h) return; const before = h.stage;
+  if (stage !== undefined && stage > h.stage) h.stage = stage;
+  Object.assign(h, flags); drawHouse(h);
+  if (h.stage === 11 && before < 11) confetti(plotPos(h));
+  renderHud();
+}
+function plotPos(h) { const [x, z] = PLOTS[h.plot]; return new THREE.Vector3(x, 0, z); }
+function drawHouse(h) {
+  if (h.group) scene.remove(h.group);
+  const g = new THREE.Group(); const s = h.stage; const P = plotPos(h);
+  const dirt = new THREE.Mesh(new THREE.PlaneGeometry(5, 4.4), M(s >= 10 ? 0x86b86f : 0xb89a6a)); dirt.rotation.x = -Math.PI / 2; dirt.position.y = 0.02; dirt.receiveShadow = true; g.add(dirt);
+  const sign = labelSprite(h.name, "#1d2731"); sign.scale.set(3.2, 0.8, 1); sign.position.set(0, s >= 6 ? 4.1 : 1.9, 2.4); g.add(sign);
+  const post = cyl(0.05, 0.05, 1.1, M(0x7a5233)); post.position.set(-2.1, 0.55, 2.0); g.add(post);
+  if (s >= 2 && s < 4) { for (const [x, z] of [[-1.5, -1.2], [1.5, -1.2], [-1.5, 1.2], [1.5, 1.2]]) { const pg = cyl(0.04, 0.04, 0.5, M(0xf08a24)); pg.position.set(x, 0.25, z); g.add(pg); } const bp = box(0.9, 0.05, 0.6, M(0x2f6fa8)); bp.position.set(1.9, 0.9, 1.6); bp.rotation.x = -0.4; g.add(bp); }
+  if (s >= 3) { const f = box(3.4, 0.25, 2.8, M(0xb7b2a8)); f.position.y = 0.12; g.add(f); }
+  if (s >= 4 && s < 5) { for (const [x, z] of [[-1.5, -1.2], [1.5, -1.2], [-1.5, 1.2], [1.5, 1.2]]) { const p = box(0.15, 2, 0.15, M(0xc28b4a)); p.position.set(x, 1.25, z); g.add(p); } const bm = box(3.2, 0.12, 0.12, M(0xc28b4a)); bm.position.y = 2.2; g.add(bm); }
+  if (s >= 5) { const wm = M(h.wall); const w = box(3.2, 1.9, 2.6, wm); w.position.y = 1.2; g.add(w);
+    const lit = s >= 11; const winM = M(lit ? 0xffe9a8 : 0x6d8aa3, { emissive: 0xffd36b, emissiveIntensity: lit ? 0.9 : 0 }); if (lit) emissives.push(winM);
+    for (const x of [-0.9, 0.9]) { const wi = box(0.6, 0.55, 0.05, winM); wi.position.set(x, 1.35, 1.32); g.add(wi); }
+    const door = box(0.6, 1, 0.05, M(lit ? 0x5a3a24 : 0x7a5233)); door.position.set(0, 0.75, 1.32); if (lit) { door.rotation.y = 1.0; door.position.x = 0.28; door.position.z = 1.55; } g.add(door); }
+  if (s >= 6) { const rf = new THREE.Mesh(new THREE.ConeGeometry(2.5, 1.4, 4), M(h.roof)); rf.rotation.y = Math.PI / 4; rf.position.y = 2.85; rf.castShadow = true; g.add(rf); }
+  if (h.inspecting) { const tape = new THREE.Mesh(new THREE.TorusGeometry(2.4, 0.05, 6, 40), M(0x8a5cd6, { emissive: 0x8a5cd6, emissiveIntensity: 0.4 })); tape.rotation.x = Math.PI / 2; tape.position.y = 0.9; g.add(tape); }
+  if (h.problem) { const cone = new THREE.Mesh(new THREE.ConeGeometry(0.25, 0.6, 12), M(0xe8705c)); cone.position.set(1.9, 0.3, 1.9); g.add(cone); const fl = box(0.5, 0.3, 0.02, M(0xe8705c)); fl.position.set(-1.6, 1.6, 1.9); g.add(fl); }
+  if (s === 9) { const ck = labelSprite("✓ TESTED", "#ffffff", "rgba(46,139,87,.95)"); ck.scale.set(1.6, 0.4, 1); ck.position.set(-1.6, 1.4, 2.2); g.add(ck); }
+  if (s >= 10) { const pole = cyl(0.04, 0.04, 2, M(0x37424d)); pole.position.set(1.9, 1, -1.5); g.add(pole); const fl = box(0.6, 0.35, 0.02, M(s >= 11 ? 0x5cc08a : 0x2f6fa8)); fl.position.set(2.22, 1.8, -1.5); g.add(fl);
+    for (const [x, z] of [[-2.1, -1.8], [2.2, 1.9]]) { const b = sph(0.35, M(0x4f9a4a)); b.position.set(x, 0.3, z); g.add(b); } }
+  g.position.copy(P); scene.add(g); h.group = g;
+}
+const particles = [];
+function confetti(at) {
+  for (let i = 0; i < 40; i++) { const m = new THREE.Mesh(new THREE.PlaneGeometry(0.15, 0.08), new THREE.MeshBasicMaterial({ color: [0xe8705c, 0xe2ac43, 0x5cc08a, 0x6aa8de, 0xa985d6][i % 5], side: THREE.DoubleSide }));
+    m.position.set(at.x, 3, at.z); m.userData.v = new THREE.Vector3((Math.random() - 0.5) * 3, 3 + Math.random() * 3, (Math.random() - 0.5) * 3); m.userData.life = 2.5; scene.add(m); particles.push(m); }
+}
+function dust(at) {
+  const m = sph(0.12, new THREE.MeshBasicMaterial({ color: 0xd8c8a8, transparent: true, opacity: 0.8 })); m.castShadow = false;
+  m.position.set(at.x + (Math.random() - 0.5) * 1.2, 0.2, at.z + (Math.random() - 0.5) * 1.2); m.userData.v = new THREE.Vector3(0, 0.8, 0); m.userData.life = 0.9; scene.add(m); particles.push(m);
+}
+
+// ── Agents in town ─────────────────────────────────────────────────────────────────────────────────────────
+const agents = new Map();      // id → actor
+const agentInfo = new Map();   // agent id → { role, house }
+function stationOf(role, n = 0) { const [x, z] = ROLES[role].station; return new THREE.Vector3(x + n * 0.9, 0, z + (n ? 0.8 : 0)); }
+function spawn(id, role) {
+  if (agents.has(id)) return agents.get(id);
+  const sameRole = [...agents.values()].filter((a) => a.role === role).length;
+  const r = makeRobot(role); const home = stationOf(role, sameRole);
+  r.group.position.copy(home); scene.add(r.group);
+  const a = { id, ...r, home, target: home.clone(), state: "sleep", until: 0, house: null, resident: id.startsWith("res:") };
+  agents.set(id, a); return a;
+}
+for (const role of Object.keys(ROLES)) spawn(role === "foreman" ? "main" : "res:" + role, role);
+function actorFor(id, role) {
+  if (id === "main") return agents.get("main");
+  if (agents.has(id)) return agents.get(id);
+  const res = agents.get("res:" + role);  // a sleeping resident of that role takes the job first
+  if (res && !res.busyFor) { res.busyFor = id; agents.set(id, res); return res; }
+  return spawn(id, role);
+}
+function goTo(a, pos, state, fast) {
+  a.target = pos.clone(); a.next = state;
+  if (fast) { a.group.position.copy(pos); a.state = state; } else a.state = "walk";
+}
+function houseSpot(h, role) {
+  const off = { builder: [-1.4, 2.4], heavy: [1.4, 2.4], carrier: [2.6, 0.6], inspector: [-2.6, 1.0], tester: [2.6, -0.6], planner: [-2.6, -0.6], scout: [0, 3], foreman: [0, 3.2] }[role] || [0, 3];
+  const p = plotPos(h); return new THREE.Vector3(p.x + off[0], 0, p.z + off[1]);
+}
+function finish(a, fast, mood = "celebrate") {
+  a.state = mood; a.until = now() + (fast ? 0 : 1.6);
+  a.after = () => { goTo(a, a.home, a.id === "main" ? "idle" : "sleep", fast); if (a.busyFor) { agents.delete(a.busyFor); a.busyFor = null; } else if (!a.resident && a.id !== "main") a.retire = true; };
+  if (fast) a.after();
+}
+const now = () => performance.now() / 1000;
+
+// ── Events → town ──────────────────────────────────────────────────────────────────────────────────────────
+const logLines = [];
+function log(t, text) { logLines.unshift([t, text]); logLines.length = Math.min(logLines.length, 4); renderHud(); }
+function hhmm(t) { const d = new Date(t); return d.toTimeString().slice(0, 5); }
+function apply(e, fast) {
+  const t = e.t || Date.now();
+  if (e.kind === "dispatch" && e.newAgent) {
+    const role = roleOf(e.subType); const h = findHouse(e.desc, true);
+    agentInfo.set(e.newAgent, { role, house: h ? h.key : null });
+    const a = actorFor(e.newAgent, role); a.house = h;
+    if (h) {
+      if (role === "planner") setStage(h, 2);
+      if (role === "builder" || role === "heavy" || role === "carrier") setStage(h, Math.max(h.stage, 3), { problem: false });
+      if (role === "inspector") setStage(h, undefined, { inspecting: true });
+      goTo(a, houseSpot(h, role), "work", fast);
+    } else goTo(a, a.home.clone().add(new THREE.Vector3(0, 0, 1.2)), "work", fast);
+    setBubble(a, null);
+    if (!fast) log(t, `${ROLES[role].label} รับงาน: ${e.desc}`);
+    return;
+  }
+  if (e.kind === "agent-start" && e.agent && !agentInfo.has(e.agent)) {
+    const role = roleOf(e.agentType); agentInfo.set(e.agent, { role, house: null });
+    const a = actorFor(e.agent, role); goTo(a, a.home.clone().add(new THREE.Vector3(0.6, 0, 1.4)), "work", fast); return;
+  }
+  if (e.kind === "tool" && e.agent && e.agent !== "main") {
+    const info = agentInfo.get(e.agent); if (!info) return;
+    const a = actorFor(e.agent, info.role); a.lastTool = now();
+    const h = a.house;
+    if (h && (info.role === "builder" || info.role === "heavy" || info.role === "carrier") && /Edit|Write/.test(e.tool)) {
+      a.edits = (a.edits || 0) + 1; if (a.edits > 3 && h.stage < 4) setStage(h, 4); if (a.edits > 10 && h.stage < 5) setStage(h, 5);
+    }
+    return;
+  }
+  if (e.kind === "agent-stop" && e.agent) {
+    const info = agentInfo.get(e.agent); if (!info) return;
+    const a = actorFor(e.agent, info.role); const h = a.house;
+    if (h) {
+      if (info.role === "builder" || info.role === "heavy" || info.role === "carrier") setStage(h, 6);
+      if (info.role === "inspector") setStage(h, undefined, { inspecting: false });
+      if (info.role === "tester") setStage(h, 9);
+    }
+    if (!fast) log(t, `${ROLES[info.role].label} ส่งงาน${h ? ": " + h.name : ""}`);
+    agentInfo.delete(e.agent); finish(a, fast);
+    return;
+  }
+  const main = agents.get("main");
+  if (e.kind === "tool" && e.agent === "main") {
+    const cmd = e.cmd || "";
+    if (/land\.cjs/.test(cmd)) {
+      const m = /--plan\s+\S*?([a-z0-9-]+)\.md/.exec(cmd);
+      const h = (m && findHouse(m[1].replace(/-/g, " "), false)) || [...houses.values()].filter((x) => x.stage >= 6 && x.stage < 10).sort((a, b) => b.stage - a.stage)[0];
+      if (h) { setStage(h, 10, { inspecting: false, problem: false }); goTo(main, houseSpot(h, "foreman"), "celebrate", fast); main.until = now() + 2; main.after = () => goTo(main, main.home, "idle", fast); if (!fast) log(t, `หัวหน้า land: ${h.name}`); }
+      return;
+    }
+    if (/git\s+push\b/.test(cmd) && /origin\s+main\b/.test(cmd) && !/main:backup/.test(cmd)) {
+      for (const h of houses.values()) if (h.stage === 10) setStage(h, 11);
+      goTo(main, new THREE.Vector3(1.5, 0, 13), "celebrate", fast); main.until = now() + 3; main.after = () => goTo(main, main.home, "idle", fast);
+      if (hallFlag) hallFlag.userData.raise = 1;
+      if (!fast) log(t, "Push ขึ้นจริง 🚀 บ้านที่ land แล้วเปิดไฟ");
+      return;
+    }
+    if (main.state === "idle" || main.state === "sleep") { main.state = "work"; main.until = now() + 3; main.after = () => { main.state = "idle"; }; }
+    return;
+  }
+  if (e.kind === "owner") { main.state = "wave"; main.until = now() + 1.8; main.after = () => { main.state = "work"; }; if (!fast) log(t, "เจ้าของสั่งงาน"); return; }
+  if (e.kind === "main-idle") { if (main.state !== "walk") { main.state = "idle"; } return; }
+}
+
+// ── Polling ~/.claude/agent-town/events.js (written by the hook) ───────────────────────────────────────────
+let lastT = 0, live = false, demoTimer = null, firstPoll = true;
+function poll() {
+  const s = document.createElement("script"); s.src = "events.js?ts=" + Date.now();
+  s.onload = () => { s.remove(); ingest(window.__AGENT_TOWN_EVENTS || []); };
+  s.onerror = () => { s.remove(); if (firstPoll) startDemo(); firstPoll = false; };
+  document.head.appendChild(s);
+}
+function ingest(list) {
+  const fresh = list.filter((e) => e.t > lastT);
+  if (!fresh.length) { if (firstPoll && !list.length) startDemo(); firstPoll = false; return; }
+  if (!live) { stopDemo(); live = true; }
+  const catchUp = firstPoll; firstPoll = false;
+  for (const e of fresh) apply(e, catchUp);
+  lastT = fresh[fresh.length - 1].t;
+  document.getElementById("mode").textContent = "LIVE · " + hhmm(lastT) + " น.";
+}
+setInterval(poll, 2000); poll();
+
+// Demo: what a day looks like, when no hook has written anything yet.
+function startDemo() {
+  if (live || demoTimer) return;
+  document.getElementById("mode").textContent = "DEMO · ยังไม่มีเหตุการณ์จาก hook";
+  const S = [
+    { kind: "owner" },
+    { kind: "dispatch", newAgent: "d1", subType: "ae49-plan", desc: "plan pricing-by-province" },
+    { kind: "dispatch", newAgent: "d2", subType: "ae49-implement", desc: "Build hub-parity B6" },
+    { kind: "agent-stop", agent: "d1" },
+    { kind: "dispatch", newAgent: "d3", subType: "ae49-implement-heavy", desc: "Build pricing-by-province B1" },
+    { kind: "agent-stop", agent: "d2" },
+    { kind: "dispatch", newAgent: "d4", subType: "ae49-audit", desc: "SHORT audit hub-parity B6" },
+    { kind: "agent-stop", agent: "d4" },
+    { kind: "dispatch", newAgent: "d5", subType: "ae49-gate", desc: "Run gate hub-parity B6" },
+    { kind: "agent-stop", agent: "d3" },
+    { kind: "agent-stop", agent: "d5" },
+    { kind: "tool", agent: "main", tool: "Bash", cmd: "node land.cjs --plan docs/plans/hub-parity-B6.md" },
+    { kind: "dispatch", newAgent: "d6", subType: "ae49-audit", desc: "FULL audit pricing-by-province B1" },
+    { kind: "agent-stop", agent: "d6" },
+    { kind: "tool", agent: "main", tool: "Bash", cmd: "git push origin main" },
+  ];
+  let i = 0;
+  demoTimer = setInterval(() => {
+    if (i >= S.length) { i = 0; for (const h of houses.values()) scene.remove(h.group); houses.clear(); renderHud(); }
+    const e = { ...S[i++], t: Date.now() }; e.newAgent &&= e.newAgent + "-" + Math.floor(Date.now() / 1e5); if (e.agent && e.agent !== "main") e.agent = e.agent + "-" + Math.floor(Date.now() / 1e5);
+    apply(e, false);
+  }, 4500);
+}
+function stopDemo() { if (demoTimer) { clearInterval(demoTimer); demoTimer = null; for (const h of houses.values()) scene.remove(h.group); houses.clear(); } }
+
+// ── HUD ────────────────────────────────────────────────────────────────────────────────────────────────────
+function renderHud() {
+  const hs = [...houses.values()].sort((a, b) => b.created - a.created).slice(0, 5);
+  const el = document.getElementById("houses"); el.hidden = !hs.length;
+  el.innerHTML = hs.map((h) => `<div><b>${esc(h.name)}</b><span>${h.inspecting ? "กำลังตรวจ" : STAGES[h.stage]}</span></div>`).join("");
+  document.getElementById("log").innerHTML = logLines.map(([t, x]) => `<div><time>${hhmm(t)}</time>${esc(x)}</div>`).join("") || "<div>รอเหตุการณ์…</div>";
+}
+const esc = (s) => String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+renderHud();
+
+// ── Day / night ────────────────────────────────────────────────────────────────────────────────────────────
+let night = (() => { const h = new Date().getHours(); return h >= 18 || h < 6; })();
+function applySky() {
+  scene.background = new THREE.Color(night ? 0x0f1b2e : 0x9fc6e6);
+  scene.fog = new THREE.Fog(scene.background, 45, 95);
+  hemi.intensity = night ? 0.28 : 0.75; sun.intensity = night ? 0.18 : 0.9; sun.color.set(night ? 0x8fa8ff : 0xfff2dc);
+  for (const m of emissives) m.emissiveIntensity = night ? 1.1 : (m.userData.dayGlow ?? (m.emissive && m.color.getHex() === 0x0c1a24 ? 0.9 : 0));
+  document.getElementById("night").textContent = night ? "☀️" : "🌙";
+}
+applySky();
+document.getElementById("night").onclick = () => { night = !night; applySky(); };
+document.getElementById("cam").onclick = () => { camera.position.copy(HOME_CAM); controls.target.set(0, 0, 1); };
+
+// ── Animation loop (paused while the pane is hidden) ───────────────────────────────────────────────────────
+let prev = now();
+function tick() {
+  if (document.hidden) { prev = now(); return requestAnimationFrame(tick); }
+  const t = now(), dt = Math.min(0.05, t - prev); prev = t;
+  for (const a of new Set(agents.values())) animate(a, t, dt);
+  for (let i = particles.length - 1; i >= 0; i--) { const p = particles[i]; p.userData.life -= dt; p.userData.v.y -= 6 * dt * (p.geometry.type === "PlaneGeometry" ? 1 : 0); p.position.addScaledVector(p.userData.v, dt); p.rotation.x += dt * 5;
+    if (p.material.opacity !== undefined && p.geometry.type !== "PlaneGeometry") p.material.opacity = Math.max(0, p.userData.life);
+    if (p.userData.life <= 0) { scene.remove(p); particles.splice(i, 1); } }
+  if (hallFlag && hallFlag.userData.raise) { hallFlag.position.y = Math.min(2.8, hallFlag.position.y + dt * 1.2); if (hallFlag.position.y >= 2.8) setTimeout(() => { hallFlag.position.y = 0.6; }, 8000), hallFlag.userData.raise = 0; }
+  controls.update(); renderer.render(scene, camera); requestAnimationFrame(tick);
+}
+function animate(a, t, dt) {
+  const p = a.parts, g = a.group, R = ROLES[a.role];
+  if (a.state !== "walk" && a.until && t > a.until) { a.until = 0; const f = a.after; a.after = null; if (f) f(); }
+  if (a.state === "walk") {
+    const d = new THREE.Vector3().subVectors(a.target, g.position); d.y = 0; const dist = d.length();
+    if (dist < 0.08) { g.position.copy(a.target); a.state = a.next || "idle"; if (a.retire) { scene.remove(g); for (const [k, v] of agents) if (v === a) agents.delete(k); } }
+    else { d.normalize(); g.position.addScaledVector(d, Math.min(dist, (a.role === "scout" ? 4.2 : 2.6) * dt)); g.rotation.y = Math.atan2(d.x, d.z); }
+  } else if (a.state === "work" && a.house) { const c = plotPos(a.house); g.rotation.y = Math.atan2(c.x - g.position.x, c.z - g.position.z); }
+  const st = a.state, w = t * 8;
+  p.body.position.y = 0; p.body.rotation.set(0, 0, 0);
+  p.legs.forEach((l, i) => { l.rotation.x = st === "walk" ? Math.sin(w + i * Math.PI) * 0.6 : st === "sleep" ? -1.3 : 0; });
+  p.arms.forEach((ar, i) => { ar.rotation.set(0, 0, 0);
+    if (st === "walk") ar.rotation.x = Math.sin(w + i * Math.PI + Math.PI) * 0.5;
+    if (st === "work") ar.rotation.x = -0.9 + Math.sin(t * 10 + i) * (i % 2 ? 0.7 : 0.25);
+    if (st === "celebrate" || st === "wave") { ar.rotation.z = (i % 2 ? 1 : -1) * (st === "wave" && i % 2 === 0 ? 0.2 : 2.6) + (st === "wave" ? Math.sin(t * 12) * 0.3 : 0); }
+    if (st === "alarm") ar.rotation.x = i % 2 ? -1.5 : 0;
+    if (st === "sleep") ar.rotation.x = -0.4; });
+  if (st === "walk") p.body.position.y = Math.abs(Math.sin(w)) * 0.08;
+  if (st === "idle") p.body.position.y = Math.sin(t * 2) * 0.03;
+  if (st === "celebrate") p.body.position.y = Math.abs(Math.sin(t * 7)) * 0.6;
+  if (st === "alarm") p.body.position.x = Math.sin(t * 40) * 0.05;
+  if (st === "sleep") p.body.position.y = R.float ? -0.25 : -0.45;
+  if (R.float) p.body.position.y += 0.35 + Math.sin(t * 2.4) * 0.12;
+  if (p.flames) p.flames.forEach((f) => { f.scale.y = st === "walk" ? 1 + Math.random() * 0.6 : 0.3; });
+  if (p.thruster) p.thruster.scale.setScalar(0.85 + Math.sin(t * 9) * 0.12);
+  if (p.holo) p.holo.material.opacity = st === "work" ? 0.45 + Math.sin(t * 6) * 0.15 : 0.15;
+  if (p.beacon) p.beacon.material.emissiveIntensity = st === "work" || st === "walk" ? 0.6 + Math.abs(Math.sin(t * 5)) : 0.3;
+  setBubble(a, st === "sleep" ? "Zz" : st === "alarm" ? "!" : st === "celebrate" ? "✓" : st === "question" ? "?" : null);
+  if (p.bubble.visible) p.bubble.position.y = 3 + Math.sin(t * 2) * 0.1;
+  if (st === "work" && a.house && (a.role === "builder" || a.role === "heavy") && Math.random() < dt * 3) dust(g.position);
+}
+tick();
+</script>
+</body>
+</html>
