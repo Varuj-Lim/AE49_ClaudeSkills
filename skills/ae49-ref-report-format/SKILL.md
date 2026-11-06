@@ -196,6 +196,10 @@ Which renders as:
   line `▶️ **คำสั่ง n/N — <PowerShell | Cloud Shell>:**` (numbered when there is more than one), so a long reply shows
   every command, not only the block heading. The plain-text copy of the command (`~/.claude/CLAUDE.md` § Communication)
   still follows the code block. A command shown only to explain something, or run by Main itself, carries no ▶️.
+  **The shell gets its own colour square after ▶️ (owner 2026-11-06: *"ให้แยก Emoji 2 อันนี้ออกจากกัน เช่น สีแดงกับนํ้าเงิน"*):**
+  `▶️ 🟦 **คำสั่ง n/N — PowerShell:**` (blue, the PowerShell window's colour) and `▶️ 🟥 **คำสั่ง n/N — Cloud Shell:**`
+  (red), so the owner sees at a glance which window the command goes into. Squares, not circles, because 🔴 already
+  means a Major finding.
 - **Close with the 👤 "your move" line — REQUIRED, never omitted (user rule, 2026-08-28).**
   The very last line of the message answers the question the reader actually has: *is anything
   waiting on me?* It restates, as concrete actions, every row whose *Waiting on* points at the
