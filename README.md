@@ -10,12 +10,12 @@ They began as an adaptation of Matt Pocock's [Skills For Real Engineers](https:/
 
 ## Quickstart
 
-Clone the repo and copy the skills into your Claude Code skills directory.
+Clone the repo and copy the skills into your Claude Code skills directory. `--depth 1` downloads only the current files, not the full history (older versions of the Agent Town models included), so the clone stays small however the repo grows; drop it only if you plan to push changes back.
 
 **Windows (PowerShell):**
 
 ```powershell
-git clone https://github.com/Varuj-Lim/AE49_ClaudeSkills.git
+git clone --depth 1 https://github.com/Varuj-Lim/AE49_ClaudeSkills.git
 Copy-Item -Path .\AE49_ClaudeSkills\skills\*  -Destination "$env:USERPROFILE\.claude\skills\"  -Recurse -Force
 Copy-Item -Path .\AE49_ClaudeSkills\agents\*  -Destination "$env:USERPROFILE\.claude\agents\"  -Force
 ```
@@ -23,7 +23,7 @@ Copy-Item -Path .\AE49_ClaudeSkills\agents\*  -Destination "$env:USERPROFILE\.cl
 **macOS / Linux:**
 
 ```bash
-git clone https://github.com/Varuj-Lim/AE49_ClaudeSkills.git
+git clone --depth 1 https://github.com/Varuj-Lim/AE49_ClaudeSkills.git
 cp -r AE49_ClaudeSkills/skills/* ~/.claude/skills/
 mkdir -p ~/.claude/agents && cp AE49_ClaudeSkills/agents/*.md ~/.claude/agents/
 ```
