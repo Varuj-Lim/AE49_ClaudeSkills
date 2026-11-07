@@ -38,6 +38,15 @@ This repo has no git-synced per-person memory, so this file is the in-flight not
 1. ~~**Emoji bubbles**~~ — done 2026-11-07 (Q22 a Fluent Emoji 3D, Q23 a Main downloaded them; `agent-town/emoji/`, MIT in
    `NOTICE.md`). Nothing else queued. White disc behind them: Q24 a (22:36 ICT) — no disc for now;
    the owner looks at night first and says if the bubbles read badly.
+2. ~~**G1 background shells**~~ — landed `2896c8f` 2026-11-07 23:1x ICT (Q25 a, Q26 a SHELL machine, Q27 a a notification
+   wake is not the owner); README "Background shells". Owner's look by eye still owed. ASKED Q28: does a sub-agent's
+   hand-back wake ("Another Claude session sent a message:") also stop counting as the owner?
+3. **Other background kinds without their own animation** (found 2026-11-07, owner picked G1 first; not started):
+   G2 other sessions / side sessions all drive the one Main (a design question: a Main per session, or one project per
+   town) · G3 Monitor · G4 Workflow (its agents get no house) · G5 ScheduleWakeup / `/loop` / CronCreate · G6 sub-agent
+   types with no role (`general-purpose`, `fork`, `claude`, `statusline-setup` → red Builder) · G7 `preview_start` dev
+   server, `run_in_terminal` · G8 `SendMessage` resume (agent wakes at its station, not its house) · G9 `TaskStop` ·
+   G10 cloud work (no hook here). Also: a start is counted before the permission check (README "Known limits").
 
 ## Rulings this session (owner, 2026-11-07)
 
