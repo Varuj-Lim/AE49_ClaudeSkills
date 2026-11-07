@@ -6,7 +6,10 @@ This repo has no git-synced per-person memory, so this file is the in-flight not
 
 ## State
 
-- `main` = `b5641ee`, pushed (this repo deploys nothing; pushing needs no ask). Tree clean. No agent running.
+- **Close-day 2026-11-07 20:15 ICT on the office PC:** `main` = `eb94f99` + this note, pushed (this repo deploys nothing;
+  pushing needs no ask). Tree clean, no worktree, no park branch, no agent running, nothing to hand-carry (no `.env*`).
+  Autopilot: OFF (switched off at close-day; its log stays machine-local in `~/.claude/autopilot/AE49_ClaudeSkills/`).
+  On another machine: `/ae49-task-session` (open) pulls it all, then `node agent-town/install.cjs` to install the town.
 - Town installed on this machine (`~/.claude/agent-town/` mirrors `agent-town/`; after editing `agent-town/town.html` copy
   it there, or run `node agent-town/install.cjs`, and reload). Server: `node "$HOME/.claude/agent-town/serve.cjs" --ensure`;
   town `http://127.0.0.1:8049/`, robot check `http://127.0.0.1:8049/?lineup`.
@@ -20,7 +23,6 @@ This repo has no git-synced per-person memory, so this file is the in-flight not
 - Every change got a short `ae49-audit`; all BLOCKER / MAJOR folded. Not verified by eye (owner may look): Heavy crowding
   its neighbours on the arc when everyone stands to clap; corner-plot houses may cast no shadow (outside the sun's shadow
   box ±22).
-- Autopilot: Off for this project (no state file).
 - **Resumed on this machine 2026-11-07 19:33 ICT** (open): Autopilot ON (ask), scope #1 Box + #2 CENTRAL CORE. `box.glb`
   arrived 19:31 → copied to `agent-town/models/box.glb` (byte-identical, sha256 `3cfd1064…`). It is ONE mesh, box and
   pallet together (0.65 × 0.74 × 0.98, pallet deck top 0.102). Q19 a: boxes on the ground keep the pallet, stacked and
