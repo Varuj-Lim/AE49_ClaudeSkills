@@ -16,4 +16,5 @@ Copied byte-identical from the owner's drop-off `Downloads\Claude Skill\Agent Mo
 | `scout.png` | scout |
 | `migrator.png` | migrator (copied from `Migration.png`, 2026-11-07) |
 | `buildings.jpg` | the owner's building concept sheet (7 types, blue sci-fi; copied from `Building.jpg`) |
+| `building-cybernetic-core.webp` | CYBERNETIC CORE cut from `buildings.jpg` on white (the owner's Tripo edit, 2026-11-07) |
 | `all.png` | all nine; the purple armoured one (top right) is the Migrator (owner Q2 a, 2026-11-07) |

@@ -24,12 +24,13 @@ Done after the swap: **Builder** (`models/builder.glb`) and **Migrator** (`model
 the `ae49-ref-3d-prompt` "prompt in the final message" rule is in. `models/builder-g70.glb` was deleted on the owner's
 word ("ลบเลย").
 
-0b. **Main's cape (owner Q14 a):** drawn in code (a cloth grid on Spine2 via `mountOnBone`, black with gold trim, flares
-   back on the walk) — in progress after the Inspector commit.
+0b. **Main's cape (owner Q14 a):** drawn in code (a cloth grid on Spine2 via `mountOnBone`, dark grey 0x2a2d33 with gold trim, flares
+   back on the walk, lies flat behind when Main sits asleep) — done.
 0c. **Heavy Builder back to TWO arms (owner 2026-11-07, "4 แขนแล้วไม่สวยเลย", replaces Q6 b):** the owner is redoing it in
    Tripo (round 1: T-pose prompt given). When the model arrives: drop `MODEL_EXTRA_ARMS.heavy` (and the code-boned lower
    arms), wire it like Carrier, check the scale.
-0. **Inspector remake (owner Q13 a): done** — third export in town, arm pivots lifted in code, code propeller, scale 2.3.
+0. **Inspector remake (owner Q13 a): done** — third export in town; the owner re-rigged the arms in Tripo (17:26 export), no code lift; code propeller on Head;
+   scale 2.3.
 1. **Buildings (owner Q8 a, Q9 a, Q12 a):** Tripo makes ONE finished building per type (static, no rig); the construction stages
    are code — foundation and scaffold drawn in code, walls revealed bottom-up by a clipping plane on the real model,
    window glow found in the texture or placed at measured points. The type is picked by a hash of the house name. The

@@ -39,6 +39,13 @@ seams (80 k triangles, 5.5 MB, base-colour texture only). `preview-model.html?mo
   lifts the colourless darks to grey (colourful pixels such as painted lights and gold keep their values), leans the
   greys cool, makes the gold richer. Main: `{ lift: 40, cool: 10, gold: 1.25 }`. A cool rim light from behind lifts
   dark outlines off the ground.
+- **Main's cape (2026-11-07, owner Q14 a):** drawn in code, not in Tripo (a Tripo cape fuses into the mesh, moves stiffly
+  with the spine and lets the legs pass through a long one). `MODEL_CAPE.foreman`: a 10 × 14 cloth grid hung from Spine2 by
+  `mountOnBone` at (0, 0.79, −0.108) behind the shoulders, 0.57 long (to the calves), dark grey (0x2a2d33, as Main's tone
+  lifts its blacks) with vertex-coloured gold trim. `driveCape` bends the rows back by an eased angle per state (flared on
+  the walk, a slow sway at rest) plus an eased ripple running down the cloth on its own phase, so a state change never jumps
+  it; once a row would reach the ground (sitting asleep) the rest lies flat behind, each row dropping only as far as the
+  room left, so the tail never jumps.
 - **Scout (2026-11-07):** `models/scout.glb` (9.4 k triangles, 4.3 MB, same 9 clips). The owner removed the jet flames from the
   art; `MODEL_JETS.scout` lists the two nozzle points (model units, measured from the rest pose) and `addJetFlames` hangs an
   emissive cone on the Spine2 bone at each: long and flickering while walking, short otherwise, off while asleep.
@@ -57,9 +64,9 @@ seams (80 k triangles, 5.5 MB, base-colour texture only). `preview-model.html?mo
   alarm; the lower shoulder's top cap (y 0.505–0.54) is partly faded into the spine so its stretch is spread. The clips never move them.
 - **Inspector, third export (2026-11-07, owner Q13 a):** `models/inspector.glb` (green and white, two short legs added so
   Tripo rigs it as a humanoid; 9.4 k triangles, 4.6 MB, 0.84 tall, same 9 clips). `MODEL_SCALE` 2.3 makes it about 80 % as
-  tall as the rest (owner: smaller). Two load-time fixes: `liftArms` (`MODEL_ARM_LIFT`) — Tripo put the arm bones below the
-  arms (shoulder 0.432, elbow 0.416 against an arm centred near 0.505), so they are moved up to y 0.505 in the rest pose, the
-  skin is re-bound there, and the clips' constant position tracks for those bones are dropped; `hideAbove` folds the model's
+  tall as the rest (owner: smaller). Tripo's first rig of it put the arm bones below the arms (shoulder 0.432 against an
+  arm centred near 0.505); the owner re-rigged it (export of 17:26, arm bones at 0.51), so the code lift that bridged the
+  first one is gone (07323c3 has it). On load `hideAbove` folds the model's
   two-blade propeller (above y 0.79) into a zero-scale bone on the Head bone and `addRotor` spins a two-blade code propeller
   there, mounted on the Head bone (`mountOnBone`) so it rides the clips (fast on the move, slow at rest, still asleep;
   it fell off the head when it hung on the model root). Asleep it stands idle, like Tester: the Sit clip sank its short

@@ -455,30 +455,13 @@ function makeRig(model, alias) {   // alias {MixamoName: fileName}: expose ONLY 
   return { model, bones };
 }
 // ── Inspector, third export (owner Q13 a, 2026-11-07): two short legs, so Tripo rigs it as a humanoid and its 9 clips
-//    play like everyone else's. Two code fixes on load, once per file:
-//    • its arm bones sit BELOW the arms (shoulder 0.432, elbow 0.416 against an arm centred at about 0.505, owner: "แขนมัน
-//      ตกลงมานิดหน่อย"), so the arms would swing about a point inside the body. liftArms moves the arm, forearm and hand
-//      bones up to the arm's centre line in the rest pose and re-binds the skin there; their translation tracks are dropped
-//      from the clips (constant rest values that would pull the pivots back down), the rotations play as authored;
+//    play like everyone else's. On load, once per file:
+//    • its arms: the owner re-rigged this export in Tripo after the first one put the arm bones below the arms; the
+//      code lift that fixed that first one is gone (git history, 07323c3);
 //    • the model's two-blade propeller cannot spin, so hideAbove folds it into a zero-scale bone at the mast and addRotor
 //      draws a spinning one in its place.
 // The ghost of the second export (upside-down skeleton, hover, code arm poses) is in git history before this change.
 const MODEL_BONES = {};
-const MODEL_ARM_LIFT = { inspector: { y: 0.505 } };
-const armsLifted = new WeakSet();
-function liftArms(model, cfg) {   // once per loaded file, before any clone, in the rest pose
-  if (armsLifted.has(model)) return; armsLifted.add(model);
-  let mesh; model.traverse((o) => { if (o.isSkinnedMesh) mesh = o; }); if (!mesh) return;
-  model.updateMatrixWorld(true);
-  const names = [];
-  for (const side of ["Left", "Right"]) for (const part of ["Arm", "ForeArm", "Hand"]) {   // parent first: a child moves with it
-    const bone = mesh.skeleton.bones.find((x) => x.name.replace(/^mixamorig:?/, "") === side + part); if (!bone) continue;
-    const w = bone.getWorldPosition(new THREE.Vector3()); w.y = model.localToWorld(new THREE.Vector3(0, cfg.y, 0)).y;
-    bone.position.copy(bone.parent.worldToLocal(w)); bone.updateMatrixWorld(true); names.push(bone.name);
-  }
-  mesh.skeleton.calculateInverses();   // every bone is in its rest pose here, so the skin binds where it stands
-  for (const clip of model.userData.clips || []) clip.tracks = clip.tracks.filter((tr) => !(tr.name.endsWith(".position") && names.includes(tr.name.slice(0, -9))));
-}
 // hide: vertices above this rest-pose height (mesh space) fold into `fold`; the code propeller spins at `hub` (model units).
 // Measured on the third export: the dome narrows into a mast of radius 0.043 from about 0.775 to 0.80; the blades span
 // 0.805–0.835 out to radius 0.163; the cap tops out at 0.844. The cut keeps the mast's foot, so the code hub sits on it.
@@ -528,6 +511,55 @@ function mountOnBone(model, boneName, at) {
   mount.position.copy(bone.worldToLocal(model.localToWorld(new THREE.Vector3(...at))));
   mount.quaternion.copy(q.invert().multiply(mq)); mount.scale.set(ms.x / sc.x, ms.y / sc.y, ms.z / sc.z);
   bone.add(mount); return mount;
+}
+// ── Main's cape (owner Q14 a, 2026-11-07): drawn in code, not in Tripo — a Tripo cape is fused into the mesh and moves
+//    stiffly with the spine, and a long one lets the legs pass through it. A grid of cols × rows quads hangs from Spine2
+//    behind the shoulders (measured on main.glb: shoulders at y 0.78, the back at z −0.07 to −0.10, the calves at −0.08);
+//    each frame the rows bend back by an angle that eases toward the state's (flared while walking, a slow sway at rest)
+//    plus a ripple that runs down the cloth. Gold trim: the outermost columns and the bottom row are vertex-coloured gold.
+const MODEL_CAPE = { foreman: { bone: "Spine2", top: [0, 0.79, -0.108], halfTop: 0.13, halfBottom: 0.18, length: 0.57,
+  cols: 10, rows: 14, color: 0x2a2d33, trim: 0xc9a23a } };   // dark grey, as Main's tone lifts its blacks (Q4 a)
+function addCape(model, cfg) {
+  const n = (cfg.cols + 1) * (cfg.rows + 1), pos = new Float32Array(n * 3), col = new Float32Array(n * 3), idx = [];
+  const dark = new THREE.Color(cfg.color), gold = new THREE.Color(cfg.trim);
+  for (let i = 0; i <= cfg.rows; i++) for (let j = 0; j <= cfg.cols; j++) {
+    const v = i * (cfg.cols + 1) + j, c = j === 0 || j === cfg.cols || i === cfg.rows ? gold : dark;
+    col[v * 3] = c.r; col[v * 3 + 1] = c.g; col[v * 3 + 2] = c.b;
+    if (i < cfg.rows && j < cfg.cols) { const a = v, b = v + 1, d = v + cfg.cols + 1, e = d + 1; idx.push(a, b, d, b, e, d); }   // outside (away from the body) is the front face
+  }
+  const geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+  geo.setAttribute("color", new THREE.BufferAttribute(col, 3)); geo.setIndex(idx);
+  const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ vertexColors: true, side: THREE.DoubleSide, roughness: 0.75, metalness: 0.1 }));
+  mesh.castShadow = true; mesh.frustumCulled = false;
+  mountOnBone(model, cfg.bone, cfg.top).add(mesh);
+  const cape = { mesh, cfg, angle: 0.08, ripple: 0.04, phase: 0 }; driveCape(cape, "idle", 0, 1); return cape;
+}
+const _capeV = new THREE.Vector3(), _capeS = new THREE.Vector3();
+function driveCape(cape, st, t, dt) {   // bend the rows back by `angle` (eased), plus a ripple running down the cloth
+  const { cfg } = cape, k = 1 - Math.exp(-dt * 4);
+  let target = 0.08 + Math.sin(t * 1.3) * 0.04, ripple = 0.04, speed = 2;
+  if (st === "walk") { target = 0.6; ripple = 0.12; speed = 9; }
+  if (st === "work" || st === "question" || st === "wave") target = 0.14;
+  if (st === "celebrate") { target = 0.35 + Math.abs(Math.sin(t * 7)) * 0.2; ripple = 0.1; speed = 7; }
+  if (st === "alarm") { target = 0.3; ripple = 0.14; speed = 16; }
+  if (st === "sleep") { target = 0.5; ripple = 0.02; speed = 1; }
+  cape.angle += (target - cape.angle) * k; cape.ripple += (ripple - cape.ripple) * k;
+  cape.phase += speed * dt;   // a running phase: a speed change never jumps the wave
+  const p = cape.mesh.geometry.attributes.position, seg = cfg.length / cfg.rows, m = cape.mesh.parent;
+  // room above the ground, in the mount's units: once the cloth reaches the floor (sitting asleep) the rest lies flat
+  // behind instead of going through it
+  const room = m.getWorldPosition(_capeV).y / m.getWorldScale(_capeS).y - 0.01;
+  let y = 0, z = 0;
+  for (let i = 0; i <= cfg.rows; i++) {
+    const u = i / cfg.rows, a = cape.angle * Math.pow(u, 1.3) + cape.ripple * Math.sin(cape.phase - u * 4) * u;
+    if (i) { const drop = Math.min(seg * Math.cos(a), Math.max(0, room + y)); y -= drop; z -= Math.sqrt(seg * seg - drop * drop); }   // part of a row may still drop: no jump as it lies down
+    const half = cfg.halfTop + (cfg.halfBottom - cfg.halfTop) * u;
+    for (let j = 0; j <= cfg.cols; j++) {
+      const w = j / cfg.cols * 2 - 1, v = i * (cfg.cols + 1) + j;
+      p.setXYZ(v, w * half, y, z - 0.02 * (1 - w * w));   // a little rounded out over the back
+    }
+  }
+  p.needsUpdate = true; cape.mesh.geometry.computeVertexNormals();
 }
 function driveRotor(parts, st, dt) {   // rad/s: fast on the move, idle spin, still asleep
   const k = 1 - Math.exp(-dt * 6), target = st === "sleep" ? 0 : st === "walk" || st === "work" || st === "celebrate" ? 30 : 10;
@@ -617,7 +649,6 @@ function makeRobot(role) {
   if (MODEL_URLS[role]) loadModel(MODEL_URLS[role]).then((m) => {
     const rig = MODEL_RIGGED[role];
     if (rig && MODEL_EXTRA_ARMS[role]) rigExtraArms(m, MODEL_EXTRA_ARMS[role]);
-    if (rig && MODEL_ARM_LIFT[role]) liftArms(m, MODEL_ARM_LIFT[role]);
     if (rig && MODEL_ROTOR[role]) hideAbove(m, MODEL_ROTOR[role]);
     if (rig && MODEL_SPIDER[role]) rigSpiderLegs(m, MODEL_SPIDER[role]);
     const c = rig && THREE.SkeletonUtils ? THREE.SkeletonUtils.clone(m) : m.clone();
@@ -630,6 +661,7 @@ function makeRobot(role) {
       if (MODEL_JETS[role]) addJetFlames(c, parts, MODEL_JETS[role]);
       if (MODEL_EXTRA_ARMS[role]) parts.extraArms = findExtraArms(c, MODEL_EXTRA_ARMS[role]);
       if (MODEL_ROTOR[role]) addRotor(c, parts, MODEL_ROTOR[role]);
+      if (MODEL_CAPE[role]) parts.cape = addCape(c, MODEL_CAPE[role]);
       if (MODEL_SPIDER[role]) parts.spiderLegs = findSpiderLegs(c, MODEL_SPIDER[role]);
       const clips = m.userData.clips || [];
       if (clips.length && MODEL_CLIPS[role]) {
@@ -991,6 +1023,7 @@ function animate(a, t, dt) {
   if (p.anim) playClip(p.anim, st, t, dt, a.pick); else if (p.rig) rigPose(p.rig, st, t);
   if (p.extraArms) driveExtraArms(p.extraArms, st, t, dt, p.anim?.current?.time);
   if (p.rotor) driveRotor(p, st, dt);
+  if (p.cape) driveCape(p.cape, st, t, dt);
   if (p.spiderLegs?.length) driveSpiderLegs(p, st, t, dt, p.anim?.current?.time);
   if (st === "work" && a.house && (a.role === "builder" || a.role === "heavy") && Math.random() < dt * 3) dust(g.position);
 }
