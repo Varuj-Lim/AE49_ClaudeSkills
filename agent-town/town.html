@@ -182,7 +182,7 @@ for (const [x, z, s] of [[-19, -16, 1.2], [-21, 4, 1], [20, -15, 1.1], [21, 3, 0
 // ── Robots, built from simple shapes ───────────────────────────────────────────────────────────────────────
 // ── Real models (owner 2026-11-06): a role listed here wears its .glb once it has loaded; until then, or if it fails,
 //    the robot built from shapes stays. The model is a statue (no rig), so it moves as one piece.
-const MODEL_URLS = { builder: "models/builder-g70.glb", planner: "models/planner.glb", foreman: "models/main.glb", scout: "models/scout.glb" };
+const MODEL_URLS = { builder: "models/builder-g70.glb", planner: "models/planner.glb", foreman: "models/main.glb", scout: "models/scout.glb", carrier: "models/carrier.glb" };
 // Clips by town state, per role (owner's Tripo exports 2026-11-06 / -07). A state missing here falls back to "idle".
 // "work" alternates its list every 8 s. Clips are played in place: the hips' horizontal drift is removed at load.
 // A name matches a clip of that exact name, else the first clip whose name STARTS with it (Tripo names a
@@ -190,8 +190,8 @@ const MODEL_URLS = { builder: "models/builder-g70.glb", planner: "models/planner
 const CLIP_SET = (point) => ({ idle: ["idle"], walk: ["walk"], work: [point, "Typing / Writing / Using tablet"],
   question: ["Thinking"], celebrate: ["Cheer / Clap"], wave: ["Wave / Nod"], sleep: ["Sit / Sleep"],
   alarm: ["Looking around / Searching"] });
-const MODEL_CLIPS = { planner: CLIP_SET("Standing in place"), foreman: CLIP_SET("Standing in place"), scout: CLIP_SET("Standing in place") };
-const MODEL_SCALE = { builder: 2.6, planner: 2.5, foreman: 2.5, scout: 2.5 };
+const MODEL_CLIPS = { planner: CLIP_SET("Standing in place"), foreman: CLIP_SET("Standing in place"), scout: CLIP_SET("Standing in place"), carrier: CLIP_SET("Standing in place") };
+const MODEL_SCALE = { builder: 2.6, planner: 2.5, foreman: 2.5, scout: 2.5, carrier: 2.5 };
 // A rigged (skinned) model: cloned with SkeletonUtils, posed by code each frame (rigPose below), turned to face +Z.
 // tone: re-grade the base colour once at load (owner 2026-11-07, Q4 a: Main's black read as a silhouette, "ทึบ").
 //   lift  raises the darkest tones to this grey (0–255, like Levels' output black) — on colourless pixels only: the lift
@@ -202,7 +202,7 @@ const MODEL_SCALE = { builder: 2.6, planner: 2.5, foreman: 2.5, scout: 2.5 };
 //   gold  multiplies the saturation of warm, saturated pixels (the gold trims) and lifts them up to 8 %, eased in from
 //         saturation 0.2 to 0.32 so trims get no hard contour; a channel past 255 scales all three down (no hue shift).
 const MODEL_RIGGED = { planner: { turn: 0, metalness: 0.25 },
-  foreman: { turn: 0, metalness: 0.25, tone: { lift: 40, cool: 10, gold: 1.25 } }, scout: { turn: 0, metalness: 0.25 } };
+  foreman: { turn: 0, metalness: 0.25, tone: { lift: 40, cool: 10, gold: 1.25 } }, scout: { turn: 0, metalness: 0.25 }, carrier: { turn: 0, metalness: 0.25 } };
 // Jet flames drawn by code at a model's nozzles (the owner removed them from the art, 2026-11-07): nozzle centres in
 // model units, measured from scout.glb's rest pose (the jetpack's lowest back points, x ±0.06–0.17, y 0.674).
 const MODEL_JETS = { scout: [[0.116, 0.672, -0.108], [-0.116, 0.672, -0.108]] };

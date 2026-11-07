@@ -41,6 +41,9 @@ a rigged export with the clip names in the skill would animate limbs. `preview-m
 - **Scout (2026-11-07):** `models/scout.glb` (9.4 k triangles, 4.3 MB, same 9 clips). The owner removed the jet flames from the
   art; `MODEL_JETS.scout` lists the two nozzle points (model units, measured from the rest pose) and `addJetFlames` hangs an
   emissive cone on the Spine2 bone at each: long and flickering while walking, short otherwise, off while asleep.
+- **Carrier (2026-11-07):** `models/carrier.glb` (yellow and silver, 9.7 k triangles, 5.1 MB, same 9 clips, `metalness: 0.25`).
+  The shape robot's crate is not carried over; if the model does not read as a carrier in the lineup, a code-drawn crate
+  can hang on a hand bone the way `addJetFlames` hangs the flames.
 
 ## Lineup preset (2026-11-07)
 
