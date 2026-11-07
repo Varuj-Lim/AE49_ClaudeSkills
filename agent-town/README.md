@@ -50,8 +50,10 @@ seams (80 k triangles, 5.5 MB, base-colour texture only). `preview-model.html?mo
   art; `MODEL_JETS.scout` lists the two nozzle points (model units, measured from the rest pose) and `addJetFlames` hangs an
   emissive cone on the Spine2 bone at each: long and flickering while walking, short otherwise, off while asleep.
 - **Carrier (2026-11-07):** `models/carrier.glb` (yellow and silver, 9.7 k triangles, 5.1 MB, same 9 clips, `metalness: 0.25`).
-  The shape robot's crate is not carried over; if the model does not read as a carrier in the lineup, a code-drawn crate
-  can hang on a hand bone the way `addJetFlames` hangs the flames.
+  While it walks to a job (and walking in the lineup) it carries a stack of three bare `box.glb` boxes in front with both
+  arms, smaller upward (owner Q21 b, "อย่างน้อย 3 กล่อง … กล่องบนขนาดเล็กลง"): `driveCarry` runs after the clip, turns the
+  upper arms forward and a little down (`CARRY_ARM`), bends the forearms in (`CARRY_FORE`), and puts the stack
+  (`CARRY_STACK`) on the hands, scaled every frame to their gap. Off the job the clip's arms come back and the stack hides.
 
 - **Heavy Builder, two arms (2026-11-07):** `models/heavy.glb` — the owner's second export (orange and grey, backpack,
   Mixamo rig with 65 bones, 9.8 k triangles, 5.2 MB, 0.85 tall, same 9 clips), wired like Carrier. The first export had

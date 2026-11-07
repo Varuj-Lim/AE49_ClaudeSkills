@@ -622,6 +622,32 @@ function poseBone(rig, name, turns) {
   for (const [axis, ang] of turns) d.premultiply(new THREE.Quaternion().setFromAxisAngle(AX[axis], ang));
   b.bone.quaternion.copy(_p.clone().invert().multiply(d).multiply(_p).multiply(b.rest));   // P^-1 · delta · P · rest
 }
+// The Carrier carries a box in front with both arms (owner Q21 b, 2026-11-07) while it walks to a job (and while it walks
+// in the lineup): after its clip has posed the frame, CARRY_ARM turns each upper arm from the rest pose to point forward and
+// a little down, CARRY_FORE bends the forearms in, and the box (bare, Q19 a; CARRY_LEN long before its fit scale) sits
+// between the two hands, scaled to their distance. Off the job its arms are the clip's again and the box is hidden.
+// CARRY_STACK: each box's size as a share of the bottom one, and its small turn
+const CARRY_ARM = [["up", Math.PI / 2], ["right", 0.45]], CARRY_FORE = 0.2, CARRY_LEN = 0.5, CARRY_STACK = [[1, 0], [0.78, 0.2], [0.58, -0.15]];
+function driveCarry(a, st) {
+  const p = a.parts, c = p.carry; if (!c) return;
+  const on = st === "walk" && (a.lineup || a.next === "work");
+  if (c.box) c.box.visible = on; if (!on) return;
+  poseBone(c.rig, "LeftArm", [["up", -CARRY_ARM[0][1]], CARRY_ARM[1]]); poseBone(c.rig, "RightArm", CARRY_ARM);
+  poseBone(c.rig, "LeftForeArm", [["up", -CARRY_FORE]]); poseBone(c.rig, "RightForeArm", [["up", CARRY_FORE]]);
+  a.group.updateMatrixWorld(true);
+  const l = c.left.getWorldPosition(new THREE.Vector3()), r = c.right.getWorldPosition(new THREE.Vector3());
+  if (!c.box) {   // a stack of three (owner 2026-11-07: "อย่างน้อย 3 กล่อง … กล่องบนขนาดเล็กลง"); the hands hold the bottom one
+    c.box = new THREE.Group(); let y = 0;
+    for (const [f, turn] of CARRY_STACK) { const len = CARRY_LEN * f; c.box.add(crate(len, false, 0, y, 0, turn)); y += crateH(len, false); }
+    a.group.add(c.box);
+  }
+  // sized to the gap between the hands every frame (the clip's crossfade moves the shoulders), so no hand sinks in: the
+  // gap is measured in the world and the scale applied in the robot's group (scaled 0.85), so the box is about 0.8 × the
+  // gap, a little air at each wrist (the look the owner saw; audit 2026-11-07). The bare box is about 0.94 × BOX_W wide
+  const k = THREE.MathUtils.clamp((l.distanceTo(r) * 0.95) / ((0.94 * BOX_W / BOX_D) * CARRY_LEN), 0.4, 1.6);
+  const mid = a.group.worldToLocal(l.add(r).multiplyScalar(0.5));
+  c.box.scale.setScalar(k); c.box.position.set(mid.x, mid.y - (crateH(CARRY_LEN, false) * k) / 2, mid.z); c.box.rotation.set(0, 0, 0);
+}
 const RIG_ARM_DOWN = 1.25;
 function rigPose(rig, st, t) {
   const s = Math.sin(t * 8), dn = RIG_ARM_DOWN;
@@ -709,6 +735,7 @@ function makeRobot(role) {
       if (MODEL_ROTOR[role]) addRotor(c, parts, MODEL_ROTOR[role]);
       if (MODEL_CAPE[role]) parts.cape = addCape(c, MODEL_CAPE[role]);
       if (MODEL_SPIDER[role]) parts.spiderLegs = findSpiderLegs(c, MODEL_SPIDER[role]);
+      if (role === "carrier") { const left = boneNamed(c, "LeftHand"), right = boneNamed(c, "RightHand"); if (left && right) parts.carry = { rig: makeRig(c), left, right, box: null }; }
       const clips = m.userData.clips || [];
       if (clips.length && MODEL_CLIPS[role]) {
         const mixer = new THREE.AnimationMixer(c); const actions = {};
@@ -1266,6 +1293,7 @@ function animate(a, t, dt) {
   if (p.bubble.visible) p.bubble.position.y = (p.bubbleY || 3) + Math.sin(t * 2) * 0.1;
   if (p.anim) playClip(p.anim, st, t, dt, a.pick); else if (p.rig) rigPose(p.rig, st, t);
   if (p.anim && p.skin && !p.spiderLegs) driveSitLift(p, t, dt);
+  if (p.carry) driveCarry(a, st);
   if (p.rotor) driveRotor(p, st, dt);
   if (p.cape) driveCape(p.cape, st, t, dt);
   if (p.spiderLegs?.length) driveSpiderLegs(p, st, t, dt, p.anim?.current?.time);
