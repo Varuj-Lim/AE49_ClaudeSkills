@@ -21,6 +21,9 @@ hand-over itself must be the right size.
   3D step. A near-miss that the next stage tolerates is not re-done, but a character that is not in a clear T-pose is
   (§ 4).
 - **Advice that changes how to use a prompt goes BEFORE the prompt**, never after it.
+- **The prompt goes in the turn's FINAL message, never in text between tool calls (owner 2026-11-07).** Text written
+  between tool calls scrolls away or reaches the owner cut short; the prompt got lost that way twice in one day
+  (Inspector round 1, Builder round 1). Finish the tool work first, then hand the prompt over last.
 
 ## 2. Hand-over format
 
