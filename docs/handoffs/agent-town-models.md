@@ -30,6 +30,8 @@ This repo has no git-synced per-person memory, so this file is the in-flight not
   body); Q21 b + "at least three boxes, smaller upward": the Carrier carries a stack of three in both arms — **landed
   `c2212f3`**. The town draws at most 30 fps (owner: "ถ้าเยอะก็ลดเลย"; measured: its share fell from ~8 % GPU / 8 % CPU to
   ~3 % / 2–3 %). CENTRAL CORE dropped (owner: "ลบออกไปเลย"); the six buildings renamed, Main's names.
+- **Resumed on this machine 2026-11-07 22:34 ICT** (open, fast path): Autopilot ON (ask), scope #1 eye-checks + #2 white
+  disc behind the emoji bubbles (ASKED Q24).
 
 ## Next (in order)
 
