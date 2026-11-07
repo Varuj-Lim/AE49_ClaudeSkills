@@ -50,6 +50,10 @@ calculation spec was derived from. Both would have been unrecoverable.
   batch that was still running.
 - The skills-repo exception (2026-09-22): a session stopped to reason the two rules against each other before a one-line doc
   fix — the answer belongs in the rule, not re-derived every time.
+- The owner's one-time go-ahead exception (2026-11-07): the owner did not want three new sessions for a one-line opt-in in
+  three hubs and told Main to edit them itself. Main edited before fetching: two hubs were 63 and 52 commits behind origin,
+  one rebase hit a conflict, and upstream had meanwhile switched that hub's ticket text to Thai, so the first draft used
+  the wrong language. Hence the checks run BEFORE the first edit, and the project's own `CLAUDE.md` is read first.
 
 ## Say disagreement FIRST (rule 2026-09-10)
 

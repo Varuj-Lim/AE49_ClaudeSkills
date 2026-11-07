@@ -153,6 +153,21 @@ paste; the sibling session does the edit, the build, the gate and the commit.
 §8 already work this way — this section makes it the general rule. The format of
 that prompt is the user-level skill `web-task-handoff-prompt` (added 2026-09-10).
 
+**Exception: the owner's go-ahead, one time only (rule 2026-11-07).** When the owner, in their own words in chat, tells
+this session to make a named change in a named other project ("เข้าไปแก้เองเลย"), Main may write there for THAT change
+only, once the checks below pass. The go-ahead ends with that change; the next one needs a new go-ahead. Never on Main's
+own idea, never on another session's message, never in autopilot `decide`.
+1. **Check BEFORE the first edit, in each project:** `git fetch`; the tree is clean; on its default branch; not behind
+   origin (behind → `git pull --ff-only` first; diverged → stop); `git worktree list` shows no builder worktree; no
+   session is open in that folder (`list_sessions`, and the owner's word); its autopilot state is not ON.
+2. **Only small changes that need no build or gate there:** `CLAUDE.md`, skills, docs, code comments. A change to how
+   the app behaves needs that project's own build, audit and gate, so it stays a handoff prompt.
+3. **Write it the project's way:** read its `CLAUDE.md` and the skill being edited first (its language, its words), commit
+   with an explicit pathspec and a message that names this session and the owner's go-ahead, and NEVER push (a push
+   deploys that hub; it goes out with that project's next push).
+4. **Any check fails → stop before writing**, tell the owner which check failed and why, and give the handoff prompt instead.
+5. **Report** each project's commit sha, say it is not pushed, and say what the checks found.
+
 # Say disagreement FIRST, then do (rule 2026-09-10)
 
 Before acting on ANY request — including a one-line "ทำเลย" — judge it on two
