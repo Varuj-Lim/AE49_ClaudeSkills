@@ -27,6 +27,12 @@
 <div class="hud top">
   <div class="pill"><div class="title">AGENT TOWN</div><div class="mode" id="mode">กำลังเริ่ม…</div></div>
   <div style="display:flex;gap:6px">
+    <span id="lineupCtl" style="display:none;gap:6px">
+      <button class="btn" id="lPrev" type="button" title="ท่าก่อนหน้า">◀</button>
+      <button class="btn" id="lPlay" type="button" title="หยุด / เล่นต่อ">⏸</button>
+      <button class="btn" id="lNext" type="button" title="ท่าถัดไป">▶</button>
+    </span>
+    <button class="btn" id="lineup" type="button" title="Lineup: ตัวละครเรียงแถว">🧍</button>
     <button class="btn" id="night" type="button">🌙</button>
     <button class="btn" id="cam" type="button">⟲</button>
   </div>
@@ -47,14 +53,14 @@ if (!window.THREE) { document.getElementById("err").style.display = "flex"; thro
 
 // ── Roles: one look per agent type ─────────────────────────────────────────────────────────────────────────
 const ROLES = {
-  foreman:  { label: "หัวหน้า (Main)",  body: 0x2f6fa8, trim: 0xf2f5f8, station: [0, 0] },
-  planner:  { label: "นักวางแผน",       body: 0xf0f3f6, trim: 0x39c6e6, station: [-7, -3], float: true },
-  builder:  { label: "ช่างสร้าง",        body: 0xd23a2e, trim: 0xf2b134, station: [5, -6] },
-  heavy:    { label: "ช่างงานใหญ่",      body: 0x6d3fb3, trim: 0xd9a52c, station: [7, -4] },
-  carrier:  { label: "ช่างเอกสาร/ข้อมูล", body: 0xe0b33a, trim: 0xd9dde2, station: [6, 5] },
-  inspector:{ label: "ผู้ตรวจ (audit)",  body: 0x3fae55, trim: 0xe9eef2, station: [-6, 5] },
-  tester:   { label: "นักทดสอบ (gate)",  body: 0x23a3a0, trim: 0xe9eef2, station: [-3, 7] },
-  scout:    { label: "นักสำรวจ",         body: 0x2c7fd4, trim: 0xf08a24, station: [3, 7] },
+  foreman:  { label: "Main",           body: 0x2f6fa8, trim: 0xf2f5f8, station: [0, 0] },
+  planner:  { label: "Planner",        body: 0xf0f3f6, trim: 0x39c6e6, station: [-7, -3], float: true },
+  builder:  { label: "Builder",        body: 0xd23a2e, trim: 0xf2b134, station: [5, -6] },
+  heavy:    { label: "Heavy Builder",  body: 0x6d3fb3, trim: 0xd9a52c, station: [7, -4] },
+  carrier:  { label: "Carrier",        body: 0xe0b33a, trim: 0xd9dde2, station: [6, 5] },
+  inspector:{ label: "Inspector",      body: 0x3fae55, trim: 0xe9eef2, station: [-6, 5] },
+  tester:   { label: "Tester",         body: 0x23a3a0, trim: 0xe9eef2, station: [-3, 7] },
+  scout:    { label: "Scout",          body: 0x2c7fd4, trim: 0xf08a24, station: [3, 7] },
 };
 function roleOf(type) {
   type = String(type || "").toLowerCase();
@@ -67,6 +73,9 @@ function roleOf(type) {
   if (type.includes("explore") || type.includes("fetch") || type.includes("guide")) return "scout";
   return "builder";
 }
+
+// The lineup preset (owner 2026-11-07): `?lineup` reads no events and lines every role up instead (see "Lineup").
+const LINEUP = new URLSearchParams(location.search).has("lineup");
 
 // ── Scene ──────────────────────────────────────────────────────────────────────────────────────────────────
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -169,17 +178,28 @@ for (const [x, z, s] of [[-19, -16, 1.2], [-21, 4, 1], [20, -15, 1.1], [21, 3, 0
 // ── Robots, built from simple shapes ───────────────────────────────────────────────────────────────────────
 // ── Real models (owner 2026-11-06): a role listed here wears its .glb once it has loaded; until then, or if it fails,
 //    the robot built from shapes stays. The model is a statue (no rig), so it moves as one piece.
-const MODEL_URLS = { builder: "models/builder-g70.glb", planner: "models/planner.glb" };
-// Clips by town state, per role (owner's Tripo export 2026-11-06). A state missing here falls back to "idle".
+const MODEL_URLS = { builder: "models/builder-g70.glb", planner: "models/planner.glb", foreman: "models/main.glb" };
+// Clips by town state, per role (owner's Tripo exports 2026-11-06 / -07). A state missing here falls back to "idle".
 // "work" alternates its list every 8 s. Clips are played in place: the hips' horizontal drift is removed at load.
-const MODEL_CLIPS = {
-  planner: { idle: ["idle"], walk: ["walk"], work: ["Pointing to the front", "Typing / Writing / Using tablet"],
-    question: ["Thinking"], celebrate: ["Cheer / Clap"], wave: ["Wave / Nod"], sleep: ["Sit / Sleep"],
-    alarm: ["Looking around / Searching"] },
-};
-const MODEL_SCALE = { builder: 2.6, planner: 2.5 };
+// A name matches a clip of that exact name, else the first clip whose name STARTS with it (Tripo names a
+// Text2Motion clip after its prompt, e.g. "Standing in place, the character extends the right arm forward ").
+const CLIP_SET = (point) => ({ idle: ["idle"], walk: ["walk"], work: [point, "Typing / Writing / Using tablet"],
+  question: ["Thinking"], celebrate: ["Cheer / Clap"], wave: ["Wave / Nod"], sleep: ["Sit / Sleep"],
+  alarm: ["Looking around / Searching"] });
+const MODEL_CLIPS = { planner: CLIP_SET("Standing in place"), foreman: CLIP_SET("Standing in place") };
+const MODEL_SCALE = { builder: 2.6, planner: 2.5, foreman: 2.5 };
 // A rigged (skinned) model: cloned with SkeletonUtils, posed by code each frame (rigPose below), turned to face +Z.
-const MODEL_RIGGED = { planner: { turn: 0, metalness: 0.25 } };
+// lift: raise the base colour's darkest tones to this grey (0–255, like Levels' output black) — Main's black reads
+// as a silhouette in town; the owner asked for grey (2026-11-07). Bright trims and lights stay bright.
+const MODEL_RIGGED = { planner: { turn: 0, metalness: 0.25 }, foreman: { turn: 0, metalness: 0.25, lift: 85 } };
+function liftTexture(mat, lift) {
+  const tex = mat.map; if (!tex || !tex.image || tex.userData.lifted) return; tex.userData.lifted = true;   // clones (and materials) share it
+  const img = tex.image, c = document.createElement("canvas"); c.width = img.width; c.height = img.height;
+  const x = c.getContext("2d"); x.drawImage(img, 0, 0);
+  const d = x.getImageData(0, 0, c.width, c.height), p = d.data, k = (255 - lift) / 255;
+  for (let i = 0; i < p.length; i += 4) { p[i] = lift + p[i] * k; p[i + 1] = lift + p[i + 1] * k; p[i + 2] = lift + p[i + 2] * k; }
+  x.putImageData(d, 0, 0); tex.image = c; tex.needsUpdate = true;
+}
 const modelCache = new Map();
 function loadModel(url) {
   if (!modelCache.has(url)) modelCache.set(url, new Promise((ok, bad) => {
@@ -199,9 +219,14 @@ function loadModel(url) {
 }
 // ── Rig posing by code (the export has no clips): each pose turns Mixamo bones about axes of the model frame
 //    on top of the T-pose rest. Mixamo frame: the model faces +Z, its left arm points +X (AX.right is the side axis).
-function playClip(an, st, t, dt) {
-  const list = an.map[st] || an.map.idle; const name = list[Math.floor(t / 8) % list.length];
-  const next = an.actions[name] || an.actions[(an.map.idle || [])[0]];
+function clipAction(an, name) {  // resolved once per name, then cached on the agent's animation
+  const seen = (an.resolved ||= {});
+  if (!(name in seen)) seen[name] = an.actions[name] || Object.entries(an.actions).find(([k]) => name && k.startsWith(name))?.[1];
+  return seen[name];
+}
+function playClip(an, st, t, dt, pick) {  // pick: which clip of the state's list (the lineup); else it alternates every 8 s
+  const list = an.map[st] || an.map.idle; const name = list[(pick ?? Math.floor(t / 8)) % list.length];
+  const next = clipAction(an, name) || clipAction(an, (an.map.idle || [])[0]);
   if (next && next !== an.current) {
     next.reset().setLoop(THREE.LoopRepeat, Infinity).play();
     if (an.current) an.current.crossFadeTo(next, 0.35, false);
@@ -301,7 +326,10 @@ function makeRobot(role) {
     const c = rig && THREE.SkeletonUtils ? THREE.SkeletonUtils.clone(m) : m.clone();
     const holder = new THREE.Group(); holder.add(c); holder.scale.setScalar(MODEL_SCALE[role] || 2.5);
     if (rig) {
-      c.rotation.y = rig.turn; c.traverse((o) => { if (o.isMesh && rig.metalness !== undefined) o.material.metalness = rig.metalness; });
+      c.rotation.y = rig.turn; c.traverse((o) => {
+        if (o.isMesh && rig.metalness !== undefined) o.material.metalness = rig.metalness;
+        if (o.isMesh && rig.lift) liftTexture(o.material, rig.lift);
+      });
       const clips = m.userData.clips || [];
       if (clips.length && MODEL_CLIPS[role]) {
         const mixer = new THREE.AnimationMixer(c); const actions = {};
@@ -477,7 +505,7 @@ function apply(e, fast) {
     if (/land\.cjs/.test(cmd)) {
       const m = /--plan\s+\S*?([a-z0-9-]+)\.md/.exec(cmd);
       const h = (m && findHouse(m[1].replace(/-/g, " "), false)) || [...houses.values()].filter((x) => x.stage >= 6 && x.stage < 10).sort((a, b) => b.stage - a.stage)[0];
-      if (h) { setStage(h, 10, { inspecting: false, problem: false }); goTo(main, houseSpot(h, "foreman"), "celebrate", fast); main.until = now() + 2; main.after = () => goTo(main, main.home, "idle", fast); if (!fast) log(t, `หัวหน้า land: ${h.name}`); }
+      if (h) { setStage(h, 10, { inspecting: false, problem: false }); goTo(main, houseSpot(h, "foreman"), "celebrate", fast); main.until = now() + 2; main.after = () => goTo(main, main.home, "idle", fast); if (!fast) log(t, `${ROLES.foreman.label} land: ${h.name}`); }
       return;
     }
     if (/git\s+push\b/.test(cmd) && /origin\s+main\b/.test(cmd) && !/main:backup/.test(cmd)) {
@@ -511,7 +539,7 @@ function ingest(list) {
   lastT = fresh[fresh.length - 1].t;
   document.getElementById("mode").textContent = "LIVE · " + hhmm(lastT) + " น.";
 }
-setInterval(poll, 2000); poll();
+if (!LINEUP) { setInterval(poll, 2000); poll(); }
 
 // Demo: what a day looks like, when no hook has written anything yet.
 function startDemo() {
@@ -563,14 +591,60 @@ function applySky() {
   document.getElementById("night").textContent = night ? "☀️" : "🌙";
 }
 applySky();
-document.getElementById("night").onclick = () => { night = !night; applySky(); };
-document.getElementById("cam").onclick = () => { camera.position.copy(HOME_CAM); controls.target.set(0, 0, 1); };
+document.getElementById("night").onclick = () => { night = !night; applySky(); if (LINEUP) lineupFog(); };  // applySky makes a new fog
+document.getElementById("cam").onclick = () => {
+  if (LINEUP) { camera.position.copy(LINEUP_CAM); controls.target.copy(LINEUP_TARGET); } else { camera.position.copy(HOME_CAM); controls.target.set(0, 0, 1); }
+};
+
+// ── Lineup (owner 2026-11-07): every role in one row facing the camera, all in the same state, stepping through every
+//    state every LINEUP_HOLD s (◀ ⏸ ▶ step by hand). A preset to check models and clips side by side; 🧍 toggles it.
+const LINEUP_STEPS = [["idle", "ยืนรอ"], ["walk", "เดิน"], ["work", "ทำงาน · ท่า 1", 0], ["work", "ทำงาน · ท่า 2", 1],
+  ["question", "รอคุณตอบ"], ["alarm", "เจอปัญหา"], ["wave", "ทักทาย"], ["celebrate", "ฉลอง"], ["sleep", "พัก"]];
+const LINEUP_CAM = new THREE.Vector3(0, 6, 25), LINEUP_TARGET = new THREE.Vector3(0, 1.2, 4), LINEUP_HOLD = 6;
+const lineup = { step: 0, since: 0, paused: false };
+function lineupShow(i) {
+  lineup.step = (i + LINEUP_STEPS.length) % LINEUP_STEPS.length; lineup.since = now();
+  const [st, label, pick] = LINEUP_STEPS[lineup.step];
+  for (const a of new Set(agents.values())) { a.state = st; a.pick = pick; }
+  document.getElementById("mode").textContent = `LINEUP · ท่า ${lineup.step + 1}/${LINEUP_STEPS.length}: ${label}${lineup.paused ? " · หยุดอยู่" : ""}`;
+}
+function lineupFrame() {  // back the camera off until the whole row fits the pane's width (a narrow pane included)
+  const d = Math.max(14, lineup.half / (Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.aspect));
+  LINEUP_CAM.set(0, LINEUP_TARGET.y + d * 0.22, LINEUP_TARGET.z + d);
+  controls.maxDistance = Math.max(70, d * 1.5); camera.position.copy(LINEUP_CAM); controls.target.copy(LINEUP_TARGET);
+  lineupFog();
+}
+function lineupFog() {  // the fog starts past the farthest the camera may zoom out, so the row never fades; it still hides
+  const far = Math.min(controls.maxDistance + 65, camera.far - 5);   // the ground's edge before the far plane cuts it
+  scene.fog.near = Math.min(controls.maxDistance + 5, far - 20); scene.fog.far = far;
+}
+if (LINEUP) {
+  const roles = Object.keys(ROLES), gap = 2.4, keep = new Set([hemi, sun, ground]);
+  roles.forEach((role, i) => {
+    const a = agents.get(role === "foreman" ? "main" : "res:" + role);
+    a.lineup = true; a.home = new THREE.Vector3((i - (roles.length - 1) / 2) * gap, 0, 4);
+    a.group.position.copy(a.home); a.group.rotation.y = 0; keep.add(a.group);
+    const tag = labelSprite(ROLES[role].label); tag.scale.set(2.1, 0.52, 1); tag.position.set(a.home.x, 0.3, a.home.z + 1.2); scene.add(tag); keep.add(tag);
+  });
+  for (const c of scene.children) if (!keep.has(c) && !c.isLight) c.visible = false;   // an empty stage: no buildings, roads or props
+  ground.scale.set(5, 5, 1);                                                            // and no ground edge, however far the camera backs off
+  lineup.half = ((roles.length - 1) / 2) * gap + 1.4;
+  lineupFrame(); addEventListener("resize", lineupFrame);
+  document.querySelector(".hud.bottom").style.display = "none";
+  document.getElementById("lineupCtl").style.display = "flex";
+  document.getElementById("lPrev").onclick = () => lineupShow(lineup.step - 1);
+  document.getElementById("lNext").onclick = () => lineupShow(lineup.step + 1);
+  document.getElementById("lPlay").onclick = (e) => { lineup.paused = !lineup.paused; e.currentTarget.textContent = lineup.paused ? "⏵" : "⏸"; lineupShow(lineup.step); };
+  lineupShow(0);
+}
+document.getElementById("lineup").onclick = () => { location.search = LINEUP ? "" : "?lineup"; };
 
 // ── Animation loop (paused while the pane is hidden) ───────────────────────────────────────────────────────
 let prev = now();
 function tick() {
   if (document.hidden) { prev = now(); return requestAnimationFrame(tick); }
   const t = now(), dt = Math.min(0.05, t - prev); prev = t;
+  if (LINEUP && !lineup.paused && t - lineup.since > LINEUP_HOLD) lineupShow(lineup.step + 1);
   for (const a of new Set(agents.values())) animate(a, t, dt);
   for (let i = particles.length - 1; i >= 0; i--) { const p = particles[i]; p.userData.life -= dt; p.userData.v.y -= 6 * dt * (p.geometry.type === "PlaneGeometry" ? 1 : 0); p.position.addScaledVector(p.userData.v, dt); p.rotation.x += dt * 5;
     if (p.material.opacity !== undefined && p.geometry.type !== "PlaneGeometry") p.material.opacity = Math.max(0, p.userData.life);
@@ -580,8 +654,10 @@ function tick() {
 }
 function animate(a, t, dt) {
   const p = a.parts, g = a.group, R = ROLES[a.role];
-  if (a.state !== "walk" && a.until && t > a.until) { a.until = 0; const f = a.after; a.after = null; if (f) f(); }
-  if (a.state === "walk") {
+  if (a.lineup) { /* the lineup sets the state: no timers, no walking off */ }
+  else if (a.state !== "walk" && a.until && t > a.until) { a.until = 0; const f = a.after; a.after = null; if (f) f(); }
+  if (a.lineup) { /* stays in its place */ }
+  else if (a.state === "walk") {
     const d = new THREE.Vector3().subVectors(a.target, g.position); d.y = 0; const dist = d.length();
     if (dist < 0.08) { g.position.copy(a.target); a.state = a.next || "idle"; if (a.retire) { scene.remove(g); for (const [k, v] of agents) if (v === a) agents.delete(k); } }
     else { d.normalize(); g.position.addScaledVector(d, Math.min(dist, (a.role === "scout" ? 4.2 : 2.6) * dt)); g.rotation.y = Math.atan2(d.x, d.z); }
@@ -607,7 +683,7 @@ function animate(a, t, dt) {
   if (p.beacon) p.beacon.material.emissiveIntensity = st === "work" || st === "walk" ? 0.6 + Math.abs(Math.sin(t * 5)) : 0.3;
   setBubble(a, st === "sleep" ? "Zz" : st === "alarm" ? "!" : st === "celebrate" ? "✓" : st === "question" ? "?" : null);
   if (p.bubble.visible) p.bubble.position.y = 3 + Math.sin(t * 2) * 0.1;
-  if (p.anim) playClip(p.anim, st, t, dt); else if (p.rig) rigPose(p.rig, st, t);
+  if (p.anim) playClip(p.anim, st, t, dt, a.pick); else if (p.rig) rigPose(p.rig, st, t);
   if (st === "work" && a.house && (a.role === "builder" || a.role === "heavy") && Math.random() < dt * 3) dust(g.position);
 }
 tick();

@@ -24,3 +24,16 @@ a rigged export with the clip names in the skill would animate limbs. `preview-m
   front, Typing / Writing / Using tablet, Thinking, Looking around / Searching, Wave / Nod, Cheer / Clap, Sit / Sleep). `MODEL_CLIPS`
   maps town states to clips (work alternates Pointing and Typing every 8 s); `playClip` cross-fades them through an
   AnimationMixer; the hips' horizontal drift is removed at load so walk plays in place. A model with no clips keeps the code poses.
+- **Main + Planner (2026-11-07, the owner's third round):** `models/main.glb` (Main / foreman: black and gold, hood, 9.5 k
+  triangles, 2K PBR, 4.2 MB) and a new `models/planner.glb` (9.0 MB). Both carry the same 9 clips, but the pointing clip is a
+  Text2Motion clip named after its prompt ("Standing in place, the character extends the right arm forward "), so a
+  `MODEL_CLIPS` name matches a clip by exact name or by prefix (`CLIP_SET("Standing in place")`). Both get `metalness: 0.25`:
+  without an environment map a metallic PBR surface renders near black. How the art and prompts were made:
+  `reference/2026-11-07/` and the skill `ae49-ref-3d-prompt`.
+
+## Lineup preset (2026-11-07)
+
+`http://127.0.0.1:8049/?lineup` (or 🧍 in the town) reads no events: every role stands in one row on an empty stage, facing
+the camera, all in the same state, and the row steps through every state every 6 s (idle, walk, work clip 1, work clip 2,
+question, alarm, wave, celebrate, sleep); ◀ ⏸ ▶ step by hand, ⟲ re-frames, 🧍 goes back to the live town. The camera backs off
+until the row fits the pane's width. Use it to check a new model's size, colours and clips beside the others.

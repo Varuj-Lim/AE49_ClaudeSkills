@@ -1,6 +1,6 @@
 ---
 name: ae49-task-agent-town
-description: Open, close or change Agent Town — the 3D town in the Claude app's Browser pane where Main and each sub-agent are robots that walk around and build one house per task, fed by Claude Code hooks. Use on เปิดเมือง, ปิดเมือง, Agent Town, ดูเมือง, ปรับเมือง, /ae49-task-agent-town.
+description: "Open, close or change Agent Town, the 3D town in the Claude app's Browser pane where Main and each sub-agent build one house per task, fed by Claude Code hooks; or its lineup test preset. Use on เปิดเมือง, ปิดเมือง, Agent Town, ดูเมือง, ปรับเมือง, ดูตัวละคร, เปิดเมือง lineup, /ae49-task-agent-town."
 ---
 
 # Agent Town
@@ -31,6 +31,9 @@ Say in one line which one ran. Words win over the toggle: "เปิดเมื
   session. Then `node "$HOME/.claude/agent-town/serve.cjs" --ensure`, then `preview_start` with
   `url: "http://127.0.0.1:8049/"` (the built-in browser). One line to the owner: the town is open, drag to turn the camera,
   🌙 for night, ⟲ to reset.
+- **lineup** (เปิดเมือง lineup, ดูตัวละคร, เทียบโมเดล; owner 2026-11-07): the TEST preset, no real events. Same as **open**
+  but `url: "http://127.0.0.1:8049/?lineup"`: every role in one row, all playing the same state, stepping through every state
+  every 6 s; ◀ ⏸ ▶ step by hand, 🧍 switches between lineup and the live town. Use it after a new model or clip lands.
 - **close** (ปิดเมือง): close the Browser tab showing `127.0.0.1:8049`, then stop the server — find the listener on port
   8049 and stop it ONLY if its command line is `…agent-town…serve.cjs` (PowerShell `Get-NetTCPConnection -LocalPort 8049`
   → `Get-CimInstance Win32_Process`). The hooks keep recording; that costs nothing noticeable.
@@ -51,8 +54,9 @@ Say in one line which one ran. Words win over the toggle: "เปิดเมื
 
 ## Limits
 
-- The robots are built from simple shapes in code. A real `.glb` model can replace one later (same roles, clips
-  `idle walk run work celebrate alarm question sleep carry_walk wave`, see the owner's reference
-  `docs/assets/agent-town/reference-agents-2026-11-06.webp` in AE49_Hub).
+- Main and Planner wear the owner's rigged Tripo models with 9 clips; Builder wears an unrigged statue; the rest are robots
+  built from simple shapes until their models arrive. Names shown in the town are English (owner 2026-11-07). A new model:
+  the owner's concept art is `agent-town/reference/2026-11-07/`, the prompts follow `ae49-ref-3d-prompt`, the clip names
+  and the model notes are in `agent-town/README.md`; check it in the **lineup** before calling it done.
 - three.js loads from a CDN the first time; offline the page says so.
 - RAM: about 150–250 MB while the page is visible; keep it closed while two builders and a gate Chrome run (16 GB machine).
