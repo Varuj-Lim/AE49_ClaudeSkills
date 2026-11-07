@@ -49,8 +49,40 @@ Say in one line which one ran. Words win over the toggle: "เปิดเมื
   (teal, spider legs), plan → Planner (white), explore / fetch → Scout (blue, jet flames), Main → Foreman.
 - A house per task, found by the Agent call's description (shared words); stages: plot → planned → foundation → frame →
   walls → roof → inspection tape → red cone → tested → landed → lights on. Main's `land.cjs` marks a house landed
-  (matched by `--plan <slug>`), `git push origin main` (not `main:backup`) lights every landed house.
+  (matched by `--plan <slug>`), `git push origin main` (not `main:backup`) lights every landed house, then clears it.
 - An agent whose dispatch the hook missed is woken from its own tool events (they carry `agent_type`).
+
+## Town design rules (owner, 2026-11-07; keep them when changing the town)
+
+The owner set these one by one while building the town; the code that does each, and his words, are in
+`agent-town/README.md` (mostly "Buildings, plots, trees and the circle"; the sit lift and the robots under "Real
+models") and in the comments in `town.html`. A change that breaks one needs his word first.
+
+1. **Only the owner's models.** Robots, buildings, trees and lamps are his Tripo exports; no building is drawn in code.
+   Code draws only small things: the construction site (slab, scaffold, stakes, blueprint, tape), flags, cones, bushes,
+   station props, robot add-ons (cape, jet flames, rotor) and the stand-ins shown until a model loads.
+2. **Buildings are 2–3 × a robot's height** (a robot is about 2.04): `TARGET_H` / `MIN_H` / `MAX_FOOT`, low types
+   stretched up. Plots, props and work spots scale with them, and no robot may stand or walk inside one.
+3. **One building per job, from a shuffle bag:** every house type once before any repeats. The main building's type
+   (CYBERNETIC CORE) and the hall's (ALGORITHM REFINERY) never go to a house.
+4. **Work in progress is a construction site:** from the plan on, slab and scaffold with the building rising out of the
+   ground; whole at "roof"; no square base once built.
+5. **The main building** is CYBERNETIC CORE at 2 × a house, north of the plaza (owner Q17 b).
+6. **Rest in front of Main:** Main sits at the main building's door facing the others; everyone else sits on an arc in
+   front facing Main. Sit / Sleep plays once and holds (no standing up and looping); every seated robot sits on the
+   ground (the lift; Tester splays its spider legs instead). Main works standing at its seat, sits when its turn ends,
+   and never stays stranded at a house or the hall.
+7. **Jobs:** walk to the job's building and work there (a job with no house is done at the role's station); when done
+   walk to the spot in front of Main, report facing Main, then walk back to the same seat. Walks go around the main building,
+   the hall and every house's building.
+8. **Cheer:** when a house lands, and again when a push lights it, everyone seated stands and claps, then sits again;
+   Main walks to the landed house (on a push, to the front of the hall) to celebrate, then back to its seat.
+9. **Push resets:** 6 s after a push the shipped houses are cleared (Main may still be at the hall); the main building,
+   the hall and jobs still in progress stay.
+10. **Colour and light:** each building type is re-coloured from Tripo's blue (its light lines keep their colour and
+    glow once the house is lit; the two landmarks always glow); a lamp lights only from the underside of its arm's far end.
+11. **Making a new model:** `ae49-ref-3d-prompt`; buildings isometric or three-quarter (a straight front view made
+    Tripo's multi-view guess a flat slab); check it in the town (and robots in the lineup) before calling it done.
 
 ## Limits
 

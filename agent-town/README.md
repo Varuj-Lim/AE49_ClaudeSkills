@@ -127,7 +127,9 @@ seams (80 k triangles, 5.5 MB, base-colour texture only). `preview-model.html?mo
   reports facing Main, then walks back to its own seat. Main works standing at its seat and sits when its turn ends (it
   never stays stranded at a house or the hall: `mainRest`). When a house lands, and again when a push lights it,
   everyone seated stands and claps (`cheerAll`). The Sit / Sleep clip plays once and holds the seated pose. Walks go
-  around the main building and the hall (`routeTo`: one corner, or two on one side when the goal is behind it).
+  around the main building, the hall and every house's building (`routeTo`: one corner, or two on one side when the
+  goal is behind it; each leg routed again when more buildings are in the way). Checked: all 216 seat → work spot → report
+  walks with all twelve plots built pass no building.
 - Make a new building isometric or three-quarter: a straight front view made Tripo's multi-view guess a flat slab; one
   that looks the same from every side can take the same image in all four multi-view slots.
 
