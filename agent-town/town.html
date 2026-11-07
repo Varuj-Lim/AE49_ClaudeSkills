@@ -61,11 +61,13 @@ const ROLES = {
   inspector:{ label: "Inspector",      body: 0x3fae55, trim: 0xe9eef2, station: [-6, 5] },
   tester:   { label: "Tester",         body: 0x23a3a0, trim: 0xe9eef2, station: [-3, 7] },
   scout:    { label: "Scout",          body: 0x2c7fd4, trim: 0xf08a24, station: [3, 7] },
+  migrator: { label: "Migrator",       body: 0x7a4bc4, trim: 0xd9dde2, station: [-4, -6] },   // ae49-migrate (owner Q2 a, 2026-11-07)
 };
 function roleOf(type) {
   type = String(type || "").toLowerCase();
   if (type.includes("heavy")) return "heavy";
-  if (type.includes("implement-docs") || type.includes("migrate") || type.includes("excel")) return "carrier";
+  if (type.includes("migrate")) return "migrator";
+  if (type.includes("implement-docs") || type.includes("excel")) return "carrier";
   if (type.includes("implement")) return "builder";
   if (type.includes("audit") || type.includes("review")) return "inspector";
   if (type.includes("gate")) return "tester";
@@ -142,6 +144,7 @@ function stationProp(role) {
   if (role === "planner")   { const t = box(1.6, 0.08, 1, M(0xe8e1cf)); t.position.y = 0.9; t.rotation.x = -0.3; g.add(t); for (const s of [-0.7, 0.7]) { const l = cyl(0.04, 0.04, 0.9, M(0x6b5a44)); l.position.set(s, 0.45, 0); g.add(l); } }
   if (role === "builder" || role === "heavy") { const t = box(1.6, 0.8, 0.8, M(0x8d6a45)); t.position.y = 0.4; g.add(t); const c = box(0.5, 0.5, 0.5, M(0xc28b4a)); c.position.set(0.5, 1.05, 0); g.add(c); }
   if (role === "carrier")   { for (let i = 0; i < 3; i++) { const c = box(0.6, 0.6, 0.6, M(0xc28b4a)); c.position.set(i * 0.65 - 0.65, 0.3, 0); g.add(c); } const c = box(0.6, 0.6, 0.6, M(0xb17a3c)); c.position.set(0, 0.9, 0); g.add(c); }
+  if (role === "migrator")  { for (let i = 0; i < 3; i++) { const d = cyl(0.42, 0.42, 0.3, M(i % 2 ? 0x9a72d8 : 0x7a4bc4), 20); d.position.y = 0.16 + i * 0.34; g.add(d); } }   // a stack of data drums
   if (role === "scout")     { const f = cyl(0.05, 0.05, 2.2, M(0x37424d)); f.position.y = 1.1; g.add(f); const fl = box(0.8, 0.45, 0.02, M(0xf08a24)); fl.position.set(0.42, 1.95, 0); g.add(fl); }
   g.position.set(x + (x > 0 ? 1.4 : -1.4), 0, z); scene.add(g);
 }
@@ -181,8 +184,8 @@ for (const [x, z, s] of [[-19, -16, 1.2], [-21, 4, 1], [20, -15, 1.1], [21, 3, 0
 
 // ── Robots, built from simple shapes ───────────────────────────────────────────────────────────────────────
 // ── Real models (owner 2026-11-06): a role listed here wears its .glb once it has loaded; until then, or if it fails,
-//    the robot built from shapes stays. The model is a statue (no rig), so it moves as one piece.
-const MODEL_URLS = { builder: "models/builder-g70.glb", planner: "models/planner.glb", foreman: "models/main.glb", scout: "models/scout.glb", carrier: "models/carrier.glb", heavy: "models/heavy.glb", inspector: "models/inspector.glb", tester: "models/tester.glb" };
+//    the robot built from shapes stays. Every role's model is rigged now (2026-11-07); the tables below give each its clips or code poses.
+const MODEL_URLS = { builder: "models/builder.glb", planner: "models/planner.glb", foreman: "models/main.glb", scout: "models/scout.glb", carrier: "models/carrier.glb", heavy: "models/heavy.glb", inspector: "models/inspector.glb", tester: "models/tester.glb", migrator: "models/migrator.glb" };
 // Clips by town state, per role (owner's Tripo exports 2026-11-06 / -07). A state missing here falls back to "idle".
 // "work" alternates its list every 8 s. Clips are played in place: the hips' horizontal drift is removed at load.
 // A name matches a clip of that exact name, else the first clip whose name STARTS with it (Tripo names a
@@ -190,8 +193,8 @@ const MODEL_URLS = { builder: "models/builder-g70.glb", planner: "models/planner
 const CLIP_SET = (point) => ({ idle: ["idle"], walk: ["walk"], work: [point, "Typing / Writing / Using tablet"],
   question: ["Thinking"], celebrate: ["Cheer / Clap"], wave: ["Wave / Nod"], sleep: ["Sit / Sleep"],
   alarm: ["Looking around / Searching"] });
-const MODEL_CLIPS = { planner: CLIP_SET("Standing in place"), foreman: CLIP_SET("Standing in place"), scout: CLIP_SET("Standing in place"), carrier: CLIP_SET("Standing in place"), heavy: CLIP_SET("Standing in place"), tester: { ...CLIP_SET("Standing in place"), sleep: ["idle"] } };   // tester: the Sit clip would sink the torso into its still base; asleep the legs splay instead
-const MODEL_SCALE = { builder: 2.6, planner: 2.5, foreman: 2.5, scout: 2.5, carrier: 2.5, heavy: 3.4, inspector: 3.4, tester: 2.5 };   // heavy.glb is 0.72 tall (the others ~0.97): 3.4 makes it as tall as the rest, and far wider
+const MODEL_CLIPS = { builder: CLIP_SET("Standing in place"), planner: CLIP_SET("Standing in place"), foreman: CLIP_SET("Standing in place"), scout: CLIP_SET("Standing in place"), carrier: CLIP_SET("Standing in place"), migrator: CLIP_SET("Standing in place"), heavy: CLIP_SET("Standing in place"), tester: { ...CLIP_SET("Standing in place"), sleep: ["idle"] } };   // tester: the Sit clip would sink the torso into its still base; asleep the legs splay instead
+const MODEL_SCALE = { builder: 2.93, planner: 2.5, foreman: 2.5, scout: 2.5, carrier: 2.5, heavy: 3.4, inspector: 3.4, tester: 2.5, migrator: 2.85 };   // heavy.glb is 0.72 tall (the others ~0.97): 3.4 makes it as tall as the rest, and far wider; migrator.glb is 0.84 tall, builder.glb 0.82
 // A rigged (skinned) model: cloned with SkeletonUtils, posed by code each frame (rigPose below), turned to face +Z.
 // tone: re-grade the base colour once at load (owner 2026-11-07, Q4 a: Main's black read as a silhouette, "ทึบ").
 //   lift  raises the darkest tones to this grey (0–255, like Levels' output black) — on colourless pixels only: the lift
@@ -201,8 +204,8 @@ const MODEL_SCALE = { builder: 2.6, planner: 2.5, foreman: 2.5, scout: 2.5, carr
 //   cool  tints the greys (the low-saturation pixels) toward blue by this much, so the grey reads cool, not brown;
 //   gold  multiplies the saturation of warm, saturated pixels (the gold trims) and lifts them up to 8 %, eased in from
 //         saturation 0.2 to 0.32 so trims get no hard contour; a channel past 255 scales all three down (no hue shift).
-const MODEL_RIGGED = { planner: { turn: 0, metalness: 0.25 },
-  foreman: { turn: 0, metalness: 0.25, tone: { lift: 40, cool: 10, gold: 1.25 } }, scout: { turn: 0, metalness: 0.25 }, carrier: { turn: 0, metalness: 0.25 }, heavy: { turn: 0, metalness: 0.25 }, inspector: { turn: 0, metalness: 0.25 }, tester: { turn: 0, metalness: 0.25 } };
+const MODEL_RIGGED = { builder: { turn: 0, metalness: 0.25 }, planner: { turn: 0, metalness: 0.25 },
+  foreman: { turn: 0, metalness: 0.25, tone: { lift: 40, cool: 10, gold: 1.25 } }, scout: { turn: 0, metalness: 0.25 }, carrier: { turn: 0, metalness: 0.25 }, heavy: { turn: 0, metalness: 0.25 }, inspector: { turn: 0, metalness: 0.25 }, tester: { turn: 0, metalness: 0.25 }, migrator: { turn: 0, metalness: 0.25 } };
 // Jet flames drawn by code at a model's nozzles (the owner removed them from the art, 2026-11-07): nozzle centres in
 // model units, measured from scout.glb's rest pose (the jetpack's lowest back points, x ±0.06–0.17, y 0.674).
 const MODEL_JETS = { scout: [[0.116, 0.672, -0.108], [-0.116, 0.672, -0.108]] };
@@ -753,8 +756,11 @@ function goTo(a, pos, state, fast) {
   if (fast) { a.group.position.copy(pos); a.state = state; } else a.state = "walk";
 }
 function houseSpot(h, role) {
-  const off = { builder: [-1.4, 2.4], heavy: [1.4, 2.4], carrier: [2.6, 0.6], inspector: [-3.0, 1.15], tester: [2.6, -0.6], planner: [-2.6, -0.6], scout: [0, 3], foreman: [0, 3.2] }[role] || [0, 3];
-  const p = plotPos(h); return new THREE.Vector3(p.x + off[0], 0, p.z + off[1]);
+  const off = { builder: [-1.4, 2.4], heavy: [1.4, 2.4], carrier: [2.6, 0.6], inspector: [-3.0, 1.15], tester: [2.6, -0.6], planner: [-2.6, -0.6], migrator: [3.0, -1.8], scout: [0, 3], foreman: [0, 3.2] }[role] || [0, 3];
+  const p = plotPos(h); let x = p.x + off[0]; const z = p.z + off[1];
+  // a spot on a station robot's home (or its second agent's) takes the mirror side: Migrator at plot 1 would stand on the Inspector
+  if (Object.values(ROLES).some(({ station: [sx, sz] }) => Math.hypot(x - sx, z - sz) < 1.2 || Math.hypot(x - sx - 0.9, z - sz - 0.8) < 1.2)) x = p.x - off[0];
+  return new THREE.Vector3(x, 0, z);
 }
 function finish(a, fast, mood = "celebrate") {
   a.state = mood; a.until = now() + (fast ? 0 : 1.6);
@@ -775,7 +781,7 @@ function apply(e, fast) {
     const a = actorFor(e.newAgent, role); a.house = h;
     if (h) {
       if (role === "planner") setStage(h, 2);
-      if (role === "builder" || role === "heavy" || role === "carrier") setStage(h, Math.max(h.stage, 3), { problem: false });
+      if (role === "builder" || role === "heavy" || role === "carrier" || role === "migrator") setStage(h, Math.max(h.stage, 3), { problem: false });
       if (role === "inspector") setStage(h, undefined, { inspecting: true });
       goTo(a, houseSpot(h, role), "work", fast);
     } else goTo(a, a.home.clone().add(new THREE.Vector3(0, 0, 1.2)), "work", fast);
@@ -797,7 +803,7 @@ function apply(e, fast) {
     if (!info) return;
     const a = actorFor(e.agent, info.role); a.lastTool = now(); if (a.state === "sleep" || a.state === "idle") goTo(a, a.home.clone().add(new THREE.Vector3(0.6, 0, 1.4)), "work", false);
     const h = a.house;
-    if (h && (info.role === "builder" || info.role === "heavy" || info.role === "carrier") && /Edit|Write/.test(e.tool)) {
+    if (h && (info.role === "builder" || info.role === "heavy" || info.role === "carrier" || info.role === "migrator") && /Edit|Write/.test(e.tool)) {
       a.edits = (a.edits || 0) + 1; if (a.edits > 3 && h.stage < 4) setStage(h, 4); if (a.edits > 10 && h.stage < 5) setStage(h, 5);
     }
     return;
@@ -806,7 +812,7 @@ function apply(e, fast) {
     const info = agentInfo.get(e.agent); if (!info) return;
     const a = actorFor(e.agent, info.role); const h = a.house;
     if (h) {
-      if (info.role === "builder" || info.role === "heavy" || info.role === "carrier") setStage(h, 6);
+      if (info.role === "builder" || info.role === "heavy" || info.role === "carrier" || info.role === "migrator") setStage(h, 6);
       if (info.role === "inspector") setStage(h, undefined, { inspecting: false });
       if (info.role === "tester") setStage(h, 9);
     }

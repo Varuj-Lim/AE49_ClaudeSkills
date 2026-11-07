@@ -19,8 +19,8 @@
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script>
-// Side-by-side look at decimated copies of one model (agent-town, 2026-11-06). ?models=a.glb,b.glb (under models/).
-const names = (new URLSearchParams(location.search).get("models") || "builder-g70.glb,builder-g110.glb").split(",");
+// Side-by-side look at two or more models, e.g. decimated copies of one (agent-town, 2026-11-06). ?models=a.glb,b.glb (under models/).
+const names = (new URLSearchParams(location.search).get("models") || "builder.glb,carrier.glb").split(",");
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.setSize(innerWidth, innerHeight);
 renderer.outputEncoding = THREE.sRGBEncoding; document.body.appendChild(renderer.domElement);

@@ -44,9 +44,9 @@ Say in one line which one ran. Words win over the toggle: "เปิดเมื
 
 ## How the town reads events
 
-- Role per agent type: implement → Builder (red, four arms), implement-heavy → Heavy Builder (purple, shield),
-  implement-docs / migrate / excel → Carrier (gold, crate), audit → Inspector (green, magnifier), gate → Tester (teal,
-  laptop), plan → Planner (white, floating, hologram), explore / fetch → Scout (blue, jetpack), Main → Foreman.
+- Role per agent type: implement → Builder (red), implement-heavy → Heavy Builder (orange, four arms), implement-docs /
+  excel → Carrier (gold), migrate → Migrator (purple, data drums), audit → Inspector (green, hovering), gate → Tester
+  (teal, spider legs), plan → Planner (white), explore / fetch → Scout (blue, jet flames), Main → Foreman.
 - A house per task, found by the Agent call's description (shared words); stages: plot → planned → foundation → frame →
   walls → roof → inspection tape → red cone → tested → landed → lights on. Main's `land.cjs` marks a house landed
   (matched by `--plan <slug>`), `git push origin main` (not `main:backup`) lights every landed house.
@@ -54,8 +54,8 @@ Say in one line which one ran. Words win over the toggle: "เปิดเมื
 
 ## Limits
 
-- Main and Planner wear the owner's rigged Tripo models with 9 clips; Builder wears an unrigged statue; the rest are robots
-  built from simple shapes until their models arrive. Names shown in the town are English (owner 2026-11-07). A new model:
+- Every role wears the owner's rigged Tripo model (2026-11-07; README lists each one's quirks); a shape robot shows only
+  until a model loads, or if it fails. Names shown in the town are English (owner 2026-11-07). A new model:
   the owner's concept art is `agent-town/reference/2026-11-07/`, the prompts follow `ae49-ref-3d-prompt`, the clip names
   and the model notes are in `agent-town/README.md`; check it in the **lineup** before calling it done.
 - three.js loads from a CDN the first time; offline the page says so.

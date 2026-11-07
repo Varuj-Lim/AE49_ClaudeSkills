@@ -11,11 +11,12 @@ nothing at SessionStart: open it with the skill `ae49-task-agent-town` (it start
 
 ## Real models (2026-11-06)
 
-`town.html`'s `MODEL_URLS` gives a role a `.glb` from `models/` (Builder: `models/builder-g70.glb`, from the owner's Tripo
-export `Agenet Implement.glb`, 1.84 M triangles / 61 MB, kept on the machine only as `models/builder-source.glb`, gitignored).
+`town.html`'s `MODEL_URLS` gives a role a `.glb` from `models/`. The first one (2026-11-06) was a Builder statue,
+`models/builder-g70.glb`, from the owner's Tripo export `Agenet Implement.glb` (1.84 M triangles / 61 MB; its source was kept only on the
+machine that made it, as `models/builder-source.glb`, gitignored); since 2026-11-07 every role wears a rigged model (below) and the statue was
+deleted (owner, 2026-11-07; it stays in git history).
 `tools/decimate-glb.cjs <in> <out> --grid 70 --uvgrid 48` shrinks a single-mesh export by vertex clustering that respects UV
-seams (80 k triangles, 5.5 MB, base-colour texture only). The model is a statue — no rig, no clips — so it moves as one piece;
-a rigged export with the clip names in the skill would animate limbs. `preview-model.html?models=a.glb,b.glb` compares copies.
+seams (80 k triangles, 5.5 MB, base-colour texture only). `preview-model.html?models=a.glb,b.glb` compares copies.
 - **Planner (2026-11-06):** `models/planner.glb` — the owner's Tripo export, 10 k triangles, Mixamo rig (54 bones, names come back
   without the `:` through GLTFLoader), no clips. `town.html` poses it in code (`rigPose`: idle, walk, work = pointing, question =
   hand up, celebrate, wave, alarm, sleep) by turning bones about the Mixamo frame (faces +Z, left arm +X). Clips in a later export
@@ -74,6 +75,15 @@ a rigged export with the clip names in the skill would animate limbs. `preview-m
   dead Mixamo thigh bones onto Hips, once per file. The clips then move only the upper body; `driveSpiderLegs` walks the legs in two alternating tripods in step with
   the walk clip, twitches them at rest, taps the front legs at work, raises one to ask or wave, and splays them asleep while
   the body sinks — the Sit clip is not used (`sleep: ["idle"]`), it would sink the torso into the still base.
+- **Migrator (2026-11-07, owner Q2 a):** a ninth role for `ae49-migrate` (Carrier keeps implement-docs and excel; `roleOf`
+  sends `migrate` to it). `models/migrator.glb` (purple and gold armour, 9.4 k triangles, 4.6 MB, Mixamo rig, same 9 clips),
+  0.84 tall so `MODEL_SCALE` 2.85 makes it as tall as the rest; `metalness: 0.25`. Station at (-4, -6) with a stack of
+  purple data drums; at a house it stands at offset (3.0, -1.8) (clear of Carrier, Tester, the blueprint board and the
+  trees; `houseSpot` mirrors any spot that lands on a station robot's home to the house's other side — only Migrator at plot 1,
+  which sits beside the Inspector's station) and moves the house's stage the way Carrier does.
+- **Builder (2026-11-07):** `models/builder.glb` (red and yellow armour, green canisters on the back, 9.5 k triangles, 3.8 MB,
+  Mixamo rig, same 9 clips), 0.82 tall so `MODEL_SCALE` 2.93; `metalness: 0.25`. It replaces the statue `builder-g70.glb`,
+  deleted on the owner's word.
 
 ## Lineup preset (2026-11-07)
 
