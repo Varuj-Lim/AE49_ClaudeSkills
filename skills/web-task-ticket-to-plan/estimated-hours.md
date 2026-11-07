@@ -14,16 +14,23 @@ Writing the figure by hand was fiddly, so Main states it at the two write-back m
 Ticket estimated hours: ON — follow web-task-ticket-to-plan/estimated-hours.md (ชั่วโมงประเมิน, สรุปรายเดือน)
 ```
 
+The project may append `· contingency N%` to that line (private repos only; this canon is public, so the figure
+never lives here).
+
 No line → none of this section applies, and the two write-backs stay exactly as `hard-rules.md` says.
 
-**The method — the same for every ticket.**
-- The figure is the effort a human developer would spend on the WHOLE ticket: clarify, build, test, deploy, reply.
-  Estimate each part, add them, round UP to the half-hour grid, minimum 0.5 (written `3.5 ชม.`, per
-  `web-ref-date-time` § 3).
-- **Never Claude's own run time** — it is far shorter than human effort and would mislead the client; never lowered
-  because the work went fast.
+**The method — the same for every ticket (owner CQ43 a, 2026-11-07).**
+- The scale is **our time**: the hours the owner spends on the WHOLE ticket working with Claude (clarify, plan, review,
+  test, deploy, reply). Size a new ticket against similar past tickets on that scale. It is never a human-only
+  developer's time and never a market figure; those belong on a separate comparison, not on a ticket.
+- Add the project's **contingency**: the percentage on its `CLAUDE.md` turn-on line (`contingency N%`); a line without
+  one → ask the owner. It is built into the figure and **never written, itemized or mentioned** to the client.
+- Round UP to the half-hour grid, minimum 0.5 (written `3.5 ชม.`, per `web-ref-date-time` § 3); never lowered because
+  the work went fast.
 - Always labelled **ชั่วโมงประเมิน**, never "ใช้เวลา" or anything that reads as measured time. A hub whose ticket replies
   are English (its project skill says so) writes `Estimated hours: 3.5 h` in the ticket; chat with the owner stays Thai.
+- The estimate reply is the FIRST reply in the thread (owner CQ42 b); the one-time backfill of 2026-11-07 was placed
+  there and says `(ประเมินย้อนหลังเมื่อ 7 พ.ย. 2569)`.
 
 **1. Taking the ticket** (plan approval, auto-approval, or the owner's go-ahead on a no-plan fix):
 - Say the figure in chat with a one-line breakdown, and the month's running total (estimates of tickets closed this
