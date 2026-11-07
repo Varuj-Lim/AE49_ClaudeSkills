@@ -36,7 +36,8 @@ This repo has no git-synced per-person memory, so this file is the in-flight not
 ## Next (in order)
 
 1. ~~**Emoji bubbles**~~ — done 2026-11-07 (Q22 a Fluent Emoji 3D, Q23 a Main downloaded them; `agent-town/emoji/`, MIT in
-   `NOTICE.md`). Nothing else queued; the owner may want the white disc back behind them for night reading.
+   `NOTICE.md`). Nothing else queued. White disc behind them: Q24 a (22:36 ICT) — no disc for now;
+   the owner looks at night first and says if the bubbles read badly.
 
 ## Rulings this session (owner, 2026-11-07)
 
