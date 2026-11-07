@@ -12,8 +12,9 @@ This repo has no git-synced per-person memory, so this file is the in-flight not
   town `http://127.0.0.1:8049/`, robot check `http://127.0.0.1:8049/?lineup`.
 - Every robot wears the owner's rigged Tripo model (9 roles incl. Migrator; Heavy two-armed at ≈1.4 ×; Inspector remade
   with legs, code propeller on Head; Main's cape is code; every robot sits on the ground; the Sit clip holds).
-- Buildings: six owner models (`models/building-*.glb`); CYBERNETIC CORE is only the main building (2 ×, north,
-  `MAIN_Z` −9.5), ALGORITHM REFINERY only the hall; houses draw the other four from a shuffle bag. Owner trees
+- Buildings: six owner models (`models/building-*.glb`, renamed 2026-11-07 on the owner's word: SITE OFFICE, TOWN HALL,
+  WORKSHOP, DOMES, SIGNAL STATION, TOWER — the old sheet names are in `agent-town/README.md`); SITE OFFICE is only the
+  main building (2 ×, north, `MAIN_Z` −9.5), TOWN HALL only the hall; houses draw the other four from a shuffle bag. Owner trees
   (`tree-1..3.glb`) and lamp (`lamp-post.glb`, glows only under the arm's end). Plots re-laid; walks route around every
   building (checked: 216 walks, twelve houses, none through a building).
 - Every change got a short `ae49-audit`; all BLOCKER / MAJOR folded. Not verified by eye (owner may look): Heavy crowding
@@ -24,17 +25,19 @@ This repo has no git-synced per-person memory, so this file is the in-flight not
   arrived 19:31 → copied to `agent-town/models/box.glb` (byte-identical, sha256 `3cfd1064…`). It is ONE mesh, box and
   pallet together (0.65 × 0.74 × 0.98, pallet deck top 0.102). Q19 a: boxes on the ground keep the pallet, stacked and
   table boxes lose it (`bareBox` cut) — **built, short audit PASS**. Q20 a was moot (the carried crate hides with the code
-  body); Q21 b: the Carrier carries a box in front with both arms — next. Q22 a / Q23 a: status bubbles become Fluent
-  Emoji 3D PNGs (`agent-town/emoji/`, MIT, in `NOTICE.md`) — after the Carrier.
+  body); Q21 b + "at least three boxes, smaller upward": the Carrier carries a stack of three in both arms — **landed
+  `c2212f3`**. The town draws at most 30 fps (owner: "ถ้าเยอะก็ลดเลย"; measured: its share fell from ~8 % GPU / 8 % CPU to
+  ~3 % / 2–3 %). CENTRAL CORE dropped (owner: "ลบออกไปเลย"); the six buildings renamed, Main's names.
 
 ## Next (in order)
 
-1. ~~**Box model**~~ — done 2026-11-07 (station stack + tables, Q19 a). Then: the Carrier's two-arm carry (Q21 b) and
-   the emoji bubbles (Q22 a).
-2. **CENTRAL CORE** building (Q12 a) is still owed — image prompt when the owner wants it (isometric view; see
-   `ae49-ref-3d-prompt`). The second sheet `agent-town/reference/2026-11-07/buildings-2.jpg` has more types.
+1. **Emoji bubbles** (Q22 a / Q23 a): the four Fluent Emoji 3D PNGs are in `agent-town/emoji/` (MIT, `NOTICE.md`
+   section added, not committed yet); `bubble()` in `town.html` draws them instead of the `Zz ! ? ✓` letters.
 
 ## Rulings this session (owner, 2026-11-07)
+
+(Building names as said then; renamed later the same day, map in `agent-town/README.md`: CYBERNETIC CORE is now SITE
+OFFICE, FOUNDRY WORKSHOP, SYNTHESIS DOMES; CENTRAL CORE was dropped.)
 
 Q1 c models stay in the public repo · Q2 a purple = Migrator · Q3 no colour changes (robots) · Q4 a Main toned in code ·
 Q5 a / Q6 b Heavy four arms (superseded: two arms, big) · Q7 b Inspector legless (superseded by Q13 a: two short legs) ·

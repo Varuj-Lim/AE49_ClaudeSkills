@@ -797,16 +797,16 @@ function plotPos(h) { const [x, z] = PLOTS[h.plot]; return new THREE.Vector3(x, 
 //    (bagType, below; replaced Q9 a's name hash).
 //    Q16 a — Tripo made them all blue; each type is re-coloured at load with a gradient map (dark → light, by the pixel's
 //    brightness) while the bright, saturated light lines keep their colour and also become the glow map.
-//    `maxStretch` lets a low building (FOUNDRY and SYNTHESIS are about half as tall as they are wide) be raised toward MIN_H.
-//    (the owner wanted FOUNDRY taller.)
+//    `maxStretch` lets a low building (WORKSHOP and DOMES are about half as tall as they are wide) be raised toward MIN_H.
+//    (the owner wanted WORKSHOP taller.)
 const BUILDINGS = [
-  { name: "CYBERNETIC CORE", url: "models/building-cybernetic-core.glb", dark: 0x5d636c, light: 0xf2efe8 },   // pearl white, grey edges
-  { name: "FOUNDRY", url: "models/building-foundry.glb", dark: 0x2c3036, light: 0xd9823a, maxStretch: 2.2 },     // dark steel, orange (a block: stretches well)
-  { name: "SYNTHESIS", url: "models/building-synthesis.glb", dark: 0x3b4149, light: 0x86e3d2, maxFoot: 5.0, maxStretch: 1.7 },   // grey base, teal glass (a dome: wider, less stretch)
+  { name: "SITE OFFICE", url: "models/building-site-office.glb", dark: 0x5d636c, light: 0xf2efe8 },   // pearl white, grey edges
+  { name: "WORKSHOP", url: "models/building-workshop.glb", dark: 0x2c3036, light: 0xd9823a, maxStretch: 2.2 },     // dark steel, orange (a block: stretches well)
+  { name: "DOMES", url: "models/building-domes.glb", dark: 0x3b4149, light: 0x86e3d2, maxFoot: 5.0, maxStretch: 1.7 },   // grey base, teal glass (a dome: wider, less stretch)
   // the owner's second sheet (buildings-2.jpg), exported as Build 1–3.glb at 17:59–18:00
-  { name: "NETWORK NODE", url: "models/building-network-node.glb", dark: 0x3a3348, light: 0xd9c7f0 },         // lavender silver
-  { name: "ALGORITHM REFINERY", url: "models/building-algorithm-refinery.glb", dark: 0x3a2a22, light: 0xd9a066 }, // copper
-  { name: "CONTROL SPIRE", url: "models/building-control-spire.glb", dark: 0x2a3350, light: 0xe8d9a8 },        // navy and cream
+  { name: "SIGNAL STATION", url: "models/building-signal-station.glb", dark: 0x3a3348, light: 0xd9c7f0 },         // lavender silver
+  { name: "TOWN HALL", url: "models/building-town-hall.glb", dark: 0x3a2a22, light: 0xd9a066 }, // copper
+  { name: "TOWER", url: "models/building-tower.glb", dark: 0x2a3350, light: 0xe8d9a8 },        // navy and cream
 ];
 // Size (owner 2026-11-07: "ต้องใหญ่กว่าตัวละครเสมอ … ประมาณ 2-3 เท่า"; a robot is about 2.04 tall): a building is scaled to
 // TARGET_H unless its wider side would pass MAX_FOOT (the plot); one left lower than MIN_H is stretched up, at most its
@@ -831,8 +831,8 @@ function bagOrder(round) {
   }
   return bagRounds[round];
 }
-// The main building (the site office) is CYBERNETIC CORE and no house may use it (owner 2026-11-07), so the bag holds the others.
-const MAIN_TYPE = "CYBERNETIC CORE", HALL_TYPE = "ALGORITHM REFINERY";   // the hall's type is kept off houses too, so no house looks like it
+// The main building is the SITE OFFICE model and no house may use it (owner 2026-11-07), so the bag holds the others.
+const MAIN_TYPE = "SITE OFFICE", HALL_TYPE = "TOWN HALL";   // the hall's type is kept off houses too, so no house looks like it
 const HOUSE_TYPES = () => BUILDINGS.filter((b) => b.name !== MAIN_TYPE && b.name !== HALL_TYPE);
 function bagType(i) { const T = HOUSE_TYPES(), n = T.length; return T[bagOrder(Math.floor(i / n))[i % n]]; }
 let houseSerial = 0;   // every house ever made, in order (its place in the bag); the demo restarts it
@@ -964,7 +964,7 @@ function actorFor(id, role) {
   if (res && !res.busyFor) { res.busyFor = id; agents.set(id, res); return res; }
   return spawn(id, role);
 }
-// Walks go around the office and the hall (audit 2026-11-07: robots walked straight through the CONTROL SPIRE to the
+// Walks go around the office and the hall (audit 2026-11-07: robots walked straight through the TOWER to the
 // northern plots): a straight line that crosses one of these boxes (grown by a body's width) gets a corner of it as a
 // waypoint, the corner that makes the walk shortest with both legs clear.
 const OBSTACLES = [[-4.3, 4.3, MAIN_Z - 4.3, MAIN_Z + 4.3], [-2.3, 2.3, 13.2, 17.8]].map(([x0, x1, z0, z1]) => [x0 - 0.6, x1 + 0.6, z0 - 0.6, z1 + 0.6]);
@@ -1243,9 +1243,17 @@ document.getElementById("lineup").onclick = () => { location.search = LINEUP ? "
 
 // ── Animation loop (paused while the pane is hidden) ───────────────────────────────────────────────────────
 let prev = now();
-function tick() {
-  if (document.hidden) { prev = now(); return requestAnimationFrame(tick); }
-  const t = now(), dt = Math.min(0.05, t - prev); prev = t;
+// The town draws at most FPS frames a second (owner 2026-11-07: "ถ้าเยอะก็ลดเลย"): measured on this machine, the town at 60
+// added about 8 % GPU and 8 % CPU over no town, at 30 about 3 % and 2–3 %, and the motion looks the same. `?fps=60` compares.
+// The frame is timed by the refresh's own timestamp (same clock as now()), so a callback that starts late skips nothing;
+// the camera's drift after a drag is set per frame, so it lasts as long as it did at 60; `?fps=` is held to 10–240.
+const FPS = THREE.MathUtils.clamp(+(new URLSearchParams(location.search).get("fps")) || 30, 10, 240);
+controls.dampingFactor = 1 - Math.pow(1 - 0.05, 60 / FPS);   // 0.05 per frame at 60 (the default) → the same per second
+function tick(ts) {
+  const t = ts === undefined ? now() : ts / 1000;
+  if (document.hidden) { prev = t; return requestAnimationFrame(tick); }
+  if (t - prev < 1 / FPS - 0.004) return requestAnimationFrame(tick);   // too soon: skip this screen refresh
+  const dt = Math.min(Math.max(0.05, 1.5 / FPS), t - prev); prev = t;
   if (LINEUP && !lineup.paused && t - lineup.since > LINEUP_HOLD) lineupShow(lineup.step + 1);
   for (const a of new Set(agents.values())) animate(a, t, dt);
   for (const h of houses.values()) if (h.buildingInfo) driveBuilding(h, dt);

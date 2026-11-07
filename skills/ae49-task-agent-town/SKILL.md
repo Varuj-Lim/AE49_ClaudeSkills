@@ -64,10 +64,10 @@ models") and in the comments in `town.html`. A change that breaks one needs his 
 2. **Buildings are 2–3 × a robot's height** (a robot is about 2.04): `TARGET_H` / `MIN_H` / `MAX_FOOT`, low types
    stretched up. Plots, props and work spots scale with them, and no robot may stand or walk inside one.
 3. **One building per job, from a shuffle bag:** every house type once before any repeats. The main building's type
-   (CYBERNETIC CORE) and the hall's (ALGORITHM REFINERY) never go to a house.
+   (SITE OFFICE) and the hall's (TOWN HALL) never go to a house.
 4. **Work in progress is a construction site:** from the plan on, slab and scaffold with the building rising out of the
    ground; whole at "roof"; no square base once built.
-5. **The main building** is CYBERNETIC CORE at 2 × a house, north of the plaza (owner Q17 b).
+5. **The main building** is the SITE OFFICE model at 2 × a house, north of the plaza (owner Q17 b).
 6. **Rest in front of Main:** Main sits at the main building's door facing the others; everyone else sits on an arc in
    front facing Main. Sit / Sleep plays once and holds (no standing up and looping); every seated robot sits on the
    ground (the lift; Tester splays its spider legs instead). Main works standing at its seat, sits when its turn ends,

@@ -9,6 +9,11 @@ to `~/.claude/settings.json` hooks: `PreToolUse` (matcher `*`), `PostToolUse` (m
 `SubagentStop`, `Stop`, `UserPromptSubmit` → `node "<home>/.claude/hooks/agent-town-hook.cjs"`, and `SessionStart` →
 nothing at SessionStart: open it with the skill `ae49-task-agent-town` (it starts the server on demand).
 
+What it costs (measured 2026-11-07): no tokens (the hook prints nothing into any context); about 0.13 s per tool call
+for the hook, open town or not; and while the page shows, the drawing. It draws at most 30 frames a second (`FPS`,
+`?fps=60` to compare, 10–240 accepted: the town's share fell from about 8 % GPU / 8 % CPU at 60 to about 3 % / 2–3 % at 30) and
+nothing while the page is hidden.
+
 ## Real models (2026-11-06)
 
 `town.html`'s `MODEL_URLS` gives a role a `.glb` from `models/`. The first one (2026-11-06) was a Builder statue,
@@ -94,10 +99,12 @@ seams (80 k triangles, 5.5 MB, base-colour texture only). `preview-model.html?mo
 ## Buildings, plots, trees and the circle (2026-11-07)
 
 - **Buildings (owner Q8 a / Q12 a / Q16 a):** six owner-made Tripo buildings (static GLBs in
-  `models/building-*.glb`, about 9 k triangles each): CYBERNETIC CORE, FOUNDRY, SYNTHESIS (from
-  `reference/2026-11-07/buildings.jpg`) and NETWORK NODE, ALGORITHM REFINERY, CONTROL SPIRE (from `buildings-2.jpg`,
-  exported as Build 1–3); CYBERNETIC CORE is only the main building and ALGORITHM REFINERY only the hall, so a house is
-  one of the other four. The stages are code: stakes on the bare plot (1); from the plan on, while the job is in progress, a
+  `models/building-*.glb`, about 9 k triangles each): SITE OFFICE, WORKSHOP, DOMES (from
+  `reference/2026-11-07/buildings.jpg`) and SIGNAL STATION, TOWN HALL, TOWER (from `buildings-2.jpg`,
+  exported as Build 1–3); SITE OFFICE is only the main building and TOWN HALL only the hall, so a house is
+  one of the other four. Renamed 2026-11-07 (owner: "ผมไม่ได้ตั้งชื่อเอง … ตั้งชื่อใหม่ให้หมดเลย"); the reference sheets
+  still print the old names: CYBERNETIC CORE → SITE OFFICE, FOUNDRY → WORKSHOP, SYNTHESIS → DOMES, NETWORK NODE →
+  SIGNAL STATION, ALGORITHM REFINERY → TOWN HALL, CONTROL SPIRE → TOWER. The stages are code: stakes on the bare plot (1); from the plan on, while the job is in progress, a
   construction site (2–5, owner: in-progress work shows as construction): a slab (gone once built, owner: no square base),
   a scaffold, a blueprint (2–3), and the building rising out of the ground (a clipping plane per house shows 12 / 25 / 45 /
   75 % of it, `REVEAL`, eased by `driveBuilding`); the whole building (6+; one already built when the page opens does not
@@ -107,14 +114,14 @@ seams (80 k triangles, 5.5 MB, base-colour texture only). `preview-model.html?mo
   repeats, then a new order (`bagType(h.serial)`), seeded by the round so a replay of the same events gives the same
   buildings (the hook keeps the last 400 events, so a log that has rolled can differ).
 - **Size (owner: "ใหญ่กว่าตัวละครเสมอ … 2-3 เท่า", a robot is about 2.04):** scaled to `TARGET_H` 5.5 unless the wider
-  side would pass `MAX_FOOT` 4.6 (SYNTHESIS 5.0); one left under `MIN_H` 4.4 is stretched up to its `maxStretch`
-  (FOUNDRY 2.2, SYNTHESIS 1.7). Plot props and work spots sit `HS` 1.25 × further out than around the old box house.
+  side would pass `MAX_FOOT` 4.6 (DOMES 5.0); one left under `MIN_H` 4.4 is stretched up to its `maxStretch`
+  (WORKSHOP 2.2, DOMES 1.7). Plot props and work spots sit `HS` 1.25 × further out than around the old box house.
 - **Colour (owner Q16 a, Tripo made them all blue):** `gradeBuilding` gradient-maps the body by brightness from the
   type's `dark` to its `light` colour; the light lines (bright cyan with almost no red) keep their colour and become
   the glow map.
-- **Landmarks:** the main building (the site office) is a CYBERNETIC CORE at 2 × a house (`MAIN_SCALE`), north of the
-  plaza at `MAIN_Z` −9.5 (owner Q17 b); the north ring road and the cross road stop at it. The town hall is an ALGORITHM
-  REFINERY. Both are always lit (`landmark`); the Inspector's and Tester's box booths are gone (open ground).
+- **Landmarks:** the main building is the SITE OFFICE model at 2 × a house (`MAIN_SCALE`), north of the
+  plaza at `MAIN_Z` −9.5 (owner Q17 b); the north ring road and the cross road stop at it. The town hall is the TOWN
+  HALL model. Both are always lit (`landmark`); the Inspector's and Tester's box booths are gone (open ground).
 - **Plots** were re-laid for the bigger buildings: twelve, outside the ring road, clear of the stations, the office, the
   hall and the roads, the camera side (+z) first, then the sides, the far side and the corners; the home camera backed off and the fog moved out so
   all twelve show. Trees and the plaza lamps
