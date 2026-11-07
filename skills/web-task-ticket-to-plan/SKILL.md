@@ -16,6 +16,7 @@ staff-note workflow are topics of this folder; the doorway's own long sections m
 | [hard-rules.md](hard-rules.md) | citing a ticket (human code, not doc id), the two-step write-back (approval = status only, push = the one reply), the fuller reply for a `bug` ticket, writing directly with no approval round trip |
 | [flow.md](flow.md) | running the flow: list → pick → read in full (attachments, the ticket card first) → clarify → hand off → write back; listing-table output notes |
 | [queue-order.md](queue-order.md) | ordering or columning ANY ticket listing, editing a project's ticket list script, or a ruling on ticket priority / ordering |
+| [estimated-hours.md](estimated-hours.md) | the project's `CLAUDE.md` has the line `Ticket estimated hours: ON`: the ชั่วโมงประเมิน at taking and closing a ticket, and the monthly summary on "สรุปรายเดือน" (opt-in, owner CQ27 a 2026-11-07) |
 | [staff-note.md](staff-note.md) | the owner files a ticket TO the team ("เปิด ticket บอก user", "จดไว้ถามทีม", "เขียน ticket แจ้งทีม"): ask / inform, filing, resolution |
 
 ## Old name → where it lives now

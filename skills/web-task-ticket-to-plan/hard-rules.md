@@ -28,7 +28,8 @@
      `status: in_progress` and NOTHING else — no response text (owner ruling
      2026-09-08: "แค่เปลี่ยน Status พอ ไม่ต้องอธิบาย"). Silent (no bell). Run the
      project's update script with `--status in_progress` and no response
-     argument.
+     argument. **Exception:** a project whose `CLAUDE.md` turns on estimated
+     hours also posts the one-line estimate reply ([estimated-hours.md](estimated-hours.md)).
   2. **At the owner's PUSH** (production deploy) → `status: resolved` + a
      Thai response saying it is live now. **This is the ONLY moment a reply is
      ever written.**
@@ -59,6 +60,7 @@
   Template (plain Thai, keep the app's English labels; one or two sentences,
   say WHAT changed for the requester, never the internals):
   - **PUSH:** `ขึ้นระบบแล้วครับ — <สิ่งที่เปลี่ยน 1 ประโยค> ลองใช้ได้เลย ถ้าไม่ตรงที่ต้องการแจ้งกลับได้ที่ ticket นี้`
+    (+ the `ชั่วโมงประเมิน` line when the project turns on [estimated-hours.md](estimated-hours.md))
 
   **A `bug` ticket gets a FULLER reply — the one-sentence template is not enough
   (owner ruling 2026-09-13).** A suggestion's author asked for a change and only
