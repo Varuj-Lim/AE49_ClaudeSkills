@@ -89,6 +89,48 @@ seams (80 k triangles, 5.5 MB, base-colour texture only). `preview-model.html?mo
   Mixamo rig, same 9 clips), 0.82 tall so `MODEL_SCALE` 2.93; `metalness: 0.25`. It replaces the statue `builder-g70.glb`,
   deleted on the owner's word.
 
+## Buildings, plots, trees and the circle (2026-11-07)
+
+- **Buildings (owner Q8 a / Q12 a / Q16 a):** six owner-made Tripo buildings (static GLBs in
+  `models/building-*.glb`, about 9 k triangles each): CYBERNETIC CORE, FOUNDRY, SYNTHESIS (from
+  `reference/2026-11-07/buildings.jpg`) and NETWORK NODE, ALGORITHM REFINERY, CONTROL SPIRE (from `buildings-2.jpg`,
+  exported as Build 1–3); CYBERNETIC CORE is only the main building and ALGORITHM REFINERY only the hall, so a house is
+  one of the other four. The stages are code: stakes on the bare plot (1); from the plan on, while the job is in progress, a
+  construction site (2–5, owner: in-progress work shows as construction): a slab (gone once built, owner: no square base),
+  a scaffold, a blueprint (2–3), and the building rising out of the ground (a clipping plane per house shows 12 / 25 / 45 /
+  75 % of it, `REVEAL`, eased by `driveBuilding`); the whole building (6+; one already built when the page opens does not
+  regrow), its light lines glowing once lit (11). A push lights the landed houses, everyone claps, and 6 s later the
+  shipped houses are cleared (owner: "ถ้า push ก็ให้ Reset"); houses still in progress stay.
+- **Which building (owner, replacing Q9 a's name hash):** a shuffle bag — every type once in a random order before any
+  repeats, then a new order (`bagType(h.serial)`), seeded by the round so a replay of the same events gives the same
+  buildings (the hook keeps the last 400 events, so a log that has rolled can differ).
+- **Size (owner: "ใหญ่กว่าตัวละครเสมอ … 2-3 เท่า", a robot is about 2.04):** scaled to `TARGET_H` 5.5 unless the wider
+  side would pass `MAX_FOOT` 4.6 (SYNTHESIS 5.0); one left under `MIN_H` 4.4 is stretched up to its `maxStretch`
+  (FOUNDRY 2.2, SYNTHESIS 1.7). Plot props and work spots sit `HS` 1.25 × further out than around the old box house.
+- **Colour (owner Q16 a, Tripo made them all blue):** `gradeBuilding` gradient-maps the body by brightness from the
+  type's `dark` to its `light` colour; the light lines (bright cyan with almost no red) keep their colour and become
+  the glow map.
+- **Landmarks:** the main building (the site office) is a CYBERNETIC CORE at 2 × a house (`MAIN_SCALE`), north of the
+  plaza at `MAIN_Z` −9.5 (owner Q17 b); the north ring road and the cross road stop at it. The town hall is an ALGORITHM
+  REFINERY. Both are always lit (`landmark`); the Inspector's and Tester's box booths are gone (open ground).
+- **Plots** were re-laid for the bigger buildings: twelve, outside the ring road, clear of the stations, the office, the
+  hall and the roads, the camera side (+z) first, then the sides, the far side and the corners; the home camera backed off and the fog moved out so
+  all twelve show. Trees and the plaza lamps
+  moved with them.
+- **Trees:** the owner's `models/tree-1..3.glb` replace the code cones once loaded, in turn, `TREE_H` 4.4 × size.
+- **Lamp posts:** the owner's `models/lamp-post.glb` (a street lamp) replaces the code pole and bulb, `LAMP_H` 3.6, each
+  turned so its arm reaches over the plaza; at night only the underside of the arm's far end glows (`prepareLamp` moves
+  the down-facing triangles of that end into a glowing material group; owner: "ไฟต้องออกมาจากส่วนปลายเท่านั้น ด้านใต้").
+- **Rest, report, cheer (owner; Q17 b):** Main rests at the main building's door (`MAIN_SEAT`) facing south; everyone
+  else rests seated on an arc in front of it facing Main (`seatOf`; a second agent of a role sits behind). A job at a house
+  is done there, one without a house at the role's station; when done the agent walks to the spot in front of Main,
+  reports facing Main, then walks back to its own seat. Main works standing at its seat and sits when its turn ends (it
+  never stays stranded at a house or the hall: `mainRest`). When a house lands, and again when a push lights it,
+  everyone seated stands and claps (`cheerAll`). The Sit / Sleep clip plays once and holds the seated pose. Walks go
+  around the main building and the hall (`routeTo`: one corner, or two on one side when the goal is behind it).
+- Make a new building isometric or three-quarter: a straight front view made Tripo's multi-view guess a flat slab; one
+  that looks the same from every side can take the same image in all four multi-view slots.
+
 ## Lineup preset (2026-11-07)
 
 `http://127.0.0.1:8049/?lineup` (or 🧍 in the town) reads no events: every role stands in one row on an empty stage, facing

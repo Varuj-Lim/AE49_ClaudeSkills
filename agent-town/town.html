@@ -61,7 +61,7 @@ const ROLES = {
   inspector:{ label: "Inspector",      body: 0x3fae55, trim: 0xe9eef2, station: [-6, 5] },
   tester:   { label: "Tester",         body: 0x23a3a0, trim: 0xe9eef2, station: [-3, 7] },
   scout:    { label: "Scout",          body: 0x2c7fd4, trim: 0xf08a24, station: [3, 7] },
-  migrator: { label: "Migrator",       body: 0x7a4bc4, trim: 0xd9dde2, station: [-4, -6] },   // ae49-migrate (owner Q2 a, 2026-11-07)
+  migrator: { label: "Migrator",       body: 0x7a4bc4, trim: 0xd9dde2, station: [-10, -5.5] },   // ae49-migrate (owner Q2 a, 2026-11-07); moved off the main building's ground (Q17 b)
 };
 function roleOf(type) {
   type = String(type || "").toLowerCase();
@@ -88,10 +88,10 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.prepend(renderer.domElement);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(32, innerWidth / innerHeight, 0.5, 200);
-const HOME_CAM = new THREE.Vector3(30, 34, 36);
+const HOME_CAM = new THREE.Vector3(40, 50, 56);   // backed off for the re-laid plots (2026-11-07): all twelve in view
 camera.position.copy(HOME_CAM);
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.target.set(0, 0, 1); controls.enableDamping = true; controls.maxPolarAngle = 1.35; controls.minDistance = 12; controls.maxDistance = 70;
+controls.target.set(0, 0, 1); controls.enableDamping = true; controls.maxPolarAngle = 1.35; controls.minDistance = 12; controls.maxDistance = 120;
 addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
 
 const hemi = new THREE.HemisphereLight(0xdfefff, 0x6b8a4f, 0.75); scene.add(hemi);
@@ -110,37 +110,91 @@ const sph = (r, m) => { const x = new THREE.Mesh(new THREE.SphereGeometry(r, 16,
 const emissives = [];  // lamps / windows / eyes that glow at night
 
 // Ground + roads (a cross through the plaza, a ring road)
-const ground = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), M(0x7fb069)); ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(160, 160), M(0x7fb069)); ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
 const roadM = M(0xc9b48a, { roughness: 0.95 });
-for (const [w, d, x, z] of [[44, 2.2, 0, 0], [2.2, 44, 0, 0], [30, 1.6, 0, -11], [30, 1.6, 0, 12], [1.6, 23, -15, 0.5], [1.6, 23, 15, 0.5]]) {
+// the north ring road and the cross road stop at the main building (it stands across both, owner Q17 b)
+for (const [w, d, x, z] of [[44, 2.2, 0, 0], [2.2, 22 + 4.2, 0, 22 - (22 + 4.2) / 2], [2.2, 22 - 15, 0, -15 - (22 - 15) / 2], [10, 1.6, -10, -11], [10, 1.6, 10, -11], [30, 1.6, 0, 12], [1.6, 23, -15, 0.5], [1.6, 23, 15, 0.5]]) {
   const r = box(w, 0.06, d, roadM); r.position.set(x, 0.03, z); r.castShadow = false; scene.add(r);
 }
 const plaza = new THREE.Mesh(new THREE.CylinderGeometry(3.2, 3.2, 0.08, 32), M(0xd9cba6)); plaza.position.y = 0.04; plaza.receiveShadow = true; scene.add(plaza);
 
 // Stations
+// Lamp posts (owner 2026-11-07): the owner's Tripo lamp (`models/lamp-post.glb`) replaces the code pole and bulb once loaded,
+// LAMP_H tall (taller than a robot). Its lantern glows at night (owner: "ให้ไฟสว่างจากตัวหลอดด้านบน", no round code bulb):
+// once per file the triangles of its light panel move into a second material group that glows: a street lamp whose arm
+// carries the panel on the UNDERSIDE of its far end (owner: "ไฟต้องออกมาจากส่วนปลายเท่านั้น ด้านใต้"), so a triangle
+// glows when it is in the head band (LAMP_GLOW, shares of the height), faces down, and lies in the outer part of the
+// arm's reach from the pole (LAMP_REACH, share of the farthest head point's distance). Loaded a tick later, like the trees.
+const LAMP_H = 3.6, LAMP_GLOW = [0.9, 1.01], LAMP_REACH = 0.55;
+let lampGlowM = null;
+function prepareLamp(m) {   // once: split the lantern band into its own glowing material
+  if (lampGlowM) return;
+  m.traverse((o) => {
+    if (!o.isMesh || lampGlowM) return;
+    const g = o.geometry, pos = g.attributes.position, idx = g.index; if (!idx) return;
+    g.computeBoundingBox(); const y0 = g.boundingBox.min.y, hgt = g.boundingBox.max.y - y0;
+    let px = 0, pz = 0, pn = 0, far = 0;   // the pole's axis: the mean of the vertices in the lower half
+    for (let i = 0; i < pos.count; i++) if ((pos.getY(i) - y0) / hgt < 0.5) { px += pos.getX(i); pz += pos.getZ(i); pn++; }
+    px /= pn || 1; pz /= pn || 1;
+    for (let i = 0; i < pos.count; i++) if ((pos.getY(i) - y0) / hgt > LAMP_GLOW[0]) far = Math.max(far, Math.hypot(pos.getX(i) - px, pos.getZ(i) - pz));
+    const body = [], glow = [], A = new THREE.Vector3(), B = new THREE.Vector3(), C = new THREE.Vector3(), N = new THREE.Vector3();
+    for (let i = 0; i < idx.count; i += 3) {
+      const ia = idx.getX(i), ib = idx.getX(i + 1), ic = idx.getX(i + 2);
+      A.fromBufferAttribute(pos, ia); B.fromBufferAttribute(pos, ib); C.fromBufferAttribute(pos, ic);
+      const cx = (A.x + B.x + C.x) / 3, cy = (A.y + B.y + C.y) / 3, cz = (A.z + B.z + C.z) / 3, u = (cy - y0) / hgt;
+      N.subVectors(B, A).cross(C.clone().sub(A)).normalize();   // its outward face normal (glTF winding is counter-clockwise)
+      const down = N.y < -0.7, out = Math.hypot(cx - px, cz - pz) > far * LAMP_REACH;
+      (u >= LAMP_GLOW[0] && u <= LAMP_GLOW[1] && down && out ? glow : body).push(ia, ib, ic);
+    }
+    g.setIndex(body.concat(glow)); g.clearGroups(); g.addGroup(0, body.length, 0); g.addGroup(body.length, glow.length, 1);
+    lampGlowM = o.material.clone(); lampGlowM.metalness = 0.2; lampGlowM.emissive = new THREE.Color(0xfff1c8); lampGlowM.emissiveMap = null;
+    lampGlowM.emissiveIntensity = night ? 1.1 : 0; emissives.push(lampGlowM);
+    o.material.metalness = 0.2; o.material = [o.material, lampGlowM];
+  });
+}
 function lampPost(x, z) {
   const g = new THREE.Group(); g.add(cyl(0.06, 0.08, 2.4, M(0x37424d))); g.children[0].position.y = 1.2;
   const bulbM = M(0xfff1b8, { emissive: 0xffd36b, emissiveIntensity: 0 }); emissives.push(bulbM);
   const b = sph(0.2, bulbM); b.position.y = 2.5; g.add(b); g.position.set(x, 0, z); scene.add(g);
+  setTimeout(() => loadModel("models/lamp-post.glb").then((m) => {
+    prepareLamp(m);
+    const bb = new THREE.Box3().setFromObject(m), k = LAMP_H / (bb.max.y - bb.min.y), lm = m.clone(true);   // shares the lamp materials
+    lm.scale.setScalar(k); lm.position.y = -bb.min.y * k; g.clear(); g.add(lm);
+    // the head reaches toward the model's −x: turn each lamp so it reaches over the plaza (toward the seats)
+    const dx = SEAT_C.x - x, dz = SEAT_C.z - z, n = Math.hypot(dx, dz) || 1; lm.rotation.y = Math.atan2(dz / n, -dx / n);
+    const i = emissives.indexOf(bulbM); if (i >= 0) emissives.splice(i, 1);   // the code bulb is gone
+  }).catch((e) => console.warn("lamp", e.message)), 0);
 }
+// Trees (owner 2026-11-07): the owner's Tripo trees replace the code cones once loaded (the cone stays only until then or
+// if a file fails). Each tree takes the next model in turn, a turn of its own, and a height of TREE_H × its size —
+// taller than a robot (about 2.04), like the buildings. loadModel is called a tick later: this runs before it is defined.
+const TREE_URLS = ["models/tree-1.glb", "models/tree-2.glb", "models/tree-3.glb"], TREE_H = 4.4;
+let treeCount = 0;
 function tree(x, z, s = 1) {
   const g = new THREE.Group(); const t = cyl(0.12 * s, 0.18 * s, 1 * s, M(0x7a5233)); t.position.y = 0.5 * s; g.add(t);
   const c = new THREE.Mesh(new THREE.ConeGeometry(0.9 * s, 1.8 * s, 9), M(0x3f8a4a)); c.position.y = 1.7 * s; c.castShadow = true; g.add(c);
   g.position.set(x, 0, z); scene.add(g);
+  const url = TREE_URLS[treeCount++ % TREE_URLS.length], turn = (x * 7.3 + z * 3.1) % (Math.PI * 2);
+  setTimeout(() => loadModel(url).then((m) => {
+    const bb = new THREE.Box3().setFromObject(m), k = (TREE_H * s) / (bb.max.y - bb.min.y), tm = m.clone(true);
+    tm.traverse((o) => { if (o.isMesh) { o.material = o.material.clone(); o.material.metalness = 0; } });
+    tm.scale.setScalar(k); tm.position.y = -bb.min.y * k; tm.rotation.y = turn; g.clear(); g.add(tm);
+  }).catch((e) => console.warn("tree", url, e.message)), 0);
 }
+// The site office, the town hall and the Inspector's and Tester's booths were boxes; since 2026-11-07 they are the owner's
+// buildings (owner: "ทำไมมันยังมีอาคารเหลี่ยมๆอยู่ … แทนด้วยอาคารที่ผมให้ไป"). These functions keep their signs, pole and
+// flag; `landmark` (after BUILDINGS, below) puts the building in each group once it has loaded.
+const landmarkGroups = {};
+// The main building (owner Q17 b, 2026-11-07): the office, 2 × a house (MAIN_SCALE), moved north to MAIN_Z; the roads under
+// it are cut. Everyone rests in front of it facing Main, who sits at its door facing them.
+const MAIN_Z = -9.5, MAIN_SCALE = 2, MAIN_SEAT = new THREE.Vector3(0, 0, -3.6);
 function office() {  // the Foreman's site office, north of the plaza
   const g = new THREE.Group();
-  const b = box(3.4, 2, 2.4, M(0x2f6fa8)); b.position.y = 1; g.add(b);
-  const r = box(3.8, 0.25, 2.8, M(0xf2f5f8)); r.position.y = 2.1; g.add(r);
-  const winM = M(0xbfe3ff, { emissive: 0xffd36b, emissiveIntensity: 0 }); emissives.push(winM);
-  const w = box(1.2, 0.7, 0.05, winM); w.position.set(0.6, 1.2, 1.22); g.add(w);
-  const sign = labelSprite("SITE OFFICE", "#2f6fa8"); sign.position.set(0, 2.9, 0); sign.scale.set(2.6, 0.65, 1); g.add(sign);
-  g.position.set(0, 0, -4.2); scene.add(g);
+  const sign = labelSprite("SITE OFFICE", "#2f6fa8"); sign.position.set(0, 2.9, 0); sign.scale.set(2.6, 0.65, 1); g.add(sign); g.userData.sign = sign;
+  g.position.set(0, 0, MAIN_Z); scene.add(g); landmarkGroups.office = g;
 }
 function stationProp(role) {
   const [x, z] = ROLES[role].station; const g = new THREE.Group();
-  if (role === "inspector") { const b = box(1.4, 1.6, 1.2, M(0x3fae55)); b.position.y = 0.8; g.add(b); const r = box(1.6, 0.15, 1.4, M(0xe9eef2)); r.position.y = 1.65; g.add(r); }
-  if (role === "tester")    { const b = box(1.8, 1.5, 1.4, M(0x23a3a0)); b.position.y = 0.75; g.add(b); const sM = M(0x0e2a33, { emissive: 0x39e6c6, emissiveIntensity: 0.6 }); const s = box(0.9, 0.5, 0.05, sM); s.position.set(0, 1, 0.72); g.add(s); }
   if (role === "planner")   { const t = box(1.6, 0.08, 1, M(0xe8e1cf)); t.position.y = 0.9; t.rotation.x = -0.3; g.add(t); for (const s of [-0.7, 0.7]) { const l = cyl(0.04, 0.04, 0.9, M(0x6b5a44)); l.position.set(s, 0.45, 0); g.add(l); } }
   if (role === "builder" || role === "heavy") { const t = box(1.6, 0.8, 0.8, M(0x8d6a45)); t.position.y = 0.4; g.add(t); const c = box(0.5, 0.5, 0.5, M(0xc28b4a)); c.position.set(0.5, 1.05, 0); g.add(c); }
   if (role === "carrier")   { for (let i = 0; i < 3; i++) { const c = box(0.6, 0.6, 0.6, M(0xc28b4a)); c.position.set(i * 0.65 - 0.65, 0.3, 0); g.add(c); } const c = box(0.6, 0.6, 0.6, M(0xb17a3c)); c.position.set(0, 0.9, 0); g.add(c); }
@@ -150,12 +204,10 @@ function stationProp(role) {
 }
 function townHall() {
   const g = new THREE.Group();
-  const b = box(4, 2.6, 2.6, M(0xe7dcc4)); b.position.y = 1.3; g.add(b);
-  const r = new THREE.Mesh(new THREE.ConeGeometry(3.2, 1.6, 4), M(0x8c4b3a)); r.rotation.y = Math.PI / 4; r.position.y = 3.4; r.castShadow = true; g.add(r);
   const pole = cyl(0.05, 0.05, 3, M(0x37424d)); pole.position.set(2.6, 1.5, 1.6); g.add(pole);
   hallFlag = box(0.9, 0.5, 0.02, M(0x5cc08a)); hallFlag.position.set(3.05, 0.6, 1.6); g.add(hallFlag);
-  const sign = labelSprite("TOWN HALL · DEPLOY", "#8c4b3a"); sign.position.set(0, 4.6, 0); sign.scale.set(3.4, 0.7, 1); g.add(sign);
-  g.position.set(0, 0, 15.5); scene.add(g);
+  const sign = labelSprite("TOWN HALL · DEPLOY", "#8c4b3a"); sign.position.set(0, 4.6, 0); sign.scale.set(3.4, 0.7, 1); g.add(sign); g.userData.sign = sign;
+  g.position.set(0, 0, 15.5); scene.add(g); landmarkGroups.hall = g;
 }
 let hallFlag;
 
@@ -179,8 +231,9 @@ function bubble(char) {
 
 office(); townHall();
 for (const r of Object.keys(ROLES)) if (r !== "foreman") stationProp(r);
-for (const [x, z] of [[-3.5, -1.5], [3.5, -1.5], [-3.5, 2.2], [3.5, 2.2], [-15, -11], [15, 12]]) lampPost(x, z);
-for (const [x, z, s] of [[-19, -16, 1.2], [-21, 4, 1], [20, -15, 1.1], [21, 3, 0.9], [-12, 17, 1], [12, 18, 1.2], [-20, 17, 0.8], [19, 18, 1], [-9, -16, 0.9], [9, -17, 1]]) tree(x, z, s);
+for (const [x, z] of [[-6.5, -3.6], [6.5, -3.6], [-5.5, 3.8], [5.5, 3.8], [-15, -11], [15, 12]]) lampPost(x, z);   // plaza lamps clear of the seats
+// trees re-placed 2026-11-07 with the plots: between plots, out of every plot's work spots, off the roads
+for (const [x, z, sz] of [[-12, -8, 1.2], [12, -8, 1.1], [-12, 8, 1], [12, 8.5, 0.9], [-27, 0, 1], [27, 0, 1.2], [-15, -25, 0.8], [15, -25, 1], [-15, 25, 0.9], [15, 25, 1]]) tree(x, z, sz);
 
 // ── Robots, built from simple shapes ───────────────────────────────────────────────────────────────────────
 // ── Real models (owner 2026-11-06): a role listed here wears its .glb once it has loaded; until then, or if it fails,
@@ -378,7 +431,10 @@ function playClip(an, st, t, dt, pick) {  // pick: which clip of the state's lis
   const list = an.map[st] || an.map.idle; const name = list[(pick ?? Math.floor(t / 8)) % list.length];
   const next = clipAction(an, name) || clipAction(an, (an.map.idle || [])[0]);
   if (next && next !== an.current) {
-    next.reset().setLoop(THREE.LoopRepeat, Infinity).play();
+    // asleep the clip plays once and holds its last frame, seated (owner 2026-11-07: "ให้จบลงตรงที่ปลายสุด … ไม่เด้งมายืนวนๆ");
+    // every other clip loops (Tester sleeps on its idle clip, which keeps looping)
+    const once = next.getClip().name === "Sit / Sleep"; next.reset().setLoop(once ? THREE.LoopOnce : THREE.LoopRepeat, once ? 1 : Infinity);
+    next.clampWhenFinished = once; next.play();
     if (an.current) an.current.crossFadeTo(next, 0.35, false);
     an.current = next;
   }
@@ -622,8 +678,10 @@ function setBubble(a, ch) {
 
 // ── Houses: one per task, eleven stages ────────────────────────────────────────────────────────────────────
 const STAGES = ["", "แปลงว่าง", "วางแผน", "ฐานราก", "โครง", "ผนัง", "หลังคา (สร้างเสร็จ)", "กำลังตรวจ", "เจอปัญหา", "ทดสอบผ่าน", "Land แล้ว", "ขึ้นจริงแล้ว"];
-const PLOTS = [[-9, -7], [-9, 7], [9, -8], [9, 8], [-21, -7], [-21, 8], [21, -8], [21, 9], [-9, -16], [9, 16], [-3, -14], [3, 16]];
-const WALLS = [0xe9d8b5, 0xd8e4ef, 0xf1d1c4, 0xd9ecd5], ROOFS = [0x8c4b3a, 0x2f5f8a, 0x4f6b3a, 0x7a4f8a];
+// Plots (2026-11-07, re-laid for buildings up to 5 wide with work spots up to 4.3 out): outside the ring road, clear of the
+// stations, the office, the hall and every road; the nearest are filled first.
+// the north pair at x ±10 so no work spot sits in the main building's shadow (Q17 b); (−10,−19) last, the tower hides it
+const PLOTS = [[8, 19.5], [-8, 19.5], [22, 6], [-22, 6], [22, -6], [-22, -6], [10, -19], [22, 18], [-22, 18], [22, -18], [-22, -18], [-10, -19]];   // camera side first
 const houses = new Map();  // key → { name, stage, group, plot, inspecting, problem, created }
 function houseKeyOf(desc) {
   const stop = new Set(["build", "fold", "folds", "run", "gate", "re-gate", "regate", "audit", "full", "short", "re-audit", "fix", "the", "of", "and", "for", "a", "on", "settled", "dispatch", "batch", "in", "to", "with"]);
@@ -638,41 +696,154 @@ function findHouse(desc, create) {
   if (!create) return null;
   if (houses.size >= PLOTS.length) {  // retire the oldest finished house
     const old = [...houses.values()].sort((a, b) => a.created - b.created).find((h) => h.stage >= 10) || [...houses.values()].sort((a, b) => a.created - b.created)[0];
-    scene.remove(old.group); houses.delete(old.key);
+    dropHouse(old);
   }
   const used = new Set([...houses.values()].map((h) => h.plot));
   const plot = PLOTS.findIndex((_, i) => !used.has(i));
   const key = toks.join(" ");
-  const h = { key, toks, name: String(desc).replace(/^(build|fold|run|full audit|short audit|re-gate|audit|gate)\s+/i, "").slice(0, 34), stage: 1, plot, created: Date.now(), wall: WALLS[houses.size % 4], roof: ROOFS[(houses.size + 1) % 4], group: null };
+  const h = { key, toks, name: String(desc).replace(/^(build|fold|run|full audit|short audit|re-gate|audit|gate)\s+/i, "").slice(0, 34), stage: 1, plot, created: Date.now(), serial: houseSerial++, group: null };
   houses.set(key, h); drawHouse(h); return h;
 }
 function setStage(h, stage, flags = {}) {
-  if (!h) return; const before = h.stage;
+  if (!h || houses.get(h.key) !== h) return; const before = h.stage;   // a dropped (shipped or retired) house is never redrawn
   if (stage !== undefined && stage > h.stage) h.stage = stage;
   Object.assign(h, flags); drawHouse(h);
   if (h.stage === 11 && before < 11) confetti(plotPos(h));
   renderHud();
 }
 function plotPos(h) { const [x, z] = PLOTS[h.plot]; return new THREE.Vector3(x, 0, z); }
+// ── Buildings (owner 2026-11-07): Q8 a — each house is one of the owner's finished Tripo buildings and the construction
+//    stages are code: stakes on the bare plot (1), then a construction site while the job is in progress (2–5: slab,
+//    scaffold, blueprint at 2–3, the building rising out of the ground by a clipping plane, REVEAL), the whole building
+//    (6+), its light lines glowing once lit (11); a push clears the shipped houses. The type comes from a shuffle bag
+//    (bagType, below; replaced Q9 a's name hash).
+//    Q16 a — Tripo made them all blue; each type is re-coloured at load with a gradient map (dark → light, by the pixel's
+//    brightness) while the bright, saturated light lines keep their colour and also become the glow map.
+//    `maxStretch` lets a low building (FOUNDRY and SYNTHESIS are about half as tall as they are wide) be raised toward MIN_H.
+//    (the owner wanted FOUNDRY taller.)
+const BUILDINGS = [
+  { name: "CYBERNETIC CORE", url: "models/building-cybernetic-core.glb", dark: 0x5d636c, light: 0xf2efe8 },   // pearl white, grey edges
+  { name: "FOUNDRY", url: "models/building-foundry.glb", dark: 0x2c3036, light: 0xd9823a, maxStretch: 2.2 },     // dark steel, orange (a block: stretches well)
+  { name: "SYNTHESIS", url: "models/building-synthesis.glb", dark: 0x3b4149, light: 0x86e3d2, maxFoot: 5.0, maxStretch: 1.7 },   // grey base, teal glass (a dome: wider, less stretch)
+  // the owner's second sheet (buildings-2.jpg), exported as Build 1–3.glb at 17:59–18:00
+  { name: "NETWORK NODE", url: "models/building-network-node.glb", dark: 0x3a3348, light: 0xd9c7f0 },         // lavender silver
+  { name: "ALGORITHM REFINERY", url: "models/building-algorithm-refinery.glb", dark: 0x3a2a22, light: 0xd9a066 }, // copper
+  { name: "CONTROL SPIRE", url: "models/building-control-spire.glb", dark: 0x2a3350, light: 0xe8d9a8 },        // navy and cream
+];
+// Size (owner 2026-11-07: "ต้องใหญ่กว่าตัวละครเสมอ … ประมาณ 2-3 เท่า"; a robot is about 2.04 tall): a building is scaled to
+// TARGET_H unless its wider side would pass MAX_FOOT (the plot); one left lower than MIN_H is stretched up, at most its
+// type's maxStretch (a dome or a block can take more than a spire). The plot's props and the robots' work spots sit
+// HS × further out than they did around the old 3.2-wide box house.
+const TARGET_H = 5.5, MIN_H = 4.4, MAX_FOOT = 4.6, HS = 1.25;
+const SLAB_TOP = 0.25;             // the code slab's height (stages 2–5 only; the building itself stands on the ground)
+// share of its height shown while the job is in progress (owner 2026-11-07: "งานไหนที่อยู่ขั้นตอนกำลังทำอยากให้ขึ้นเป็นก่อสร้าง"):
+// from the plan (2) on, a house is a construction site — slab, scaffold and the building rising; 6+ shows all of it
+const REVEAL = { 2: 0.12, 3: 0.25, 4: 0.45, 5: 0.75 };
+renderer.localClippingEnabled = true;
+// Which building a house gets (owner 2026-11-07, replacing Q9 a's name hash): a shuffle bag — every type once, in a random
+// order, before any repeats; then a new order, and so on, never starting with the type the last round ended on. The order is
+// seeded by the round number, so a reload that replays the same events gives every house the same building again.
+const bagRounds = [];
+function bagOrder(round) {
+  while (bagRounds.length <= round) {
+    const r = bagRounds.length, n = HOUSE_TYPES().length, o = [...Array(n).keys()]; let x = (r * 2654435761 + 12345) >>> 0;
+    for (let j = n - 1; j > 0; j--) { x = (Math.imul(x, 1103515245) + 12345) >>> 0; const k = x % (j + 1); [o[j], o[k]] = [o[k], o[j]]; }
+    if (r && o[0] === bagRounds[r - 1][n - 1]) [o[0], o[1]] = [o[1], o[0]];
+    bagRounds.push(o);
+  }
+  return bagRounds[round];
+}
+// The main building (the site office) is CYBERNETIC CORE and no house may use it (owner 2026-11-07), so the bag holds the others.
+const MAIN_TYPE = "CYBERNETIC CORE", HALL_TYPE = "ALGORITHM REFINERY";   // the hall's type is kept off houses too, so no house looks like it
+const HOUSE_TYPES = () => BUILDINGS.filter((b) => b.name !== MAIN_TYPE && b.name !== HALL_TYPE);
+function bagType(i) { const T = HOUSE_TYPES(), n = T.length; return T[bagOrder(Math.floor(i / n))[i % n]]; }
+let houseSerial = 0;   // every house ever made, in order (its place in the bag); the demo restarts it
+function dropHouse(h) {   // a house leaves the town: its group, and its lit materials from the night list
+  scene.remove(h.group); houses.delete(h.key);
+  for (const a of agents.values()) if (a.house === h) a.house = null;
+  if (h.buildingInfo) for (const m of h.buildingInfo.mats) { const i = emissives.indexOf(m); if (i >= 0) emissives.splice(i, 1); }
+}
+function gradeBuilding(mat, type) {   // once per type (its source materials): gradient-map the body, keep and glow the lights
+  const tex = mat.map; if (!tex || !tex.image) return;
+  const img = tex.image, w = img.width, hgt = img.height, c = document.createElement("canvas"); c.width = w; c.height = hgt;
+  const x = c.getContext("2d"); x.drawImage(img, 0, 0);
+  const d = x.getImageData(0, 0, w, hgt), p = d.data, e = x.createImageData(w, hgt), q = e.data;
+  const lo = new THREE.Color(type.dark), hi = new THREE.Color(type.light);
+  for (let i = 0; i < p.length; i += 4) {
+    const r = p[i] / 255, g = p[i + 1] / 255, b = p[i + 2] / 255;
+    q[i + 3] = 255;
+    // a light line: bright cyan, almost no red (measured: lights ~16/176–240/240, the blue body keeps red 48–112)
+    if (p[i] < 48 && p[i + 1] > 150 && p[i + 2] > 190) { q[i] = p[i]; q[i + 1] = p[i + 1]; q[i + 2] = p[i + 2]; continue; }
+    const lum = 0.3 * r + 0.59 * g + 0.11 * b, k = Math.min(1, Math.max(0, (lum - 0.12) / 0.6));
+    p[i] = (lo.r + (hi.r - lo.r) * k) * 255; p[i + 1] = (lo.g + (hi.g - lo.g) * k) * 255; p[i + 2] = (lo.b + (hi.b - lo.b) * k) * 255;
+  }
+  x.putImageData(d, 0, 0); tex.image = c; tex.needsUpdate = true;
+  const ec = document.createElement("canvas"); ec.width = w; ec.height = hgt; ec.getContext("2d").putImageData(e, 0, 0);
+  const glow = tex.clone(); glow.image = ec; glow.needsUpdate = true;
+  mat.emissiveMap = glow; mat.emissive = new THREE.Color(0xffffff); mat.emissiveIntensity = 0; mat.metalness = 0.25;
+}
+function buildingType(type) {   // the graded source and its size, once per type
+  return (type.ready ||= loadModel(type.url).then((m) => {
+    m.traverse((o) => { if (o.isMesh) gradeBuilding(o.material, type); });
+    const bb = new THREE.Box3().setFromObject(m), size = bb.getSize(new THREE.Vector3());
+    const w = Math.max(size.x, size.z), k = Math.min(TARGET_H / size.y, (type.maxFoot || MAX_FOOT) / w);
+    const ky = k * Math.min(type.maxStretch || 1.4, Math.max(1, MIN_H / (size.y * k)));
+    return { model: m, k, ky, base: bb.min.y, height: size.y * ky, foot: w * k };
+  }));
+}
+function ensureBuilding(h) {   // the house's own copy (own materials, for its own clipping plane), made once
+  if (h.buildingLoading) return; h.buildingLoading = true;
+  const type = bagType(h.serial); h.type = type.name;
+  buildingType(type).then((t) => {
+    const b = t.model.clone(true), plane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0), mats = [];
+    b.traverse((o) => { if (o.isMesh) { o.material = o.material.clone(); o.material.clippingPlanes = [plane]; o.material.clipShadows = true; mats.push(o.material); } });
+    b.scale.set(t.k, t.ky, t.k); b.position.y = -t.base * t.ky;   // on the ground; the slab (2–5) hides its foot while it rises
+    h.building = b; h.buildingInfo = { plane, mats, height: t.height, foot: t.foot, shown: h.stage >= 6 ? 1 : 0 };   // built already: no regrowth on load
+    if (houses.get(h.key) === h) drawHouse(h);   // the house may have moved on (or gone) while it loaded
+  }).catch((e) => console.warn("building", type.name, e.message));
+}
+function driveBuilding(h, dt) {   // ease the shown height toward the stage's; light it at 11
+  const B = h.buildingInfo, s = h.stage, want = s >= 6 ? 1 : REVEAL[s] || 0;
+  B.shown += (want - B.shown) * (1 - Math.exp(-dt * 1.5));
+  B.plane.constant = B.shown * B.height + (want >= 1 && B.shown > 0.995 ? 1 : 0);   // fully built: no cut at all
+  if (s >= 11 && !B.lit) { B.lit = true; for (const m of B.mats) { m.userData.dayGlow = 0.35; m.emissiveIntensity = night ? 1.1 : 0.35; emissives.push(m); } }
+}
+// Landmarks: whole buildings, always lit (their light lines glow like a lit house), `k` × the house size.
+function landmark(g, name, k = 1) {
+  const type = BUILDINGS.find((b) => b.name === name); if (!g || !type) return;
+  buildingType(type).then((t) => {
+    const b = t.model.clone(true);   // k: × the house size
+    b.traverse((o) => { if (o.isMesh) { o.material = o.material.clone(); o.material.userData.dayGlow = 0.35; o.material.emissiveIntensity = night ? 1.1 : 0.35; emissives.push(o.material); } });
+    b.scale.set(t.k * k, t.ky * k, t.k * k); b.position.y = -t.base * t.ky * k; g.add(b);
+    if (g.userData.sign) g.userData.sign.position.y = Math.max(g.userData.sign.position.y, t.height * k + 0.6);
+  }).catch((e) => console.warn("landmark", name, e.message));
+}
+landmark(landmarkGroups.office, MAIN_TYPE, MAIN_SCALE);
+landmark(landmarkGroups.hall, HALL_TYPE);
+// the Inspector's and Tester's booths were boxes; a building there would be smaller than the robots or crowd plot 1, so
+// those two stations are open ground (owner 2026-11-07: buildings always 2–3 × a robot)
 function drawHouse(h) {
   if (h.group) scene.remove(h.group);
   const g = new THREE.Group(); const s = h.stage; const P = plotPos(h);
-  const dirt = new THREE.Mesh(new THREE.PlaneGeometry(5, 4.4), M(s >= 10 ? 0x86b86f : 0xb89a6a)); dirt.rotation.x = -Math.PI / 2; dirt.position.y = 0.02; dirt.receiveShadow = true; g.add(dirt);
-  const sign = labelSprite(h.name, "#1d2731"); sign.scale.set(3.2, 0.8, 1); sign.position.set(0, s >= 6 ? 4.1 : 1.9, 2.4); g.add(sign);
-  const post = cyl(0.05, 0.05, 1.1, M(0x7a5233)); post.position.set(-2.1, 0.55, 2.0); g.add(post);
-  if (s >= 2 && s < 4) { for (const [x, z] of [[-1.5, -1.2], [1.5, -1.2], [-1.5, 1.2], [1.5, 1.2]]) { const pg = cyl(0.04, 0.04, 0.5, M(0xf08a24)); pg.position.set(x, 0.25, z); g.add(pg); } const bp = box(0.9, 0.05, 0.6, M(0x2f6fa8)); bp.position.set(1.9, 0.9, 1.6); bp.rotation.x = -0.4; g.add(bp); }
-  if (s >= 3) { const f = box(3.4, 0.25, 2.8, M(0xb7b2a8)); f.position.y = 0.12; g.add(f); }
-  if (s >= 4 && s < 5) { for (const [x, z] of [[-1.5, -1.2], [1.5, -1.2], [-1.5, 1.2], [1.5, 1.2]]) { const p = box(0.15, 2, 0.15, M(0xc28b4a)); p.position.set(x, 1.25, z); g.add(p); } const bm = box(3.2, 0.12, 0.12, M(0xc28b4a)); bm.position.y = 2.2; g.add(bm); }
-  if (s >= 5) { const wm = M(h.wall); const w = box(3.2, 1.9, 2.6, wm); w.position.y = 1.2; g.add(w);
-    const lit = s >= 11; const winM = M(lit ? 0xffe9a8 : 0x6d8aa3, { emissive: 0xffd36b, emissiveIntensity: lit ? 0.9 : 0 }); if (lit) emissives.push(winM);
-    for (const x of [-0.9, 0.9]) { const wi = box(0.6, 0.55, 0.05, winM); wi.position.set(x, 1.35, 1.32); g.add(wi); }
-    const door = box(0.6, 1, 0.05, M(lit ? 0x5a3a24 : 0x7a5233)); door.position.set(0, 0.75, 1.32); if (lit) { door.rotation.y = 1.0; door.position.x = 0.28; door.position.z = 1.55; } g.add(door); }
-  if (s >= 6) { const rf = new THREE.Mesh(new THREE.ConeGeometry(2.5, 1.4, 4), M(h.roof)); rf.rotation.y = Math.PI / 4; rf.position.y = 2.85; rf.castShadow = true; g.add(rf); }
-  if (h.inspecting) { const tape = new THREE.Mesh(new THREE.TorusGeometry(2.4, 0.05, 6, 40), M(0x8a5cd6, { emissive: 0x8a5cd6, emissiveIntensity: 0.4 })); tape.rotation.x = Math.PI / 2; tape.position.y = 0.9; g.add(tape); }
-  if (h.problem) { const cone = new THREE.Mesh(new THREE.ConeGeometry(0.25, 0.6, 12), M(0xe8705c)); cone.position.set(1.9, 0.3, 1.9); g.add(cone); const fl = box(0.5, 0.3, 0.02, M(0xe8705c)); fl.position.set(-1.6, 1.6, 1.9); g.add(fl); }
-  if (s === 9) { const ck = labelSprite("✓ TESTED", "#ffffff", "rgba(46,139,87,.95)"); ck.scale.set(1.6, 0.4, 1); ck.position.set(-1.6, 1.4, 2.2); g.add(ck); }
-  if (s >= 10) { const pole = cyl(0.04, 0.04, 2, M(0x37424d)); pole.position.set(1.9, 1, -1.5); g.add(pole); const fl = box(0.6, 0.35, 0.02, M(s >= 11 ? 0x5cc08a : 0x2f6fa8)); fl.position.set(2.22, 1.8, -1.5); g.add(fl);
-    for (const [x, z] of [[-2.1, -1.8], [2.2, 1.9]]) { const b = sph(0.35, M(0x4f9a4a)); b.position.set(x, 0.3, z); g.add(b); } }
+  const dirt = new THREE.Mesh(new THREE.PlaneGeometry(6, 5.6), M(s >= 10 ? 0x86b86f : 0xb89a6a)); dirt.rotation.x = -Math.PI / 2; dirt.position.y = 0.02; dirt.receiveShadow = true; g.add(dirt);
+  const sign = labelSprite(h.name, "#1d2731"); sign.scale.set(3.2, 0.8, 1); sign.position.set(0, s >= 6 ? Math.max(4.1, (h.buildingInfo ? h.buildingInfo.height : 0) + 0.6) : 1.9, 2.4 * HS); g.add(sign);
+  const post = cyl(0.05, 0.05, 1.1, M(0x7a5233)); post.position.set(-2.1 * HS, 0.55, 2.0 * HS); g.add(post);
+  if (s === 1) for (const [x, z] of [[-1.5, -1.2], [1.5, -1.2], [-1.5, 1.2], [1.5, 1.2]]) { const pg = cyl(0.04, 0.04, 0.5, M(0xf08a24)); pg.position.set(x * HS, 0.25, z * HS); g.add(pg); }   // the bare plot is staked out
+  if (s >= 2 && s < 4) { const bx = (h.buildingInfo ? h.buildingInfo.foot : MAX_FOOT) / 2 + 0.75, bp = box(0.9, 0.05, 0.6, M(0x2f6fa8)); bp.position.set(bx, 0.9, 1.6 * HS); bp.rotation.x = -0.4; g.add(bp); }   // the blueprint, outside the scaffold
+  if (s >= 2 && s < 6) { const fw = (h.buildingInfo ? h.buildingInfo.foot : MAX_FOOT) + 0.4, f = box(fw, SLAB_TOP, fw, M(0xb7b2a8)); f.position.y = SLAB_TOP / 2; g.add(f); }   // gone once built (owner: no square base)
+  if (s >= 2) { ensureBuilding(h); if (h.building) g.add(h.building); }
+  if (s >= 2 && s < 6) {   // scaffold up to the part that is rising, a little above it
+    const top = (REVEAL[s] || 0) * (h.buildingInfo ? h.buildingInfo.height : 3) + 0.4, hw = (h.buildingInfo ? h.buildingInfo.foot : MAX_FOOT) / 2 + 0.15, sm = M(0xc28b4a);
+    for (const [x, z] of [[-hw, -hw], [hw, -hw], [-hw, hw], [hw, hw]]) { const p = box(0.12, top, 0.12, sm); p.position.set(x, top / 2, z); g.add(p); }
+    for (let y = 1; y < top; y += 1.1) for (const [w, d, x, z] of [[hw * 2, 0.08, 0, -hw], [hw * 2, 0.08, 0, hw], [0.08, hw * 2, -hw, 0], [0.08, hw * 2, hw, 0]]) {
+      const bm = box(w, 0.08, d, sm); bm.position.set(x, y, z); g.add(bm);
+    }
+  }
+  if (h.inspecting) { const tape = new THREE.Mesh(new THREE.TorusGeometry(4.9, 0.05, 6, 40), M(0x8a5cd6, { emissive: 0x8a5cd6, emissiveIntensity: 0.4 })); tape.rotation.x = Math.PI / 2; tape.position.y = 0.9; g.add(tape); }
+  if (h.problem) { const cone = new THREE.Mesh(new THREE.ConeGeometry(0.25, 0.6, 12), M(0xe8705c)); cone.position.set(1.9 * HS, 0.3, 1.9 * HS); g.add(cone); const fl = box(0.5, 0.3, 0.02, M(0xe8705c)); fl.position.set(-1.6 * HS, 1.6, 1.9 * HS); g.add(fl); }
+  if (s === 9) { const ck = labelSprite("✓ TESTED", "#ffffff", "rgba(46,139,87,.95)"); ck.scale.set(1.6, 0.4, 1); ck.position.set(-1.6 * HS, 1.4, 2.2 * HS); g.add(ck); }
+  if (s >= 10) { const pole = cyl(0.04, 0.04, 2, M(0x37424d)); pole.position.set(1.9 * HS, 1, -1.5 * HS); g.add(pole); const fl = box(0.6, 0.35, 0.02, M(s >= 11 ? 0x5cc08a : 0x2f6fa8)); fl.position.set(1.9 * HS + 0.32, 1.8, -1.5 * HS); g.add(fl);
+    for (const [x, z] of [[-2.1, -1.8], [2.2, 1.9]]) { const b = sph(0.35, M(0x4f9a4a)); b.position.set(x * HS, 0.3, z * HS); g.add(b); } }
   g.position.copy(P); scene.add(g); h.group = g;
 }
 const particles = [];
@@ -689,12 +860,22 @@ function dust(at) {
 const agents = new Map();      // id → actor
 const agentInfo = new Map();   // agent id → { role, house }
 function stationOf(role, n = 0) { const [x, z] = ROLES[role].station; return new THREE.Vector3(x + n * 0.9, 0, z + (n ? 0.8 : 0)); }
+// A job at a house is done there; one with no house at the role's station (stationOf).
+// Seats (owner Q17 b: "ทุกคนอยู่หน้าอาคาร หันหน้าไปทาง Main"): Main at the main building's door facing south; the others
+// on an arc in front of it (SEAT_R from Main, ±70°), facing Main; a second agent of a role sits behind on a wider arc.
+const SEAT_C = MAIN_SEAT, SEAT_R = 4.5;
+function seatOf(role, n = 0) {
+  if (role === "foreman") return MAIN_SEAT.clone();
+  const others = Object.keys(ROLES).filter((r) => r !== "foreman"), i = others.indexOf(role);
+  const th = (-70 + (140 * i) / Math.max(1, others.length - 1)) * Math.PI / 180, r = SEAT_R + n * 1.4;
+  return new THREE.Vector3(MAIN_SEAT.x + Math.sin(th) * r, 0, MAIN_SEAT.z + Math.cos(th) * r);
+}
 function spawn(id, role) {
   if (agents.has(id)) return agents.get(id);
   const sameRole = [...agents.values()].filter((a) => a.role === role).length;
-  const r = makeRobot(role); const home = stationOf(role, sameRole);
+  const r = makeRobot(role); const home = seatOf(role, sameRole), station = stationOf(role, sameRole);
   r.group.position.copy(home); scene.add(r.group);
-  const a = { id, ...r, home, target: home.clone(), state: "sleep", until: 0, house: null, resident: id.startsWith("res:") };
+  const a = { id, ...r, home, station, target: home.clone(), state: "sleep", until: 0, house: null, resident: id.startsWith("res:") };
   agents.set(id, a); return a;
 }
 for (const role of Object.keys(ROLES)) spawn(role === "foreman" ? "main" : "res:" + role, role);
@@ -705,23 +886,63 @@ function actorFor(id, role) {
   if (res && !res.busyFor) { res.busyFor = id; agents.set(id, res); return res; }
   return spawn(id, role);
 }
+// Walks go around the office and the hall (audit 2026-11-07: robots walked straight through the CONTROL SPIRE to the
+// northern plots): a straight line that crosses one of these boxes (grown by a body's width) gets a corner of it as a
+// waypoint, the corner that makes the walk shortest with both legs clear.
+const OBSTACLES = [[-4.3, 4.3, MAIN_Z - 4.3, MAIN_Z + 4.3], [-2.3, 2.3, 13.2, 17.8]].map(([x0, x1, z0, z1]) => [x0 - 0.6, x1 + 0.6, z0 - 0.6, z1 + 0.6]);
+function crosses(p, q, [x0, x1, z0, z1]) {   // does the segment p→q pass through the box (2D slab test)?
+  let t0 = 0, t1 = 1; const d = [q.x - p.x, q.z - p.z], o = [p.x, p.z], lo = [x0, z0], hi = [x1, z1];
+  for (let k = 0; k < 2; k++) {
+    if (Math.abs(d[k]) < 1e-9) { if (o[k] < lo[k] || o[k] > hi[k]) return false; continue; }
+    let a = (lo[k] - o[k]) / d[k], b = (hi[k] - o[k]) / d[k]; if (a > b) [a, b] = [b, a];
+    t0 = Math.max(t0, a); t1 = Math.min(t1, b); if (t0 > t1) return false;
+  }
+  return true;
+}
+function routeTo(from, to) {
+  const box = OBSTACLES.find((b) => crosses(from, to, b)); if (!box) return [to];
+  const [x0, x1, z0, z1] = box, m = 0.05, corners = [[x0 - m, z0 - m], [x1 + m, z0 - m], [x0 - m, z1 + m], [x1 + m, z1 + m]].map(([x, z]) => new THREE.Vector3(x, 0, z));
+  const ok = corners.filter((c) => !OBSTACLES.some((b) => crosses(from, c, b) || crosses(c, to, b)));
+  if (ok.length) return [ok.sort((c, d) => (from.distanceTo(c) + c.distanceTo(to)) - (from.distanceTo(d) + d.distanceTo(to)))[0], to];
+  // behind the box: two corners on one side (front then back), the shorter clear pair
+  const pairs = [[0, 2], [2, 0], [1, 3], [3, 1], [0, 1], [1, 0], [2, 3], [3, 2]].map(([i, j]) => [corners[i], corners[j]])
+    .filter(([c, e]) => !OBSTACLES.some((b) => crosses(from, c, b) || crosses(c, e, b) || crosses(e, to, b)));
+  if (pairs.length) { const [c, e] = pairs.sort(([a1, a2], [b1, b2]) => (from.distanceTo(a1) + a1.distanceTo(a2) + a2.distanceTo(to)) - (from.distanceTo(b1) + b1.distanceTo(b2) + b2.distanceTo(to)))[0]; return [c, e, to]; }
+  return [to];
+}
 function goTo(a, pos, state, fast) {
-  a.target = pos.clone(); a.next = state;
+  a.until = 0; a.after = null; a.holdOnArrive = 0;   // a new errand cancels a cheer's or a report's timer
+  a.next = state; a.path = fast ? [] : routeTo(a.group.position, pos); a.target = (fast ? pos : a.path.shift()).clone();
   if (fast) { a.group.position.copy(pos); a.state = state; } else a.state = "walk";
 }
 function houseSpot(h, role) {
-  const off = { builder: [-1.4, 2.4], heavy: [1.4, 2.4], carrier: [2.6, 0.6], inspector: [-3.0, 1.15], tester: [2.6, -0.6], planner: [-2.6, -0.6], migrator: [3.0, -1.8], scout: [0, 3], foreman: [0, 3.2] }[role] || [0, 3];
-  const p = plotPos(h); let x = p.x + off[0]; const z = p.z + off[1];
+  const off = { builder: [-1.4, 2.4], heavy: [1.4, 2.4], carrier: [2.6, 0.6], inspector: [-3.0, 1.15], tester: [2.6, -0.6], planner: [-2.6, -0.6], migrator: [3.0, -1.8], scout: [0, 3], foreman: [0, 3.2] }[role] || [0, 3];   // × HS below: around the bigger buildings
+  const p = plotPos(h); let x = p.x + off[0] * HS; const z = p.z + off[1] * HS;
   // a spot on a station robot's home (or its second agent's) takes the mirror side: Migrator at plot 1 would stand on the Inspector
-  if (Object.values(ROLES).some(({ station: [sx, sz] }) => Math.hypot(x - sx, z - sz) < 1.2 || Math.hypot(x - sx - 0.9, z - sz - 0.8) < 1.2)) x = p.x - off[0];
+  if (Object.values(ROLES).some(({ station: [sx, sz] }) => Math.hypot(x - sx, z - sz) < 1.2 || Math.hypot(x - sx - 0.9, z - sz - 0.8) < 1.2)) x = p.x - off[0] * HS;
   return new THREE.Vector3(x, 0, z);
 }
+// Done (owner 2026-11-07: "ตอนมารายงานก็ให้เดินมารายงานตรงกลาง … เดินกลับมานั่งที่เดิม"; Q17 b: in front of Main): the agent
+// walks to the spot in front of Main, reports there for 1.6 s facing Main, then walks back to its own seat and sits.
 function finish(a, fast, mood = "celebrate") {
-  a.state = mood; a.until = now() + (fast ? 0 : 1.6);
-  a.after = () => { goTo(a, a.home, a.id === "main" ? "idle" : "sleep", fast); if (a.busyFor) { agents.delete(a.busyFor); a.busyFor = null; } else if (!a.resident && a.id !== "main") a.retire = true; };
+  if (fast) { a.state = mood; a.until = now(); }
+  else { goTo(a, MAIN_SEAT.clone().add(new THREE.Vector3((Math.random() - 0.5) * 1.2, 0, 1.8)), mood, false); a.holdOnArrive = 1.6; }   // report in front of Main
+  a.after = () => { goTo(a, a.home, "sleep", fast); if (a.busyFor) { agents.delete(a.busyFor); a.busyFor = null; } else if (!a.resident && a.id !== "main") a.retire = true; };
   if (fast) a.after();
 }
 const now = () => performance.now() / 1000;
+function mainRest(fast) {   // Main sits at its seat; if it is somewhere else it walks back first (never stranded)
+  const main = agents.get("main"); main.until = 0; main.after = null;
+  if (main.group.position.distanceTo(main.home) < 0.1) main.state = "sleep"; else goTo(main, main.home, "sleep", fast);
+}
+// A job done (owner 2026-11-07: "เมื่องานเสร็จทุกคนต้องยืนขึ้นตบมือ"): when a house lands, and again when a push lights it,
+// every robot sitting at its seat stands up and claps (the celebrate clip) for 3 s, then sits down again.
+function cheerAll() {
+  for (const a of new Set(agents.values())) {
+    if (a.lineup || a.state !== "sleep" || a.group.position.distanceTo(a.home) > 0.1) continue;
+    a.state = "celebrate"; a.until = now() + 3; a.after = () => { a.state = "sleep"; };
+  }
+}
 
 // ── Events → town ──────────────────────────────────────────────────────────────────────────────────────────
 const logLines = [];
@@ -738,24 +959,24 @@ function apply(e, fast) {
       if (role === "builder" || role === "heavy" || role === "carrier" || role === "migrator") setStage(h, Math.max(h.stage, 3), { problem: false });
       if (role === "inspector") setStage(h, undefined, { inspecting: true });
       goTo(a, houseSpot(h, role), "work", fast);
-    } else goTo(a, a.home.clone().add(new THREE.Vector3(0, 0, 1.2)), "work", fast);
+    } else goTo(a, a.station.clone().add(new THREE.Vector3(0, 0, 1.2)), "work", fast);
     setBubble(a, null);
     if (!fast) log(t, `${ROLES[role].label} รับงาน: ${e.desc}`);
     return;
   }
   if (e.kind === "agent-start" && e.agent && !agentInfo.has(e.agent)) {
     const role = roleOf(e.agentType); agentInfo.set(e.agent, { role, house: null });
-    const a = actorFor(e.agent, role); goTo(a, a.home.clone().add(new THREE.Vector3(0.6, 0, 1.4)), "work", fast); return;
+    const a = actorFor(e.agent, role); goTo(a, a.station.clone().add(new THREE.Vector3(0.6, 0, 1.4)), "work", fast); return;
   }
   if (e.kind === "tool" && e.agent && e.agent !== "main") {
     let info = agentInfo.get(e.agent);
     if (!info && e.agentType) {  // an agent dispatched before the hook was installed, or whose dispatch was missed: wake it at its station
       info = { role: roleOf(e.agentType), house: null }; agentInfo.set(e.agent, info);
-      const w = actorFor(e.agent, info.role); goTo(w, w.home.clone().add(new THREE.Vector3(0.6, 0, 1.4)), "work", false);
+      const w = actorFor(e.agent, info.role); goTo(w, w.station.clone().add(new THREE.Vector3(0.6, 0, 1.4)), "work", false);
       log(e.t || Date.now(), `${ROLES[info.role].label} กำลังทำงานอยู่`);
     }
     if (!info) return;
-    const a = actorFor(e.agent, info.role); a.lastTool = now(); if (a.state === "sleep" || a.state === "idle") goTo(a, a.home.clone().add(new THREE.Vector3(0.6, 0, 1.4)), "work", false);
+    const a = actorFor(e.agent, info.role); a.lastTool = now(); if (a.state === "sleep" || a.state === "idle") goTo(a, a.house ? houseSpot(a.house, info.role) : a.station.clone().add(new THREE.Vector3(0.6, 0, 1.4)), "work", false);
     const h = a.house;
     if (h && (info.role === "builder" || info.role === "heavy" || info.role === "carrier" || info.role === "migrator") && /Edit|Write/.test(e.tool)) {
       a.edits = (a.edits || 0) + 1; if (a.edits > 3 && h.stage < 4) setStage(h, 4); if (a.edits > 10 && h.stage < 5) setStage(h, 5);
@@ -780,21 +1001,32 @@ function apply(e, fast) {
     if (/land\.cjs/.test(cmd)) {
       const m = /--plan\s+\S*?([a-z0-9-]+)\.md/.exec(cmd);
       const h = (m && findHouse(m[1].replace(/-/g, " "), false)) || [...houses.values()].filter((x) => x.stage >= 6 && x.stage < 10).sort((a, b) => b.stage - a.stage)[0];
-      if (h) { setStage(h, 10, { inspecting: false, problem: false }); goTo(main, houseSpot(h, "foreman"), "celebrate", fast); main.until = now() + 2; main.after = () => goTo(main, main.home, "idle", fast); if (!fast) log(t, `${ROLES.foreman.label} land: ${h.name}`); }
+      if (h) { setStage(h, 10, { inspecting: false, problem: false });
+        if (fast) goTo(main, main.home, "sleep", true);   // catching up on load: straight home
+        else { goTo(main, houseSpot(h, "foreman"), "celebrate", false); main.holdOnArrive = 2; cheerAll(); main.after = () => goTo(main, main.home, "sleep", false); } if (!fast) log(t, `${ROLES.foreman.label} land: ${h.name}`); }
       return;
     }
     if (/git\s+push\b/.test(cmd) && /origin\s+main\b/.test(cmd) && !/main:backup/.test(cmd)) {
       for (const h of houses.values()) if (h.stage === 10) setStage(h, 11);
-      goTo(main, new THREE.Vector3(1.5, 0, 13), "celebrate", fast); main.until = now() + 3; main.after = () => goTo(main, main.home, "idle", fast);
+      // reset (owner 2026-11-07: "ถ้า push ก็ให้ Reset ลบอาคารทั้งหมดยกเว้นตัวอาคารหลัก"): the shipped houses go once the
+      // cheering is over, freeing their plots; houses still being built stay; the main building and the hall are not houses
+      const shipped = [...houses.values()].filter((x) => x.stage >= 11);
+      const clear = () => { for (const x of shipped) if (houses.get(x.key) === x) dropHouse(x); renderHud(); };
+      if (fast) clear(); else setTimeout(clear, 6000);
+      if (fast) goTo(main, main.home, "sleep", true);   // catching up on load: straight home
+      else { goTo(main, new THREE.Vector3(0, 0, 11.4), "celebrate", false); main.holdOnArrive = 3; cheerAll(); main.after = () => goTo(main, main.home, "sleep", false); }   // in front of the hall (its face is at z 13.2)
       if (hallFlag) hallFlag.userData.raise = 1;
       if (!fast) log(t, "Push ขึ้นจริง 🚀 บ้านที่ land แล้วเปิดไฟ");
       return;
     }
-    if (main.state === "idle" || main.state === "sleep") { main.state = "work"; main.until = now() + 3; main.after = () => { main.state = "idle"; }; }
+    if (main.state === "idle" || main.state === "sleep") { main.state = "work"; main.until = now() + 3; main.after = () => mainRest(fast); }
     return;
   }
-  if (e.kind === "owner") { main.state = "wave"; main.until = now() + 1.8; main.after = () => { main.state = "work"; }; if (!fast) log(t, "เจ้าของสั่งงาน"); return; }
-  if (e.kind === "main-idle") { if (main.state !== "walk") { main.state = "idle"; } return; }
+  if (e.kind === "owner") {   // the owner's prompt: Main waves, then works — not while walking or holding a celebration (its walk home is pending), no timer on load
+    if (main.state !== "walk" && !main.after) { if (fast) main.state = "work"; else { main.state = "wave"; main.until = now() + 1.8; main.after = () => { main.state = "work"; }; } }
+    if (!fast) log(t, "เจ้าของสั่งงาน"); return;
+  }
+  if (e.kind === "main-idle") { if (main.state !== "walk" && !(main.state === "celebrate" && main.after)) mainRest(fast); return; }   // its turn ended: sit with the others (a celebration finishes first)
 }
 
 // ── Polling ~/.claude/agent-town/events.js (written by the hook) ───────────────────────────────────────────
@@ -839,12 +1071,12 @@ function startDemo() {
   ];
   let i = 0;
   demoTimer = setInterval(() => {
-    if (i >= S.length) { i = 0; for (const h of houses.values()) scene.remove(h.group); houses.clear(); renderHud(); }
+    if (i >= S.length) { i = 0; for (const h of [...houses.values()]) dropHouse(h); houseSerial = 0; renderHud(); }
     const e = { ...S[i++], t: Date.now() }; e.newAgent &&= e.newAgent + "-" + Math.floor(Date.now() / 1e5); if (e.agent && e.agent !== "main") e.agent = e.agent + "-" + Math.floor(Date.now() / 1e5);
     apply(e, false);
   }, 4500);
 }
-function stopDemo() { if (demoTimer) { clearInterval(demoTimer); demoTimer = null; for (const h of houses.values()) scene.remove(h.group); houses.clear(); } }
+function stopDemo() { if (demoTimer) { clearInterval(demoTimer); demoTimer = null; for (const h of [...houses.values()]) dropHouse(h); houseSerial = 0; } }
 
 // ── HUD ────────────────────────────────────────────────────────────────────────────────────────────────────
 function renderHud() {
@@ -860,7 +1092,7 @@ renderHud();
 let night = (() => { const h = new Date().getHours(); return h >= 18 || h < 6; })();
 function applySky() {
   scene.background = new THREE.Color(night ? 0x0f1b2e : 0x9fc6e6);
-  scene.fog = new THREE.Fog(scene.background, 45, 95);
+  scene.fog = new THREE.Fog(scene.background, 95, 170);   // past the farthest plot from the home camera
   hemi.intensity = night ? 0.28 : 0.75; sun.intensity = night ? 0.18 : 0.9; sun.color.set(night ? 0x8fa8ff : 0xfff2dc);
   rim.intensity = night ? 0.13 : 0.45;   // under the night sun, so walls facing it stay dark
   for (const m of emissives) m.emissiveIntensity = night ? 1.1 : (m.userData.dayGlow ?? (m.emissive && m.color.getHex() === 0x0c1a24 ? 0.9 : 0));
@@ -922,6 +1154,7 @@ function tick() {
   const t = now(), dt = Math.min(0.05, t - prev); prev = t;
   if (LINEUP && !lineup.paused && t - lineup.since > LINEUP_HOLD) lineupShow(lineup.step + 1);
   for (const a of new Set(agents.values())) animate(a, t, dt);
+  for (const h of houses.values()) if (h.buildingInfo) driveBuilding(h, dt);
   for (let i = particles.length - 1; i >= 0; i--) { const p = particles[i]; p.userData.life -= dt; p.userData.v.y -= 6 * dt * (p.geometry.type === "PlaneGeometry" ? 1 : 0); p.position.addScaledVector(p.userData.v, dt); p.rotation.x += dt * 5;
     if (p.material.opacity !== undefined && p.geometry.type !== "PlaneGeometry") p.material.opacity = Math.max(0, p.userData.life);
     if (p.userData.life <= 0) { scene.remove(p); particles.splice(i, 1); } }
@@ -935,9 +1168,14 @@ function animate(a, t, dt) {
   if (a.lineup) { /* stays in its place */ }
   else if (a.state === "walk") {
     const d = new THREE.Vector3().subVectors(a.target, g.position); d.y = 0; const dist = d.length();
-    if (dist < 0.08) { g.position.copy(a.target); a.state = a.next || "idle"; if (a.retire) { scene.remove(g); for (const [k, v] of agents) if (v === a) agents.delete(k); } }
+    if (dist < 0.08 && a.path && a.path.length) { g.position.copy(a.target); a.target = a.path.shift().clone(); }   // a waypoint: walk on
+    else if (dist < 0.08) { g.position.copy(a.target); a.state = a.next || "idle"; if (a.holdOnArrive) { a.until = t + a.holdOnArrive; a.holdOnArrive = 0; } if (a.retire) { scene.remove(g); for (const [k, v] of agents) if (v === a) agents.delete(k); } }
     else { d.normalize(); g.position.addScaledVector(d, Math.min(dist, (a.role === "scout" ? 4.2 : 2.6) * dt)); g.rotation.y = Math.atan2(d.x, d.z); }
   } else if (a.state === "work" && a.house) { const c = plotPos(a.house); g.rotation.y = Math.atan2(c.x - g.position.x, c.z - g.position.z); }
+  else if (a.state === "sleep" && g.position.distanceTo(a.home) < 0.1) {   // seated: Main faces its audience, the others face Main
+    const to = a.id === "main" ? MAIN_SEAT.clone().add(new THREE.Vector3(0, 0, 3)) : MAIN_SEAT; g.rotation.y = Math.atan2(to.x - g.position.x, to.z - g.position.z);
+  }
+  else if (a.state === "celebrate" && a.id !== "main" && g.position.distanceTo(MAIN_SEAT) < 3) g.rotation.y = Math.atan2(MAIN_SEAT.x - g.position.x, MAIN_SEAT.z - g.position.z);   // reporting: face Main
   const st = a.state, w = t * 8;
   p.body.position.y = 0; p.body.rotation.set(0, 0, 0);
   p.legs.forEach((l, i) => { l.rotation.x = st === "walk" ? Math.sin(w + i * Math.PI) * 0.6 : st === "sleep" ? -1.3 : 0; });

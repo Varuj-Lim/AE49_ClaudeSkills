@@ -45,7 +45,11 @@ word ("ลบเลย").
    multi-view slots) but not yet used by the code. FOUNDRY (`building-foundry.glb`, 0.98 × 0.91, 0.45 tall) and SYNTHESIS
    (`building-synthesis.glb`, one dome, 0.98 × 0.98, 0.47 tall) are in too (17:56). CENTRAL CORE is still owed (Q12 a);
    the second sheet `buildings-2.jpg` has five more types.
-   Next: the building system in `town.html` (type by name hash, code foundation/scaffold, clipping-plane reveal).
+   **Done by 18:25:** buildings re-laid on new plots, office = the main building (CYBERNETIC CORE, 2 ×, north, Q17 b) and hall (ALGORITHM REFINERY), the
+   owner's trees, everyone rests in front of the main building facing Main / reports in front of Main / claps when a house
+   lands or lights; a push clears the shipped houses; in-progress jobs look like construction, the Sit clip
+   holds, building type by a shuffle bag (owner, replaces Q9 a), size 2–3 × a robot (owner). **Earlier, 18:03:** the building system in `town.html` with six types (README "Buildings"), re-coloured per type (owner
+   Q16 a); the tree that stood on plot 8 moved off it. Owner to look at it in the live town and judge colours / sizes.
 
 ## Rulings this session (owner)
 
@@ -54,5 +58,7 @@ Q5 a / Q6 b Heavy four arms, lower pair code-boned (superseded) · Q7 b Inspecto
 role labels · Heavy lower arms crossed at rest (superseded) · Tester six spider legs · Q8 a buildings: Tripo finished model + code
 stages · Q9 a building type by name hash · Q12 a CENTRAL CORE / FOUNDRY / SYNTHESIS first · Q13 a Inspector remade with two
 short legs · Q14 a Main's cape in code · Heavy Builder back to two arms (replaces Q6 b),
-scale ≈1.4 × · Q15 a sit lift for every clip-driven robot (Tester skipped), Inspector sits · buildings: the owner made
-CYBERNETIC CORE, FOUNDRY (one block) and SYNTHESIS (one dome) first; CENTRAL CORE is still owed.
+scale ≈1.4 × · Q17 b main building CYBERNETIC CORE 2 × in the north, everyone in front facing Main
+(houses never use CORE or the hall's REFINERY) · push resets shipped houses · Q15 a sit lift for every clip-driven robot (Tester skipped), Inspector sits · buildings: the owner made
+CYBERNETIC CORE, FOUNDRY (one block) and SYNTHESIS (one dome) first; CENTRAL CORE is still owed · Q16 a buildings re-coloured in code
+per type · Build 1–3 = NETWORK NODE, ALGORITHM REFINERY, CONTROL SPIRE.
