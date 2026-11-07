@@ -51,6 +51,10 @@ Say in one line which one ran. Words win over the toggle: "เปิดเมื
   walls → roof → inspection tape → red cone → tested → landed → lights on. Main's `land.cjs` marks a house landed
   (matched by `--plan <slug>`), `git push origin main` (not `main:backup`) lights every landed house, then clears it.
 - An agent whose dispatch the hook missed is woken from its own tool events (they carry `agent_type`).
+- Background shells (`run_in_background`, owner Q25 a / Q26 a) turn the SHELL machine west of the SITE OFFICE: gears and
+  lamp while any runs, its sign `SHELL ×N`, a ✓ as each ends. Ends come from the task-notification that wakes Main
+  (`bg-done`; it is not the owner speaking, owner Q27 a) and from each turn end's `background_tasks` list, counted per
+  session — README "Background shells".
 
 ## Town design rules (owner, 2026-11-07; keep them when changing the town)
 
@@ -60,7 +64,8 @@ models") and in the comments in `town.html`. A change that breaks one needs his 
 
 1. **Only the owner's models.** Robots, buildings, trees, lamps and boxes are his Tripo exports; no building is drawn in code.
    Code draws only small things: the construction site (slab, scaffold, stakes, blueprint, tape), flags, cones, bushes,
-   station props, robot add-ons (cape, jet flames, rotor) and the stand-ins shown until a model loads.
+   station props, the SHELL machine (owner Q26 a), robot add-ons (cape, jet flames, rotor) and the stand-ins shown until a
+   model loads.
 2. **Buildings are 2–3 × a robot's height** (a robot is about 2.04): `TARGET_H` / `MIN_H` / `MAX_FOOT`, low types
    stretched up. Plots, props and work spots scale with them, and no robot may stand or walk inside one.
 3. **One building per job, from a shuffle bag:** every house type once before any repeats. The main building's type
@@ -74,7 +79,7 @@ models") and in the comments in `town.html`. A change that breaks one needs his 
    and never stays stranded at a house or the hall.
 7. **Jobs:** walk to the job's building and work there (a job with no house is done at the role's station); when done
    walk to the spot in front of Main, report facing Main, then walk back to the same seat. Walks go around the main building,
-   the hall and every house's building.
+   the hall, the SHELL machine and every house's building.
 8. **Cheer:** when a house lands, and again when a push lights it, everyone seated stands and claps, then sits again;
    Main walks to the landed house (on a push, to the front of the hall) to celebrate, then back to its seat.
 9. **Push resets:** every `git push origin main`, in any repo (owner: "นับทุก push"), lights the landed houses and,

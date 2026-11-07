@@ -12,6 +12,15 @@ const STATE = path.join(DIR, "state.json");
 const OUT = path.join(DIR, "events.js");
 const KEEP = 400;
 
+// The background tasks still in flight when a turn ends (Stop / SubagentStop carry `background_tasks`): the only place a
+// hook can learn that a background shell has finished — it is no longer in the list. No field = unknown (no `bgTasks`): the
+// town then keeps its count rather than end every shell (an older Claude Code may not send it).
+function bgTasks(j) {
+  if (!Array.isArray(j.background_tasks)) return {};
+  return { bgTasks: j.background_tasks.slice(0, 20).map((b) => (b || {})).map((b) => ({ id: String(b.id || ""), type: String(b.type || ""),
+    status: String(b.status || ""), cmd: String(b.command || b.description || "").slice(0, 120) })) };
+}
+
 function read(stdin) {
   let j = {};
   try { j = JSON.parse(stdin || "{}"); } catch { return null; }
@@ -23,7 +32,10 @@ function read(stdin) {
   if (ev === "PreToolUse") {
     const input = j.tool_input || {};
     const e = { ...base, kind: "tool", agent: agentId || "main", agentType, tool: j.tool_name || "" };
-    if (j.tool_name === "Bash" || j.tool_name === "PowerShell") e.cmd = String(input.command || "").slice(0, 240);
+    if (j.tool_name === "Bash" || j.tool_name === "PowerShell") {
+      e.cmd = String(input.command || "").slice(0, 240);
+      if (input.run_in_background === true) e.bg = true;   // a background shell starts (G1)
+    }
     if (j.tool_name === "Agent" || j.tool_name === "Task") {
       e.kind = "dispatch-ask";
       e.subType = input.subagent_type || "general-purpose";
@@ -39,9 +51,21 @@ function read(stdin) {
       subType: input.subagent_type || "general-purpose", desc: String(input.description || "").slice(0, 80) };
   }
   if (ev === "SubagentStart") return { ...base, kind: "agent-start", agent: agentId, agentType };
-  if (ev === "SubagentStop") return { ...base, kind: "agent-stop", agent: agentId, agentType };
-  if (ev === "Stop") return { ...base, kind: "main-idle", agent: "main" };
-  if (ev === "UserPromptSubmit") return { ...base, kind: "owner", agent: "main" };
+  if (ev === "SubagentStop") return { ...base, kind: "agent-stop", agent: agentId, agentType, ...bgTasks(j) };
+  if (ev === "Stop") return { ...base, kind: "main-idle", agent: "main", ...bgTasks(j) };
+  if (ev === "UserPromptSubmit") {
+    // A background task's completion wakes Main through this event too: it is not the owner speaking (G1)
+    const p = String(j.prompt || "");
+    if (/^\s*<task-notification>/.test(p)) {   // the wake's prompt starts with it (seen 2026-11-07); a quoted one inside an owner prompt is not one
+      const done = [...p.matchAll(/<task-notification>([\s\S]*?)<\/task-notification>/g)].slice(0, 10).map(([, whole]) => {
+        const b = whole.split("<result>")[0];   // only the head: an agent's report in <result> may quote tags (audit 2026-11-07)
+        const id = /<task-id>([^<]+)<\/task-id>/.exec(b), st = /<status>([^<]+)<\/status>/.exec(b);
+        return { taskId: id ? id[1] : "", status: st ? st[1] : "", shell: /<summary>\s*Background command/.test(b) };   // an agent's reads "Agent … finished"
+      });
+      return { ...base, kind: "bg-done", agent: "main", done };
+    }
+    return { ...base, kind: "owner", agent: "main" };
+  }
   return null;
 }
 

@@ -261,6 +261,39 @@ function townHall() {
   g.position.set(0, 0, 15.5); scene.add(g); landmarkGroups.hall = g;
 }
 let hallFlag;
+// The background-shell machine (owner Q25 a / Q26 a, 2026-11-07): a shell started with `run_in_background` runs on its
+// own while Main works on, so a machine beside the SITE OFFICE shows it, not a robot: while any runs its gears turn and its
+// lamp blinks, with ×N above it; each one that ends pops a ✓. Fed by `bgApply` (below, under "Events → town").
+const BG_POS = new THREE.Vector3(-6.6, 0, -8), BG_HALF = 0.75;   // west of the office, its face turned to the plaza
+const bgMachine = { gears: [], lampM: null, count: null, check: null, n: 0, doneUntil: 0 };
+function machine() {
+  const g = new THREE.Group(), steel = M(0x5f6d78), dark = M(0x37424d), gold = M(0xd9a52c);
+  const base = box(1.3, 0.2, 1.0, M(0x3a434b)); base.position.y = 0.1; g.add(base);
+  const body = box(1.1, 0.95, 0.8, steel); body.position.y = 0.675; g.add(body);
+  const pipe = cyl(0.09, 0.09, 0.6, dark); pipe.position.set(-0.32, 1.45, -0.15); g.add(pipe);
+  for (const [x, y, r] of [[-0.2, 0.78, 0.24], [0.22, 0.52, 0.17]]) {   // two gears on the face
+    const gear = new THREE.Group(), disc = cyl(r, r, 0.06, gold, 18); disc.rotation.x = Math.PI / 2; gear.add(disc);
+    for (let k = 0; k < 8; k++) { const a = (k / 8) * Math.PI * 2, tooth = box(0.07, 0.09, 0.06, gold); tooth.position.set(Math.cos(a) * (r + 0.03), Math.sin(a) * (r + 0.03), 0); tooth.rotation.z = a; gear.add(tooth); }
+    gear.position.set(x, y, 0.43); gear.userData.speed = 0.45 / r; g.add(gear); bgMachine.gears.push(gear);
+  }
+  bgMachine.lampM = M(0x55606a, { emissive: new THREE.Color(0xffa62b), emissiveIntensity: 0 });
+  const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.13, 16, 12), bgMachine.lampM); lamp.position.set(0.3, 1.27, 0); g.add(lamp);
+  bgMachine.check = bubble("✓"); bgMachine.check.position.set(0, 3, 0); bgMachine.check.visible = false; g.add(bgMachine.check);
+  g.position.copy(BG_POS); g.rotation.y = Math.atan2(-BG_POS.x, -BG_POS.z); scene.add(g); bgMachine.group = g;
+  machineCount(0, true);
+}
+function machineCount(n, first) {   // the sign over the machine: "SHELL", and "SHELL ×N" in orange while N run
+  if (n === bgMachine.n && !first) return; bgMachine.n = n;
+  if (bgMachine.count) { bgMachine.group.remove(bgMachine.count); bgMachine.count.material.map.dispose(); bgMachine.count.material.dispose(); }
+  const s = n > 0 ? labelSprite("SHELL ×" + n, "#b4561f") : labelSprite("SHELL", "#37424d");
+  s.position.set(0, 1.95, 0); s.scale.set(1.6, 0.4, 1); bgMachine.group.add(s); bgMachine.count = s;
+}
+function driveMachine(t, dt) {
+  const on = bgMachine.n > 0;
+  if (on) for (const [i, g] of bgMachine.gears.entries()) g.rotation.z += dt * g.userData.speed * (i % 2 ? -1 : 1);   // meshed: opposite turns
+  bgMachine.lampM.emissiveIntensity = on ? (Math.sin(t * 6) > 0 ? 1.4 : 0.15) : 0;
+  const c = bgMachine.check; c.visible = t < bgMachine.doneUntil; if (c.visible) c.position.y = 3 + Math.sin(t * 2) * 0.1;
+}
 
 function labelSprite(text, color = "#1d2731", bg = "rgba(255,255,255,.92)") {
   const c = document.createElement("canvas"); c.width = 512; c.height = 128; const x = c.getContext("2d");
@@ -295,7 +328,7 @@ function bubble(char) {
   return s;
 }
 
-office(); townHall();
+office(); townHall(); machine();
 for (const r of Object.keys(ROLES)) if (r !== "foreman") stationProp(r);
 for (const [x, z] of [[-6.5, -3.6], [6.5, -3.6], [-5.5, 3.8], [5.5, 3.8], [-15, -11], [15, 12]]) lampPost(x, z);   // plaza lamps clear of the seats
 // trees re-placed 2026-11-07 with the plots: between plots, out of every plot's work spots, off the roads
@@ -983,7 +1016,8 @@ function actorFor(id, role) {
 // Walks go around the office and the hall (audit 2026-11-07: robots walked straight through the TOWER to the
 // northern plots): a straight line that crosses one of these boxes (grown by a body's width) gets a corner of it as a
 // waypoint, the corner that makes the walk shortest with both legs clear.
-const OBSTACLES = [[-4.3, 4.3, MAIN_Z - 4.3, MAIN_Z + 4.3], [-2.3, 2.3, 13.2, 17.8]].map(([x0, x1, z0, z1]) => [x0 - 0.6, x1 + 0.6, z0 - 0.6, z1 + 0.6]);
+const OBSTACLES = [[-4.3, 4.3, MAIN_Z - 4.3, MAIN_Z + 4.3], [-2.3, 2.3, 13.2, 17.8],
+  [BG_POS.x - BG_HALF, BG_POS.x + BG_HALF, BG_POS.z - BG_HALF, BG_POS.z + BG_HALF]].map(([x0, x1, z0, z1]) => [x0 - 0.6, x1 + 0.6, z0 - 0.6, z1 + 0.6]);
 function crosses(p, q, [x0, x1, z0, z1]) {   // does the segment p→q pass through the box (2D slab test)?
   let t0 = 0, t1 = 1; const d = [q.x - p.x, q.z - p.z], o = [p.x, p.z], lo = [x0, z0], hi = [x1, z1];
   for (let k = 0; k < 2; k++) {
@@ -1058,8 +1092,42 @@ function cheerAll() {
 const logLines = [];
 function log(t, text) { logLines.unshift([t, text]); logLines.length = Math.min(logLines.length, 4); renderHud(); }
 function hhmm(t) { const d = new Date(t); return d.toTimeString().slice(0, 5); }
+// Background shells, for the machine (Q26 a). No hook event fires when one ends, so three sources are combined, per
+// SESSION (a turn end's list covers the whole session, a sub-agent's too — audit 2026-11-07): a start (`bg` on the tool
+// event) adds one not yet known by id (`pending`); the task-notification that wakes Main (`bg-done`, the hook reads it
+// from UserPromptSubmit) ends one at once; every turn end (`main-idle` / `agent-stop`) lists the ones still running
+// (`bgTasks`), which replaces the session's count, and one gone from it without a notification ends there. Every end pops
+// the ✓ once. A session not refreshed for BG_STALE ms is dropped from the count (closed while a shell ran), checked each minute.
+const bgRuns = new Map(), bgDoneIds = new Set(), BG_STALE = 3 * 3600e3;
+function bgApply(e, fast) {
+  const t = e.t || Date.now(), key = e.session || "";
+  const run = () => { let r = bgRuns.get(key); if (!r) bgRuns.set(key, (r = { ids: new Set(), pending: 0, seen: t })); r.seen = t; return r; };
+  const ended = () => { if (!fast) bgMachine.doneUntil = now() + 2.5; };
+  if (e.kind === "tool" && e.bg) run().pending++;
+  else if (e.kind === "bg-done") {
+    const list = e.done || (e.taskId ? [{ taskId: e.taskId, shell: e.shell }] : []);   // older events: one per event
+    for (const d of list) {
+      if (!d.shell || !d.taskId || bgDoneIds.has(d.taskId)) continue;
+      bgDoneIds.add(d.taskId); const r = bgRuns.get(key); if (!r) continue;
+      if (r.ids.delete(d.taskId) || (r.pending > 0 && r.pending--)) ended();   // not counted any more (a turn end saw it go): no second ✓
+    }
+  } else if ((e.kind === "main-idle" || e.kind === "agent-stop") && Array.isArray(e.bgTasks)) {
+    const r = run(), still = new Set(e.bgTasks.filter((b) => b.type === "shell" && b.status === "running" && !bgDoneIds.has(b.id)).map((b) => b.id));
+    for (const id of r.ids) if (!still.has(id)) { bgDoneIds.add(id); ended(); }
+    let fresh = 0; for (const id of still) if (!r.ids.has(id)) fresh++;
+    for (let k = r.pending - fresh; k > 0; k--) ended();   // started since the last list and already gone, no notification seen
+    r.ids = still; r.pending = 0;
+  } else return;
+  bgCount();
+}
+function bgCount() {
+  let n = 0; for (const [k, r] of bgRuns) { if (Date.now() - r.seen > BG_STALE) bgRuns.delete(k); else n += r.ids.size + r.pending; }
+  machineCount(n);
+}
+setInterval(bgCount, 60e3);
 function apply(e, fast) {
   const t = e.t || Date.now();
+  bgApply(e, fast);
   if (e.kind === "dispatch" && e.newAgent) {
     const role = roleOf(e.subType); const h = findHouse(e.desc, true);
     agentInfo.set(e.newAgent, { role, house: h ? h.key : null });
@@ -1132,6 +1200,7 @@ function apply(e, fast) {
     if (main.state === "idle" || main.state === "sleep") { main.state = "work"; main.until = now() + 3; main.after = () => mainRest(fast); }
     return;
   }
+  if (e.kind === "bg-done") { if (main.state !== "walk" && !main.after) main.state = "work"; return; }   // a background task woke Main: it works, no wave (owner Q27 a)
   if (e.kind === "owner") {   // the owner's prompt: Main waves, then works — not while walking or holding a celebration (its walk home is pending), no timer on load
     if (main.state !== "walk" && !main.after) { if (fast) main.state = "work"; else { main.state = "wave"; main.until = now() + 1.8; main.after = () => { main.state = "work"; }; } }
     if (!fast) log(t, "เจ้าของสั่งงาน"); return;
@@ -1273,6 +1342,7 @@ function tick(ts) {
   if (LINEUP && !lineup.paused && t - lineup.since > LINEUP_HOLD) lineupShow(lineup.step + 1);
   for (const a of new Set(agents.values())) animate(a, t, dt);
   for (const h of houses.values()) if (h.buildingInfo) driveBuilding(h, dt);
+  driveMachine(t, dt);
   for (let i = particles.length - 1; i >= 0; i--) { const p = particles[i]; p.userData.life -= dt; p.userData.v.y -= 6 * dt * (p.geometry.type === "PlaneGeometry" ? 1 : 0); p.position.addScaledVector(p.userData.v, dt); p.rotation.x += dt * 5;
     if (p.material.opacity !== undefined && p.geometry.type !== "PlaneGeometry") p.material.opacity = Math.max(0, p.userData.life);
     if (p.userData.life <= 0) { scene.remove(p); particles.splice(i, 1); } }

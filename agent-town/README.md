@@ -156,3 +156,31 @@ seams (80 k triangles, 5.5 MB, base-colour texture only). `preview-model.html?mo
 the camera, all in the same state, and the row steps through every state every 6 s (idle, walk, work clip 1, work clip 2,
 question, alarm, wave, celebrate, sleep); ◀ ⏸ ▶ step by hand, ⟲ re-frames, 🧍 goes back to the live town. The camera backs off
 until the row fits the pane's width. Use it to check a new model's size, colours and clips beside the others.
+
+## Background shells — the SHELL machine (2026-11-07)
+
+A shell Main (or an agent) starts with `run_in_background` runs on its own while Main works on (owner Q25 a / Q26 a), so a
+machine beside the SITE OFFICE (west, `BG_POS`) shows it, not a robot: while any runs its gears turn, its lamp blinks and
+its sign reads `SHELL ×N`; each one that ends pops a ✓ for 2.5 s. Robots walk around it (it is in `OBSTACLES`; checked: 2,880
+walks between every seat or station and six work spots of every plot, none through the office, the hall or the machine).
+
+Claude Code has no hook event for a background task ending (hooks docs, 2026-11-07), so the hook combines three things:
+- the start: `PreToolUse` on Bash / PowerShell with `run_in_background: true` → the tool event carries `bg: true`;
+- the end, at once: the task-notification that wakes Main arrives as `UserPromptSubmit` whose prompt STARTS with
+  `<task-notification>` (seen 2026-11-07; a notification quoted inside the owner's own prompt stays an owner prompt) →
+  `kind: "bg-done"`, `done: [{ taskId, status, shell }]`, one entry per notification block, read from its head only (`shell` is true when its
+  summary reads "Background command"; an agent's is false and the machine ignores it). Such a wake is not the owner
+  speaking (owner Q27 a): Main keeps working, with no wave and no log line;
+- the correction, at every turn end: `Stop` / `SubagentStop` carry `background_tasks` → `bgTasks` (id, type, status,
+  command; with no field the event carries no `bgTasks` and the count is kept). The list covers the whole session (a sub-agent's turn end lists Main's
+  shells too), so it replaces that session's count; one gone from it without a notification ends there, and so does a
+  start not yet listed that is already gone.
+Each end pops the ✓ once. Counts are kept per session, so other sessions' shells count too; a session not refreshed for
+3 h (by a background start or a turn end) is dropped from the count, checked every minute: meant for a session closed
+while a shell ran, it also hides a long background server in a session idle that long, until its next turn end. Checked in the page (2026-11-07): a shell
+listed by both Main's and a sub-agent's turn end counts once; ends before or after the turn end pop one ✓ each; an
+agent's notification changes nothing.
+Known limits (audit 2026-11-07, each corrected at the next turn end): a start is counted at `PreToolUse`, before the
+permission check, so a refused background command shows ×1 and later a ✓; a command moved to the background by hand
+(Ctrl+B) has no start, and its notification can use up another pending start; whether a sub-agent's running shell is in
+the session's list is not yet seen.
