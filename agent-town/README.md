@@ -50,10 +50,30 @@ a rigged export with the clip names in the skill would animate limbs. `preview-m
   (`Hip`, `Spine01/02`, `L_Upperarm`…, 78 bones) with the lower arms weighted to the UPPER arm bones. `MODEL_EXTRA_ARMS.heavy`
   lists each lower arm's root, elbow and hand point (model units, rest pose); `rigExtraArms` adds a shoulder and an elbow
   bone per side under `Spine02` once per file, moves the lower-arm skin onto them (the vertices below y 0.505 whose strongest
-  bone is that side's arm or hand; blended into the spine at the root), and `driveExtraArms` swings them by state: sway at
-  idle, swing in step with the walk clip, hammering at work, raised out when celebrating, reaching forward asleep (the
-  sit-down would put hanging hands through the floor); a base outward spread keeps them clear of the upper arms, and the
-  lower shoulder's top cap (y 0.505–0.54) is partly faded into the spine so its stretch is spread. The clips never move them.
+  bone is that side's arm or hand; blended into the spine at the root), and `driveExtraArms` poses them by state: arms
+  crossed across the belly at rest, walking, waving and asleep (owner: "ปกติเป็นการกอดอก"; the arms are short for the wide
+  body, so the forearms meet in the middle rather than overlap), hammering at work, raised out when celebrating, flailing on
+  alarm; the lower shoulder's top cap (y 0.505–0.54) is partly faded into the spine so its stretch is spread. The clips never move them.
+- **Inspector, legless, hovering (2026-11-07, owner Q7 b):** `models/inspector.glb` (the owner's second export: green and
+  white, 9.8 k triangles, 5.2 MB, 0.524 tall so `MODEL_SCALE` 3.4). Its Mixamo skeleton came out UPSIDE DOWN (Hips at the
+  helmet, the legs running up into the helmet and the X, the spine running down into the body); only the arms are boned
+  right, and its 9 clips are broken at the source (arms-down plays as arms-up, in Tripo's preview too). So:
+  `reweightSkin` moves the helmet skin from the leg bones to `Head`; the inspector has no `MODEL_CLIPS` entry, and
+  `inspectorPose` (`MODEL_POSER`, on the four arm bones `MODEL_BONES` exposes) poses the arms in all eight states (they hang
+  at 0.85 rad so the long arms clear the floor; at work one hand points ahead and sweeps like a magnifying glass);
+  `driveHover` moves the whole model — hovers at 0.55 (0.45 asleep, with a slow breath), turns to look around at rest, leans
+  while walking; the base pose is smoothed and the quick shake / hop / bob are added after (owner: "ขยับเยอะขึ้น");
+  `hideAbove` folds everything above y 0.4535 (the X plate and the dome's very tip) into a zero-scale bone at
+  its base, leaving a flat lid, and `addRotor` puts a three-blade code propeller there that spins fast on the move, slowly at rest, and stops
+  asleep (owner: "กังหันแทนตัว X").
+- **Tester, six spider legs (2026-11-07):** `models/tester.glb` (teal, 9.9 k triangles, 4.7 MB, Mixamo rig, 9 clips). The
+  Humanoid rig weighted the round base and every spider leg to the Mixamo LEG bones, so the clips would twist the base.
+  `MODEL_SPIDER.tester` lists the six legs' azimuths and the hip / knee points (model units, rest pose; the two back legs
+  stand straight below the rim and get their own points and a height blend); `rigSpiderLegs` moves the base onto a still
+  `SpiderBase` bone and each leg onto its own hip and knee bones (blended at the rim), and moves any weight left on the
+  dead Mixamo thigh bones onto Hips, once per file. The clips then move only the upper body; `driveSpiderLegs` walks the legs in two alternating tripods in step with
+  the walk clip, twitches them at rest, taps the front legs at work, raises one to ask or wave, and splays them asleep while
+  the body sinks — the Sit clip is not used (`sleep: ["idle"]`), it would sink the torso into the still base.
 
 ## Lineup preset (2026-11-07)
 

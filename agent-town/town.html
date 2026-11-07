@@ -182,7 +182,7 @@ for (const [x, z, s] of [[-19, -16, 1.2], [-21, 4, 1], [20, -15, 1.1], [21, 3, 0
 // ── Robots, built from simple shapes ───────────────────────────────────────────────────────────────────────
 // ── Real models (owner 2026-11-06): a role listed here wears its .glb once it has loaded; until then, or if it fails,
 //    the robot built from shapes stays. The model is a statue (no rig), so it moves as one piece.
-const MODEL_URLS = { builder: "models/builder-g70.glb", planner: "models/planner.glb", foreman: "models/main.glb", scout: "models/scout.glb", carrier: "models/carrier.glb", heavy: "models/heavy.glb" };
+const MODEL_URLS = { builder: "models/builder-g70.glb", planner: "models/planner.glb", foreman: "models/main.glb", scout: "models/scout.glb", carrier: "models/carrier.glb", heavy: "models/heavy.glb", inspector: "models/inspector.glb", tester: "models/tester.glb" };
 // Clips by town state, per role (owner's Tripo exports 2026-11-06 / -07). A state missing here falls back to "idle".
 // "work" alternates its list every 8 s. Clips are played in place: the hips' horizontal drift is removed at load.
 // A name matches a clip of that exact name, else the first clip whose name STARTS with it (Tripo names a
@@ -190,8 +190,8 @@ const MODEL_URLS = { builder: "models/builder-g70.glb", planner: "models/planner
 const CLIP_SET = (point) => ({ idle: ["idle"], walk: ["walk"], work: [point, "Typing / Writing / Using tablet"],
   question: ["Thinking"], celebrate: ["Cheer / Clap"], wave: ["Wave / Nod"], sleep: ["Sit / Sleep"],
   alarm: ["Looking around / Searching"] });
-const MODEL_CLIPS = { planner: CLIP_SET("Standing in place"), foreman: CLIP_SET("Standing in place"), scout: CLIP_SET("Standing in place"), carrier: CLIP_SET("Standing in place"), heavy: CLIP_SET("Standing in place") };
-const MODEL_SCALE = { builder: 2.6, planner: 2.5, foreman: 2.5, scout: 2.5, carrier: 2.5, heavy: 3.4 };   // heavy.glb is 0.72 tall (the others ~0.97): 3.4 makes it as tall as the rest, and far wider
+const MODEL_CLIPS = { planner: CLIP_SET("Standing in place"), foreman: CLIP_SET("Standing in place"), scout: CLIP_SET("Standing in place"), carrier: CLIP_SET("Standing in place"), heavy: CLIP_SET("Standing in place"), tester: { ...CLIP_SET("Standing in place"), sleep: ["idle"] } };   // tester: the Sit clip would sink the torso into its still base; asleep the legs splay instead
+const MODEL_SCALE = { builder: 2.6, planner: 2.5, foreman: 2.5, scout: 2.5, carrier: 2.5, heavy: 3.4, inspector: 3.4, tester: 2.5 };   // heavy.glb is 0.72 tall (the others ~0.97): 3.4 makes it as tall as the rest, and far wider
 // A rigged (skinned) model: cloned with SkeletonUtils, posed by code each frame (rigPose below), turned to face +Z.
 // tone: re-grade the base colour once at load (owner 2026-11-07, Q4 a: Main's black read as a silhouette, "ทึบ").
 //   lift  raises the darkest tones to this grey (0–255, like Levels' output black) — on colourless pixels only: the lift
@@ -202,7 +202,7 @@ const MODEL_SCALE = { builder: 2.6, planner: 2.5, foreman: 2.5, scout: 2.5, carr
 //   gold  multiplies the saturation of warm, saturated pixels (the gold trims) and lifts them up to 8 %, eased in from
 //         saturation 0.2 to 0.32 so trims get no hard contour; a channel past 255 scales all three down (no hue shift).
 const MODEL_RIGGED = { planner: { turn: 0, metalness: 0.25 },
-  foreman: { turn: 0, metalness: 0.25, tone: { lift: 40, cool: 10, gold: 1.25 } }, scout: { turn: 0, metalness: 0.25 }, carrier: { turn: 0, metalness: 0.25 }, heavy: { turn: 0, metalness: 0.25 } };
+  foreman: { turn: 0, metalness: 0.25, tone: { lift: 40, cool: 10, gold: 1.25 } }, scout: { turn: 0, metalness: 0.25 }, carrier: { turn: 0, metalness: 0.25 }, heavy: { turn: 0, metalness: 0.25 }, inspector: { turn: 0, metalness: 0.25 }, tester: { turn: 0, metalness: 0.25 } };
 // Jet flames drawn by code at a model's nozzles (the owner removed them from the art, 2026-11-07): nozzle centres in
 // model units, measured from scout.glb's rest pose (the jetpack's lowest back points, x ±0.06–0.17, y 0.674).
 const MODEL_JETS = { scout: [[0.116, 0.672, -0.108], [-0.116, 0.672, -0.108]] };
@@ -278,28 +278,113 @@ function rigExtraArms(model, cfg) {   // once per loaded file, before any clone:
 function findExtraArms(model, cfg) {
   return cfg.sides.map((side) => {
     const sh = model.getObjectByName(side.name + "_LowerShoulder"), el = model.getObjectByName(side.name + "_LowerElbow");
-    return sh && el && { s: side.s, sh, el, shRest: sh.quaternion.clone(), elRest: el.quaternion.clone(), x: 0, z: 0, e: 0 };
+    return sh && el && { s: side.s, sh, el, shRest: sh.quaternion.clone(), elRest: el.quaternion.clone(), x: 0, z: 0, w: 0, e: 0 };
   }).filter(Boolean);
 }
 const _q = new THREE.Quaternion(), _e = new THREE.Euler();
-// Base spread z 0.45: the clips lower the upper arms to hang just outside the lower ones, so the lower pair always
-// stays spread clear of them (audit 2026-11-07: at z 0 the upper arms passed through). Asleep, the clip sits the body
-// down, so the lower arms reach forward and out instead of hanging (hanging put the hands through the floor).
-function driveExtraArms(arms, st, t, dt, clipT) {   // x: swing forward (−) / back (+); z: out from the body; e: elbow bend
-  const k = 1 - Math.exp(-dt * 8), Z = 0.45;
+// The lower pair's resting pose is ARMS CROSSED in front of the belly (owner 2026-11-07: "ปกติเป็นการกอดอก", spread out
+// looked odd): shoulders forward, the upper arm twisted inward about its own axis (w), the elbow bent ~83° so the
+// forearms lie across the front. They leave the cross only to hammer (work), ask, flail (alarm) and cheer (celebrate).
+function driveExtraArms(arms, st, t, dt, clipT) {   // x: forward (−); z: out from the body; w: twist inward; e: elbow bend
+  const k = 1 - Math.exp(-dt * 8);
   for (const a of arms) {
-    let x = Math.sin(t * 1.4 + a.s) * 0.05, z = Z, e = -0.15;
-    if (st === "walk") x = Math.sin((clipT ?? t) * 2 * Math.PI / 2.33) * 0.45 * a.s;   // in step with the walk clip
-    if (st === "work") { x = -0.9 - Math.max(0, Math.sin(t * 6 + (a.s > 0 ? 0 : Math.PI))) * 0.6; e = -0.6; }
-    if (st === "question") { x = a.s > 0 ? -0.5 : 0; e = a.s > 0 ? -0.9 : -0.15; }
-    if (st === "alarm") { z = Z + 0.15 + Math.sin(t * 18) * 0.15; x = -0.2; }
-    if (st === "wave") { z = Z + 0.1; x = -0.15; }
-    if (st === "celebrate") { z = 1.3 + Math.sin(t * 9) * 0.2; e = -0.4; }
-    if (st === "sleep") { x = -0.9; z = 0.4; e = -0.6; }
-    a.x += (x - a.x) * k; a.z += (z - a.z) * k; a.e += (e - a.e) * k;
-    a.sh.quaternion.copy(a.shRest).multiply(_q.setFromEuler(_e.set(a.x, 0, a.z * a.s)));
+    const up = a.s > 0 ? 0 : 0.06;   // the right forearm lies a little higher, so the two cross instead of meeting
+    // crossed (idle, walk, wave, sleep): elbows forward, forearms level across the belly, hands meeting in the middle —
+    // the lower arms are short for this wide body, so they fold rather than overlap (values tuned by eye in the lineup)
+    let x = -0.9 - up + Math.sin(t * 1.4 + a.s) * 0.03, z = -0.1, w = 1.7, e = -1.45;
+    if (st === "walk") x += Math.sin((clipT ?? t) * 2 * Math.PI / 2.33) * 0.08 * a.s;      // a slight sway in step
+    if (st === "work") { x = -0.9 - Math.max(0, Math.sin(t * 6 + (a.s > 0 ? 0 : Math.PI))) * 0.6; z = 0.45; w = 0; e = -0.6; }
+    if (st === "question") { if (a.s > 0) { x = -0.5; z = 0.45; w = 0; e = -0.9; } }
+    if (st === "alarm") { z = 0.6 + Math.sin(t * 18) * 0.15; x = -0.2; w = 0; e = -0.15; }
+    if (st === "celebrate") { z = 1.3 + Math.sin(t * 9) * 0.2; w = 0; e = -0.4; }
+    a.x += (x - a.x) * k; a.z += (z - a.z) * k; a.w += (w - a.w) * k; a.e += (e - a.e) * k;
+    a.sh.quaternion.copy(a.shRest).multiply(_q.setFromEuler(_e.set(a.x, -a.w * a.s, a.z * a.s)));
     a.el.quaternion.copy(a.elRest).multiply(_q.setFromEuler(_e.set(a.e, 0, 0)));
   }
+}
+// ── Spider legs (owner 2026-11-07): Tester stands on a round base with six spider legs. Tripo's Humanoid rig weighted
+//    the base and every leg to the Mixamo LEG bones, so the clips would twist it. At load the base moves onto a still
+//    bone and each leg gets a hip and a knee bone of its own; the clips then move only the upper body, and
+//    `driveSpiderLegs` walks the legs (two tripods, alternating), twitches them at rest, taps at work, splays asleep.
+//    Measured from tester.glb's rest pose (model units): leg tips at these azimuths (degrees, 0 = +X, 90 = +Z front),
+//    the front and side legs rise from the rim (hip r 0.27, y 0.30) to a knee (r 0.325, y 0.24) and drop to the ground;
+//    the two back legs stand straight below the rim (r 0.24–0.29), so they get their own points and a height blend.
+const MODEL_SPIDER = { tester: { below: 0.44, belowLeg: 0.47, hip: [0.27, 0.30], knee: [0.325, 0.24], rim: [0.26, 0.31],
+  legs: [{ a: -3, g: 1 }, { a: 40, g: 0 }, { a: 302, g: 0, back: true }, { a: 185, g: 0 }, { a: 137, g: 1 }, { a: 232, g: 1, back: true }],
+  back: { hip: [0.255, 0.27], knee: [0.26, 0.20] } } };
+const spiderRigged = new WeakSet();
+function rigSpiderLegs(model, cfg) {   // once per loaded file, before any clone
+  if (spiderRigged.has(model)) return; spiderRigged.add(model);
+  let mesh; model.traverse((o) => { if (o.isSkinnedMesh) mesh = o; }); if (!mesh) return;
+  const hips = mesh.skeleton.bones.find((b) => /Hips$/.test(b.name)); if (!hips) return;
+  model.updateMatrixWorld(true);
+  const place = (b, parent, p) => {   // a new bone at model point p, its axes and units those of the model frame
+    parent.add(b); const pq = new THREE.Quaternion(), ps = new THREE.Vector3(); parent.getWorldQuaternion(pq); parent.getWorldScale(ps);
+    b.position.copy(parent.worldToLocal(model.localToWorld(new THREE.Vector3(...p)))); b.quaternion.copy(pq.invert());
+    b.scale.set(1 / ps.x, 1 / ps.y, 1 / ps.z); b.updateMatrixWorld(true);
+  };
+  const bones = mesh.skeleton.bones.slice(), inv = mesh.skeleton.boneInverses.slice();
+  const add = (b) => { bones.push(b); inv.push(new THREE.Matrix4().copy(b.matrixWorld).invert()); return bones.length - 1; };
+  const base = new THREE.Bone(); base.name = "SpiderBase"; place(base, hips.parent, [0, cfg.hip[1], 0]); const baseI = add(base);
+  const legs = cfg.legs.map((l, n) => {
+    const a = l.a * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+    const H = l.back ? cfg.back.hip : cfg.hip, K = l.back ? cfg.back.knee : cfg.knee;
+    const hip = new THREE.Bone(); hip.name = "SpiderHip" + n; place(hip, base, [c * H[0], H[1], s * H[0]]);
+    const knee = new THREE.Bone(); knee.name = "SpiderKnee" + n; place(knee, hip, [c * K[0], K[1], s * K[0]]);
+    return { a, back: !!l.back, hipY: H[1], hipI: add(hip), kneeI: add(knee) };
+  });
+  const pos = mesh.geometry.attributes.position, si = mesh.geometry.attributes.skinIndex, sw = mesh.geometry.attributes.skinWeight;
+  const get = (at, i, k) => [at.getX(i), at.getY(i), at.getZ(i), at.getW(i)][k], v = new THREE.Vector3();
+  const legBone = /(UpLeg|Leg|Foot|ToeBase|Toe_End)$/, hipsI = bones.indexOf(hips);
+  for (let i = 0; i < pos.count; i++) {
+    v.fromBufferAttribute(pos, i).applyMatrix4(mesh.matrixWorld);
+    let bi = 0, bw = -1; for (let k = 0; k < 4; k++) { const w = get(sw, i, k); if (w > bw) { bw = w; bi = get(si, i, k); } }
+    if (!(v.y < cfg.below || (v.y < cfg.belowLeg && legBone.test(bones[bi].name)))) {   // kept: but no weight may stay on the
+      si.setXYZW(i, ...[0, 1, 2, 3].map((k) => (legBone.test(bones[get(si, i, k)].name) ? hipsI : get(si, i, k))));   // dead thigh bones
+      continue;
+    }
+    const r = Math.hypot(v.x, v.z), az = Math.atan2(v.z, v.x);
+    let best = null, d = 9; for (const L of legs) { const dd = Math.abs(Math.atan2(Math.sin(az - L.a), Math.cos(az - L.a))); if (dd < d) { d = dd; best = L; } }
+    const clamp = (x) => Math.min(1, Math.max(0, x));
+    let legW = d >= 0.42 || r <= 0.21 ? 0 : best.back ? clamp((0.27 - v.y) / 0.04)        // back legs: a height blend
+      : clamp((r - cfg.rim[0]) / (cfg.rim[1] - cfg.rim[0]));                            // others: out past the rim
+    if (v.y < cfg.knee[1] && d < 0.55 && r > 0.21) legW = 1;   // below the knee: all leg (r > 0.21 spares the base's underside)
+    const kneeW = clamp((best.hipY - 0.03 - v.y) / 0.06);                             // hip above, knee below
+    si.setXYZW(i, baseI, best.hipI, best.kneeI, 0); sw.setXYZW(i, 1 - legW, legW * (1 - kneeW), legW * kneeW, 0);
+  }
+  si.needsUpdate = sw.needsUpdate = true;
+  mesh.bind(new THREE.Skeleton(bones, inv), mesh.bindMatrix);
+}
+function findSpiderLegs(model, cfg) {
+  return cfg.legs.map((l, n) => {
+    const hip = model.getObjectByName("SpiderHip" + n), knee = model.getObjectByName("SpiderKnee" + n); if (!hip || !knee) return null;
+    const a = l.a * Math.PI / 180;
+    return { n, g: l.g, front: Math.sin(a) > 0.5, left: Math.cos(a) > 0, hip, knee, hipRest: hip.quaternion.clone(), kneeRest: knee.quaternion.clone(),
+      tan: new THREE.Vector3(-Math.sin(a), 0, Math.cos(a)), lift: 0, swing: 0, bend: 0 };
+  }).filter(Boolean);
+}
+const _qa = new THREE.Quaternion(), _qb = new THREE.Quaternion(), UP = new THREE.Vector3(0, 1, 0);
+// lift: + raises the tip up and out (about the leg's tangent); swing: turns the leg about the vertical; bend: the knee.
+function driveSpiderLegs(parts, st, t, dt, clipT) {
+  const k = 1 - Math.exp(-dt * 12);
+  for (const L of parts.spiderLegs) {
+    let lift = 0, swing = 0, bend = 0;
+    if (st === "walk") { const ph = (clipT ?? t) * 2 * Math.PI / 1.165 + L.g * Math.PI; lift = Math.max(0, Math.sin(ph)) * 0.45; swing = Math.cos(ph) * 0.28 * (L.left ? 1 : -1); bend = -lift * 0.5; }   // mirrored: both sides step forward
+    else if (st === "work") { if (L.front) { lift = Math.max(0, Math.sin(t * 9 + (L.left ? 0 : Math.PI))) * 0.45; bend = -lift * 0.6; } }
+    else if (st === "alarm") { lift = 0.12 + Math.sin(t * 26 + L.n) * 0.08; swing = Math.sin(t * 19 + L.n) * 0.06; }
+    else if (st === "celebrate") { lift = Math.abs(Math.sin(t * 7)) * 0.35; }
+    else if (st === "question") { if (L.front && L.left) { lift = 0.7; bend = -0.6; } }
+    else if (st === "wave") { if (L.front && !L.left) { lift = 0.8 + Math.sin(t * 10) * 0.25; bend = -0.5; } }
+    else if (st === "sleep") { lift = 0.85; bend = 0.25; }
+    else { lift = Math.pow(Math.max(0, Math.sin(t * 0.9 + L.n * 1.7)), 12) * 0.35; swing = Math.sin(t * 0.7 + L.n) * 0.05; }   // idle twitches
+    L.lift += (lift - L.lift) * k; L.swing += (swing - L.swing) * k; L.bend += (bend - L.bend) * k;
+    L.hip.quaternion.copy(L.hipRest).multiply(_qa.setFromAxisAngle(UP, L.swing)).multiply(_qb.setFromAxisAngle(L.tan, L.lift));
+    L.knee.quaternion.copy(L.kneeRest).multiply(_qa.setFromAxisAngle(L.tan, L.bend));
+  }
+  // The body sinks with the LEAST-raised leg (all legs splay asleep), and with the square of its lift: a tip rises slowly
+  // at small lifts, so a linear drop pushed tips below the floor in celebrate / alarm / waking (audit 2026-11-07).
+  const minLift = Math.min(...parts.spiderLegs.map((L) => L.lift));
+  if (parts.model) parts.model.position.y = -0.32 * Math.min(1, Math.max(0, minLift) / 0.85) ** 2;
 }
 const tonedTextures = new WeakSet();   // three r128 textures have no userData; clones (and materials) share a texture
 function toneTexture(mat, { lift = 0, cool = 0, gold = 1 }) {
@@ -358,11 +443,109 @@ function playClip(an, st, t, dt, pick) {  // pick: which clip of the state's lis
   }
   an.mixer.update(dt);
 }
-function makeRig(model) {
+function makeRig(model, alias) {   // alias {MixamoName: fileName}: expose ONLY those bones to rigPose
   model.updateMatrixWorld(true);
-  const bones = {};
-  model.traverse((o) => { if (o.isBone) bones[o.name.replace(/^mixamorig:?/, "")] = { bone: o, rest: o.quaternion.clone() }; });
+  const bones = {}, all = {};
+  model.traverse((o) => { if (o.isBone) all[o.name.replace(/^mixamorig:?/, "")] = { bone: o, rest: o.quaternion.clone() }; });
+  if (!alias) return { model, bones: all };
+  for (const [k, n] of Object.entries(alias)) if (all[n]) bones[k] = all[n];
   return { model, bones };
+}
+// ── Inspector (owner Q7 b, 2026-11-07): a legless hovering robot. The owner's second export (Mixamo rig, 9 clips) has its
+//    skeleton UPSIDE DOWN: Hips at the helmet, the "legs" running up into the helmet and the X, the spine running down
+//    into the body; only the arms are boned right. So (owner: "ช่วยสลับให้หน่อย"): the helmet skin on the leg bones moves
+//    to the Head bone (MODEL_REWEIGHT). Its clips are broken at the source (under the inverted spine "arms down" plays as
+//    arms UP, in Tripo's own preview too), so the inspector has no MODEL_CLIPS entry: inspectorPose poses the four arm
+//    bones (MODEL_POSER), the body hovers, leans and bobs as one piece (driveHover), and the X folds into a zero-scale
+//    bone under a code-drawn propeller that spins (owner: "กังหันแทนตัว X").
+const MODEL_BONES = { inspector: { LeftArm: "LeftArm", RightArm: "RightArm", LeftForeArm: "LeftForeArm", RightForeArm: "RightForeArm" } };
+const MODEL_REWEIGHT = { inspector: { from: /(UpLeg|Leg|Foot|ToeBase|Toe_End)$/, to: /Head$/ } };
+const reweighted = new WeakSet();
+function reweightSkin(model, cfg) {   // once per loaded file, before any clone: every weight on a `from` bone moves to `to`
+  if (reweighted.has(model)) return; reweighted.add(model);
+  let mesh; model.traverse((o) => { if (o.isSkinnedMesh) mesh = o; }); if (!mesh) return;
+  const bones = mesh.skeleton.bones, to = bones.findIndex((b) => cfg.to.test(b.name)); if (to < 0) return;
+  const move = new Set(bones.map((b, i) => (cfg.from.test(b.name) ? i : -1)).filter((i) => i >= 0));
+  const si = mesh.geometry.attributes.skinIndex;
+  for (let i = 0; i < si.count; i++) si.setXYZW(i, ...[si.getX(i), si.getY(i), si.getZ(i), si.getW(i)].map((b) => (move.has(b) ? to : b)));
+  si.needsUpdate = true;   // a vertex may now list Head twice; skinning adds the two weights, which is what we want
+}
+// lift: height above the ground in the agent group's units (the group is scaled 0.85), before the bob. The arms hang
+// below the body's base, so the robot hovers high enough that its hands never reach the floor, asleep included.
+const MODEL_HOVER = { inspector: { lift: 0.55, sleep: 0.45 } };
+// hide: vertices above this rest-pose height (mesh space) fold into `fold`, at the X's own base so no fin of stretched
+// triangles shows; the propeller spins at `hub` (model units).
+// Measured on the second export: the X plate starts at 0.455 (z 0.014–0.051); the cut also takes the dome's very tip
+// (y up to 0.4566, r < 0.03), which folds into a near-flat lid under the hub.
+const MODEL_ROTOR = { inspector: { hide: 0.4535, fold: [0, 0.452, 0.03], hub: [0, 0.452, 0.03], blade: 0.1 } };
+// Code arm poses for a model with no clips and an arm-only rig (owner 2026-11-07: "ขยับเยอะขึ้น", Inspector looked stiff
+// next to the clip-driven robots). Mixamo frame: arms point ±X at rest; "fwd" raises (−L / +R lowers), "right" swings
+// forward (−) / back (+), forearm turns bend at the elbow. Arms hang at ARM (0.85 rad), not 1.25, so the long arms
+// clear the floor.
+function inspectorPose(rig, st, t) {
+  const ARM = 0.85, s1 = Math.sin(t * 1.7), s2 = Math.sin(t * 1.1 + 1);
+  let L = [["fwd", -ARM + s1 * 0.12], ["right", s2 * 0.25]], R = [["fwd", ARM - s2 * 0.12], ["right", -s1 * 0.25]];
+  let LF = [["right", -0.35 + s2 * 0.15]], RF = [["right", -0.35 + s1 * 0.15]];
+  if (st === "walk") { const w = Math.sin(t * 5); L = [["fwd", -ARM], ["right", -w * 0.7]]; R = [["fwd", ARM], ["right", w * 0.7]]; LF = [["right", -0.5]]; RF = [["right", -0.5]]; }
+  if (st === "work") {   // right hand up in front, sweeping side to side like a magnifying glass; left hand on the hip
+    // lowered a little, then turned to point ahead (a level arm swings about "up")
+    R = [["fwd", 0.25], ["up", 1.25 + Math.sin(t * 2.4) * 0.45]]; RF = [["right", -0.7 + Math.sin(t * 4.8) * 0.2]];
+    L = [["fwd", -ARM], ["right", 0.35]]; LF = [["right", -1.3]];
+  }
+  if (st === "question") { R = [["fwd", 0.5], ["up", 1.1]]; RF = [["right", -2.1]]; L = [["fwd", -ARM - 0.1], ["right", 0.2]]; }
+  if (st === "alarm") { L = [["fwd", 0.9 + Math.sin(t * 14) * 0.35]]; R = [["fwd", -0.9 - Math.sin(t * 14 + 1.5) * 0.35]]; LF = RF = [["right", -0.6]]; }
+  if (st === "wave") { R = [["fwd", -1.15]]; RF = [["fwd", Math.sin(t * 12) * 0.6]]; L = [["fwd", -ARM], ["right", 0.15]]; }
+  if (st === "celebrate") { const p = Math.sin(t * 9) * 0.3; L = [["fwd", 1.2 + p]]; R = [["fwd", -1.2 - p]]; LF = RF = [["right", -0.3]]; }
+  if (st === "sleep") { L = [["fwd", -0.95], ["right", -0.7]]; R = [["fwd", 0.95], ["right", -0.7]]; LF = RF = [["right", -0.9]]; }
+  poseBone(rig, "LeftArm", L); poseBone(rig, "RightArm", R); poseBone(rig, "LeftForeArm", LF); poseBone(rig, "RightForeArm", RF);
+}
+const MODEL_POSER = { inspector: inspectorPose };
+const rotorRigged = new WeakSet();
+function hideAbove(model, cfg) {   // once per loaded file, before any clone
+  if (rotorRigged.has(model)) return; rotorRigged.add(model);
+  let mesh; model.traverse((o) => { if (o.isSkinnedMesh) mesh = o; }); if (!mesh) return;
+  model.updateMatrixWorld(true);
+  const root = mesh.skeleton.bones[0], b = new THREE.Bone(); b.name = "RotorHide"; root.add(b);
+  b.position.copy(root.worldToLocal(model.localToWorld(new THREE.Vector3(...(cfg.fold || cfg.hub))))); b.updateMatrixWorld(true);
+  const bones = mesh.skeleton.bones.concat(b), inv = mesh.skeleton.boneInverses.concat(new THREE.Matrix4().copy(b.matrixWorld).invert());
+  const idx = bones.length - 1, pos = mesh.geometry.attributes.position, si = mesh.geometry.attributes.skinIndex, sw = mesh.geometry.attributes.skinWeight;
+  for (let i = 0; i < pos.count; i++) if (pos.getY(i) > cfg.hide) { si.setXYZW(i, idx, 0, 0, 0); sw.setXYZW(i, 1, 0, 0, 0); }
+  si.needsUpdate = sw.needsUpdate = true;
+  mesh.bind(new THREE.Skeleton(bones, inv), mesh.bindMatrix);
+  b.scale.setScalar(1e-4);   // AFTER the inverse is taken at scale 1: the hidden part folds into the hub
+}
+function addRotor(model, parts, cfg) {
+  const r = new THREE.Group(); r.position.set(...cfg.hub);
+  const hubM = M(0xc9d1d9, { metalness: 0.5, roughness: 0.35 }), bladeM = M(0x3fbf4a, { roughness: 0.45 });
+  const hub = cyl(0.014, 0.018, 0.03, hubM, 12); hub.position.y = 0.015; r.add(hub);
+  const cap = sph(0.016, bladeM); cap.position.y = 0.035; r.add(cap);
+  for (let i = 0; i < 3; i++) {   // three blades, pitched like a toy propeller
+    const arm = new THREE.Group(); arm.rotation.y = i * Math.PI * 2 / 3; r.add(arm);
+    const bl = box(cfg.blade, 0.004, 0.026, bladeM); bl.position.set(cfg.blade / 2 + 0.01, 0.028, 0); bl.rotation.x = 0.35; arm.add(bl);
+  }
+  model.add(r); parts.rotor = r; parts.rotorSpeed = 0;
+}
+function driveHover(parts, cfg, st, t, dt) {   // the whole model: lift + bob, look around, lean, shake, hop, sink asleep
+  const h = parts.model, k = 1 - Math.exp(-dt * 6), s = (parts.hover ||= { y: cfg.lift, lean: 0, roll: 0, yaw: 0 });
+  // Base pose, smoothed (state changes ease in); the quick wobbles are added after the smoothing so they keep their size.
+  let y = cfg.lift, lean = 0, roll = 0, yaw = Math.sin(t * 0.6) * 0.35;   // idle: turns to look around
+  if (st === "walk") { lean = 0.3; yaw = 0; }
+  if (st === "work") { lean = 0.15; yaw = Math.sin(t * 2.4) * 0.2; }
+  if (st === "question") { roll = 0.22; yaw = 0.25; }
+  if (st === "celebrate" || st === "alarm" || st === "wave") yaw = 0;
+  if (st === "sleep") { y = cfg.sleep; lean = 0.18; yaw = 0; }
+  s.y += (y - s.y) * k; s.lean += (lean - s.lean) * k; s.roll += (roll - s.roll) * k; s.yaw += (yaw - s.yaw) * k;
+  let wy = Math.sin(t * 2.2) * 0.09, wr = Math.sin(t * 1.3) * 0.06;
+  if (st === "walk") wr = Math.sin(t * 5) * 0.12;
+  if (st === "work") wy += Math.sin(t * 7) * 0.04;
+  if (st === "alarm") wr = Math.sin(t * 30) * 0.14;
+  if (st === "celebrate") wy = Math.abs(Math.sin(t * 7)) * 0.55;
+  if (st === "sleep") { wy = Math.sin(t * 1.2) * 0.025; wr = 0; }   // a slow breath
+  h.position.y = s.y + wy; h.rotation.x = s.lean; h.rotation.z = s.roll + wr; h.rotation.y = s.yaw;
+  if (parts.rotor) {   // rad/s: fast on the move, idle spin, still asleep
+    const target = st === "sleep" ? 0 : st === "walk" || st === "work" || st === "celebrate" ? 30 : 10;
+    parts.rotorSpeed += (target - parts.rotorSpeed) * k; parts.rotor.rotation.y += parts.rotorSpeed * dt;
+  }
 }
 const AX = { right: new THREE.Vector3(1, 0, 0), up: new THREE.Vector3(0, 1, 0), fwd: new THREE.Vector3(0, 0, 1) };
 const _p = new THREE.Quaternion(), _m = new THREE.Quaternion();
@@ -448,6 +631,9 @@ function makeRobot(role) {
   if (MODEL_URLS[role]) loadModel(MODEL_URLS[role]).then((m) => {
     const rig = MODEL_RIGGED[role];
     if (rig && MODEL_EXTRA_ARMS[role]) rigExtraArms(m, MODEL_EXTRA_ARMS[role]);
+    if (rig && MODEL_REWEIGHT[role]) reweightSkin(m, MODEL_REWEIGHT[role]);
+    if (rig && MODEL_ROTOR[role]) hideAbove(m, MODEL_ROTOR[role]);
+    if (rig && MODEL_SPIDER[role]) rigSpiderLegs(m, MODEL_SPIDER[role]);
     const c = rig && THREE.SkeletonUtils ? THREE.SkeletonUtils.clone(m) : m.clone();
     const holder = new THREE.Group(); holder.add(c); holder.scale.setScalar(MODEL_SCALE[role] || 2.5);
     if (rig) {
@@ -457,12 +643,14 @@ function makeRobot(role) {
       });
       if (MODEL_JETS[role]) addJetFlames(c, parts, MODEL_JETS[role]);
       if (MODEL_EXTRA_ARMS[role]) parts.extraArms = findExtraArms(c, MODEL_EXTRA_ARMS[role]);
+      if (MODEL_ROTOR[role]) addRotor(c, parts, MODEL_ROTOR[role]);
+      if (MODEL_SPIDER[role]) parts.spiderLegs = findSpiderLegs(c, MODEL_SPIDER[role]);
       const clips = m.userData.clips || [];
       if (clips.length && MODEL_CLIPS[role]) {
         const mixer = new THREE.AnimationMixer(c); const actions = {};
         for (const clip of clips) actions[clip.name] = mixer.clipAction(clip);
         parts.anim = { mixer, actions, map: MODEL_CLIPS[role], current: null };
-      } else parts.rig = makeRig(c);
+      } else parts.rig = makeRig(c, MODEL_BONES[role]);
     }
     body.visible = false; g.add(holder); parts.model = holder;
   }).catch((e) => console.warn("model", role, e.message));
@@ -565,7 +753,7 @@ function goTo(a, pos, state, fast) {
   if (fast) { a.group.position.copy(pos); a.state = state; } else a.state = "walk";
 }
 function houseSpot(h, role) {
-  const off = { builder: [-1.4, 2.4], heavy: [1.4, 2.4], carrier: [2.6, 0.6], inspector: [-2.6, 1.0], tester: [2.6, -0.6], planner: [-2.6, -0.6], scout: [0, 3], foreman: [0, 3.2] }[role] || [0, 3];
+  const off = { builder: [-1.4, 2.4], heavy: [1.4, 2.4], carrier: [2.6, 0.6], inspector: [-3.0, 1.15], tester: [2.6, -0.6], planner: [-2.6, -0.6], scout: [0, 3], foreman: [0, 3.2] }[role] || [0, 3];
   const p = plotPos(h); return new THREE.Vector3(p.x + off[0], 0, p.z + off[1]);
 }
 function finish(a, fast, mood = "celebrate") {
@@ -811,8 +999,10 @@ function animate(a, t, dt) {
   if (p.beacon) p.beacon.material.emissiveIntensity = st === "work" || st === "walk" ? 0.6 + Math.abs(Math.sin(t * 5)) : 0.3;
   setBubble(a, st === "sleep" ? "Zz" : st === "alarm" ? "!" : st === "celebrate" ? "✓" : st === "question" ? "?" : null);
   if (p.bubble.visible) p.bubble.position.y = 3 + Math.sin(t * 2) * 0.1;
-  if (p.anim) playClip(p.anim, st, t, dt, a.pick); else if (p.rig) rigPose(p.rig, st, t);
+  if (p.anim) playClip(p.anim, st, t, dt, a.pick); else if (p.rig) (MODEL_POSER[a.role] || rigPose)(p.rig, st, t);
   if (p.extraArms) driveExtraArms(p.extraArms, st, t, dt, p.anim?.current?.time);
+  if (p.model && MODEL_HOVER[a.role]) driveHover(p, MODEL_HOVER[a.role], st, t, dt);
+  if (p.spiderLegs?.length) driveSpiderLegs(p, st, t, dt, p.anim?.current?.time);
   if (st === "work" && a.house && (a.role === "builder" || a.role === "heavy") && Math.random() < dt * 3) dust(g.position);
 }
 tick();
