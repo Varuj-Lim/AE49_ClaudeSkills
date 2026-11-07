@@ -77,8 +77,8 @@ models") and in the comments in `town.html`. A change that breaks one needs his 
    the hall and every house's building.
 8. **Cheer:** when a house lands, and again when a push lights it, everyone seated stands and claps, then sits again;
    Main walks to the landed house (on a push, to the front of the hall) to celebrate, then back to its seat.
-9. **Push resets:** 6 s after a push the shipped houses are cleared (Main may still be at the hall); the main building,
-   the hall and jobs still in progress stay.
+9. **Push resets:** every `git push origin main`, in any repo (owner: "นับทุก push"), lights the landed houses and,
+   6 s later, clears them (Main may still be at the hall); the main building, the hall and jobs still in progress stay.
 10. **Colour and light:** each building type is re-coloured from Tripo's blue (its light lines keep their colour and
     glow once the house is lit; the two landmarks always glow); a lamp lights only from the underside of its arm's far end.
 11. **Making a new model:** `ae49-ref-3d-prompt`; buildings isometric or three-quarter (a straight front view made

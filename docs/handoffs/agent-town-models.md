@@ -59,6 +59,6 @@ role labels · Heavy lower arms crossed at rest (superseded) · Tester six spide
 stages · Q9 a building type by name hash · Q12 a CENTRAL CORE / FOUNDRY / SYNTHESIS first · Q13 a Inspector remade with two
 short legs · Q14 a Main's cape in code · Heavy Builder back to two arms (replaces Q6 b),
 scale ≈1.4 × · Q17 b main building CYBERNETIC CORE 2 × in the north, everyone in front facing Main
-(houses never use CORE or the hall's REFINERY) · push resets shipped houses · Q15 a sit lift for every clip-driven robot (Tester skipped), Inspector sits · buildings: the owner made
+(houses never use CORE or the hall's REFINERY) · push resets shipped houses, every `git push origin main` in any repo counts (owner "นับทุก push") · Q15 a sit lift for every clip-driven robot (Tester skipped), Inspector sits · buildings: the owner made
 CYBERNETIC CORE, FOUNDRY (one block) and SYNTHESIS (one dome) first; CENTRAL CORE is still owed · Q16 a buildings re-coloured in code
 per type · Build 1–3 = NETWORK NODE, ALGORITHM REFINERY, CONTROL SPIRE.
