@@ -53,15 +53,15 @@ seams (80 k triangles, 5.5 MB, base-colour texture only). `preview-model.html?mo
   The shape robot's crate is not carried over; if the model does not read as a carrier in the lineup, a code-drawn crate
   can hang on a hand bone the way `addJetFlames` hangs the flames.
 
-- **Heavy Builder, four arms (2026-11-07, owner Q6 b):** `models/heavy.glb` (orange and grey, 9.3 k triangles, 4.4 MB, 0.72
-  tall so `MODEL_SCALE` 3.4, same 9 clips). Tripo rigs two arms only, and this export's skeleton is not Mixamo's
-  (`Hip`, `Spine01/02`, `L_Upperarm`…, 78 bones) with the lower arms weighted to the UPPER arm bones. `MODEL_EXTRA_ARMS.heavy`
-  lists each lower arm's root, elbow and hand point (model units, rest pose); `rigExtraArms` adds a shoulder and an elbow
-  bone per side under `Spine02` once per file, moves the lower-arm skin onto them (the vertices below y 0.505 whose strongest
-  bone is that side's arm or hand; blended into the spine at the root), and `driveExtraArms` poses them by state: arms
-  crossed across the belly at rest, walking, waving and asleep (owner: "ปกติเป็นการกอดอก"; the arms are short for the wide
-  body, so the forearms meet in the middle rather than overlap), hammering at work, raised out when celebrating, flailing on
-  alarm; the lower shoulder's top cap (y 0.505–0.54) is partly faded into the spine so its stretch is spread. The clips never move them.
+- **Heavy Builder, two arms (2026-11-07):** `models/heavy.glb` — the owner's second export (orange and grey, backpack,
+  Mixamo rig with 65 bones, 9.8 k triangles, 5.2 MB, 0.85 tall, same 9 clips), wired like Carrier. The first export had
+  four arms with the lower pair boned in code (owner Q6 b); the owner dropped it ("4 แขนแล้วไม่สวยเลย") and that code is in
+  git history before this change. `MODEL_SCALE` 3.98 makes it about 1.4 × as tall as the rest (owner: big, then +30 %,
+  then −10 %); its speech bubble floats above its head (`parts.bubbleY`, from the model's top) instead of at y 3.
+- **Sitting on the ground (2026-11-07, owner Q15 a):** Tripo's Sit / Sleep clip sinks every robot's seat 0.09–0.33 world
+  units into the ground (more on Heavy). `driveSitLift` measures the lowest skinned point while that clip plays (every
+  frame through the cross-fade, then 4×/s, 1×/s when settled, jittered) and eases the model up until it touches the
+  ground, then back down on waking. Tester is skipped (it sleeps on idle and moves its own model for the spider legs).
 - **Inspector, third export (2026-11-07, owner Q13 a):** `models/inspector.glb` (green and white, two short legs added so
   Tripo rigs it as a humanoid; 9.4 k triangles, 4.6 MB, 0.84 tall, same 9 clips). `MODEL_SCALE` 2.3 makes it about 80 % as
   tall as the rest (owner: smaller). Tripo's first rig of it put the arm bones below the arms (shoulder 0.432 against an
@@ -69,8 +69,7 @@ seams (80 k triangles, 5.5 MB, base-colour texture only). `preview-model.html?mo
   first one is gone (07323c3 has it). On load `hideAbove` folds the model's
   two-blade propeller (above y 0.79) into a zero-scale bone on the Head bone and `addRotor` spins a two-blade code propeller
   there, mounted on the Head bone (`mountOnBone`) so it rides the clips (fast on the move, slow at rest, still asleep;
-  it fell off the head when it hung on the model root). Asleep it stands idle, like Tester: the Sit clip sank its short
-  legs into the ground. The second export (legless, upside-down skeleton, hover and code arm poses, owner Q7 b) was
+  it fell off the head when it hung on the model root). Asleep it sits, lifted onto the ground by `driveSitLift`. The second export (legless, upside-down skeleton, hover and code arm poses, owner Q7 b) was
   replaced; its code is in git history before this change.
 - **Tester, six spider legs (2026-11-07):** `models/tester.glb` (teal, 9.9 k triangles, 4.7 MB, Mixamo rig, 9 clips). The
   Humanoid rig weighted the round base and every spider leg to the Mixamo LEG bones, so the clips would twist the base.

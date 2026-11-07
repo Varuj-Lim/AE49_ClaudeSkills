@@ -193,8 +193,8 @@ const MODEL_URLS = { builder: "models/builder.glb", planner: "models/planner.glb
 const CLIP_SET = (point) => ({ idle: ["idle"], walk: ["walk"], work: [point, "Typing / Writing / Using tablet"],
   question: ["Thinking"], celebrate: ["Cheer / Clap"], wave: ["Wave / Nod"], sleep: ["Sit / Sleep"],
   alarm: ["Looking around / Searching"] });
-const MODEL_CLIPS = { builder: CLIP_SET("Standing in place"), planner: CLIP_SET("Standing in place"), foreman: CLIP_SET("Standing in place"), scout: CLIP_SET("Standing in place"), carrier: CLIP_SET("Standing in place"), inspector: { ...CLIP_SET("Standing in place"), sleep: ["idle"] }, migrator: CLIP_SET("Standing in place"), heavy: CLIP_SET("Standing in place"), tester: { ...CLIP_SET("Standing in place"), sleep: ["idle"] } };   // tester: the Sit clip would sink the torso into its still base; asleep the legs splay instead
-const MODEL_SCALE = { builder: 2.93, planner: 2.5, foreman: 2.5, scout: 2.5, carrier: 2.5, heavy: 3.4, inspector: 2.3, tester: 2.5, migrator: 2.85 };   // heavy.glb is 0.72 tall (the others ~0.97): 3.4 makes it as tall as the rest, and far wider; migrator.glb is 0.84 tall, builder.glb 0.82; inspector.glb 0.84 at 2.3 stands about 80 % as tall (owner: smaller)
+const MODEL_CLIPS = { builder: CLIP_SET("Standing in place"), planner: CLIP_SET("Standing in place"), foreman: CLIP_SET("Standing in place"), scout: CLIP_SET("Standing in place"), carrier: CLIP_SET("Standing in place"), inspector: CLIP_SET("Standing in place"), migrator: CLIP_SET("Standing in place"), heavy: CLIP_SET("Standing in place"), tester: { ...CLIP_SET("Standing in place"), sleep: ["idle"] } };   // tester: the Sit clip would sink the torso into its still base; asleep the legs splay instead
+const MODEL_SCALE = { builder: 2.93, planner: 2.5, foreman: 2.5, scout: 2.5, carrier: 2.5, heavy: 3.98, inspector: 2.3, tester: 2.5, migrator: 2.85 };   // the others are ~0.96 tall at 2.5; heavy.glb (two arms, 2026-11-07) is 0.85 and at 3.98 stands about 1.4 × the rest (owner: "เอาตัวใหญ่ๆเลย", then +30 %, then −10 %), migrator.glb is 0.84 tall, builder.glb 0.82; inspector.glb 0.84 at 2.3 stands about 80 % as tall (owner: smaller)
 // A rigged (skinned) model: cloned with SkeletonUtils, posed by code each frame (rigPose below), turned to face +Z.
 // tone: re-grade the base colour once at load (owner 2026-11-07, Q4 a: Main's black read as a silhouette, "ทึบ").
 //   lift  raises the darkest tones to this grey (0–255, like Levels' output black) — on colourless pixels only: the lift
@@ -222,88 +222,26 @@ function addJetFlames(model, parts, nozzles) {  // hung on Spine2, so the flames
     h.add(f); spine.add(h); return f;
   });
 }
-// ── Extra arms (owner Q6 b, 2026-11-07): Heavy Builder has a second, lower pair of arms that no auto-rig gives bones
-//    (Tripo rigs two arms; its exporter weighted the lower arms to the UPPER arm bones). At load we give each lower arm
-//    a shoulder and an elbow bone, move its skin onto them (blended into the spine at the root so it does not tear), and
-//    `driveExtraArms` swings them by state each frame. Points are in model units, measured from heavy.glb's rest pose:
-//    the lower-arm skin is the vertices below y 0.505 whose strongest bone is that side's upper arm / forearm / hand.
-const MODEL_EXTRA_ARMS = { heavy: { parent: "Spine02", below: 0.505, cap: 0.54, sides: [
-  { name: "L", s: 1, owners: /^L_(Upperarm|Forearm|Hand|Thumb|Index|Mid|Ring|Pinky)/, attach: [0.200, 0.470, -0.010], elbow: [0.245, 0.360, -0.008], hand: [0.268, 0.230, -0.005] },
-  { name: "R", s: -1, owners: /^R_(Upperarm|Forearm|Hand|Thumb|Index|Mid|Ring|Pinky)/, attach: [-0.200, 0.470, -0.010], elbow: [-0.245, 0.360, -0.008], hand: [-0.268, 0.230, -0.005] },
-] } };
-const riggedExtra = new WeakSet();
-function rigExtraArms(model, cfg) {   // once per loaded file, before any clone: SkeletonUtils.clone copies the new bones
-  if (riggedExtra.has(model)) return; riggedExtra.add(model);
-  let mesh; model.traverse((o) => { if (o.isSkinnedMesh) mesh = o; });
-  const parent = mesh && mesh.skeleton.bones.find((b) => b.name === cfg.parent); if (!parent) return;
-  model.updateMatrixWorld(true);
-  const toLocal = (b, p) => {   // a new bone at model point p, its axes and units those of the model frame
-    const pq = new THREE.Quaternion(), ps = new THREE.Vector3(); b.parent.getWorldQuaternion(pq); b.parent.getWorldScale(ps);
-    b.position.copy(b.parent.worldToLocal(model.localToWorld(new THREE.Vector3(...p)))); b.quaternion.copy(pq.invert());
-    b.scale.set(1 / ps.x, 1 / ps.y, 1 / ps.z); b.updateMatrixWorld(true);
-  };
-  const bones = mesh.skeleton.bones.slice(), inv = mesh.skeleton.boneInverses.slice(), spineIdx = bones.indexOf(parent);
-  const g = mesh.geometry, pos = g.attributes.position, si = g.attributes.skinIndex, sw = g.attributes.skinWeight;
-  const get = (a, i, k) => [a.getX(i), a.getY(i), a.getZ(i), a.getW(i)][k], v = new THREE.Vector3();
-  for (const side of cfg.sides) {
-    const sh = new THREE.Bone(); sh.name = side.name + "_LowerShoulder"; parent.add(sh); toLocal(sh, side.attach);
-    const el = new THREE.Bone(); el.name = side.name + "_LowerElbow"; sh.add(el); toLocal(el, side.elbow);
-    const shI = bones.push(sh) - 1; inv.push(new THREE.Matrix4().copy(sh.matrixWorld).invert());
-    const elI = bones.push(el) - 1; inv.push(new THREE.Matrix4().copy(el.matrixWorld).invert());
-    const A = new THREE.Vector3(...side.attach), AH = new THREE.Vector3(...side.hand).sub(A), L2 = AH.lengthSq();
-    const tE = new THREE.Vector3(...side.elbow).sub(A).dot(AH) / L2;
-    for (let i = 0; i < pos.count; i++) {
-      v.fromBufferAttribute(pos, i); if (v.y >= cfg.below || v.y < 0.15) continue;
-      let bi = 0, bw = -1; for (let k = 0; k < 4; k++) { const w = get(sw, i, k); if (w > bw) { bw = w; bi = get(si, i, k); } }
-      if (!side.owners.test(bones[bi].name)) continue;   // bones[], not the old skeleton: the first side's new indices are in it
-      const t = Math.min(1, Math.max(0, v.sub(A).dot(AH) / L2));
-      const root = Math.max(0, 1 - t / 0.12);                                   // near the torso: blend into the spine
-      const e = Math.min(1, Math.max(0, (t - (tE - 0.08)) / 0.16)) * (1 - root);   // soft elbow
-      si.setXYZW(i, shI, elI, spineIdx, 0); sw.setXYZW(i, 1 - root - e, e, root, 0);   // sums to 1 for any config
-    }
-    // The lower shoulder's top cap (just above the cut) stays on the upper-arm bone and stretches when the clips lower
-    // the upper arm; fade part of it into the spine over `cap` so the stretch spreads instead of one hard ring.
-    for (let i = 0; i < pos.count; i++) {
-      v.fromBufferAttribute(pos, i); if (v.y < cfg.below || v.y >= cfg.cap || Math.sign(v.x) !== side.s) continue;
-      let bi = 0, bw = -1; for (let k = 0; k < 4; k++) { const w = get(sw, i, k); if (w > bw) { bw = w; bi = get(si, i, k); } }
-      if (!side.owners.test(bones[bi].name)) continue;
-      const a = 0.6 * (cfg.cap - v.y) / (cfg.cap - cfg.below);                 // 0.6 at the cut, 0 at the cap's top
-      const ws = [0, 1, 2, 3].map((k) => get(sw, i, k) * (1 - a)), ix = [0, 1, 2, 3].map((k) => get(si, i, k));
-      let slot = ix.indexOf(spineIdx); if (slot < 0) slot = ws.indexOf(Math.min(...ws));
-      if (ix[slot] !== spineIdx) { ws[slot] = 0; ix[slot] = spineIdx; }
-      ws[slot] += a; const sum = ws.reduce((p, q) => p + q, 0);
-      si.setXYZW(i, ...ix); sw.setXYZW(i, ...ws.map((w) => w / sum));
-    }
+// ── Sitting on the ground (owner Q15 a, 2026-11-07): Tripo's Sit / Sleep clip puts every robot's seat 0.09–0.33 world
+//    units below the town's ground at the usual size (measured in the lineup; more on a bigger model). While that clip
+//    plays the lowest skinned point (every 4th vertex) is measured every frame through the cross-fade, then four times a
+//    second, once a second when settled, and the model is eased up until it touches the ground; on waking it eases back
+//    down. Only clip-driven models; Tester sleeps on its idle clip and moves its own model for the spider legs.
+const _sit = new THREE.Vector3();
+function driveSitLift(p, t, dt) {
+  const s = (p.sit ||= { lift: 0, target: 0, next: t + 0.05, until: 0, clip: null }), clip = p.anim.current && p.anim.current.getClip().name;
+  if (clip !== s.clip) { if (s.clip !== null) s.until = t + 0.8; s.clip = clip; }   // a cross-fade (0.35 s): follow it every frame
+  if (clip !== "Sit / Sleep") s.target = 0;
+  else if (t >= s.next || t < s.until) {
+    s.next = t + (Math.abs(s.target - s.lift) < 0.01 ? 1 : 0.25) + Math.random() * 0.1;
+    const m = p.skin, pos = m.geometry.attributes.position; let low = Infinity;
+    for (let i = 0; i < pos.count; i += 4) { _sit.fromBufferAttribute(pos, i); m.boneTransform(i, _sit); m.localToWorld(_sit); if (_sit.y < low) low = _sit.y; }
+    // `low` is world height with the current lift in it; the lift sits on the holder, in the agent group's units
+    s.target = Math.max(0, s.lift - low / p.model.parent.getWorldScale(_sit).y);
   }
-  si.needsUpdate = sw.needsUpdate = true;
-  mesh.bind(new THREE.Skeleton(bones, inv), mesh.bindMatrix);
-}
-function findExtraArms(model, cfg) {
-  return cfg.sides.map((side) => {
-    const sh = model.getObjectByName(side.name + "_LowerShoulder"), el = model.getObjectByName(side.name + "_LowerElbow");
-    return sh && el && { s: side.s, sh, el, shRest: sh.quaternion.clone(), elRest: el.quaternion.clone(), x: 0, z: 0, w: 0, e: 0 };
-  }).filter(Boolean);
-}
-const _q = new THREE.Quaternion(), _e = new THREE.Euler();
-// The lower pair's resting pose is ARMS CROSSED in front of the belly (owner 2026-11-07: "ปกติเป็นการกอดอก", spread out
-// looked odd): shoulders forward, the upper arm twisted inward about its own axis (w), the elbow bent ~83° so the
-// forearms lie across the front. They leave the cross only to hammer (work), ask, flail (alarm) and cheer (celebrate).
-function driveExtraArms(arms, st, t, dt, clipT) {   // x: forward (−); z: out from the body; w: twist inward; e: elbow bend
-  const k = 1 - Math.exp(-dt * 8);
-  for (const a of arms) {
-    const up = a.s > 0 ? 0 : 0.06;   // the right forearm lies a little higher, so the two cross instead of meeting
-    // crossed (idle, walk, wave, sleep): elbows forward, forearms level across the belly, hands meeting in the middle —
-    // the lower arms are short for this wide body, so they fold rather than overlap (values tuned by eye in the lineup)
-    let x = -0.9 - up + Math.sin(t * 1.4 + a.s) * 0.03, z = -0.1, w = 1.7, e = -1.45;
-    if (st === "walk") x += Math.sin((clipT ?? t) * 2 * Math.PI / 2.33) * 0.08 * a.s;      // a slight sway in step
-    if (st === "work") { x = -0.9 - Math.max(0, Math.sin(t * 6 + (a.s > 0 ? 0 : Math.PI))) * 0.6; z = 0.45; w = 0; e = -0.6; }
-    if (st === "question") { if (a.s > 0) { x = -0.5; z = 0.45; w = 0; e = -0.9; } }
-    if (st === "alarm") { z = 0.6 + Math.sin(t * 18) * 0.15; x = -0.2; w = 0; e = -0.15; }
-    if (st === "celebrate") { z = 1.3 + Math.sin(t * 9) * 0.2; w = 0; e = -0.4; }
-    a.x += (x - a.x) * k; a.z += (z - a.z) * k; a.w += (w - a.w) * k; a.e += (e - a.e) * k;
-    a.sh.quaternion.copy(a.shRest).multiply(_q.setFromEuler(_e.set(a.x, -a.w * a.s, a.z * a.s)));
-    a.el.quaternion.copy(a.elRest).multiply(_q.setFromEuler(_e.set(a.e, 0, 0)));
-  }
+  if (t < s.until && s.target > s.lift) s.lift = s.target;   // sitting down: rise with the clip, no lag below the ground
+  else s.lift += (s.target - s.lift) * (1 - Math.exp(-dt * (t < s.until ? 3 : 5)));   // waking: ease down with the fade
+  p.model.position.y = s.lift;
 }
 // ── Spider legs (owner 2026-11-07): Tester stands on a round base with six spider legs. Tripo's Humanoid rig weighted
 //    the base and every leg to the Mixamo LEG bones, so the clips would twist it. At load the base moves onto a still
@@ -648,18 +586,19 @@ function makeRobot(role) {
   const bub = bubble("Zz"); bub.position.y = 3; bub.visible = false; g.add(bub); parts.bubble = bub; parts.bubbleChar = "Zz";
   if (MODEL_URLS[role]) loadModel(MODEL_URLS[role]).then((m) => {
     const rig = MODEL_RIGGED[role];
-    if (rig && MODEL_EXTRA_ARMS[role]) rigExtraArms(m, MODEL_EXTRA_ARMS[role]);
     if (rig && MODEL_ROTOR[role]) hideAbove(m, MODEL_ROTOR[role]);
     if (rig && MODEL_SPIDER[role]) rigSpiderLegs(m, MODEL_SPIDER[role]);
     const c = rig && THREE.SkeletonUtils ? THREE.SkeletonUtils.clone(m) : m.clone();
     const holder = new THREE.Group(); holder.add(c); holder.scale.setScalar(MODEL_SCALE[role] || 2.5);
+    // the speech bubble floats above the head: at y 3 it covered the face of a model taller than the rest (Heavy, audit)
+    parts.bubbleY = Math.max(3, new THREE.Box3().setFromObject(c).max.y * (MODEL_SCALE[role] || 2.5) + 0.45);
     if (rig) {
       c.rotation.y = rig.turn; c.traverse((o) => {
         if (o.isMesh && rig.metalness !== undefined) o.material.metalness = rig.metalness;
         if (o.isMesh && rig.tone) toneTexture(o.material, rig.tone);
       });
       if (MODEL_JETS[role]) addJetFlames(c, parts, MODEL_JETS[role]);
-      if (MODEL_EXTRA_ARMS[role]) parts.extraArms = findExtraArms(c, MODEL_EXTRA_ARMS[role]);
+      c.traverse((o) => { if (o.isSkinnedMesh && !parts.skin) parts.skin = o; });
       if (MODEL_ROTOR[role]) addRotor(c, parts, MODEL_ROTOR[role]);
       if (MODEL_CAPE[role]) parts.cape = addCape(c, MODEL_CAPE[role]);
       if (MODEL_SPIDER[role]) parts.spiderLegs = findSpiderLegs(c, MODEL_SPIDER[role]);
@@ -677,7 +616,7 @@ function makeRobot(role) {
 function setBubble(a, ch) {
   const p = a.parts;
   if (!ch) { p.bubble.visible = false; return; }
-  if (p.bubbleChar !== ch) { a.group.remove(p.bubble); p.bubble = bubble(ch); p.bubble.position.y = 3; a.group.add(p.bubble); p.bubbleChar = ch; }
+  if (p.bubbleChar !== ch) { a.group.remove(p.bubble); p.bubble = bubble(ch); p.bubble.position.y = p.bubbleY || 3; a.group.add(p.bubble); p.bubbleChar = ch; }
   p.bubble.visible = true;
 }
 
@@ -1019,9 +958,9 @@ function animate(a, t, dt) {
   if (p.holo) p.holo.material.opacity = st === "work" ? 0.45 + Math.sin(t * 6) * 0.15 : 0.15;
   if (p.beacon) p.beacon.material.emissiveIntensity = st === "work" || st === "walk" ? 0.6 + Math.abs(Math.sin(t * 5)) : 0.3;
   setBubble(a, st === "sleep" ? "Zz" : st === "alarm" ? "!" : st === "celebrate" ? "✓" : st === "question" ? "?" : null);
-  if (p.bubble.visible) p.bubble.position.y = 3 + Math.sin(t * 2) * 0.1;
+  if (p.bubble.visible) p.bubble.position.y = (p.bubbleY || 3) + Math.sin(t * 2) * 0.1;
   if (p.anim) playClip(p.anim, st, t, dt, a.pick); else if (p.rig) rigPose(p.rig, st, t);
-  if (p.extraArms) driveExtraArms(p.extraArms, st, t, dt, p.anim?.current?.time);
+  if (p.anim && p.skin && !p.spiderLegs) driveSitLift(p, t, dt);
   if (p.rotor) driveRotor(p, st, dt);
   if (p.cape) driveCape(p.cape, st, t, dt);
   if (p.spiderLegs?.length) driveSpiderLegs(p, st, t, dt, p.anim?.current?.time);

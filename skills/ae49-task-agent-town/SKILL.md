@@ -44,7 +44,7 @@ Say in one line which one ran. Words win over the toggle: "เปิดเมื
 
 ## How the town reads events
 
-- Role per agent type: implement → Builder (red), implement-heavy → Heavy Builder (orange, four arms), implement-docs /
+- Role per agent type: implement → Builder (red), implement-heavy → Heavy Builder (orange, big), implement-docs /
   excel → Carrier (gold), migrate → Migrator (purple, data drums), audit → Inspector (green, propeller), gate → Tester
   (teal, spider legs), plan → Planner (white), explore / fetch → Scout (blue, jet flames), Main → Foreman.
 - A house per task, found by the Agent call's description (shared words); stages: plot → planned → foundation → frame →
