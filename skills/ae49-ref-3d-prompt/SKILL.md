@@ -18,7 +18,8 @@ hand-over itself must be the right size.
   in one message, never a combined prompt with a note that it could be split.
 - **Each prompt says "keep everything else exactly the same"** and names what must stay (colours, pose, style, background).
 - **Look at the result before the next round.** Say what came out right, what did not, and whether it matters for the
-  3D step. A near-miss that the next stage tolerates is not re-done (e.g. arms at A-pose instead of T-pose: the rig accepts it).
+  3D step. A near-miss that the next stage tolerates is not re-done, but a character that is not in a clear T-pose is
+  (§ 4).
 - **Advice that changes how to use a prompt goes BEFORE the prompt**, never after it.
 
 ## 2. Hand-over format
@@ -43,7 +44,7 @@ the `~/.claude/CLAUDE.md` § Communication rule for anything the owner pastes.
 Run only the rounds the image needs, in this order (each is its own message):
 
 1. **Colours** — main colour, trim colour, which lights stay glowing.
-2. **Pose** — full body, T-pose or A-pose, facing the camera straight on, legs straight, feet apart, hands empty.
+2. **Pose** — full body, strict T-pose (§ 4), facing the camera straight on, legs straight, feet apart, hands empty.
 3. **Remove floating things** — holograms, orbs, screens, particles, glow effects, jet flames.
 4. **Garments** — remove or shorten long coats, capes, skirts and loose cloth (see § 4).
 5. **Background** — plain pure white, no shadow, whole body in frame with margin.
@@ -53,7 +54,12 @@ Run only the rounds the image needs, in this order (each is its own message):
 - **Humanoid, two arms, two legs** — the auto-rig (Mixamo-style) needs it. A non-humanoid (many legs, a ball body
   with no legs) cannot take that rig: it becomes a single piece that moves whole, or is redrawn as a humanoid. Say so
   before the owner spends credits on it.
-- **T-pose or A-pose, front view**, limbs apart from the body. An action pose bakes into the mesh and bends wrongly when rigged.
+- **A clear T-pose, said in EVERY character prompt (owner 2026-11-07).** The pose round asks for it, and every other
+  round's "keep the same" names it, so no edit lets the arms drift. The wording, verbatim: *"strict T-pose, facing the
+  camera straight on, both arms straight out to the sides, perfectly horizontal at shoulder height, palms facing down,
+  legs straight, feet shoulder-width apart"*. Why: asked only once, in a five-change prompt, the arms came back angled
+  down with palms up (an A-pose), and the owner wants the T-pose stated plainly every time. A result that is not a clear
+  T-pose gets a pose round of its own. An action pose bakes into the mesh and bends wrongly when rigged.
 - **No floating or glowing extras.** Image-to-3D turns them into solid lumps; the town adds glow in code instead.
 - **Cloth no lower than the knee.** A long coat becomes one stiff sheet that the legs pass through when walking.
   Removing it now and "adding it later" means generating and rigging a NEW model from an image with the coat:
