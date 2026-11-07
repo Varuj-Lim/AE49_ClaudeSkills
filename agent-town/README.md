@@ -55,18 +55,16 @@ seams (80 k triangles, 5.5 MB, base-colour texture only). `preview-model.html?mo
   crossed across the belly at rest, walking, waving and asleep (owner: "ปกติเป็นการกอดอก"; the arms are short for the wide
   body, so the forearms meet in the middle rather than overlap), hammering at work, raised out when celebrating, flailing on
   alarm; the lower shoulder's top cap (y 0.505–0.54) is partly faded into the spine so its stretch is spread. The clips never move them.
-- **Inspector, legless, hovering (2026-11-07, owner Q7 b):** `models/inspector.glb` (the owner's second export: green and
-  white, 9.8 k triangles, 5.2 MB, 0.524 tall so `MODEL_SCALE` 3.4). Its Mixamo skeleton came out UPSIDE DOWN (Hips at the
-  helmet, the legs running up into the helmet and the X, the spine running down into the body); only the arms are boned
-  right, and its 9 clips are broken at the source (arms-down plays as arms-up, in Tripo's preview too). So:
-  `reweightSkin` moves the helmet skin from the leg bones to `Head`; the inspector has no `MODEL_CLIPS` entry, and
-  `inspectorPose` (`MODEL_POSER`, on the four arm bones `MODEL_BONES` exposes) poses the arms in all eight states (they hang
-  at 0.85 rad so the long arms clear the floor; at work one hand points ahead and sweeps like a magnifying glass);
-  `driveHover` moves the whole model — hovers at 0.55 (0.45 asleep, with a slow breath), turns to look around at rest, leans
-  while walking; the base pose is smoothed and the quick shake / hop / bob are added after (owner: "ขยับเยอะขึ้น");
-  `hideAbove` folds everything above y 0.4535 (the X plate and the dome's very tip) into a zero-scale bone at
-  its base, leaving a flat lid, and `addRotor` puts a three-blade code propeller there that spins fast on the move, slowly at rest, and stops
-  asleep (owner: "กังหันแทนตัว X").
+- **Inspector, third export (2026-11-07, owner Q13 a):** `models/inspector.glb` (green and white, two short legs added so
+  Tripo rigs it as a humanoid; 9.4 k triangles, 4.6 MB, 0.84 tall, same 9 clips). `MODEL_SCALE` 2.3 makes it about 80 % as
+  tall as the rest (owner: smaller). Two load-time fixes: `liftArms` (`MODEL_ARM_LIFT`) — Tripo put the arm bones below the
+  arms (shoulder 0.432, elbow 0.416 against an arm centred near 0.505), so they are moved up to y 0.505 in the rest pose, the
+  skin is re-bound there, and the clips' constant position tracks for those bones are dropped; `hideAbove` folds the model's
+  two-blade propeller (above y 0.79) into a zero-scale bone on the Head bone and `addRotor` spins a two-blade code propeller
+  there, mounted on the Head bone (`mountOnBone`) so it rides the clips (fast on the move, slow at rest, still asleep;
+  it fell off the head when it hung on the model root). Asleep it stands idle, like Tester: the Sit clip sank its short
+  legs into the ground. The second export (legless, upside-down skeleton, hover and code arm poses, owner Q7 b) was
+  replaced; its code is in git history before this change.
 - **Tester, six spider legs (2026-11-07):** `models/tester.glb` (teal, 9.9 k triangles, 4.7 MB, Mixamo rig, 9 clips). The
   Humanoid rig weighted the round base and every spider leg to the Mixamo LEG bones, so the clips would twist the base.
   `MODEL_SPIDER.tester` lists the six legs' azimuths and the hip / knee points (model units, rest pose; the two back legs

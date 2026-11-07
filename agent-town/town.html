@@ -193,8 +193,8 @@ const MODEL_URLS = { builder: "models/builder.glb", planner: "models/planner.glb
 const CLIP_SET = (point) => ({ idle: ["idle"], walk: ["walk"], work: [point, "Typing / Writing / Using tablet"],
   question: ["Thinking"], celebrate: ["Cheer / Clap"], wave: ["Wave / Nod"], sleep: ["Sit / Sleep"],
   alarm: ["Looking around / Searching"] });
-const MODEL_CLIPS = { builder: CLIP_SET("Standing in place"), planner: CLIP_SET("Standing in place"), foreman: CLIP_SET("Standing in place"), scout: CLIP_SET("Standing in place"), carrier: CLIP_SET("Standing in place"), migrator: CLIP_SET("Standing in place"), heavy: CLIP_SET("Standing in place"), tester: { ...CLIP_SET("Standing in place"), sleep: ["idle"] } };   // tester: the Sit clip would sink the torso into its still base; asleep the legs splay instead
-const MODEL_SCALE = { builder: 2.93, planner: 2.5, foreman: 2.5, scout: 2.5, carrier: 2.5, heavy: 3.4, inspector: 3.4, tester: 2.5, migrator: 2.85 };   // heavy.glb is 0.72 tall (the others ~0.97): 3.4 makes it as tall as the rest, and far wider; migrator.glb is 0.84 tall, builder.glb 0.82
+const MODEL_CLIPS = { builder: CLIP_SET("Standing in place"), planner: CLIP_SET("Standing in place"), foreman: CLIP_SET("Standing in place"), scout: CLIP_SET("Standing in place"), carrier: CLIP_SET("Standing in place"), inspector: { ...CLIP_SET("Standing in place"), sleep: ["idle"] }, migrator: CLIP_SET("Standing in place"), heavy: CLIP_SET("Standing in place"), tester: { ...CLIP_SET("Standing in place"), sleep: ["idle"] } };   // tester: the Sit clip would sink the torso into its still base; asleep the legs splay instead
+const MODEL_SCALE = { builder: 2.93, planner: 2.5, foreman: 2.5, scout: 2.5, carrier: 2.5, heavy: 3.4, inspector: 2.3, tester: 2.5, migrator: 2.85 };   // heavy.glb is 0.72 tall (the others ~0.97): 3.4 makes it as tall as the rest, and far wider; migrator.glb is 0.84 tall, builder.glb 0.82; inspector.glb 0.84 at 2.3 stands about 80 % as tall (owner: smaller)
 // A rigged (skinned) model: cloned with SkeletonUtils, posed by code each frame (rigPose below), turned to face +Z.
 // tone: re-grade the base colour once at load (owner 2026-11-07, Q4 a: Main's black read as a silhouette, "ทึบ").
 //   lift  raises the darkest tones to this grey (0–255, like Levels' output black) — on colourless pixels only: the lift
@@ -454,61 +454,46 @@ function makeRig(model, alias) {   // alias {MixamoName: fileName}: expose ONLY 
   for (const [k, n] of Object.entries(alias)) if (all[n]) bones[k] = all[n];
   return { model, bones };
 }
-// ── Inspector (owner Q7 b, 2026-11-07): a legless hovering robot. The owner's second export (Mixamo rig, 9 clips) has its
-//    skeleton UPSIDE DOWN: Hips at the helmet, the "legs" running up into the helmet and the X, the spine running down
-//    into the body; only the arms are boned right. So (owner: "ช่วยสลับให้หน่อย"): the helmet skin on the leg bones moves
-//    to the Head bone (MODEL_REWEIGHT). Its clips are broken at the source (under the inverted spine "arms down" plays as
-//    arms UP, in Tripo's own preview too), so the inspector has no MODEL_CLIPS entry: inspectorPose poses the four arm
-//    bones (MODEL_POSER), the body hovers, leans and bobs as one piece (driveHover), and the X folds into a zero-scale
-//    bone under a code-drawn propeller that spins (owner: "กังหันแทนตัว X").
-const MODEL_BONES = { inspector: { LeftArm: "LeftArm", RightArm: "RightArm", LeftForeArm: "LeftForeArm", RightForeArm: "RightForeArm" } };
-const MODEL_REWEIGHT = { inspector: { from: /(UpLeg|Leg|Foot|ToeBase|Toe_End)$/, to: /Head$/ } };
-const reweighted = new WeakSet();
-function reweightSkin(model, cfg) {   // once per loaded file, before any clone: every weight on a `from` bone moves to `to`
-  if (reweighted.has(model)) return; reweighted.add(model);
+// ── Inspector, third export (owner Q13 a, 2026-11-07): two short legs, so Tripo rigs it as a humanoid and its 9 clips
+//    play like everyone else's. Two code fixes on load, once per file:
+//    • its arm bones sit BELOW the arms (shoulder 0.432, elbow 0.416 against an arm centred at about 0.505, owner: "แขนมัน
+//      ตกลงมานิดหน่อย"), so the arms would swing about a point inside the body. liftArms moves the arm, forearm and hand
+//      bones up to the arm's centre line in the rest pose and re-binds the skin there; their translation tracks are dropped
+//      from the clips (constant rest values that would pull the pivots back down), the rotations play as authored;
+//    • the model's two-blade propeller cannot spin, so hideAbove folds it into a zero-scale bone at the mast and addRotor
+//      draws a spinning one in its place.
+// The ghost of the second export (upside-down skeleton, hover, code arm poses) is in git history before this change.
+const MODEL_BONES = {};
+const MODEL_ARM_LIFT = { inspector: { y: 0.505 } };
+const armsLifted = new WeakSet();
+function liftArms(model, cfg) {   // once per loaded file, before any clone, in the rest pose
+  if (armsLifted.has(model)) return; armsLifted.add(model);
   let mesh; model.traverse((o) => { if (o.isSkinnedMesh) mesh = o; }); if (!mesh) return;
-  const bones = mesh.skeleton.bones, to = bones.findIndex((b) => cfg.to.test(b.name)); if (to < 0) return;
-  const move = new Set(bones.map((b, i) => (cfg.from.test(b.name) ? i : -1)).filter((i) => i >= 0));
-  const si = mesh.geometry.attributes.skinIndex;
-  for (let i = 0; i < si.count; i++) si.setXYZW(i, ...[si.getX(i), si.getY(i), si.getZ(i), si.getW(i)].map((b) => (move.has(b) ? to : b)));
-  si.needsUpdate = true;   // a vertex may now list Head twice; skinning adds the two weights, which is what we want
-}
-// lift: height above the ground in the agent group's units (the group is scaled 0.85), before the bob. The arms hang
-// below the body's base, so the robot hovers high enough that its hands never reach the floor, asleep included.
-const MODEL_HOVER = { inspector: { lift: 0.55, sleep: 0.45 } };
-// hide: vertices above this rest-pose height (mesh space) fold into `fold`, at the X's own base so no fin of stretched
-// triangles shows; the propeller spins at `hub` (model units).
-// Measured on the second export: the X plate starts at 0.455 (z 0.014–0.051); the cut also takes the dome's very tip
-// (y up to 0.4566, r < 0.03), which folds into a near-flat lid under the hub.
-const MODEL_ROTOR = { inspector: { hide: 0.4535, fold: [0, 0.452, 0.03], hub: [0, 0.452, 0.03], blade: 0.1 } };
-// Code arm poses for a model with no clips and an arm-only rig (owner 2026-11-07: "ขยับเยอะขึ้น", Inspector looked stiff
-// next to the clip-driven robots). Mixamo frame: arms point ±X at rest; "fwd" raises (−L / +R lowers), "right" swings
-// forward (−) / back (+), forearm turns bend at the elbow. Arms hang at ARM (0.85 rad), not 1.25, so the long arms
-// clear the floor.
-function inspectorPose(rig, st, t) {
-  const ARM = 0.85, s1 = Math.sin(t * 1.7), s2 = Math.sin(t * 1.1 + 1);
-  let L = [["fwd", -ARM + s1 * 0.12], ["right", s2 * 0.25]], R = [["fwd", ARM - s2 * 0.12], ["right", -s1 * 0.25]];
-  let LF = [["right", -0.35 + s2 * 0.15]], RF = [["right", -0.35 + s1 * 0.15]];
-  if (st === "walk") { const w = Math.sin(t * 5); L = [["fwd", -ARM], ["right", -w * 0.7]]; R = [["fwd", ARM], ["right", w * 0.7]]; LF = [["right", -0.5]]; RF = [["right", -0.5]]; }
-  if (st === "work") {   // right hand up in front, sweeping side to side like a magnifying glass; left hand on the hip
-    // lowered a little, then turned to point ahead (a level arm swings about "up")
-    R = [["fwd", 0.25], ["up", 1.25 + Math.sin(t * 2.4) * 0.45]]; RF = [["right", -0.7 + Math.sin(t * 4.8) * 0.2]];
-    L = [["fwd", -ARM], ["right", 0.35]]; LF = [["right", -1.3]];
+  model.updateMatrixWorld(true);
+  const names = [];
+  for (const side of ["Left", "Right"]) for (const part of ["Arm", "ForeArm", "Hand"]) {   // parent first: a child moves with it
+    const bone = mesh.skeleton.bones.find((x) => x.name.replace(/^mixamorig:?/, "") === side + part); if (!bone) continue;
+    const w = bone.getWorldPosition(new THREE.Vector3()); w.y = model.localToWorld(new THREE.Vector3(0, cfg.y, 0)).y;
+    bone.position.copy(bone.parent.worldToLocal(w)); bone.updateMatrixWorld(true); names.push(bone.name);
   }
-  if (st === "question") { R = [["fwd", 0.5], ["up", 1.1]]; RF = [["right", -2.1]]; L = [["fwd", -ARM - 0.1], ["right", 0.2]]; }
-  if (st === "alarm") { L = [["fwd", 0.9 + Math.sin(t * 14) * 0.35]]; R = [["fwd", -0.9 - Math.sin(t * 14 + 1.5) * 0.35]]; LF = RF = [["right", -0.6]]; }
-  if (st === "wave") { R = [["fwd", -1.15]]; RF = [["fwd", Math.sin(t * 12) * 0.6]]; L = [["fwd", -ARM], ["right", 0.15]]; }
-  if (st === "celebrate") { const p = Math.sin(t * 9) * 0.3; L = [["fwd", 1.2 + p]]; R = [["fwd", -1.2 - p]]; LF = RF = [["right", -0.3]]; }
-  if (st === "sleep") { L = [["fwd", -0.95], ["right", -0.7]]; R = [["fwd", 0.95], ["right", -0.7]]; LF = RF = [["right", -0.9]]; }
-  poseBone(rig, "LeftArm", L); poseBone(rig, "RightArm", R); poseBone(rig, "LeftForeArm", LF); poseBone(rig, "RightForeArm", RF);
+  mesh.skeleton.calculateInverses();   // every bone is in its rest pose here, so the skin binds where it stands
+  for (const clip of model.userData.clips || []) clip.tracks = clip.tracks.filter((tr) => !(tr.name.endsWith(".position") && names.includes(tr.name.slice(0, -9))));
 }
-const MODEL_POSER = { inspector: inspectorPose };
+// hide: vertices above this rest-pose height (mesh space) fold into `fold`; the code propeller spins at `hub` (model units).
+// Measured on the third export: the dome narrows into a mast of radius 0.043 from about 0.775 to 0.80; the blades span
+// 0.805–0.835 out to radius 0.163; the cap tops out at 0.844. The cut keeps the mast's foot, so the code hub sits on it.
+const MODEL_ROTOR = { inspector: { hide: 0.79, fold: [0, 0.788, 0.025], hub: [0, 0.788, 0.025], blade: 0.15, blades: 2, bladeW: 0.06, hubR: 0.04, bone: "Head" } };
+function boneNamed(model, name) {   // a bone by its Mixamo name, with or without the "mixamorig(:)" prefix
+  let found = null; model.traverse((o) => { if (!found && o.isBone && o.name.replace(/^mixamorig:?/, "") === name) found = o; }); return found;
+}
 const rotorRigged = new WeakSet();
 function hideAbove(model, cfg) {   // once per loaded file, before any clone
   if (rotorRigged.has(model)) return; rotorRigged.add(model);
   let mesh; model.traverse((o) => { if (o.isSkinnedMesh) mesh = o; }); if (!mesh) return;
   model.updateMatrixWorld(true);
-  const root = mesh.skeleton.bones[0], b = new THREE.Bone(); b.name = "RotorHide"; root.add(b);
+  // the fold point rides the rotor's own bone: on Hips it drifted away from the head-skinned mast in every clip and
+  // stretched a spike out of the head (audit 2026-11-07, 0.46 model units asleep)
+  const root = (cfg.bone && boneNamed(model, cfg.bone)) || mesh.skeleton.bones[0], b = new THREE.Bone(); b.name = "RotorHide"; root.add(b);
   b.position.copy(root.worldToLocal(model.localToWorld(new THREE.Vector3(...(cfg.fold || cfg.hub))))); b.updateMatrixWorld(true);
   const bones = mesh.skeleton.bones.concat(b), inv = mesh.skeleton.boneInverses.concat(new THREE.Matrix4().copy(b.matrixWorld).invert());
   const idx = bones.length - 1, pos = mesh.geometry.attributes.position, si = mesh.geometry.attributes.skinIndex, sw = mesh.geometry.attributes.skinWeight;
@@ -518,37 +503,35 @@ function hideAbove(model, cfg) {   // once per loaded file, before any clone
   b.scale.setScalar(1e-4);   // AFTER the inverse is taken at scale 1: the hidden part folds into the hub
 }
 function addRotor(model, parts, cfg) {
-  const r = new THREE.Group(); r.position.set(...cfg.hub);
+  const r = new THREE.Group();
   const hubM = M(0xc9d1d9, { metalness: 0.5, roughness: 0.35 }), bladeM = M(0x3fbf4a, { roughness: 0.45 });
-  const hub = cyl(0.014, 0.018, 0.03, hubM, 12); hub.position.y = 0.015; r.add(hub);
-  const cap = sph(0.016, bladeM); cap.position.y = 0.035; r.add(cap);
-  for (let i = 0; i < 3; i++) {   // three blades, pitched like a toy propeller
-    const arm = new THREE.Group(); arm.rotation.y = i * Math.PI * 2 / 3; r.add(arm);
-    const bl = box(cfg.blade, 0.004, 0.026, bladeM); bl.position.set(cfg.blade / 2 + 0.01, 0.028, 0); bl.rotation.x = 0.35; arm.add(bl);
+  const hr = cfg.hubR || 0.016, n = cfg.blades || 3;
+  const hub = cyl(hr * 0.875, hr * 1.125, 0.03, hubM, 12); hub.position.y = 0.015; r.add(hub);
+  const cap = sph(hr, bladeM); cap.position.y = 0.035; r.add(cap);
+  for (let i = 0; i < n; i++) {   // blades pitched like a toy propeller
+    const arm = new THREE.Group(); arm.rotation.y = i * Math.PI * 2 / n; r.add(arm);
+    const bl = box(cfg.blade, 0.004, cfg.bladeW || 0.026, bladeM); bl.position.set(cfg.blade / 2 + (cfg.hubR ? hr * 0.6 : 0.01), 0.028, 0); bl.rotation.x = 0.35; arm.add(bl);
   }
-  model.add(r); parts.rotor = r; parts.rotorSpeed = 0;
+  mountOnBone(model, cfg.bone, cfg.hub).add(r); parts.rotor = r; parts.rotorSpeed = 0;
 }
-function driveHover(parts, cfg, st, t, dt) {   // the whole model: lift + bob, look around, lean, shake, hop, sink asleep
-  const h = parts.model, k = 1 - Math.exp(-dt * 6), s = (parts.hover ||= { y: cfg.lift, lean: 0, roll: 0, yaw: 0 });
-  // Base pose, smoothed (state changes ease in); the quick wobbles are added after the smoothing so they keep their size.
-  let y = cfg.lift, lean = 0, roll = 0, yaw = Math.sin(t * 0.6) * 0.35;   // idle: turns to look around
-  if (st === "walk") { lean = 0.3; yaw = 0; }
-  if (st === "work") { lean = 0.15; yaw = Math.sin(t * 2.4) * 0.2; }
-  if (st === "question") { roll = 0.22; yaw = 0.25; }
-  if (st === "celebrate" || st === "alarm" || st === "wave") yaw = 0;
-  if (st === "sleep") { y = cfg.sleep; lean = 0.18; yaw = 0; }
-  s.y += (y - s.y) * k; s.lean += (lean - s.lean) * k; s.roll += (roll - s.roll) * k; s.yaw += (yaw - s.yaw) * k;
-  let wy = Math.sin(t * 2.2) * 0.09, wr = Math.sin(t * 1.3) * 0.06;
-  if (st === "walk") wr = Math.sin(t * 5) * 0.12;
-  if (st === "work") wy += Math.sin(t * 7) * 0.04;
-  if (st === "alarm") wr = Math.sin(t * 30) * 0.14;
-  if (st === "celebrate") wy = Math.abs(Math.sin(t * 7)) * 0.55;
-  if (st === "sleep") { wy = Math.sin(t * 1.2) * 0.025; wr = 0; }   // a slow breath
-  h.position.y = s.y + wy; h.rotation.x = s.lean; h.rotation.z = s.roll + wr; h.rotation.y = s.yaw;
-  if (parts.rotor) {   // rad/s: fast on the move, idle spin, still asleep
-    const target = st === "sleep" ? 0 : st === "walk" || st === "work" || st === "celebrate" ? 30 : 10;
-    parts.rotorSpeed += (target - parts.rotorSpeed) * k; parts.rotor.rotation.y += parts.rotorSpeed * dt;
-  }
+// A group that rides a bone (so the clips carry it) and, at rest, sits at `at` (model units), upright and model-sized: its
+// rotation and scale cancel the bone's rest ones. No bone named → a plain group on the model at `at`; a name that is not
+// found warns, since a part on the model root is left behind when the clips move the body (the Inspector's propeller
+// fell off its head that way, owner 2026-11-07). Call it at load, before any mixer runs (the bone must be at rest), on a
+// rig whose bones scale uniformly (the Tripo rigs do).
+function mountOnBone(model, boneName, at) {
+  const mount = new THREE.Group(), bone = boneName && boneNamed(model, boneName);
+  if (!bone) { if (boneName) console.warn("mountOnBone: no bone", boneName); mount.position.set(...at); model.add(mount); return mount; }
+  (model.parent || model).updateMatrixWorld(true);
+  const q = new THREE.Quaternion(), sc = new THREE.Vector3(), mq = new THREE.Quaternion(), ms = new THREE.Vector3();
+  bone.matrixWorld.decompose(new THREE.Vector3(), q, sc); model.matrixWorld.decompose(new THREE.Vector3(), mq, ms);
+  mount.position.copy(bone.worldToLocal(model.localToWorld(new THREE.Vector3(...at))));
+  mount.quaternion.copy(q.invert().multiply(mq)); mount.scale.set(ms.x / sc.x, ms.y / sc.y, ms.z / sc.z);
+  bone.add(mount); return mount;
+}
+function driveRotor(parts, st, dt) {   // rad/s: fast on the move, idle spin, still asleep
+  const k = 1 - Math.exp(-dt * 6), target = st === "sleep" ? 0 : st === "walk" || st === "work" || st === "celebrate" ? 30 : 10;
+  parts.rotorSpeed += (target - parts.rotorSpeed) * k; parts.rotor.rotation.y += parts.rotorSpeed * dt;
 }
 const AX = { right: new THREE.Vector3(1, 0, 0), up: new THREE.Vector3(0, 1, 0), fwd: new THREE.Vector3(0, 0, 1) };
 const _p = new THREE.Quaternion(), _m = new THREE.Quaternion();
@@ -634,7 +617,7 @@ function makeRobot(role) {
   if (MODEL_URLS[role]) loadModel(MODEL_URLS[role]).then((m) => {
     const rig = MODEL_RIGGED[role];
     if (rig && MODEL_EXTRA_ARMS[role]) rigExtraArms(m, MODEL_EXTRA_ARMS[role]);
-    if (rig && MODEL_REWEIGHT[role]) reweightSkin(m, MODEL_REWEIGHT[role]);
+    if (rig && MODEL_ARM_LIFT[role]) liftArms(m, MODEL_ARM_LIFT[role]);
     if (rig && MODEL_ROTOR[role]) hideAbove(m, MODEL_ROTOR[role]);
     if (rig && MODEL_SPIDER[role]) rigSpiderLegs(m, MODEL_SPIDER[role]);
     const c = rig && THREE.SkeletonUtils ? THREE.SkeletonUtils.clone(m) : m.clone();
@@ -1005,9 +988,9 @@ function animate(a, t, dt) {
   if (p.beacon) p.beacon.material.emissiveIntensity = st === "work" || st === "walk" ? 0.6 + Math.abs(Math.sin(t * 5)) : 0.3;
   setBubble(a, st === "sleep" ? "Zz" : st === "alarm" ? "!" : st === "celebrate" ? "✓" : st === "question" ? "?" : null);
   if (p.bubble.visible) p.bubble.position.y = 3 + Math.sin(t * 2) * 0.1;
-  if (p.anim) playClip(p.anim, st, t, dt, a.pick); else if (p.rig) (MODEL_POSER[a.role] || rigPose)(p.rig, st, t);
+  if (p.anim) playClip(p.anim, st, t, dt, a.pick); else if (p.rig) rigPose(p.rig, st, t);
   if (p.extraArms) driveExtraArms(p.extraArms, st, t, dt, p.anim?.current?.time);
-  if (p.model && MODEL_HOVER[a.role]) driveHover(p, MODEL_HOVER[a.role], st, t, dt);
+  if (p.rotor) driveRotor(p, st, dt);
   if (p.spiderLegs?.length) driveSpiderLegs(p, st, t, dt, p.anim?.current?.time);
   if (st === "work" && a.house && (a.role === "builder" || a.role === "heavy") && Math.random() < dt * 3) dust(g.position);
 }
