@@ -27,6 +27,9 @@ Delegation covers only **Main-run gates**: autopilot (`ae49-mode-autopilot`, the
   already listens. Why: on 2026-10-29 15:09 an AE49_Hub gate started Chrome on 9334 while an AWDC_Hub gate already
   ran there, and its tools drove AWDC's Chrome — both gates' readings were void. Each agent stops only its own port, with `stop-port.ps1` called through `powershell -NoProfile -ExecutionPolicy Bypass -File`. Nobody ever kills Chrome by name.
 - **Data:** each gate uses its own sets and its own `testBatch`. Data goes only through `gate-tools/emu-admin.cjs`, which refuses unless the host is 127.0.0.1, and is swept with `emu-sweep.cjs`. Never use a project script that reads `.env.local`.
+- **Data is ready BEFORE the dispatch (owner P2-Q4 a, 2026-11-07):** the builder's seed script, or Main seeding while the audit runs; the dispatch names the seeded records and the agent never hunts or seeds. Why: the 2026-11-07 gates that ran 1½–3.6 h spent it finding or making data.
+- **One section, two agents (owner P2-Q3 a):** a section of 6–7 items may split across two agents on disjoint items, each its own port and `testBatch`, when the items do not touch the same record.
+- **Landing gates alongside (owner P2-Q4 a):** build, lint, tsc and the touched harnesses start in the background when the gate starts; re-run only if a fold lands (`ae49-router` § Speed levers).
 
 ## Gate during audit (Main-run gates only)
 A Main-run gate may start as soon as the build is in the hub tree.

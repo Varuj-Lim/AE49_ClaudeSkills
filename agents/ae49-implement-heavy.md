@@ -60,7 +60,11 @@ Report the base you started from and the base you built on.
    change** if the project requires it.
 4. **Verify locally** using the project's own commands (check its `CLAUDE.md`; commonly
    `npm run build` and `npm run lint`, but use whatever the project defines). Fix what they
-   surface.
+   surface. Of the project's harnesses run only those that read the files you touched; a slow
+   one Main names (over ~10 min) is Main's to run alongside (owner P2-Q3 a, `ae49-router` § Speed levers).
+5. **Ship the gate's data.** When the plan's testing checklist needs records the emulator lacks,
+   add a small seed script (emulator only, through the project's gate tools, tagged
+   `isTestData` + a `testBatch`) and name it in your report (owner P2-Q4 a).
 
 ## Hard limits — you are headless
 

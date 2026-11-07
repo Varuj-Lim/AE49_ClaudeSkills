@@ -269,6 +269,25 @@ what `git worktree remove --force` then FOLLOWS and empties); if a link cannot b
 compare with before, AND list `<hub>/node_modules/firebase-admin` and `rimraf` (non-empty) — the count alone misses an emptied package. Never `rm -rf`, `Remove-Item -Recurse` or `rmdir /s` a tree you have not
 scanned.
 
+## Speed levers — fewer cold starts, less waiting (owner P2-Q3 a + P2-Q4 a, 2026-11-07)
+
+Measured on 2026-11-07: a heavy build took 44–66 min, a whole feature 3½–4 h, and folds plus re-audits were about ¾ of it;
+gates ran 11 min to 3.6 h, the long ones hunting for emulator data. So:
+1. **A fold goes to the SAME builder while it is alive** (`SendMessage` to its id, warm context: it already read the plan
+   and the code). A new dispatch only when that builder is gone.
+2. **A heavy, money or data plan gets an `ae49-audit` read of the PLAN before the build** (the roster's FULL-audit triggers:
+   data shape, rules / permissions, money, migration, more than ~5 files). Findings are folded into the plan, or asked, before
+   the builder starts, so the build's own audit finds less.
+3. **Builders run only the harnesses that read their files** (plus build, tsc, lint). The slow ones (e.g. AE49's
+   `verify-form-errors`, over 10 min) Main runs in the background alongside the audit, never as the builder's wait.
+4. **A gate section may split across two `ae49-gate` agents** on disjoint items (`ae49-ref-gate-checklist/delegated.md`).
+5. **The gate's test data is READY before the `ae49-gate` dispatch**: the builder ships a seed script with the build when
+   the plan's checklist needs data the emulator lacks, or Main seeds while the audit runs. The dispatch names the seeded
+   records; the agent never hunts or seeds.
+6. **The landing gates run DURING the gate**: build, lint, tsc and every harness that reads the touched files start in the
+   background when the gate starts, and re-run only if a fold lands. Landing waits for them, not after them.
+The post-compact rule (§ Session length) is unchanged (owner kept it with P2-Q4 a).
+
 ## Gates you (Main) always own — never delegate these
 
 - The **design interview / approval** (grill + plan approval) before drafting or building.
