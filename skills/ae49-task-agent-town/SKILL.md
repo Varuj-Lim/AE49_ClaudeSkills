@@ -58,7 +58,7 @@ The owner set these one by one while building the town; the code that does each,
 `agent-town/README.md` (mostly "Buildings, plots, trees and the circle"; the sit lift and the robots under "Real
 models") and in the comments in `town.html`. A change that breaks one needs his word first.
 
-1. **Only the owner's models.** Robots, buildings, trees and lamps are his Tripo exports; no building is drawn in code.
+1. **Only the owner's models.** Robots, buildings, trees, lamps and boxes are his Tripo exports; no building is drawn in code.
    Code draws only small things: the construction site (slab, scaffold, stakes, blueprint, tape), flags, cones, bushes,
    station props, robot add-ons (cape, jet flames, rotor) and the stand-ins shown until a model loads.
 2. **Buildings are 2–3 × a robot's height** (a robot is about 2.04): `TARGET_H` / `MIN_H` / `MAX_FOOT`, low types

@@ -121,6 +121,11 @@ seams (80 k triangles, 5.5 MB, base-colour texture only). `preview-model.html?mo
 - **Lamp posts:** the owner's `models/lamp-post.glb` (a street lamp) replaces the code pole and bulb, `LAMP_H` 3.6, each
   turned so its arm reaches over the plaza; at night only the underside of the arm's far end glows (`prepareLamp` moves
   the down-facing triangles of that end into a glowing material group; owner: "ไฟต้องออกมาจากส่วนปลายเท่านั้น ด้านใต้").
+- **Boxes:** the owner's `models/box.glb` (a cardboard box on a pallet, ONE mesh) replaces the code crates: three pallets in
+  a row at the Carrier's station with three bare boxes stacked on them, and two bare boxes on each Builder / Heavy table,
+  sizes and turns varied (`crate(len, pallet, …)`). A box on the ground keeps the pallet; one on another box or on a table
+  loses it (owner Q19 a): `bareBox` drops the triangles below `BOX_PALLET` (the deck top, 0.102 in file units) and cuts
+  the side faces at it, once per file. `BOX_W/H/D` are the file's size, so stacks are laid out before it loads.
 - **Rest, report, cheer (owner; Q17 b):** Main rests at the main building's door (`MAIN_SEAT`) facing south; everyone
   else rests seated on an arc in front of it facing Main (`seatOf`; a second agent of a role sits behind). A job at a house
   is done there, one without a house at the role's station; when done the agent walks to the spot in front of Main,

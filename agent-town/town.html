@@ -193,11 +193,62 @@ function office() {  // the Foreman's site office, north of the plaza
   const sign = labelSprite("SITE OFFICE", "#2f6fa8"); sign.position.set(0, 2.9, 0); sign.scale.set(2.6, 0.65, 1); g.add(sign); g.userData.sign = sign;
   g.position.set(0, 0, MAIN_Z); scene.add(g); landmarkGroups.office = g;
 }
+// Boxes (owner 2026-11-07): the owner's cardboard box on a pallet (`models/box.glb`, ONE mesh: box and pallet together)
+// replaces the code crates at the Carrier's station and on the Builder's and Heavy's tables. A box on the ground keeps its
+// pallet; a box stacked on another or standing on a table loses it (owner Q19 a): once per file, its triangles below
+// BOX_PALLET (the pallet's deck top, in the file's units) are dropped and those crossing it are cut at it. BOX_W/H/D are the
+// file's size (x, height, z; the long side is z), so a stack is laid out before the file loads; each box is sized by its
+// long side `len` and turned a little. The code box stands in until the file loads, or if it fails. Loaded a tick later.
+const BOX_W = 0.652, BOX_H = 0.740, BOX_D = 0.977, BOX_PALLET = 0.102;
+const crateH = (len, pallet) => (len / BOX_D) * (pallet ? BOX_H : BOX_H - BOX_PALLET);
+let bareBoxModel = null;
+function bareBox(m) {   // once: a copy of the box with the pallet cut away, its foot at y 0
+  if (bareBoxModel) return bareBoxModel;
+  bareBoxModel = m.clone(true);
+  bareBoxModel.traverse((o) => {
+    if (!o.isMesh) return;
+    const src = o.geometry.index ? o.geometry.toNonIndexed() : o.geometry.clone(), pos = src.attributes.position, keep = [];
+    for (let i = 0; i < pos.count; i += 3) if (Math.max(pos.getY(i), pos.getY(i + 1), pos.getY(i + 2)) > BOX_PALLET + 0.002) keep.push(i);
+    const g = new THREE.BufferGeometry();
+    for (const [name, a] of Object.entries(src.attributes)) {
+      const out = new Float32Array(keep.length * 3 * a.itemSize);
+      keep.forEach((t, n) => { for (let v = 0; v < 3; v++) for (let c = 0; c < a.itemSize; c++) out[(n * 3 + v) * a.itemSize + c] = a.array[(t + v) * a.itemSize + c]; });
+      g.setAttribute(name, new THREE.BufferAttribute(out, a.itemSize));
+    }
+    const p = g.attributes.position;   // a side face that reached into the pallet now starts at the deck top
+    for (let i = 0; i < p.count; i++) p.setY(i, Math.max(p.getY(i), BOX_PALLET) - BOX_PALLET);
+    g.computeVertexNormals(); o.geometry = g;
+  });
+  return bareBoxModel;
+}
+let boxMat = null;
+function crate(len, pallet, x, y, z, turn = 0) {   // a Group whose origin is the box's foot
+  const g = new THREE.Group(), s = len / BOX_D, h = crateH(len, pallet);
+  const c = box(BOX_W * s, h, len, M(pallet ? 0xc28b4a : 0xb17a3c)); c.position.y = h / 2; g.add(c);
+  g.position.set(x, y, z); g.rotation.y = turn;
+  setTimeout(() => loadModel("models/box.glb").then((m) => {
+    if (!boxMat) m.traverse((o) => { if (o.isMesh && !boxMat) { boxMat = o.material.clone(); boxMat.metalness = 0; } });   // cardboard, not metal
+    const bm = (pallet ? m : bareBox(m)).clone(true);
+    bm.traverse((o) => { if (o.isMesh) { o.material = boxMat; o.castShadow = o.receiveShadow = true; } });
+    bm.scale.setScalar(s); g.clear(); g.add(bm);
+  }).catch((e) => console.warn("box", e.message)), 0);
+  return g;
+}
 function stationProp(role) {
   const [x, z] = ROLES[role].station; const g = new THREE.Group();
   if (role === "planner")   { const t = box(1.6, 0.08, 1, M(0xe8e1cf)); t.position.y = 0.9; t.rotation.x = -0.3; g.add(t); for (const s of [-0.7, 0.7]) { const l = cyl(0.04, 0.04, 0.9, M(0x6b5a44)); l.position.set(s, 0.45, 0); g.add(l); } }
-  if (role === "builder" || role === "heavy") { const t = box(1.6, 0.8, 0.8, M(0x8d6a45)); t.position.y = 0.4; g.add(t); const c = box(0.5, 0.5, 0.5, M(0xc28b4a)); c.position.set(0.5, 1.05, 0); g.add(c); }
-  if (role === "carrier")   { for (let i = 0; i < 3; i++) { const c = box(0.6, 0.6, 0.6, M(0xc28b4a)); c.position.set(i * 0.65 - 0.65, 0.3, 0); g.add(c); } const c = box(0.6, 0.6, 0.6, M(0xb17a3c)); c.position.set(0, 0.9, 0); g.add(c); }
+  if (role === "builder" || role === "heavy") {   // the work table: a box on it, a smaller one on top (no pallets, Q19 a)
+    const t = box(1.6, 0.8, 0.8, M(0x8d6a45)); t.position.y = 0.4; g.add(t);
+    g.add(crate(0.62, false, 0.45, 0.8, 0, 0.1)); g.add(crate(0.42, false, 0.47, 0.8 + crateH(0.62, false), 0, -0.3));
+  }
+  if (role === "carrier") {   // three pallets in a row; bare boxes stacked on them (Q19 a), sizes and turns varied
+    const row = [[0.85, -0.66, 0.06], [0.8, 0, -0.04], [0.9, 0.66, 0.09]];
+    for (const [len, bx, turn] of row) g.add(crate(len, true, bx, 0, 0, turn));
+    const top0 = crateH(0.85, true), top1 = crateH(0.8, true);
+    g.add(crate(0.6, false, -0.66, top0, 0.02, -0.15));
+    g.add(crate(0.65, false, 0, top1, -0.02, 0.25));
+    g.add(crate(0.45, false, 0.02, top1 + crateH(0.65, false), 0, 0.4));
+  }
   if (role === "migrator")  { for (let i = 0; i < 3; i++) { const d = cyl(0.42, 0.42, 0.3, M(i % 2 ? 0x9a72d8 : 0x7a4bc4), 20); d.position.y = 0.16 + i * 0.34; g.add(d); } }   // a stack of data drums
   if (role === "scout")     { const f = cyl(0.05, 0.05, 2.2, M(0x37424d)); f.position.y = 1.1; g.add(f); const fl = box(0.8, 0.45, 0.02, M(0xf08a24)); fl.position.set(0.42, 1.95, 0); g.add(fl); }
   g.position.set(x + (x > 0 ? 1.4 : -1.4), 0, z); scene.add(g);

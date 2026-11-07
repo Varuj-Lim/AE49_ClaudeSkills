@@ -20,13 +20,17 @@ This repo has no git-synced per-person memory, so this file is the in-flight not
   its neighbours on the arc when everyone stands to clap; corner-plot houses may cast no shadow (outside the sun's shadow
   box ±22).
 - Autopilot: Off for this project (no state file).
+- **Resumed on this machine 2026-11-07 19:33 ICT** (open): Autopilot ON (ask), scope #1 Box + #2 CENTRAL CORE. `box.glb`
+  arrived 19:31 → copied to `agent-town/models/box.glb` (byte-identical, sha256 `3cfd1064…`). It is ONE mesh, box and
+  pallet together (0.65 × 0.74 × 0.98, pallet deck top 0.102). Q19 a: boxes on the ground keep the pallet, stacked and
+  table boxes lose it (`bareBox` cut) — **built, short audit PASS**. Q20 a was moot (the carried crate hides with the code
+  body); Q21 b: the Carrier carries a box in front with both arms — next. Q22 a / Q23 a: status bubbles become Fluent
+  Emoji 3D PNGs (`agent-town/emoji/`, MIT, in `NOTICE.md`) — after the Carrier.
 
 ## Next (in order)
 
-1. **Box model** — the owner will export a cardboard box on a pallet as `Box.glb` into
-   `Downloads\Claude Skill\Agent Model\`. Copy it (byte-check) to `agent-town/models/box.glb`, then replace the code
-   crates: Carrier's station stack and the crates on the Builder / Heavy tables, sized and stacked in code (vary sizes,
-   small turns). Ask the owner whether upper boxes keep their pallet (he was asked; no answer yet). Short audit, commit.
+1. ~~**Box model**~~ — done 2026-11-07 (station stack + tables, Q19 a). Then: the Carrier's two-arm carry (Q21 b) and
+   the emoji bubbles (Q22 a).
 2. **CENTRAL CORE** building (Q12 a) is still owed — image prompt when the owner wants it (isometric view; see
    `ae49-ref-3d-prompt`). The second sheet `agent-town/reference/2026-11-07/buildings-2.jpg` has more types.
 
