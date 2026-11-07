@@ -1,6 +1,6 @@
 ---
 name: web-ref-local-emulator
-description: "Canon (web-ref-*) emulator discipline for hubs with .cmd launchers: the OWNER presses launchers (bends: stop on a live shutdown order; start / safe-close in its OWN visible cmd window (Start-Process, 2026-11-05; Q458 a); refresh the same way when nothing uses the suite, Q487 a; safe-close unasked at a session swap / close when nothing pending uses it, 2026-11-05); probe before naming a button; look-alike safe-kill; refresh; stale-cache 404. Use to start, stop, refresh or debug an emulator, before naming any launcher, or when a launcher/emulator ruling lands."
+description: "Canon (web-ref-*) emulator discipline for hubs with .cmd launchers: the OWNER presses launchers, with named bends (start, safe-close, refresh in their own visible cmd window; safe-close unasked at a swap or close when nothing uses it); probe first; look-alike safe-kill. Use to start, stop, refresh or debug an emulator, or before naming a launcher."
 ---
 
 # Local emulator — shared discipline

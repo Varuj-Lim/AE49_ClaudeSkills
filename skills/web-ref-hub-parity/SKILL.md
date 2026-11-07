@@ -1,6 +1,6 @@
 ---
 name: web-ref-hub-parity
-description: The central hub-parity ledger - AE49_Hub is the reference hub; divergences.md lists what every hub keeps different on purpose (one column per hub), pages.md the shared pages kept equal (Home, Notifications, Employees, Support, Settings, sign-in pages, the shell), changelog.md what AE49 changed on them. Use when AE49_Hub lands a change to one of those pages (log it), when a hub's parity run reads or records a ruling, or on ทำไม Hub นี้ต่างจาก AE49, จงใจให้ต่าง, บันทึกการเปลี่ยนแปลง AE49.
+description: "The central hub-parity ledger. AE49_Hub is the reference hub; divergences.md lists what each hub keeps different on purpose, pages.md the shared pages kept equal, changelog.md what AE49 changed on them. Use when AE49_Hub lands a change to a shared page, when a parity run reads or records a ruling, or on ทำไม Hub นี้ต่างจาก AE49, จงใจให้ต่าง."
 ---
 
 # web-ref-hub-parity — the ledger that keeps the hubs' shared pages equal

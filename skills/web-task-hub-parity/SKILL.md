@@ -1,6 +1,6 @@
 ---
 name: web-task-hub-parity
-description: Compare THIS hub's shared pages (Home, Notifications, Employees, Support, Settings, sign-in pages, the shell) with AE49_Hub - the reference hub - and with the user skills, then walk every difference to an owner ruling - this hub follows AE49, the skill changes, AE49 changes, or it stays different on purpose. Reads only this hub, AE49 on GitHub and the user skills. In AE49_Hub itself it is the FAMILY run: AE49 vs NURI, CCP, AWDC (from GitHub) and the skills, recommending the best version - easiest to use, simplest, fastest, least work. Use on /web-task-hub-parity, เทียบกับ AE49, ทำให้เหมือน AE49 Hub, Hub นี้ต่างจาก AE49 ตรงไหน, ให้ consistent กัน, ไล่เคาะทีละข้อ.
+description: "Compare THIS hub's shared pages (Home, Notifications, Employees, Support, Settings, sign-in, the shell) with AE49_Hub and the user skills, then walk each difference to an owner ruling. In AE49_Hub it runs the family comparison (NURI, CCP, AWDC). Use on /web-task-hub-parity, เทียบกับ AE49, ทำให้เหมือน AE49 Hub, Hub นี้ต่างจาก AE49 ตรงไหน."
 ---
 
 # web-task-hub-parity — keep this hub's shared pages equal to AE49_Hub
