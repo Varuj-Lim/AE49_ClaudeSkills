@@ -45,6 +45,16 @@ a rigged export with the clip names in the skill would animate limbs. `preview-m
   The shape robot's crate is not carried over; if the model does not read as a carrier in the lineup, a code-drawn crate
   can hang on a hand bone the way `addJetFlames` hangs the flames.
 
+- **Heavy Builder, four arms (2026-11-07, owner Q6 b):** `models/heavy.glb` (orange and grey, 9.3 k triangles, 4.4 MB, 0.72
+  tall so `MODEL_SCALE` 3.4, same 9 clips). Tripo rigs two arms only, and this export's skeleton is not Mixamo's
+  (`Hip`, `Spine01/02`, `L_Upperarm`…, 78 bones) with the lower arms weighted to the UPPER arm bones. `MODEL_EXTRA_ARMS.heavy`
+  lists each lower arm's root, elbow and hand point (model units, rest pose); `rigExtraArms` adds a shoulder and an elbow
+  bone per side under `Spine02` once per file, moves the lower-arm skin onto them (the vertices below y 0.505 whose strongest
+  bone is that side's arm or hand; blended into the spine at the root), and `driveExtraArms` swings them by state: sway at
+  idle, swing in step with the walk clip, hammering at work, raised out when celebrating, reaching forward asleep (the
+  sit-down would put hanging hands through the floor); a base outward spread keeps them clear of the upper arms, and the
+  lower shoulder's top cap (y 0.505–0.54) is partly faded into the spine so its stretch is spread. The clips never move them.
+
 ## Lineup preset (2026-11-07)
 
 `http://127.0.0.1:8049/?lineup` (or 🧍 in the town) reads no events: every role stands in one row on an empty stage, facing

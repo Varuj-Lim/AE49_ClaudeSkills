@@ -182,7 +182,7 @@ for (const [x, z, s] of [[-19, -16, 1.2], [-21, 4, 1], [20, -15, 1.1], [21, 3, 0
 // ── Robots, built from simple shapes ───────────────────────────────────────────────────────────────────────
 // ── Real models (owner 2026-11-06): a role listed here wears its .glb once it has loaded; until then, or if it fails,
 //    the robot built from shapes stays. The model is a statue (no rig), so it moves as one piece.
-const MODEL_URLS = { builder: "models/builder-g70.glb", planner: "models/planner.glb", foreman: "models/main.glb", scout: "models/scout.glb", carrier: "models/carrier.glb" };
+const MODEL_URLS = { builder: "models/builder-g70.glb", planner: "models/planner.glb", foreman: "models/main.glb", scout: "models/scout.glb", carrier: "models/carrier.glb", heavy: "models/heavy.glb" };
 // Clips by town state, per role (owner's Tripo exports 2026-11-06 / -07). A state missing here falls back to "idle".
 // "work" alternates its list every 8 s. Clips are played in place: the hips' horizontal drift is removed at load.
 // A name matches a clip of that exact name, else the first clip whose name STARTS with it (Tripo names a
@@ -190,8 +190,8 @@ const MODEL_URLS = { builder: "models/builder-g70.glb", planner: "models/planner
 const CLIP_SET = (point) => ({ idle: ["idle"], walk: ["walk"], work: [point, "Typing / Writing / Using tablet"],
   question: ["Thinking"], celebrate: ["Cheer / Clap"], wave: ["Wave / Nod"], sleep: ["Sit / Sleep"],
   alarm: ["Looking around / Searching"] });
-const MODEL_CLIPS = { planner: CLIP_SET("Standing in place"), foreman: CLIP_SET("Standing in place"), scout: CLIP_SET("Standing in place"), carrier: CLIP_SET("Standing in place") };
-const MODEL_SCALE = { builder: 2.6, planner: 2.5, foreman: 2.5, scout: 2.5, carrier: 2.5 };
+const MODEL_CLIPS = { planner: CLIP_SET("Standing in place"), foreman: CLIP_SET("Standing in place"), scout: CLIP_SET("Standing in place"), carrier: CLIP_SET("Standing in place"), heavy: CLIP_SET("Standing in place") };
+const MODEL_SCALE = { builder: 2.6, planner: 2.5, foreman: 2.5, scout: 2.5, carrier: 2.5, heavy: 3.4 };   // heavy.glb is 0.72 tall (the others ~0.97): 3.4 makes it as tall as the rest, and far wider
 // A rigged (skinned) model: cloned with SkeletonUtils, posed by code each frame (rigPose below), turned to face +Z.
 // tone: re-grade the base colour once at load (owner 2026-11-07, Q4 a: Main's black read as a silhouette, "ทึบ").
 //   lift  raises the darkest tones to this grey (0–255, like Levels' output black) — on colourless pixels only: the lift
@@ -202,7 +202,7 @@ const MODEL_SCALE = { builder: 2.6, planner: 2.5, foreman: 2.5, scout: 2.5, carr
 //   gold  multiplies the saturation of warm, saturated pixels (the gold trims) and lifts them up to 8 %, eased in from
 //         saturation 0.2 to 0.32 so trims get no hard contour; a channel past 255 scales all three down (no hue shift).
 const MODEL_RIGGED = { planner: { turn: 0, metalness: 0.25 },
-  foreman: { turn: 0, metalness: 0.25, tone: { lift: 40, cool: 10, gold: 1.25 } }, scout: { turn: 0, metalness: 0.25 }, carrier: { turn: 0, metalness: 0.25 } };
+  foreman: { turn: 0, metalness: 0.25, tone: { lift: 40, cool: 10, gold: 1.25 } }, scout: { turn: 0, metalness: 0.25 }, carrier: { turn: 0, metalness: 0.25 }, heavy: { turn: 0, metalness: 0.25 } };
 // Jet flames drawn by code at a model's nozzles (the owner removed them from the art, 2026-11-07): nozzle centres in
 // model units, measured from scout.glb's rest pose (the jetpack's lowest back points, x ±0.06–0.17, y 0.674).
 const MODEL_JETS = { scout: [[0.116, 0.672, -0.108], [-0.116, 0.672, -0.108]] };
@@ -218,6 +218,88 @@ function addJetFlames(model, parts, nozzles) {  // hung on Spine2, so the flames
     const f = new THREE.Mesh(new THREE.ConeGeometry(0.03, 0.14, 10).rotateX(Math.PI).translate(0, -0.07, 0), fm);   // tip down, base at the nozzle, so it scales from there
     h.add(f); spine.add(h); return f;
   });
+}
+// ── Extra arms (owner Q6 b, 2026-11-07): Heavy Builder has a second, lower pair of arms that no auto-rig gives bones
+//    (Tripo rigs two arms; its exporter weighted the lower arms to the UPPER arm bones). At load we give each lower arm
+//    a shoulder and an elbow bone, move its skin onto them (blended into the spine at the root so it does not tear), and
+//    `driveExtraArms` swings them by state each frame. Points are in model units, measured from heavy.glb's rest pose:
+//    the lower-arm skin is the vertices below y 0.505 whose strongest bone is that side's upper arm / forearm / hand.
+const MODEL_EXTRA_ARMS = { heavy: { parent: "Spine02", below: 0.505, cap: 0.54, sides: [
+  { name: "L", s: 1, owners: /^L_(Upperarm|Forearm|Hand|Thumb|Index|Mid|Ring|Pinky)/, attach: [0.200, 0.470, -0.010], elbow: [0.245, 0.360, -0.008], hand: [0.268, 0.230, -0.005] },
+  { name: "R", s: -1, owners: /^R_(Upperarm|Forearm|Hand|Thumb|Index|Mid|Ring|Pinky)/, attach: [-0.200, 0.470, -0.010], elbow: [-0.245, 0.360, -0.008], hand: [-0.268, 0.230, -0.005] },
+] } };
+const riggedExtra = new WeakSet();
+function rigExtraArms(model, cfg) {   // once per loaded file, before any clone: SkeletonUtils.clone copies the new bones
+  if (riggedExtra.has(model)) return; riggedExtra.add(model);
+  let mesh; model.traverse((o) => { if (o.isSkinnedMesh) mesh = o; });
+  const parent = mesh && mesh.skeleton.bones.find((b) => b.name === cfg.parent); if (!parent) return;
+  model.updateMatrixWorld(true);
+  const toLocal = (b, p) => {   // a new bone at model point p, its axes and units those of the model frame
+    const pq = new THREE.Quaternion(), ps = new THREE.Vector3(); b.parent.getWorldQuaternion(pq); b.parent.getWorldScale(ps);
+    b.position.copy(b.parent.worldToLocal(model.localToWorld(new THREE.Vector3(...p)))); b.quaternion.copy(pq.invert());
+    b.scale.set(1 / ps.x, 1 / ps.y, 1 / ps.z); b.updateMatrixWorld(true);
+  };
+  const bones = mesh.skeleton.bones.slice(), inv = mesh.skeleton.boneInverses.slice(), spineIdx = bones.indexOf(parent);
+  const g = mesh.geometry, pos = g.attributes.position, si = g.attributes.skinIndex, sw = g.attributes.skinWeight;
+  const get = (a, i, k) => [a.getX(i), a.getY(i), a.getZ(i), a.getW(i)][k], v = new THREE.Vector3();
+  for (const side of cfg.sides) {
+    const sh = new THREE.Bone(); sh.name = side.name + "_LowerShoulder"; parent.add(sh); toLocal(sh, side.attach);
+    const el = new THREE.Bone(); el.name = side.name + "_LowerElbow"; sh.add(el); toLocal(el, side.elbow);
+    const shI = bones.push(sh) - 1; inv.push(new THREE.Matrix4().copy(sh.matrixWorld).invert());
+    const elI = bones.push(el) - 1; inv.push(new THREE.Matrix4().copy(el.matrixWorld).invert());
+    const A = new THREE.Vector3(...side.attach), AH = new THREE.Vector3(...side.hand).sub(A), L2 = AH.lengthSq();
+    const tE = new THREE.Vector3(...side.elbow).sub(A).dot(AH) / L2;
+    for (let i = 0; i < pos.count; i++) {
+      v.fromBufferAttribute(pos, i); if (v.y >= cfg.below || v.y < 0.15) continue;
+      let bi = 0, bw = -1; for (let k = 0; k < 4; k++) { const w = get(sw, i, k); if (w > bw) { bw = w; bi = get(si, i, k); } }
+      if (!side.owners.test(bones[bi].name)) continue;   // bones[], not the old skeleton: the first side's new indices are in it
+      const t = Math.min(1, Math.max(0, v.sub(A).dot(AH) / L2));
+      const root = Math.max(0, 1 - t / 0.12);                                   // near the torso: blend into the spine
+      const e = Math.min(1, Math.max(0, (t - (tE - 0.08)) / 0.16)) * (1 - root);   // soft elbow
+      si.setXYZW(i, shI, elI, spineIdx, 0); sw.setXYZW(i, 1 - root - e, e, root, 0);   // sums to 1 for any config
+    }
+    // The lower shoulder's top cap (just above the cut) stays on the upper-arm bone and stretches when the clips lower
+    // the upper arm; fade part of it into the spine over `cap` so the stretch spreads instead of one hard ring.
+    for (let i = 0; i < pos.count; i++) {
+      v.fromBufferAttribute(pos, i); if (v.y < cfg.below || v.y >= cfg.cap || Math.sign(v.x) !== side.s) continue;
+      let bi = 0, bw = -1; for (let k = 0; k < 4; k++) { const w = get(sw, i, k); if (w > bw) { bw = w; bi = get(si, i, k); } }
+      if (!side.owners.test(bones[bi].name)) continue;
+      const a = 0.6 * (cfg.cap - v.y) / (cfg.cap - cfg.below);                 // 0.6 at the cut, 0 at the cap's top
+      const ws = [0, 1, 2, 3].map((k) => get(sw, i, k) * (1 - a)), ix = [0, 1, 2, 3].map((k) => get(si, i, k));
+      let slot = ix.indexOf(spineIdx); if (slot < 0) slot = ws.indexOf(Math.min(...ws));
+      if (ix[slot] !== spineIdx) { ws[slot] = 0; ix[slot] = spineIdx; }
+      ws[slot] += a; const sum = ws.reduce((p, q) => p + q, 0);
+      si.setXYZW(i, ...ix); sw.setXYZW(i, ...ws.map((w) => w / sum));
+    }
+  }
+  si.needsUpdate = sw.needsUpdate = true;
+  mesh.bind(new THREE.Skeleton(bones, inv), mesh.bindMatrix);
+}
+function findExtraArms(model, cfg) {
+  return cfg.sides.map((side) => {
+    const sh = model.getObjectByName(side.name + "_LowerShoulder"), el = model.getObjectByName(side.name + "_LowerElbow");
+    return sh && el && { s: side.s, sh, el, shRest: sh.quaternion.clone(), elRest: el.quaternion.clone(), x: 0, z: 0, e: 0 };
+  }).filter(Boolean);
+}
+const _q = new THREE.Quaternion(), _e = new THREE.Euler();
+// Base spread z 0.45: the clips lower the upper arms to hang just outside the lower ones, so the lower pair always
+// stays spread clear of them (audit 2026-11-07: at z 0 the upper arms passed through). Asleep, the clip sits the body
+// down, so the lower arms reach forward and out instead of hanging (hanging put the hands through the floor).
+function driveExtraArms(arms, st, t, dt, clipT) {   // x: swing forward (−) / back (+); z: out from the body; e: elbow bend
+  const k = 1 - Math.exp(-dt * 8), Z = 0.45;
+  for (const a of arms) {
+    let x = Math.sin(t * 1.4 + a.s) * 0.05, z = Z, e = -0.15;
+    if (st === "walk") x = Math.sin((clipT ?? t) * 2 * Math.PI / 2.33) * 0.45 * a.s;   // in step with the walk clip
+    if (st === "work") { x = -0.9 - Math.max(0, Math.sin(t * 6 + (a.s > 0 ? 0 : Math.PI))) * 0.6; e = -0.6; }
+    if (st === "question") { x = a.s > 0 ? -0.5 : 0; e = a.s > 0 ? -0.9 : -0.15; }
+    if (st === "alarm") { z = Z + 0.15 + Math.sin(t * 18) * 0.15; x = -0.2; }
+    if (st === "wave") { z = Z + 0.1; x = -0.15; }
+    if (st === "celebrate") { z = 1.3 + Math.sin(t * 9) * 0.2; e = -0.4; }
+    if (st === "sleep") { x = -0.9; z = 0.4; e = -0.6; }
+    a.x += (x - a.x) * k; a.z += (z - a.z) * k; a.e += (e - a.e) * k;
+    a.sh.quaternion.copy(a.shRest).multiply(_q.setFromEuler(_e.set(a.x, 0, a.z * a.s)));
+    a.el.quaternion.copy(a.elRest).multiply(_q.setFromEuler(_e.set(a.e, 0, 0)));
+  }
 }
 const tonedTextures = new WeakSet();   // three r128 textures have no userData; clones (and materials) share a texture
 function toneTexture(mat, { lift = 0, cool = 0, gold = 1 }) {
@@ -365,6 +447,7 @@ function makeRobot(role) {
   const bub = bubble("Zz"); bub.position.y = 3; bub.visible = false; g.add(bub); parts.bubble = bub; parts.bubbleChar = "Zz";
   if (MODEL_URLS[role]) loadModel(MODEL_URLS[role]).then((m) => {
     const rig = MODEL_RIGGED[role];
+    if (rig && MODEL_EXTRA_ARMS[role]) rigExtraArms(m, MODEL_EXTRA_ARMS[role]);
     const c = rig && THREE.SkeletonUtils ? THREE.SkeletonUtils.clone(m) : m.clone();
     const holder = new THREE.Group(); holder.add(c); holder.scale.setScalar(MODEL_SCALE[role] || 2.5);
     if (rig) {
@@ -373,6 +456,7 @@ function makeRobot(role) {
         if (o.isMesh && rig.tone) toneTexture(o.material, rig.tone);
       });
       if (MODEL_JETS[role]) addJetFlames(c, parts, MODEL_JETS[role]);
+      if (MODEL_EXTRA_ARMS[role]) parts.extraArms = findExtraArms(c, MODEL_EXTRA_ARMS[role]);
       const clips = m.userData.clips || [];
       if (clips.length && MODEL_CLIPS[role]) {
         const mixer = new THREE.AnimationMixer(c); const actions = {};
@@ -728,6 +812,7 @@ function animate(a, t, dt) {
   setBubble(a, st === "sleep" ? "Zz" : st === "alarm" ? "!" : st === "celebrate" ? "✓" : st === "question" ? "?" : null);
   if (p.bubble.visible) p.bubble.position.y = 3 + Math.sin(t * 2) * 0.1;
   if (p.anim) playClip(p.anim, st, t, dt, a.pick); else if (p.rig) rigPose(p.rig, st, t);
+  if (p.extraArms) driveExtraArms(p.extraArms, st, t, dt, p.anim?.current?.time);
   if (st === "work" && a.house && (a.role === "builder" || a.role === "heavy") && Math.random() < dt * 3) dust(g.position);
 }
 tick();
