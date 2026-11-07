@@ -135,6 +135,9 @@ seams (80 k triangles, 5.5 MB, base-colour texture only). `preview-model.html?mo
   sizes and turns varied (`crate(len, pallet, …)`). A box on the ground keeps the pallet; one on another box or on a table
   loses it (owner Q19 a): `bareBox` drops the triangles below `BOX_PALLET` (the deck top, 0.102 in file units) and cuts
   the side faces at it, once per file. `BOX_W/H/D` are the file's size, so stacks are laid out before it loads.
+- **Status bubbles:** 💤 asleep, ❗ alarm, ❓ question, ✅ cheer are Microsoft's Fluent Emoji 3D PNGs in `emoji/` (owner
+  Q22 a / Q23 a; MIT, `NOTICE.md`), drawn alone without a disc (`BUBBLE_IMG`, one texture per image shared by every
+  bubble); the old letter on a white disc stands in until an image loads, or if it fails.
 - **Rest, report, cheer (owner; Q17 b):** Main rests at the main building's door (`MAIN_SEAT`) facing south; everyone
   else rests seated on an arc in front of it facing Main (`seatOf`; a second agent of a role sits behind). A job at a house
   is done there, one without a house at the role's station; when done the agent walks to the spot in front of Main,

@@ -31,13 +31,17 @@ This repo has no git-synced per-person memory, so this file is the in-flight not
 
 ## Next (in order)
 
-1. **Emoji bubbles** (Q22 a / Q23 a): the four Fluent Emoji 3D PNGs are in `agent-town/emoji/` (MIT, `NOTICE.md`
-   section added, not committed yet); `bubble()` in `town.html` draws them instead of the `Zz ! ? ✓` letters.
+1. ~~**Emoji bubbles**~~ — done 2026-11-07 (Q22 a Fluent Emoji 3D, Q23 a Main downloaded them; `agent-town/emoji/`, MIT in
+   `NOTICE.md`). Nothing else queued; the owner may want the white disc back behind them for night reading.
 
 ## Rulings this session (owner, 2026-11-07)
 
 (Building names as said then; renamed later the same day, map in `agent-town/README.md`: CYBERNETIC CORE is now SITE
 OFFICE, FOUNDRY WORKSHOP, SYNTHESIS DOMES; CENTRAL CORE was dropped.)
+
+Evening, after the swap: Q19 a pallet only on ground boxes · Q20 a (moot) · Q21 b Carrier carries in both arms, then
+"at least three boxes, smaller upward" · Q22 a Fluent Emoji 3D bubbles · Q23 a Main downloads them · "ลด fps … ถ้าเยอะก็
+ลดเลย" → 30 fps · "ลบออกไปเลย … ตั้งชื่อใหม่ให้หมดเลย" → CENTRAL CORE dropped, buildings renamed by Main.
 
 Q1 c models stay in the public repo · Q2 a purple = Migrator · Q3 no colour changes (robots) · Q4 a Main toned in code ·
 Q5 a / Q6 b Heavy four arms (superseded: two arms, big) · Q7 b Inspector legless (superseded by Q13 a: two short legs) ·

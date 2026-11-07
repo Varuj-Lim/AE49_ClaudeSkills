@@ -271,13 +271,28 @@ function labelSprite(text, color = "#1d2731", bg = "rgba(255,255,255,.92)") {
   const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), depthTest: false, transparent: true }));
   s.renderOrder = 10; return s;
 }
+// The status bubbles are Microsoft's Fluent Emoji 3D images (owner Q22 a / Q23 a, 2026-11-07; MIT, see NOTICE.md), drawn
+// on their own without the white disc; the letter on a disc stands in until the image loads, or if it fails.
+const BUBBLE_IMG = { "Zz": "emoji/zzz_3d.png", "!": "emoji/red_exclamation_mark_3d.png", "?": "emoji/red_question_mark_3d.png", "✓": "emoji/check_mark_button_3d.png" };
+const bubbleTex = {}, bubbleReady = {};   // url → a Promise of the texture (warns once if it fails); url → the texture once loaded
 function bubble(char) {
+  const url = BUBBLE_IMG[char];
+  if (url && bubbleReady[url]) {   // loaded: the emoji at once, so the letter never shows for a frame (audit 2026-11-07)
+    const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: bubbleReady[url], depthTest: false, transparent: true }));
+    s.scale.set(0.8, 0.8, 1); s.renderOrder = 11; return s;
+  }
   const color = { "!": "#e8705c", "?": "#e2ac43", "Zz": "#6b7c8c", "✓": "#2e8b57" }[char] || "#333";
   const c = document.createElement("canvas"); c.width = c.height = 128; const x = c.getContext("2d");
   x.fillStyle = "#fff"; x.beginPath(); x.arc(64, 60, 52, 0, Math.PI * 2); x.fill();
   x.fillStyle = color; x.font = "700 64px sans-serif"; x.textAlign = "center"; x.textBaseline = "middle"; x.fillText(char, 64, 62);
   const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), depthTest: false, transparent: true }));
-  s.scale.set(0.7, 0.7, 1); s.renderOrder = 11; return s;
+  s.scale.set(0.7, 0.7, 1); s.renderOrder = 11;
+  if (url) {
+    bubbleTex[url] ||= new Promise((ok, bad) => new THREE.TextureLoader().load(url, (t) => { bubbleReady[url] = t; ok(t); }, undefined, bad))
+      .catch(() => { console.warn("bubble", url); return null; });
+    bubbleTex[url].then((t) => { if (!t) return; s.material.map.dispose(); s.material.map = t; s.material.needsUpdate = true; s.scale.set(0.8, 0.8, 1); });
+  }
+  return s;
 }
 
 office(); townHall();
@@ -724,7 +739,8 @@ function makeRobot(role) {
     const c = rig && THREE.SkeletonUtils ? THREE.SkeletonUtils.clone(m) : m.clone();
     const holder = new THREE.Group(); holder.add(c); holder.scale.setScalar(MODEL_SCALE[role] || 2.5);
     // the speech bubble floats above the head: at y 3 it covered the face of a model taller than the rest (Heavy, audit)
-    parts.bubbleY = Math.max(3, new THREE.Box3().setFromObject(c).max.y * (MODEL_SCALE[role] || 2.5) + 0.45);
+    // + 0.55 (was 0.45 for the 0.7 disc): the 0.8 emoji reaches about 0.09 lower, so it clears the head by as much as before
+    parts.bubbleY = Math.max(3, new THREE.Box3().setFromObject(c).max.y * (MODEL_SCALE[role] || 2.5) + 0.55);
     if (rig) {
       c.rotation.y = rig.turn; c.traverse((o) => {
         if (o.isMesh && rig.metalness !== undefined) o.material.metalness = rig.metalness;
