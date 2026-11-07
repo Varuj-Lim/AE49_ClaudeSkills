@@ -30,6 +30,17 @@ a rigged export with the clip names in the skill would animate limbs. `preview-m
   `MODEL_CLIPS` name matches a clip by exact name or by prefix (`CLIP_SET("Standing in place")`). Both get `metalness: 0.25`:
   without an environment map a metallic PBR surface renders near black. How the art and prompts were made:
   `reference/2026-11-07/` and the skill `ae49-ref-3d-prompt`.
+- **Colour maps are read as LINEAR (2026-11-07).** The renderer's output is linear (never set; the town's hex colours are
+  tuned for it), while GLTFLoader marks a GLB's colour maps sRGB, so every model showed far darker than in Tripo (a mid-grey
+  128 displayed as about 55). `loadModel` sets `map` / `emissiveMap` to `LinearEncoding`: a model now looks as Tripo shows
+  it. `preview-model.html` still renders sRGB in and out, so it is not a colour reference for the town; the lineup is.
+- **Tone (Main, owner Q4 a):** `MODEL_RIGGED.<role>.tone = { lift, cool, gold }` re-grades the base colour once at load —
+  lifts the colourless darks to grey (colourful pixels such as painted lights and gold keep their values), leans the
+  greys cool, makes the gold richer. Main: `{ lift: 40, cool: 10, gold: 1.25 }`. A cool rim light from behind lifts
+  dark outlines off the ground.
+- **Scout (2026-11-07):** `models/scout.glb` (9.4 k triangles, 4.3 MB, same 9 clips). The owner removed the jet flames from the
+  art; `MODEL_JETS.scout` lists the two nozzle points (model units, measured from the rest pose) and `addJetFlames` hangs an
+  emissive cone on the Spine2 bone at each: long and flickering while walking, short otherwise, off while asleep.
 
 ## Lineup preset (2026-11-07)
 
